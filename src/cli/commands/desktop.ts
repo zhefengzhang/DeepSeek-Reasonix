@@ -1,7 +1,16 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-import { existsSync, statSync, writeSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+  writeSync,
+} from "node:fs";
 import { readFile } from "node:fs/promises";
-import { isAbsolute, join, resolve } from "node:path";
+import { homedir } from "node:os";
+import { dirname, isAbsolute, join, resolve } from "node:path";
 import { stdin } from "node:process";
 import { createInterface } from "node:readline";
 import { toApprovalPrompt } from "@reasonix/core-utils";
@@ -131,7 +140,7 @@ import {
   importExternalSession,
   importExternalSessions,
 } from "../../session-import.js";
-import { SkillStore } from "../../skills.js";
+import { SKILLS_DIRNAME, SKILL_FILE, SkillStore, validateSkillFrontmatter } from "../../skills.js";
 import { countTokensBounded } from "../../tokenizer.js";
 import type { ChoiceOption } from "../../tools/choice.js";
 import type { ChatMessage } from "../../types.js";
@@ -234,6 +243,9 @@ type InMessage = { tabId?: string } & (
   | { cmd: "mcp_specs_retry"; raw: string }
   | { cmd: "skills_get" }
   | { cmd: "skill_run"; name: string; args?: string }
+  | { cmd: "skill_read"; scope: "project" | "global"; name: string }
+  | { cmd: "skill_save"; scope: "project" | "global"; name: string; body: string }
+  | { cmd: "skill_delete"; scope: "project" | "global"; name: string }
   | { cmd: "jobs_list" }
   | { cmd: "jobs_stop"; jobId: number }
   | { cmd: "jobs_stop_all" }
@@ -558,6 +570,14 @@ interface SkillsEvent {
   items: SkillInfo[];
 }
 
+interface SkillDetailEvent {
+  type: "$skill_detail";
+  name: string;
+  scope: "project" | "global";
+  body: string;
+  path: string;
+}
+
 interface JobInfoPayload {
   id: number;
   tabId: string;
@@ -628,6 +648,7 @@ type EmittableEvent =
   | TabClosedEvent
   | McpSpecsEvent
   | SkillsEvent
+  | SkillDetailEvent
   | CtxBreakdownEvent
   | MemoryEvent
   | MemoryDetailEvent
@@ -3072,6 +3093,103 @@ export async function desktopCommand(opts: DesktopOptions): Promise<void> {
         void runTurn(tab, payload);
       } catch (err) {
         emit({ type: "$error", message: `skill_run: ${(err as Error).message}` }, tab.id);
+      }
+      return;
+    }
+    if (msg.cmd === "skill_read") {
+      try {
+        const store = new SkillStore({
+          projectRoot: tab.rootDir,
+          customSkillPaths: loadResolvedSkillPaths(tab.rootDir),
+          subagentModels: loadSubagentModels(),
+        });
+        const skill = store.read(msg.name);
+        if (!skill || skill.scope === "builtin") {
+          emit({ type: "$error", message: `skill not found: ${msg.name}` }, tab.id);
+          return;
+        }
+        const body = readFileSync(skill.path, "utf8");
+        emit(
+          { type: "$skill_detail", name: msg.name, scope: msg.scope, body, path: skill.path },
+          tab.id,
+        );
+      } catch (err) {
+        emit({ type: "$error", message: `skill_read: ${(err as Error).message}` }, tab.id);
+      }
+      return;
+    }
+    if (msg.cmd === "skill_save") {
+      try {
+        if (msg.name.includes("..") || msg.name.includes("/") || msg.name.includes("\\")) {
+          emit({ type: "$error", message: `invalid skill name: ${msg.name}` }, tab.id);
+          return;
+        }
+        const fm = validateSkillFrontmatter(msg.body);
+        if ("error" in fm) {
+          emit({ type: "$error", message: fm.error }, tab.id);
+          return;
+        }
+        const dir =
+          msg.scope === "project"
+            ? join(tab.rootDir, ".reasonix", SKILLS_DIRNAME)
+            : join(homedir(), ".reasonix", SKILLS_DIRNAME);
+        const folderPath = join(dir, msg.name, SKILL_FILE);
+        const flatPath = join(dir, `${msg.name}.md`);
+        let targetPath: string;
+        if (existsSync(folderPath)) {
+          targetPath = folderPath;
+        } else if (existsSync(flatPath)) {
+          targetPath = flatPath;
+        } else {
+          targetPath = flatPath;
+        }
+        const resolvedTarget = resolve(targetPath);
+        const resolvedDir = resolve(dir);
+        if (!resolvedTarget.startsWith(`${resolvedDir}/`) && resolvedTarget !== resolvedDir) {
+          emit({ type: "$error", message: `invalid skill name: ${msg.name}` }, tab.id);
+          return;
+        }
+        mkdirSync(dirname(targetPath), { recursive: true });
+        writeFileSync(targetPath, msg.body, "utf8");
+        emitSkills(tab);
+      } catch (err) {
+        emit({ type: "$error", message: `skill_save: ${(err as Error).message}` }, tab.id);
+      }
+      return;
+    }
+    if (msg.cmd === "skill_delete") {
+      try {
+        if (msg.name.includes("..") || msg.name.includes("/") || msg.name.includes("\\")) {
+          emit({ type: "$error", message: `invalid skill name: ${msg.name}` }, tab.id);
+          return;
+        }
+        const dir =
+          msg.scope === "project"
+            ? join(tab.rootDir, ".reasonix", SKILLS_DIRNAME)
+            : join(homedir(), ".reasonix", SKILLS_DIRNAME);
+        const folderPath = join(dir, msg.name, SKILL_FILE);
+        const flatPath = join(dir, `${msg.name}.md`);
+        const resolvedFolder = resolve(dirname(folderPath));
+        const resolvedFlat = resolve(flatPath);
+        const resolvedDir = resolve(dir);
+        const insideDir =
+          resolvedFolder.startsWith(`${resolvedDir}/`) || resolvedFolder === resolvedDir;
+        const flatInside = resolvedFlat.startsWith(`${resolvedDir}/`);
+        if (!insideDir && !flatInside) {
+          emit({ type: "$error", message: `invalid skill name: ${msg.name}` }, tab.id);
+          return;
+        }
+        if (existsSync(folderPath)) {
+          rmSync(dirname(folderPath), { recursive: true, force: true });
+        } else if (existsSync(flatPath)) {
+          rmSync(flatPath, { force: true });
+        } else {
+          emit({ type: "$error", message: `skill not found: ${msg.name}` }, tab.id);
+          return;
+        }
+        emitSkills(tab);
+      } catch (err) {
+        emit({ type: "$error", message: `skill_delete: ${(err as Error).message}` }, tab.id);
       }
       return;
     }
