@@ -380,13 +380,19 @@ fn ts_lookup(root: &str, file: &str, line: u32, column: u32) -> Result<TsDefinit
             .join("..")
             .join("scripts")
             .join("ts-lookup.mjs");
-        let mut child = Command::new("node")
+        let mut child = Command::new("node");
+        child
             .arg(script.to_string_lossy().as_ref())
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
-            .stderr(Stdio::inherit())
-            .spawn()
-            .map_err(|e| format!("spawn node: {e}"))?;
+            .stderr(Stdio::piped());
+        #[cfg(windows)]
+        {
+            use std::os::windows::process::CommandExt;
+            const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+            child.creation_flags(CREATE_NO_WINDOW);
+        }
+        let mut child = child.spawn().map_err(|e| format!("spawn node: {e}"))?;
         let stdin = child.stdin.take().ok_or("no stdin")?;
         let stdout = child.stdout.take().ok_or("no stdout")?;
         *guard = Some((BufReader::new(stdout), stdin));
