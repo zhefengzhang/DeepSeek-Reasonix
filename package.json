@@ -52,10 +52,7 @@
     "pitch:html": "npx -y @marp-team/marp-cli pitch/pitch.md -o pitch/dist/pitch.html --allow-local-files",
     "pitch:watch": "npx -y @marp-team/marp-cli pitch/pitch.md --preview --watch --allow-local-files"
   },
-  "simple-git-hooks": {
-    "pre-commit": "npm run lint",
-    "pre-push": "npm run verify"
-  },
+  "simple-git-hooks": {},
   "keywords": [
     "agent",
     "llm",

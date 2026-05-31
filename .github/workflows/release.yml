@@ -4,15 +4,24 @@ name: Release desktop
 # Plain `v<semver>` tags are reserved for the npm CLI release (see
 # publish-npm.yml) — they intentionally do NOT trigger this workflow.
 # Bump the desktop with: `git tag desktop-vX.Y.Z && git push origin desktop-vX.Y.Z`.
+# TEMP: automatic desktop release disabled — restore tag push trigger to re-enable.
 on:
-  push:
-    tags: ["desktop-v*"]
   workflow_dispatch:
     inputs:
       tag:
         description: "Tag to publish (e.g. desktop-v0.47.0). Required when running manually."
         required: true
         type: string
+
+# on:
+#   push:
+#     tags: ["desktop-v*"]
+#   workflow_dispatch:
+#     inputs:
+#       tag:
+#         description: "Tag to publish (e.g. desktop-v0.47.0). Required when running manually."
+#         required: true
+#         type: string
 
 permissions:
   contents: write

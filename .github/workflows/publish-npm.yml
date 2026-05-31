@@ -4,15 +4,24 @@ name: Publish npm
 # reasonix CLI package. Desktop Tauri releases use `desktop-v*`
 # (see release.yml) — pushing one of those never reaches this
 # workflow, so the two release tracks are fully decoupled.
+# TEMP: automatic npm publish disabled — restore tag push trigger to re-enable.
 on:
-  push:
-    tags: ["v*"]
   workflow_dispatch:
     inputs:
       tag:
         description: "Tag to publish (e.g. v0.47.0). Required when running manually."
         required: true
         type: string
+
+# on:
+#   push:
+#     tags: ["v*"]
+#   workflow_dispatch:
+#     inputs:
+#       tag:
+#         description: "Tag to publish (e.g. v0.47.0). Required when running manually."
+#         required: true
+#         type: string
 
 permissions:
   contents: read

@@ -4,15 +4,24 @@ name: Publish dsnix
 # dsnix shim package only. Plain `v<semver>` tags publish the main
 # `reasonix` CLI (see publish-npm.yml); the two are decoupled so the
 # alias can be released independently when the shim itself changes.
+# TEMP: automatic dsnix publish disabled — restore tag push trigger to re-enable.
 on:
-  push:
-    tags: ["dsnix-v*"]
   workflow_dispatch:
     inputs:
       tag:
         description: "Tag to publish (e.g. dsnix-v0.48.0). Required when running manually."
         required: true
         type: string
+
+# on:
+#   push:
+#     tags: ["dsnix-v*"]
+#   workflow_dispatch:
+#     inputs:
+#       tag:
+#         description: "Tag to publish (e.g. dsnix-v0.48.0). Required when running manually."
+#         required: true
+#         type: string
 
 permissions:
   contents: read

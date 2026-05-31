@@ -1,9 +1,13 @@
 name: oosmetrics Health Check
 
+# TEMP: scheduled health check disabled — restore `schedule` trigger to re-enable.
 on:
-  schedule:
-    - cron: "0 9 * * 1"
   workflow_dispatch:
+
+# on:
+#   schedule:
+#     - cron: "0 9 * * 1"
+#   workflow_dispatch:
 
 permissions:
   issues: write

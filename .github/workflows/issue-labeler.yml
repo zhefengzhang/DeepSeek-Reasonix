@@ -1,8 +1,12 @@
 name: Issue auto-label
 
+# TEMP: automatic issue labeling disabled — restore `issues` trigger to re-enable.
 on:
-  issues:
-    types: [opened, edited]
+  workflow_dispatch:
+
+# on:
+#   issues:
+#     types: [opened, edited]
 
 permissions:
   issues: write
