@@ -366,14 +366,12 @@ struct TsDefinitionResponse {
 #[tauri::command]
 fn ts_definition(root: String, file: String, line: u32, column: u32) -> Result<TsDefinitionResponse, String> {
     use std::process::Command;
-    // Resolve the script relative to the workspace root (repo), not cwd.
-    // tauri dev sets cwd to desktop/, so current_dir() may already be desktop/.
-    let mut script = std::env::current_dir().map_err(|e| format!("cwd: {e}"))?;
-    if script.ends_with("desktop") {
-        script = script.join("scripts").join("ts-lookup.mjs");
-    } else {
-        script = script.join("desktop").join("scripts").join("ts-lookup.mjs");
-    }
+    // CARGO_MANIFEST_DIR = .../desktop/src-tauri.
+    // ts-lookup.mjs lives at .../desktop/scripts/ → one level up.
+    let script = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("..")
+        .join("scripts")
+        .join("ts-lookup.mjs");
     let output = Command::new("node")
         .arg(script.to_string_lossy().as_ref())
         .arg(&root)
