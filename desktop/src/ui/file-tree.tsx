@@ -144,10 +144,12 @@ export function FileTree({
   workspaceDir,
   onOpenFile,
   onToggleSidebarTab,
+  onMentionFile,
 }: {
   workspaceDir?: string;
   onOpenFile: (path: string) => void;
   onToggleSidebarTab: (tab: TabId) => void;
+  onMentionFile?: (path: string) => void;
 }) {
   useLang();
   const [children, setChildren] = useState<TreeNode[]>([]);
@@ -594,6 +596,9 @@ export function FileTree({
     ctxMenu?.kind === "file"
       ? [
           { label: "在编辑器中打开", fn: openInEditor },
+          ...(onMentionFile
+            ? [{ label: "添加到聊天框", fn: () => { setCtxMenu(null); onMentionFile(ctxMenu!.path); } }]
+            : []),
           { type: "sep" as const },
           { label: "重命名", fn: startRename },
           { label: "删除", fn: handleDelete },
@@ -601,6 +606,9 @@ export function FileTree({
           { label: "在资源管理器中显示", fn: handleReveal },
         ]
       : [
+          ...(onMentionFile
+            ? [{ label: "添加到聊天框", fn: () => { setCtxMenu(null); onMentionFile(ctxMenu!.path); } }]
+            : []),
           { label: "新建文件", fn: startNewFile },
           { label: "新建文件夹", fn: startNewFolder },
           ...(!isRoot

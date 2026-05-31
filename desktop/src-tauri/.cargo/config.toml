@@ -1,0 +1,11 @@
+# 直连 crates.io sparse 索引，不走镜像
+[registries.crates-io]
+protocol = "sparse"
+
+[http]
+multiplexing = false
+http2 = false
+
+[net]
+git-fetch-with-cli = true
+retry = 10

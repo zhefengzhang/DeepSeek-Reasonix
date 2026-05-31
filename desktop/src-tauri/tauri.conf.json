@@ -43,7 +43,7 @@
       "../../dist": "dist",
       "../../data": "data"
     },
-    "createUpdaterArtifacts": true,
+    "createUpdaterArtifacts": false,
     "windows": {
       "nsis": {
         "languages": [

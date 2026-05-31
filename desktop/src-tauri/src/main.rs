@@ -5,7 +5,7 @@ mod rpc;
 
 use cc_switch::import_cc_switch_mcp;
 use rpc::{rpc_kill, rpc_send, rpc_spawn, RpcState};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tauri::menu::MenuBuilder;
@@ -151,7 +151,7 @@ struct FileEntry {
 }
 
 const SKIP_DIRS: &[&str] = &["node_modules", "target", "dist", "build", "out"];
-const MAX_ENTRIES: usize = 800;
+const MAX_ENTRIES: usize = 5000;
 
 fn walk_dir(dir: &Path, depth: u32, max_depth: u32, out: &mut Vec<FileEntry>) {
     if depth > max_depth || out.len() >= MAX_ENTRIES {
@@ -261,6 +261,141 @@ fn git_status(root: String) -> Result<Vec<GitStatusEntry>, String> {
         out.push(GitStatusEntry { path, kind });
     }
     Ok(out)
+}
+
+#[derive(Serialize)]
+struct FileDiff {
+    file: String,
+    additions: u32,
+    deletions: u32,
+    patch: Option<String>,
+    status: String,
+}
+
+#[derive(Serialize)]
+struct GitDiffsResult {
+    staged: Vec<FileDiff>,
+    unstaged: Vec<FileDiff>,
+    untracked: Vec<String>,
+}
+
+fn parse_diff_output(stdout: &str) -> Vec<FileDiff> {
+    let mut files = Vec::new();
+    // Split on "diff --git " headers
+    for block in stdout.split("\ndiff --git ") {
+        let full = if block.starts_with("diff --git ") {
+            block.to_string()
+        } else {
+            format!("diff --git {block}")
+        };
+        // Extract b/ path
+        let b_path = full
+            .lines()
+            .find(|l| l.starts_with("diff --git "))
+            .and_then(|l| l.strip_prefix("diff --git a/").and_then(|r| r.split_once(" b/")))
+            .map(|(_, b)| b.trim().to_string());
+        let Some(file) = b_path else { continue };
+        let additions = full.lines().filter(|l| l.starts_with('+')).count() as u32;
+        let deletions = full.lines().filter(|l| l.starts_with('-')).count() as u32;
+        let status = if full.contains("new file mode") {
+            "added"
+        } else if full.contains("deleted file mode") {
+            "deleted"
+        } else {
+            "modified"
+        };
+        files.push(FileDiff {
+            file,
+            additions,
+            deletions,
+            patch: Some(full),
+            status: status.to_string(),
+        });
+    }
+    files
+}
+
+fn run_git(args: &[&str], cwd: &Path) -> String {
+    use std::process::Command;
+    let mut cmd = Command::new("git");
+    cmd.args(args).current_dir(cwd);
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+        cmd.creation_flags(CREATE_NO_WINDOW);
+    }
+    match cmd.output() {
+        Ok(o) if o.status.success() => String::from_utf8_lossy(&o.stdout).into_owned(),
+        _ => String::new(),
+    }
+}
+
+#[tauri::command]
+fn git_diffs(root: String) -> Result<GitDiffsResult, String> {
+    let root_path = Path::new(&root);
+    if !root_path.is_dir() {
+        return Err(format!("not a directory: {root}"));
+    }
+    let staged_out = run_git(&["diff", "--no-color", "--unified=3", "--cached"], root_path);
+    let unstaged_out = run_git(&["diff", "--no-color", "--unified=3", "HEAD"], root_path);
+    let untracked_out = run_git(&["ls-files", "--others", "--exclude-standard"], root_path);
+
+    let staged = parse_diff_output(&staged_out);
+    let unstaged = parse_diff_output(&unstaged_out);
+    let untracked: Vec<String> = untracked_out
+        .lines()
+        .filter(|l| !l.is_empty())
+        .map(|l| l.to_string())
+        .collect();
+
+    Ok(GitDiffsResult {
+        staged,
+        unstaged,
+        untracked,
+    })
+}
+
+#[derive(Deserialize, Serialize)]
+struct TsDefinitionResponse {
+    file: String,
+    line: u32,
+    column: u32,
+}
+
+#[tauri::command]
+fn ts_definition(root: String, file: String, line: u32, column: u32) -> Result<TsDefinitionResponse, String> {
+    use std::process::Command;
+    // Resolve the script relative to the workspace root (repo), not cwd.
+    // tauri dev sets cwd to desktop/, so current_dir() may already be desktop/.
+    let mut script = std::env::current_dir().map_err(|e| format!("cwd: {e}"))?;
+    if script.ends_with("desktop") {
+        script = script.join("scripts").join("ts-lookup.mjs");
+    } else {
+        script = script.join("desktop").join("scripts").join("ts-lookup.mjs");
+    }
+    let output = Command::new("node")
+        .arg(script.to_string_lossy().as_ref())
+        .arg(&root)
+        .arg(&file)
+        .arg(line.to_string())
+        .arg(column.to_string())
+        .output()
+        .map_err(|e| format!("spawn node: {e}"))?;
+    if output.status.success() {
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        serde_json::from_str::<TsDefinitionResponse>(stdout.trim())
+            .map_err(|e| format!("parse response: {e} (raw: {stdout})"))
+    } else {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        // Try to extract error message from JSON
+        if let Ok(err) = serde_json::from_str::<serde_json::Value>(stderr.trim()) {
+            if let Some(msg) = err.get("error").and_then(|v| v.as_str()) {
+                return Err(msg.to_string());
+            }
+        }
+        Err(format!("ts-lookup failed: {stderr}"))
+    }
 }
 
 #[tauri::command]
@@ -461,6 +596,8 @@ fn main() {
             open_in_editor,
             list_workspace_tree,
             git_status,
+            git_diffs,
+            ts_definition,
             write_text_file,
             read_text_file,
             rename_file,

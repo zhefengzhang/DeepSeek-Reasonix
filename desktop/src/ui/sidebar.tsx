@@ -67,6 +67,7 @@ export function Sidebar({
   onOpenCommands,
   onOpenAbout,
   onOpenFile,
+  onMentionFile,
   onCopyMd,
   onExportMd,
   hasMessages,
@@ -88,6 +89,7 @@ export function Sidebar({
   onOpenCommands: () => void;
   onOpenAbout: () => void;
   onOpenFile: (path: string) => void;
+  onMentionFile?: (path: string) => void;
   onCopyMd?: () => void;
   onExportMd?: () => void;
   hasMessages?: boolean;
@@ -375,6 +377,7 @@ export function Sidebar({
         <FileTree
           workspaceDir={workspaceDir}
           onOpenFile={onOpenFile}
+          onMentionFile={onMentionFile}
           onToggleSidebarTab={setSidebarTab}
         />
       )}

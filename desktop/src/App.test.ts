@@ -19,7 +19,7 @@ vi.mock("./theme", () => ({
   FONT_SCALE_ZOOM: 1,
   THEME: "dark",
   defaultStyleForTheme: vi.fn(() => ({
-    bg: "#000",
+    bg: "#0001",
     surface: "#111",
     border: "#222",
     text: "#fff",

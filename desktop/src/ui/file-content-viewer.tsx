@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import type { TsDefinitionResult } from "../protocol";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as monaco from "monaco-editor";
 import { I } from "../icons";
@@ -78,13 +79,17 @@ export function FileContentViewer({
   openFiles,
   activeFile,
   theme,
+  workspaceDir,
   onSetActiveFile,
+  onOpenFile,
   onCloseFile,
 }: {
   openFiles: string[];
   activeFile: string | null;
   theme: Theme;
+  workspaceDir?: string;
   onSetActiveFile: (path: string) => void;
+  onOpenFile?: (path: string) => void;
   onCloseFile: (path: string) => void;
 }) {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -100,6 +105,12 @@ export function FileContentViewer({
   const [closingFile, setClosingFile] = useState<{ path: string; name: string } | null>(null);
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; path: string } | null>(null);
   const [batchClosing, setBatchClosing] = useState<{ files: string[]; dirtyCount: number } | null>(null);
+  const [copyToast, setCopyToast] = useState<string | null>(null);
+
+  const flashCopyToast = useCallback((msg: string) => {
+    setCopyToast(msg);
+    setTimeout(() => setCopyToast(null), 1500);
+  }, []);
 
   // Close context menu on click outside
   useEffect(() => {
@@ -110,10 +121,172 @@ export function FileContentViewer({
     return () => window.removeEventListener("click", close);
   }, [contextMenu]);
 
+  // Register each opened file as a model with a proper file:// URI so
+  // the TypeScript language service can resolve relative imports between
+  // files. Without this every `import` from a sibling file shows "Cannot
+  // find module".
+  function fileUri(path: string): monaco.Uri {
+    // Uri.file handles both Windows drive letters (D:/…) and POSIX paths.
+    return monaco.Uri.file(path.replace(/\\/g, "/"));
+  }
+
+  function getOrCreateModel(
+    path: string,
+    content: string,
+    language: string,
+  ): monaco.editor.ITextModel {
+    const uri = fileUri(path);
+    const existing = monaco.editor.getModel(uri);
+    if (existing) {
+      if (existing.getValue() !== content) existing.setValue(content);
+      return existing;
+    }
+    return monaco.editor.createModel(content, language, uri);
+  }
+
+  // Compute a relative path for use in @mentions / file references.
+  function relPath(abs: string): string {
+    if (!workspaceDir) return abs;
+    const ws = workspaceDir.replace(/\\/g, "/").replace(/\/+$/, "");
+    const norm = abs.replace(/\\/g, "/");
+    if (norm.toLowerCase().startsWith(ws.toLowerCase() + "/")) {
+      return norm.slice(ws.length + 1);
+    }
+    return abs;
+  }
+
+  // Copy selected code with file:line reference (Cursor-style).
+  function copySelectionRef() {
+    const editor = editorRef.current;
+    const filePath = activeFileRef.current;
+    if (!editor || !filePath) return;
+    const selection = editor.getSelection();
+    if (!selection || selection.isEmpty()) return;
+    const model = editor.getModel();
+    if (!model) return;
+    const startLine = selection.startLineNumber;
+    const endLine = selection.endLineNumber;
+    const range = startLine === endLine ? `${startLine}` : `${startLine}-${endLine}`;
+    const ref = `@${relPath(filePath)}:${range}`;
+    const selectedText = model.getValueInRange(selection);
+    // Only include code block if selection spans multiple lines or is
+    // non-trivial (longer than 80 chars or contains newlines).
+    const useBlock = selectedText.includes("\n") || selectedText.length > 80;
+    const payload = useBlock
+      ? `${ref}\n\`\`\`${extToLang(filePath)}\n${selectedText}\n\`\`\``
+      : `${ref} — \`${selectedText}\``;
+    void navigator.clipboard.writeText(payload);
+    flashCopyToast("Copied with file reference");
+  }
+
+  // When a file is opened, scan its import statements and pre-register
+  // the imported modules as Monaco models so go-to-definition and type
+  // resolution work across project files.
+  const preloadingRef = useRef<Set<string>>(new Set());
+  // Derive the current file's directory (normalized to forward slashes)
+  function fileDir(abs: string): string {
+    return abs.replace(/\\/g, "/").replace(/\/[^/]*$/, "");
+  }
+
+  async function preloadImports(absPath: string, content: string) {
+    if (!workspaceDir) return;
+    const dir = fileDir(absPath);
+    // Match `from "./foo"` / `from "../bar"` (both single and double quotes)
+    const IMPORT_RE = /from\s+['"](\..*?)['"]/g;
+    const jobs: string[] = [];
+    let m: RegExpExecArray | null;
+    while ((m = IMPORT_RE.exec(content)) !== null) {
+      const importPath = m[1]!;
+      // Resolve to the actual .ts file on disk.  The definition provider
+      // returns Location at this URI; go-to-definition navigates here.
+      const tsPath = resolveImportPathWin(dir, importPath.replace(/\.js$/, ".ts"))
+        ?? resolveImportPathWin(dir, importPath);
+      if (tsPath && !preloadingRef.current.has(tsPath)) {
+        jobs.push(tsPath);
+      }
+    }
+    if (jobs.length === 0) return;
+    const results = await Promise.allSettled(
+      jobs.map(async (p) => {
+        preloadingRef.current.add(p);
+        const text = await invoke<string>("read_text_file", { path: p });
+        const lang = extToLang(p);
+        getOrCreateModel(p, text, lang);
+      }),
+    );
+    for (let i = 0; i < results.length; i++) {
+      if (results[i]?.status === "rejected") {
+        preloadingRef.current.delete(jobs[i]!);
+      }
+    }
+  }
+
+  // Simple path resolution for Windows/Linux without pull-up of node:path
+  function resolveImportPathWin(dir: string, relative: string): string | null {
+    // Handle ".." and "." in the relative path
+    const parts = relative.split("/");
+    const dirParts = dir.split("/");
+    const result: string[] = [];
+    for (const p of parts) {
+      if (p === "." || p === "") continue;
+      if (p === "..") {
+        if (result.length > 0) result.pop();
+        else if (dirParts.length > 0) dirParts.pop();
+      } else {
+        result.push(p);
+      }
+    }
+    const base = dirParts.join("/");
+    const resolved = base ? `${base}/${result.join("/")}` : result.join("/");
+    // Try each extension — return the first one that already has a model
+    // (meaning it was loaded before), otherwise return the .ts variant.
+    const exts = ["", ".ts", ".tsx", "/index.ts", "/index.tsx"];
+    for (const ext of exts) {
+      const candidate = resolved + ext;
+      if (monaco.editor.getModel(fileUri(candidate))) {
+        return candidate;
+      }
+    }
+    // Don't double-append extension
+    if (/\.(ts|tsx|js|jsx)$/.test(resolved)) return resolved;
+    return resolved + ".ts";
+  }
+
   // Create editor ONCE on mount
   useEffect(() => {
     const el = editorElRef.current;
     if (!el) return;
+
+    // Configure TS language service so imports between opened files work.
+    // monaco 0.44+ moved the API from monaco.languages.typescript → monaco.typescript.
+    const ts = monaco.typescript;
+    ts.typescriptDefaults.setCompilerOptions({
+      target: ts.ScriptTarget.ES2020,
+      module: ts.ModuleKind.ESNext,
+      // Monaco's embedded TS defaults to NodeJs resolution, which
+      // doesn't remap .js → .ts imports.  We suppress the resulting
+      // TS2307 to avoid false positives; remaining type checking and
+      // navigation still work correctly within each file.
+      moduleResolution: ts.ModuleResolutionKind.NodeJs,
+      allowNonTsExtensions: true,
+      allowJs: true,
+      checkJs: false,
+      jsx: ts.JsxEmit.ReactJSX,
+      noEmit: true,
+      esModuleInterop: true,
+      isolatedModules: true,
+      strict: true,
+    });
+    ts.typescriptDefaults.setEagerModelSync(true);
+
+    // Suppress "Cannot find module" (TS2307) — the language service has no
+    // access to the actual file system, so import resolution fails for any
+    // file not currently open as a model.  Cross-file resolution between
+    // OPEN models still works because we register each one with a file://
+    // URI via getOrCreateModel().
+    ts.typescriptDefaults.setDiagnosticsOptions({
+      diagnosticCodesToIgnore: [2307],
+    });
 
     const editor = monaco.editor.create(el, {
       value: "",
@@ -164,6 +337,93 @@ export function FileContentViewer({
       }
     });
 
+    // Ctrl+Shift+C — copy selection with file:line reference (Cursor-style)
+    editor.addAction({
+      id: "copy-selection-ref",
+      label: "Copy with Reference",
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyC],
+      contextMenuGroupId: "9_cutcopypaste",
+      contextMenuOrder: 2.1,
+      precondition: "editorHasSelection",
+      run: () => copySelectionRef(),
+    });
+
+    // F12 / Ctrl+Click — go-to-definition via TypeScript language server.
+    // Uses the project's real tsconfig.json for precise symbol resolution.
+    const triggerDefinition = async () => {
+      const filePath = activeFileRef.current;
+      const pos = editor.getPosition();
+      if (!filePath || !pos || !workspaceDir || !onOpenFile) {
+        console.log("[go-to-def] missing prereq", { filePath, pos, workspaceDir, onOpenFile });
+        return;
+      }
+      console.log("[go-to-def] calling ts_definition", { filePath, line: pos.lineNumber, col: pos.column });
+      try {
+        const result = await invoke<TsDefinitionResult>("ts_definition", {
+          root: workspaceDir,
+          file: filePath,
+          line: pos.lineNumber,
+          column: pos.column,
+        });
+        console.log("[go-to-def] result", result);
+        if (result && result.file) {
+          // ts-lookup now returns an absolute path — use it directly.
+          console.log("[go-to-def] opening", result.file);
+          onOpenFile(result.file);
+          // Scroll to the definition line after the model loads
+          setTimeout(() => {
+            const e = editorRef.current;
+            if (e && activeFileRef.current === result.file) {
+              e.revealLineInCenter(result.line);
+              e.setPosition({ lineNumber: result.line, column: result.column });
+            }
+          }, 300);
+          return;
+        }
+      } catch (err) {
+        console.log("[go-to-def] ts_definition failed", err);
+        // ts_definition not available or no result — fall through
+      }
+      // Fallback: try to resolve import paths directly
+      const model = editor.getModel();
+      if (!model) return;
+      const line = model.getLineContent(pos.lineNumber);
+      const m =
+        line.match(/from\s+['"]([^'"]+)['"]/) ??
+        line.match(/import\s+['"]([^'"]+)['"]/);
+      if (!m || !m[1]?.startsWith(".")) return;
+      const importPath = m[1];
+      const dir = fileDir(filePath);
+      const tsPath =
+        resolveImportPathWin(dir, importPath.replace(/\.js$/, ".ts")) ??
+        resolveImportPathWin(dir, importPath);
+      if (tsPath) onOpenFile(tsPath);
+    };
+
+    // F12 via keyboard — use browserEvent.key (not .keyCode which is 0
+    // in modern Chromium for function keys).
+    editor.onKeyDown((e) => {
+      const key = e.browserEvent?.key ?? String.fromCharCode(e.keyCode);
+      if (key === "F12" && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("[go-to-def] F12 pressed, triggering…");
+        void triggerDefinition();
+      }
+    });
+
+    // Ctrl+Click via mouse (Monaco fires go-to-definition on Ctrl+Click)
+    editor.onMouseDown((e) => {
+      if (e.event.ctrlKey || e.event.metaKey) {
+        // Let Monaco handle the selection, then intercept the definition
+        // request that follows. We use a microtask to run after Monaco's
+        // click handler.
+        queueMicrotask(() => {
+          void triggerDefinition();
+        });
+      }
+    });
+
     requestAnimationFrame(() => editor.layout());
 
     return () => {
@@ -192,42 +452,40 @@ export function FileContentViewer({
 
     if (!activeFile) return;
 
+    const newLang = extToLang(activeFile);
+
     const cached = fileCache.current.get(activeFile);
-    if (cached) {
-      editor.setValue(cached.content);
-    } else {
-      setLoadingFiles((prev) => new Set(prev).add(activeFile));
-      invoke<string>("read_text_file", { path: activeFile })
-        .then((text) => {
-          fileCache.current.set(activeFile, {
-            content: text,
-            original: text,
-            dirty: false,
-          });
-          if (activeFileRef.current === activeFile) {
-            editor.setValue(text);
-          }
-        })
-        .catch((err) => {
+    const loadAndSwitch = async () => {
+      // Load file content (from cache or disk) and preload imported models
+      // BEFORE calling setModel, so the TS worker finds them when it
+      // resolves imports on the initial pass.
+      let text: string;
+      if (cached) {
+        text = cached.content;
+      } else {
+        setLoadingFiles((prev) => new Set(prev).add(activeFile));
+        try {
+          text = await invoke<string>("read_text_file", { path: activeFile });
+          fileCache.current.set(activeFile, { content: text, original: text, dirty: false });
+        } catch (err) {
           console.error("load failed", err);
-        })
-        .finally(() => {
+          return;
+        } finally {
           setLoadingFiles((prev) => {
             const next = new Set(prev);
             next.delete(activeFile);
             return next;
           });
-        });
-    }
-
-    // Update language
-    const model = editor.getModel();
-    if (model) {
-      const newLang = extToLang(activeFile);
-      if (model.getLanguageId() !== newLang) {
-        monaco.editor.setModelLanguage(model, newLang);
+        }
       }
-    }
+      // Preload imports first — create models so TS worker sees them
+      await preloadImports(activeFile, text);
+      // Now set the main model — TS worker resolves imports successfully
+      if (activeFileRef.current === activeFile) {
+        editor.setModel(getOrCreateModel(activeFile, text, newLang));
+      }
+    };
+    void loadAndSwitch();
 
     requestAnimationFrame(() => editor.layout());
   }, [activeFile]);
@@ -255,7 +513,11 @@ export function FileContentViewer({
   }, []);
 
   const doCloseFiles = useCallback((files: string[]) => {
-    files.forEach((f) => fileCache.current.delete(f));
+    files.forEach((f) => {
+      fileCache.current.delete(f);
+      const uri = fileUri(f);
+      monaco.editor.getModel(uri)?.dispose();
+    });
     setLoadingFiles((prev) => {
       const next = new Set(prev);
       files.forEach((f) => next.delete(f));
@@ -490,6 +752,7 @@ export function FileContentViewer({
           />
         ) : null}
       </div>
+      {copyToast ? <div className="fcv-copy-toast">{copyToast}</div> : null}
     </div>
   );
 }

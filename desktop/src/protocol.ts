@@ -631,3 +631,10 @@ export type OutgoingCommand = { tabId?: string } & (
   | { cmd: "retry" }
   | { cmd: "btw"; text: string }
 );
+
+/** Response from ts_definition Tauri command — go-to-definition result. */
+export interface TsDefinitionResult {
+  file: string;
+  line: number;
+  column: number;
+}

@@ -8,7 +8,7 @@ import {
   sendNotification,
 } from "@tauri-apps/plugin-notification";
 import { relaunch } from "@tauri-apps/plugin-process";
-import { type Update, check } from "@tauri-apps/plugin-updater";
+import { type Update } from "@tauri-apps/plugin-updater";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { CommandPalette, Toast, buildCommands, useCommandPalette } from "./CommandPalette";
 import { WorkspaceProvider } from "./Markdown";
@@ -2552,6 +2552,11 @@ function TabRuntime({
         <Sidebar
           sessions={state.sessions}
           importSources={state.externalImportSources}
+          onMentionFile={(path) => {
+            const ws = state.settings?.workspaceDir ?? "";
+            const rel = path.startsWith(ws) ? path.slice(ws.length).replace(/^[\\/]+/, "") : path;
+            window.dispatchEvent(new CustomEvent("reasonix:mention", { detail: `@${rel.replace(/\\/g, "/")}` }));
+          }}
           activeName={state.currentSession}
           workspaceDir={state.settings?.workspaceDir}
           onNewChat={newChat}
@@ -2604,7 +2609,12 @@ function TabRuntime({
               openFiles={openFiles}
               activeFile={activeFile}
               theme={theme}
+              workspaceDir={state.settings?.workspaceDir}
               onSetActiveFile={setActiveFile}
+              onOpenFile={(path) => {
+                setOpenFiles(prev => prev.includes(path) ? prev : [...prev, path]);
+                setActiveFile(path);
+              }}
               onCloseFile={(path) => {
                 setOpenFiles(prev => prev.filter(f => f !== path));
                 setActiveFile(prev => {
@@ -3682,20 +3692,21 @@ export function App() {
     setStartupRetryNonce((n) => n + 1);
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-    void (async () => {
-      try {
-        const update = await check();
-        if (!cancelled && update) setPendingUpdate(update);
-      } catch {
-        // updater not configured
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  // Auto-update check disabled — user merges changes manually.
+  // useEffect(() => {
+  //   let cancelled = false;
+  //   void (async () => {
+  //     try {
+  //       const update = await check();
+  //       if (!cancelled && update) setPendingUpdate(update);
+  //     } catch {
+  //       // updater not configured
+  //     }
+  //   })();
+  //   return () => {
+  //     cancelled = true;
+  //   };
+  // }, []);
 
   const installUpdate = useCallback(async () => {
     if (!pendingUpdate) return;

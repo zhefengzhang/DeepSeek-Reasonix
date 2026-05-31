@@ -333,6 +333,21 @@ export function Composer({
     }
   }, [draft]);
 
+  // Accept @mentions dispatched from other components (file tree right-click, etc.)
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<string>).detail;
+      if (!detail) return;
+      const mention = detail.startsWith("@") ? detail : `@${detail}`;
+      setDraft((current) =>
+        current ? `${current.replace(/\s+$/, "")} ${mention} ` : `${mention} `,
+      );
+      textareaRef.current?.focus();
+    };
+    window.addEventListener("reasonix:mention", handler);
+    return () => window.removeEventListener("reasonix:mention", handler);
+  }, [setDraft, textareaRef]);
+
   useEffect(() => {
     if (!modelMenuOpen) return;
     const onDown = (e: MouseEvent) => {
