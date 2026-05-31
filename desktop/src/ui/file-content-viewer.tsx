@@ -167,16 +167,10 @@ export function FileContentViewer({
     const startLine = selection.startLineNumber;
     const endLine = selection.endLineNumber;
     const range = startLine === endLine ? `${startLine}` : `${startLine}-${endLine}`;
-    const ref = `@${relPath(filePath)}:${range}`;
-    const selectedText = model.getValueInRange(selection);
-    // Only include code block if selection spans multiple lines or is
-    // non-trivial (longer than 80 chars or contains newlines).
-    const useBlock = selectedText.includes("\n") || selectedText.length > 80;
-    const payload = useBlock
-      ? `${ref}\n\`\`\`${extToLang(filePath)}\n${selectedText}\n\`\`\``
-      : `${ref} — \`${selectedText}\``;
+    const payload = `@${relPath(filePath)}:${range}`;
     void navigator.clipboard.writeText(payload);
-    flashCopyToast("Copied with file reference");
+    window.dispatchEvent(new CustomEvent("reasonix:mention", { detail: payload }));
+    flashCopyToast("已添加到聊天框");
   }
 
   // When a file is opened, scan its import statements and pre-register
@@ -337,11 +331,11 @@ export function FileContentViewer({
       }
     });
 
-    // Ctrl+Shift+C — copy selection with file:line reference (Cursor-style)
+    // Ctrl+Shift+L — add selection reference to chat composer
     editor.addAction({
       id: "copy-selection-ref",
-      label: "Copy with Reference",
-      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyC],
+      label: "添加到聊天框",
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyL],
       contextMenuGroupId: "9_cutcopypaste",
       contextMenuOrder: 2.1,
       precondition: "editorHasSelection",

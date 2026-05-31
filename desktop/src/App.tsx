@@ -1531,6 +1531,13 @@ function TabRuntime({
     onBusyChange?.(tabId, state.busy);
   }, [tabId, state.busy, onBusyChange]);
 
+  // Pre-warm the TypeScript language service as soon as the workspace is set.
+  useEffect(() => {
+    const ws = state.settings?.workspaceDir;
+    if (!ws) return;
+    void invoke("ts_warmup", { root: ws });
+  }, [state.settings?.workspaceDir]);
+
   const sendRpc = useCallback(
     (cmd: OutgoingCommand) => {
       const payload = { tabId, ...cmd };

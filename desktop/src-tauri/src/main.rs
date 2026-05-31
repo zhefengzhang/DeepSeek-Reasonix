@@ -6,7 +6,10 @@ mod rpc;
 use cc_switch::import_cc_switch_mcp;
 use rpc::{rpc_kill, rpc_send, rpc_spawn, RpcState};
 use serde::{Deserialize, Serialize};
+use std::io::{BufRead, BufReader, Write};
 use std::path::{Path, PathBuf};
+use std::process::{Command, Stdio};
+use std::sync::Mutex;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tauri::menu::MenuBuilder;
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
@@ -363,37 +366,57 @@ struct TsDefinitionResponse {
     column: u32,
 }
 
+/// Lazily-spawned persistent Node process.  Held inside a Mutex so every
+/// request acquires the lock, writes its query, reads the reply, then
+/// releases the lock.  The TypeScript program stays alive between calls.
+static TS_PROCESS: Mutex<Option<(BufReader<std::process::ChildStdout>, std::process::ChildStdin)>> =
+    Mutex::new(None);
+
+/// Send a single go-to-definition request to the persistent ts-lookup process.
+fn ts_lookup(root: &str, file: &str, line: u32, column: u32) -> Result<TsDefinitionResponse, String> {
+    let mut guard = TS_PROCESS.lock().map_err(|e| format!("lock: {e}"))?;
+    if guard.is_none() {
+        let script = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("..")
+            .join("scripts")
+            .join("ts-lookup.mjs");
+        let mut child = Command::new("node")
+            .arg(script.to_string_lossy().as_ref())
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::inherit())
+            .spawn()
+            .map_err(|e| format!("spawn node: {e}"))?;
+        let stdin = child.stdin.take().ok_or("no stdin")?;
+        let stdout = child.stdout.take().ok_or("no stdout")?;
+        *guard = Some((BufReader::new(stdout), stdin));
+    }
+    let (reader, writer) = guard.as_mut().ok_or("ts process gone")?;
+    let req = serde_json::json!({ "root": root, "file": file, "line": line, "column": column });
+    writeln!(writer, "{}", req).map_err(|e| format!("write: {e}"))?;
+    writer.flush().map_err(|e| format!("flush: {e}"))?;
+    let mut response = String::new();
+    reader.read_line(&mut response).map_err(|e| format!("read: {e}"))?;
+    let parsed: serde_json::Value =
+        serde_json::from_str(response.trim()).map_err(|e| format!("parse: {e}"))?;
+    if let Some(err) = parsed.get("error").and_then(|v| v.as_str()) {
+        return Err(err.to_string());
+    }
+    serde_json::from_value::<TsDefinitionResponse>(parsed).map_err(|e| format!("parse: {e}"))
+}
+
 #[tauri::command]
 fn ts_definition(root: String, file: String, line: u32, column: u32) -> Result<TsDefinitionResponse, String> {
-    use std::process::Command;
-    // CARGO_MANIFEST_DIR = .../desktop/src-tauri.
-    // ts-lookup.mjs lives at .../desktop/scripts/ → one level up.
-    let script = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("..")
-        .join("scripts")
-        .join("ts-lookup.mjs");
-    let output = Command::new("node")
-        .arg(script.to_string_lossy().as_ref())
-        .arg(&root)
-        .arg(&file)
-        .arg(line.to_string())
-        .arg(column.to_string())
-        .output()
-        .map_err(|e| format!("spawn node: {e}"))?;
-    if output.status.success() {
-        let stdout = String::from_utf8_lossy(&output.stdout);
-        serde_json::from_str::<TsDefinitionResponse>(stdout.trim())
-            .map_err(|e| format!("parse response: {e} (raw: {stdout})"))
-    } else {
-        let stderr = String::from_utf8_lossy(&output.stderr);
-        // Try to extract error message from JSON
-        if let Ok(err) = serde_json::from_str::<serde_json::Value>(stderr.trim()) {
-            if let Some(msg) = err.get("error").and_then(|v| v.as_str()) {
-                return Err(msg.to_string());
-            }
-        }
-        Err(format!("ts-lookup failed: {stderr}"))
-    }
+    ts_lookup(&root, &file, line, column)
+}
+
+/// Pre-warm the TypeScript language service so the first Ctrl+Click is instant.
+#[tauri::command]
+fn ts_warmup(root: String) -> Result<(), String> {
+    // Send a dummy request to force LanguageService initialization.
+    // Use a file we know exists (tsconfig.json itself works as a sentinel).
+    let _ = ts_lookup(&root, &root, 1, 1);
+    Ok(())
 }
 
 #[tauri::command]
@@ -596,6 +619,7 @@ fn main() {
             git_status,
             git_diffs,
             ts_definition,
+            ts_warmup,
             write_text_file,
             read_text_file,
             rename_file,

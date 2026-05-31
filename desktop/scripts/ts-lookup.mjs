@@ -1,110 +1,117 @@
 #!/usr/bin/env node
 /**
- * TypeScript go-to-definition lookup.
+ * Persistent TypeScript go-to-definition server.
  *
- * Usage: node ts-lookup.mjs <rootDir> <filePath> <line> <column>
- * Output (stdout): { "file": "...", "line": N, "column": N }
- * Errors (stderr):  { "error": "..." }
+ * Reads JSON lines from stdin, writes JSON lines to stdout.
+ * Each line: { "root": "...", "file": "...", "line": N, "column": N }
+ * Response:   { "file": "...", "line": N, "column": N } or null
+ *
+ * Exit on EOF or {"exit":true}.
  */
 
 import { createRequire } from "node:module";
+import { createInterface } from "node:readline";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, "..", "..");
-
 const requireTs = createRequire(join(repoRoot, "package.json"));
 const ts = requireTs("typescript");
 
-function fail(msg) {
-  process.stderr.write(JSON.stringify({ error: msg }) + "\n");
-  process.exit(1);
-}
+/** Per-project language service cache. Keyed by root dir. */
+const services = new Map();
 
-const args = process.argv.slice(2);
-if (args.length < 4) fail("usage: ts-lookup.mjs <rootDir> <filePath> <line> <column>");
+function getService(rootDir) {
+  let entry = services.get(rootDir);
+  if (entry) return entry;
 
-const [rootDir, filePath, lineStr, columnStr] = args;
-const line = Number(lineStr);
-const column = Number(columnStr);
-if (Number.isNaN(line) || Number.isNaN(column)) fail("invalid line/column");
-
-// Read tsconfig.json
-const configPath = join(rootDir, "tsconfig.json");
-let options, fileNames;
-try {
+  const configPath = join(rootDir, "tsconfig.json");
   const { config: parsed } = ts.readConfigFile(configPath, ts.sys.readFile);
   const result = ts.parseJsonConfigFileContent(parsed, ts.sys, rootDir);
-  options = result.options;
-  fileNames = result.fileNames;
-} catch (e) {
-  fail(`failed to read tsconfig: ${e.message}`);
+  const fileNames = [...result.fileNames];
+  const options = result.options;
+
+  const host = {
+    getScriptFileNames: () => fileNames,
+    getScriptVersion: () => "0",
+    getScriptSnapshot: (fileName) => {
+      try {
+        const text = ts.sys.readFile(fileName);
+        return text !== undefined ? ts.ScriptSnapshot.fromString(text) : undefined;
+      } catch {
+        return undefined;
+      }
+    },
+    getCurrentDirectory: () => rootDir,
+    getCompilationSettings: () => options,
+    getDefaultLibFileName: (opts) => ts.getDefaultLibFilePath(opts),
+    fileExists: ts.sys.fileExists,
+    readFile: ts.sys.readFile,
+    readDirectory: ts.sys.readDirectory,
+    directoryExists: ts.sys.directoryExists,
+    getDirectories: ts.sys.getDirectories,
+  };
+
+  const service = ts.createLanguageService(host, ts.createDocumentRegistry());
+  entry = { service, fileNames, rootDir, options };
+  services.set(rootDir, entry);
+  return entry;
 }
 
-// Include the target file even if it's excluded by tsconfig
-if (!fileNames.includes(filePath)) {
-  fileNames = [...fileNames, filePath];
-}
+function lookup({ root, file, line, column }) {
+  const entry = getService(root);
 
-// Build a language service
-const files = new Map();
-for (const fn of fileNames) {
-  try { files.set(fn, ts.sys.readFile(fn)); } catch { /* skip */ }
-}
-
-const host = {
-  getScriptFileNames: () => fileNames,
-  getScriptVersion: () => "0",
-  getScriptSnapshot: (fileName) => {
-    let text = files.get(fileName);
-    if (text === undefined) {
-      try { text = ts.sys.readFile(fileName); } catch { return undefined; }
-      if (text !== undefined) files.set(fileName, text);
-    }
-    return text !== undefined ? ts.ScriptSnapshot.fromString(text) : undefined;
-  },
-  getCurrentDirectory: () => rootDir,
-  getCompilationSettings: () => options,
-  getDefaultLibFileName: (opts) => ts.getDefaultLibFilePath(opts),
-  fileExists: ts.sys.fileExists,
-  readFile: ts.sys.readFile,
-  readDirectory: ts.sys.readDirectory,
-  directoryExists: ts.sys.directoryExists,
-  getDirectories: ts.sys.getDirectories,
-};
-
-const service = ts.createLanguageService(host, ts.createDocumentRegistry());
-
-// Open the target file to warm the service
-const sourceFile = service.getProgram()?.getSourceFile(filePath);
-if (!sourceFile) fail(`file not in program: ${filePath}`);
-
-const pos = ts.getPositionOfLineAndCharacter(sourceFile, line - 1, column - 1);
-
-// go-to-definition
-let definitionResult = service.getDefinitionAtPosition(filePath, pos);
-if (!definitionResult || definitionResult.length === 0) {
-  // fallback: getDefinitionAndBoundSpan
-  const span = service.getDefinitionAndBoundSpan(filePath, pos);
-  if (span && span.definitions && span.definitions.length > 0) {
-    definitionResult = span.definitions;
-  } else {
-    fail("no definition found");
+  // Add the target file if it's not already in the project
+  if (!entry.fileNames.includes(file)) {
+    entry.fileNames.push(file);
   }
-}
 
-const def = definitionResult[0];
-// Return the absolute path — the frontend opens files by absolute path.
-const defFile = service.getProgram()?.getSourceFile(def.fileName);
-const defPos = defFile
-  ? ts.getLineAndCharacterOfPosition(defFile, def.textSpan.start)
-  : { line: 0, character: 0 };
+  const program = entry.service.getProgram();
+  if (!program) return null;
 
-process.stdout.write(
-  JSON.stringify({
+  const sourceFile = program.getSourceFile(file);
+  if (!sourceFile) return null;
+
+  const pos = ts.getPositionOfLineAndCharacter(sourceFile, line - 1, column - 1);
+
+  let defs = entry.service.getDefinitionAtPosition(file, pos);
+  if (!defs || defs.length === 0) {
+    const span = entry.service.getDefinitionAndBoundSpan(file, pos);
+    if (span?.definitions?.length) defs = span.definitions;
+    else return null;
+  }
+
+  const def = defs[0];
+  const defFile = program.getSourceFile(def.fileName);
+  const defPos = defFile
+    ? ts.getLineAndCharacterOfPosition(defFile, def.textSpan.start)
+    : { line: 0, character: 0 };
+
+  return {
     file: def.fileName.replace(/\\/g, "/"),
     line: defPos.line + 1,
     column: defPos.character + 1,
-  }) + "\n",
-);
+  };
+}
+
+// --- main loop ---
+
+const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: false });
+
+rl.on("line", (raw) => {
+  raw = raw.trim();
+  if (!raw || raw === '{"exit":true}') {
+    rl.close();
+    return;
+  }
+  try {
+    const req = JSON.parse(raw);
+    const result = lookup(req);
+    process.stdout.write(JSON.stringify(result ?? { error: "no definition found" }) + "\n");
+  } catch (e) {
+    process.stdout.write(JSON.stringify({ error: e.message }) + "\n");
+  }
+});
+
+rl.on("close", () => process.exit(0));
