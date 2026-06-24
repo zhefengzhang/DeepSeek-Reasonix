@@ -2737,6 +2737,8 @@ html:not([data-platform="macos"]) .shortcut kbd[data-key="mod"] {
   background: transparent;
 }
 .thread-inner {
+  position: relative;
+  z-index: 1;
   max-width: var(--thread-max-width, 740px);
   margin: 0 auto 28px;
   padding: 0 32px;
@@ -3761,6 +3763,8 @@ html:not([data-platform="macos"]) .shortcut kbd[data-key="mod"] {
 }
 
 .approve-row {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -4274,6 +4278,7 @@ html:not([data-platform="macos"]) .shortcut kbd[data-key="mod"] {
   height: 24px;
   background: linear-gradient(to top, var(--bg), transparent);
   pointer-events: none;
+  z-index: 0;
 }
 .composer-inner {
   max-width: var(--composer-max-width, 760px);
@@ -7072,6 +7077,7 @@ html:not([data-platform="macos"]) .cmdk-row .kb .shortcut kbd[data-key="mod"] {
   border-radius: 10px;
   overflow: hidden;
   position: relative;
+  z-index: 1;
   will-change: transform;
 }
 .approval::before {

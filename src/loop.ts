@@ -149,7 +149,7 @@ export class CacheFirstLoop {
   /** Hard iteration cap per turn — prevents runaway tool-call loops from
    *  burning unlimited API budget. The model gets one final force-summary
    *  call when the cap fires. Override via REASONIX_MAX_ITER env var. */
-  static readonly DEFAULT_MAX_ITER_PER_TURN = 50;
+  static readonly DEFAULT_MAX_ITER_PER_TURN = 9999;
   /** Files the model has read this session; gates edit_file / multi_edit so SEARCH text matches on-disk bytes. Cleared on fold / mechanical truncate (the model's byte-level view of the elided history is gone). In-memory only — naturally empty on resume. */
   readonly readTracker = new ReadTracker();
 

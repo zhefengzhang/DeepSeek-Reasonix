@@ -62,6 +62,21 @@ const status: SlashHandler = (_args, loop, ctx) => {
           cost: cost.toFixed(4),
           turns: summary.turns,
         });
+  const churn =
+    summary.lastPrefixChangeReasons.length > 0
+      ? t("handlers.observability.statusCacheChurn", {
+          reasons: summary.lastPrefixChangeReasons.join(","),
+        })
+      : "";
+  const cacheDetailLine =
+    summary.turns > 0
+      ? t("handlers.observability.statusCacheDetail", {
+          miss: compactNum(summary.totalCacheMissTokens),
+          last: compactNum(summary.lastCacheMissTokens),
+          schemas: compactNum(summary.lastToolSchemaTokens),
+          churn,
+        })
+      : "";
 
   const budgetLine =
     typeof loop.budgetUsd === "number"
@@ -118,6 +133,7 @@ const status: SlashHandler = (_args, loop, ctx) => {
     mcpLine,
     sessionLine,
   ];
+  if (cacheDetailLine) lines.splice(3, 0, cacheDetailLine);
   if (workspaceLine) lines.push(workspaceLine);
   if (budgetLine) lines.push(budgetLine);
   if (pendingLine) lines.push(pendingLine);

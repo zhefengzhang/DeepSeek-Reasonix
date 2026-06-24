@@ -20,12 +20,14 @@ npx @tauri-apps/cli signer generate -w ~/.tauri/reasonix.key
 ```
 
 Outputs:
+
 - `~/.tauri/reasonix.key` — the **private** key. Never commit. Add a
   passphrase when prompted.
 - `~/.tauri/reasonix.key.pub` — paste into `tauri.conf.json` under
   `plugins.updater.pubkey`, replacing `REPLACE_ME_RUN_tauri_signer_generate`.
 
 Set repo secrets:
+
 - `TAURI_SIGNING_PRIVATE_KEY` — full contents of `~/.tauri/reasonix.key`
 - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` — the passphrase
 
@@ -58,10 +60,10 @@ Set a strong export password — needed below.
 
 Tauri v2 reads three env vars on Windows:
 
-| Secret | What it is |
-|---|---|
-| `WINDOWS_CERTIFICATE` | base64-encoded contents of `reasonix.pfx` |
-| `WINDOWS_CERTIFICATE_PASSWORD` | the PFX export password |
+| Secret                           | What it is                                  |
+| -------------------------------- | ------------------------------------------- |
+| `WINDOWS_CERTIFICATE`          | base64-encoded contents of `reasonix.pfx` |
+| `WINDOWS_CERTIFICATE_PASSWORD` | the PFX export password                     |
 
 Encode the cert before adding the secret:
 
@@ -96,7 +98,6 @@ Output should include `Successfully verified` and the certificate's
 common name.
 
 [Azure trusted signing action]: https://github.com/Azure/trusted-signing-action
-
 ## macOS — Developer ID + notarization
 
 Two separate signatures are required for a non-warning install:
@@ -108,7 +109,7 @@ Two separate signatures are required for a non-warning install:
 
 ### One-time: certificate
 
-Enroll in the [Apple Developer Program] ($99/yr). In Xcode → Settings →
+Enroll in the [Apple Developer Program][Apple Developer Program] ($99/yr). In Xcode → Settings →
 Accounts → Manage Certificates, create a `Developer ID Application`
 cert. Export from Keychain as a `.p12` with a passphrase.
 
@@ -119,20 +120,20 @@ base64 -i ReasonixDeveloperID.p12 -o cert.p12.b64
 ### One-time: app-specific password for notarytool
 
 Notarization uses the Apple ID, not the cert. At
-<https://appleid.apple.com> → Sign-In and Security → App-Specific
+[https://appleid.apple.com](https://appleid.apple.com) → Sign-In and Security → App-Specific
 Passwords, generate one labelled "reasonix notarytool". Save it — Apple
 only shows it once.
 
 ### Repository secrets
 
-| Secret | What it is |
-|---|---|
-| `APPLE_CERTIFICATE` | base64 of the `.p12` |
-| `APPLE_CERTIFICATE_PASSWORD` | the `.p12` passphrase |
-| `APPLE_SIGNING_IDENTITY` | the Common Name, e.g. `Developer ID Application: Your Name (TEAMID)` |
-| `APPLE_ID` | your Apple ID email |
-| `APPLE_PASSWORD` | the app-specific password from the previous step |
-| `APPLE_TEAM_ID` | 10-character team identifier, visible in Apple Developer → Membership |
+| Secret                         | What it is                                                             |
+| ------------------------------ | ---------------------------------------------------------------------- |
+| `APPLE_CERTIFICATE`          | base64 of the `.p12`                                                 |
+| `APPLE_CERTIFICATE_PASSWORD` | the `.p12` passphrase                                                |
+| `APPLE_SIGNING_IDENTITY`     | the Common Name, e.g.`Developer ID Application: Your Name (TEAMID)`  |
+| `APPLE_ID`                   | your Apple ID email                                                    |
+| `APPLE_PASSWORD`             | the app-specific password from the previous step                       |
+| `APPLE_TEAM_ID`              | 10-character team identifier, visible in Apple Developer → Membership |
 
 The release workflow already passes all six to `tauri-action`. Once
 they're set, builds for both `macos-13` (Intel) and `macos-14` (Apple
@@ -153,7 +154,6 @@ codesign --verify --deep --strict --verbose=2 /Applications/Reasonix.app
 ```
 
 [Apple Developer Program]: https://developer.apple.com/programs/
-
 ## Linux
 
 No signing required — `.deb` and `.AppImage` ship plain. If the project

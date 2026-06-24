@@ -1,0 +1,527 @@
+diff --git a/dashboard/src/App.tsx b/dashboard/src/App.tsx
+index d7126ba91..264c007ca 100644
+--- a/dashboard/src/App.tsx
++++ b/dashboard/src/App.tsx
+@@ -166,6 +166,7 @@ export type PendingRevision = {
+ 
+ export type UsageStats = {
+   totalCostUsd: number;
++  turnCostUsd: number;
+   totalPromptTokens: number;
+   totalCompletionTokens: number;
+   cacheHitTokens: number;
+@@ -319,6 +320,13 @@ function nextMessageTurn(messages: ChatMessage[]): number {
+   return lastTurn + 1;
+ }
+ 
++function isIncomingUserNewTurn(state: State, turn: number): boolean {
++  return (
++    !state.busy ||
++    !state.messages.some((m) => (m.kind === "user" || m.kind === "assistant") && m.turn === turn)
++  );
++}
++
+ function reduce(state: State, action: Action): State {
+   return withElidedTranscript(reduceRaw(state, action));
+ }
+@@ -329,6 +337,7 @@ function reduceRaw(state: State, action: Action): State {
+       return {
+         ...state,
+         busy: true,
++        usage: { ...state.usage, turnCostUsd: 0 },
+         messages: [
+           ...state.messages,
+           { kind: "user", text: action.text, clientId: action.clientId, turn: nextMessageTurn(state.messages) },
+@@ -341,6 +350,7 @@ function reduceRaw(state: State, action: Action): State {
+         ...state,
+         busy: true,
+         activeSkill: action.skill,
++        usage: { ...state.usage, turnCostUsd: 0 },
+         messages: [
+           ...state.messages,
+           {
+@@ -548,6 +558,7 @@ function mergeSessionFiles(existing: SessionFile[], adds: SessionFile[]): Sessio
+ function zeroUsage(): UsageStats {
+   return {
+     totalCostUsd: 0,
++    turnCostUsd: 0,
+     totalPromptTokens: 0,
+     totalCompletionTokens: 0,
+     cacheHitTokens: 0,
+@@ -581,16 +592,20 @@ function applyIncomingRaw(state: State, ev: IncomingEvent): State {
+       if (state.busy && last?.kind === "user" && last.text === ev.text) {
+         return state;
+       }
++      const turn = ev.turn > 0 ? ev.turn : nextMessageTurn(state.messages);
+       return {
+         ...state,
+         busy: true,
++        usage: isIncomingUserNewTurn(state, turn)
++          ? { ...state.usage, turnCostUsd: 0 }
++          : state.usage,
+         messages: [
+           ...state.messages,
+           {
+             kind: "user",
+             text: ev.text,
+             clientId: `remote-${ev.id}`,
+-            turn: ev.turn > 0 ? ev.turn : nextMessageTurn(state.messages),
++            turn,
+           },
+         ],
+       };
+@@ -751,6 +766,7 @@ function applyIncomingRaw(state: State, ev: IncomingEvent): State {
+           totalCompletionTokens: ev.totalCompletionTokens,
+           cacheHitTokens: ev.cacheHitTokens,
+           cacheMissTokens: ev.cacheMissTokens,
++          turnCostUsd: empty ? 0 : state.usage.turnCostUsd,
+           lastCallCacheHit: empty ? null : state.usage.lastCallCacheHit,
+           lastCallCacheMiss: empty ? null : state.usage.lastCallCacheMiss,
+         },
+@@ -956,6 +972,7 @@ function applyIncomingRaw(state: State, ev: IncomingEvent): State {
+       const hasCall = callHit > 0 || callMiss > 0;
+       const usage: UsageStats = {
+         totalCostUsd: state.usage.totalCostUsd + (ev.costUsd ?? 0),
++        turnCostUsd: state.usage.turnCostUsd + (ev.costUsd ?? 0),
+         totalPromptTokens: state.usage.totalPromptTokens + (u?.prompt_tokens ?? 0),
+         totalCompletionTokens: state.usage.totalCompletionTokens + (u?.completion_tokens ?? 0),
+         cacheHitTokens: state.usage.cacheHitTokens + callHit,
+diff --git a/dashboard/src/i18n/de.ts b/dashboard/src/i18n/de.ts
+index 73ab4df3b..de0ac2beb 100644
+--- a/dashboard/src/i18n/de.ts
++++ b/dashboard/src/i18n/de.ts
+@@ -1306,6 +1306,7 @@ export const de: typeof en = {
+     themeStyleGlacier: "Gletscher",
+     themeStyleMidnight: "Mitternacht",
+     thisTurn: "Dieser Turn",
++    session: "Sitzung",
+     tokens: "Tokens",
+   },
+   thread: {
+diff --git a/dashboard/src/i18n/en.ts b/dashboard/src/i18n/en.ts
+index bc047d945..95bc8c07d 100644
+--- a/dashboard/src/i18n/en.ts
++++ b/dashboard/src/i18n/en.ts
+@@ -1258,6 +1258,7 @@ export const en = {
+     themeStyleGlacier: "Glacier",
+     themeStyleMidnight: "Midnight",
+     thisTurn: "This turn",
++    session: "Session",
+     tokens: "Tokens",
+   },
+   thread: {
+diff --git a/dashboard/src/i18n/zh-CN.ts b/dashboard/src/i18n/zh-CN.ts
+index 33078958f..c84a4b6de 100644
+--- a/dashboard/src/i18n/zh-CN.ts
++++ b/dashboard/src/i18n/zh-CN.ts
+@@ -1233,6 +1233,7 @@ export const zhCN = {
+     themeStyleGlacier: "冰川",
+     themeStyleMidnight: "午夜",
+     thisTurn: "本轮",
++    session: "会话",
+     tokens: "Tokens",
+   },
+   thread: {
+diff --git a/dashboard/src/ui/statusbar.tsx b/dashboard/src/ui/statusbar.tsx
+index ed257d5dc..5d72b536e 100644
+--- a/dashboard/src/ui/statusbar.tsx
++++ b/dashboard/src/ui/statusbar.tsx
+@@ -70,7 +70,8 @@ export function StatusBar({
+       ? `${usage.cacheHitTokens.toLocaleString()} / ${totalTokens.toLocaleString()} tokens (${cacheHitPctDisplay}%)`
+       : "";
+   const runningJobs = jobs.filter((j) => j.running).length;
+-  const spent = formatMoney(usage.totalCostUsd, currency);
++  const turnSpent = formatMoney(usage.turnCostUsd, currency);
++  const sessionSpent = formatMoney(usage.totalCostUsd, currency);
+   const balanceLabel = balance
+     ? `${balance.currency === "USD" ? "$" : "¥"} ${balance.total.toFixed(2)}`
+     : "—";
+@@ -113,7 +114,12 @@ export function StatusBar({
+       <span className="seg">
+         <I.coin size={11} />
+         <span>{t("statusbar.thisTurn")}</span>
+-        <span className="v ok">{spent}</span>
++        <span className="v ok">{turnSpent}</span>
++      </span>
++      <span className="seg">
++        <I.coin size={11} />
++        <span>{t("statusbar.session")}</span>
++        <span className="v ok">{sessionSpent}</span>
+       </span>
+ 
+       <span className="grow" />
+diff --git a/desktop/src/App.test.ts b/desktop/src/App.test.ts
+index 5cf003f22..8f727fc14 100644
+--- a/desktop/src/App.test.ts
++++ b/desktop/src/App.test.ts
+@@ -52,6 +52,7 @@ function initialState(): Parameters<typeof reduce>[0] {
+     activePlan: null,
+     usage: {
+       totalCostUsd: 0,
++      turnCostUsd: 0,
+       totalPromptTokens: 0,
+       totalCompletionTokens: 0,
+       cacheHitTokens: 0,
+@@ -136,7 +137,7 @@ function makePathPrompt(
+ }
+ 
+ describe("Desktop App reducer — usage", () => {
+-  it("falls back prompt tokens to cache miss tokens when cache fields are absent", () => {
++  it("falls back prompt tokens to cache miss tokens and tracks turn cost", () => {
+     const next = reduce(initialState(), {
+       t: "incoming",
+       event: {
+@@ -151,9 +152,61 @@ describe("Desktop App reducer — usage", () => {
+     });
+ 
+     expect(next.usage.totalPromptTokens).toBe(1234);
++    expect(next.usage.turnCostUsd).toBe(0.001);
+     expect(next.usage.cacheHitTokens).toBe(0);
+     expect(next.usage.cacheMissTokens).toBe(1234);
+     expect(next.usage.lastCallCacheMiss).toBe(1234);
++
++    const accumulated = reduce(next, {
++      t: "incoming",
++      event: {
++        type: "model.final",
++        id: 2,
++        ts: "2026-05-27T00:00:01.000Z",
++        turn: 1,
++        content: "ok again",
++        usage: { prompt_tokens: 10, completion_tokens: 2, total_tokens: 12 },
++        costUsd: 0.002,
++      },
++    });
++    expect(accumulated.usage.turnCostUsd).toBeCloseTo(0.003, 6);
++
++    const steered = reduce(
++      {
++        ...accumulated,
++        busy: true,
++        messages: [{ kind: "assistant", turn: 1, segments: [], pending: false }],
++      },
++      {
++        t: "incoming",
++        event: {
++          type: "user.message",
++          id: 3,
++          ts: "2026-05-27T00:00:02.000Z",
++          turn: 1,
++          text: "same-turn steer",
++        },
++      },
++    );
++    expect(steered.usage.turnCostUsd).toBeCloseTo(0.003, 6);
++
++    const reset = reduce(accumulated, {
++      t: "incoming",
++      event: {
++        type: "user.message",
++        id: 4,
++        ts: "2026-05-27T00:00:03.000Z",
++        turn: 2,
++        text: "next turn",
++      },
++    });
++    expect(reset.usage.turnCostUsd).toBe(0);
++
++    const localReset = reduce(
++      { ...accumulated, usage: { ...accumulated.usage, turnCostUsd: 0.004 } },
++      { t: "send_user", text: "local next turn", clientId: "local-1" },
++    );
++    expect(localReset.usage.turnCostUsd).toBe(0);
+   });
+ 
+   it("settles the pending assistant message when an error ends the turn (#1660)", () => {
+diff --git a/desktop/src/App.tsx b/desktop/src/App.tsx
+index 286a4868e..ebe959e8a 100644
+--- a/desktop/src/App.tsx
++++ b/desktop/src/App.tsx
+@@ -221,6 +221,7 @@ export type PendingRevision = {
+ 
+ export type UsageStats = {
+   totalCostUsd: number;
++  turnCostUsd: number;
+   totalPromptTokens: number;
+   totalCompletionTokens: number;
+   cacheHitTokens: number;
+@@ -451,6 +452,13 @@ function nextMessageTurn(messages: ChatMessage[]): number {
+   return lastTurn + 1;
+ }
+ 
++function isIncomingUserNewTurn(state: State, turn: number): boolean {
++  return (
++    !state.busy ||
++    !state.messages.some((m) => (m.kind === "user" || m.kind === "assistant") && m.turn === turn)
++  );
++}
++
+ let _errSeq = 0;
+ function nextErrorId(): string {
+   _errSeq += 1;
+@@ -467,6 +475,7 @@ function reduceRaw(state: State, action: Action): State {
+       return {
+         ...state,
+         busy: true,
++        usage: { ...state.usage, turnCostUsd: 0 },
+         messages: [
+           ...state.messages,
+           { kind: "user", text: action.text, clientId: action.clientId, turn: nextMessageTurn(state.messages) },
+@@ -479,6 +488,7 @@ function reduceRaw(state: State, action: Action): State {
+         ...state,
+         busy: true,
+         activeSkill: action.skill,
++        usage: { ...state.usage, turnCostUsd: 0 },
+         messages: [
+           ...state.messages,
+           {
+@@ -780,6 +790,7 @@ function mergeSessionFiles(existing: SessionFile[], adds: SessionFile[]): Sessio
+ function zeroUsage(): UsageStats {
+   return {
+     totalCostUsd: 0,
++    turnCostUsd: 0,
+     totalPromptTokens: 0,
+     totalCompletionTokens: 0,
+     cacheHitTokens: 0,
+@@ -810,16 +821,20 @@ export function applyIncoming(state: State, ev: IncomingEvent): State {
+ function applyIncomingRaw(state: State, ev: IncomingEvent): State {
+   switch (ev.type) {
+     case "user.message": {
++      const turn = ev.turn > 0 ? ev.turn : nextMessageTurn(state.messages);
+       return {
+         ...state,
+         busy: true,
++        usage: isIncomingUserNewTurn(state, turn)
++          ? { ...state.usage, turnCostUsd: 0 }
++          : state.usage,
+         messages: [
+           ...state.messages,
+           {
+             kind: "user",
+             text: ev.text,
+             clientId: `remote-${ev.id}`,
+-            turn: ev.turn > 0 ? ev.turn : nextMessageTurn(state.messages),
++            turn,
+           },
+         ],
+       };
+@@ -1197,6 +1212,7 @@ function applyIncomingRaw(state: State, ev: IncomingEvent): State {
+       const hasCall = promptTokens > 0 || callHit > 0 || callMiss > 0;
+       const usage: UsageStats = {
+         totalCostUsd: state.usage.totalCostUsd + (ev.costUsd ?? 0),
++        turnCostUsd: state.usage.turnCostUsd + (ev.costUsd ?? 0),
+         totalPromptTokens: state.usage.totalPromptTokens + promptTokens,
+         totalCompletionTokens: state.usage.totalCompletionTokens + (u?.completion_tokens ?? 0),
+         cacheHitTokens: state.usage.cacheHitTokens + callHit,
+diff --git a/desktop/src/i18n/de.ts b/desktop/src/i18n/de.ts
+index 679e32dd3..93f8e3763 100644
+--- a/desktop/src/i18n/de.ts
++++ b/desktop/src/i18n/de.ts
+@@ -667,6 +667,7 @@ export const de: typeof en = {
+     cache: "Cache",
+     tokens: "Tokens",
+     thisTurn: "dieser Turn",
++    session: "Sitzung",
+     switchWorkspace: "Arbeitsbereich wechseln · {workspace}",
+     switchCurrency: "Währung wechseln (CNY / USD)",
+     balance: "Guthaben",
+diff --git a/desktop/src/i18n/en.ts b/desktop/src/i18n/en.ts
+index 059e95b71..c913a00a3 100644
+--- a/desktop/src/i18n/en.ts
++++ b/desktop/src/i18n/en.ts
+@@ -638,6 +638,7 @@ export const en = {
+     cache: "cache",
+     tokens: "tokens",
+     thisTurn: "this turn",
++    session: "session",
+     switchWorkspace: "Switch workspace · {workspace}",
+     switchCurrency: "Switch currency (CNY / USD)",
+     balance: "balance",
+diff --git a/desktop/src/i18n/ja.ts b/desktop/src/i18n/ja.ts
+index 32981d30d..f5ecc3ea4 100644
+--- a/desktop/src/i18n/ja.ts
++++ b/desktop/src/i18n/ja.ts
+@@ -661,6 +661,7 @@ export const ja: typeof en = {
+     cache: "キャッシュ",
+     tokens: "トークン",
+     thisTurn: "このターン",
++    session: "セッション",
+     switchWorkspace: "ワークスペース切替 · {workspace}",
+     switchCurrency: "通貨切替 (CNY / USD)",
+     balance: "残高",
+diff --git a/desktop/src/i18n/zh-CN.ts b/desktop/src/i18n/zh-CN.ts
+index 11f80343c..4f1831fbd 100644
+--- a/desktop/src/i18n/zh-CN.ts
++++ b/desktop/src/i18n/zh-CN.ts
+@@ -439,6 +439,7 @@ export const zhCN: typeof en = {
+     cache: "缓存",
+     tokens: "tokens",
+     thisTurn: "本次",
++    session: "会话",
+     switchWorkspace: "切换工作区 · {workspace}",
+     switchCurrency: "切换货币 (CNY / USD)",
+     balance: "余额",
+diff --git a/desktop/src/ui/context-panel.test.tsx b/desktop/src/ui/context-panel.test.tsx
+index 622832100..70c681969 100644
+--- a/desktop/src/ui/context-panel.test.tsx
++++ b/desktop/src/ui/context-panel.test.tsx
+@@ -13,6 +13,7 @@ vi.mock("@tauri-apps/plugin-opener", () => ({ openPath: vi.fn() }));
+ 
+ const usage: UsageStats = {
+   totalCostUsd: 0,
++  turnCostUsd: 0,
+   totalPromptTokens: 0,
+   totalCompletionTokens: 0,
+   cacheHitTokens: 0,
+diff --git a/desktop/src/ui/statusbar.tsx b/desktop/src/ui/statusbar.tsx
+index 4e3bc2d77..e299c024a 100644
+--- a/desktop/src/ui/statusbar.tsx
++++ b/desktop/src/ui/statusbar.tsx
+@@ -74,7 +74,8 @@ export function StatusBar({
+       ? `${usage.cacheHitTokens.toLocaleString()} / ${cacheDenom.toLocaleString()} tokens (${cacheHitPctDisplay}%)`
+       : "";
+   const runningJobs = jobs.filter((j) => j.running).length;
+-  const spent = formatMoney(usage.totalCostUsd, currency);
++  const turnSpent = formatMoney(usage.turnCostUsd, currency);
++  const sessionSpent = formatMoney(usage.totalCostUsd, currency);
+   const balanceLabel = balance
+     ? `${balance.currency === "USD" ? "$" : "¥"} ${balance.total.toFixed(2)}`
+     : "—";
+@@ -117,7 +118,12 @@ export function StatusBar({
+       <span className="seg">
+         <I.coin size={11} />
+         <span>{t("statusbar.thisTurn")}</span>
+-        <span className="v ok">{spent}</span>
++        <span className="v ok">{turnSpent}</span>
++      </span>
++      <span className="seg">
++        <I.coin size={11} />
++        <span>{t("statusbar.session")}</span>
++        <span className="v ok">{sessionSpent}</span>
+       </span>
+ 
+       <span className="grow" />
+diff --git a/src/loop.ts b/src/loop.ts
+index 40fd0ee1e..09fe57e06 100644
+--- a/src/loop.ts
++++ b/src/loop.ts
+@@ -744,7 +744,7 @@ export class CacheFirstLoop {
+     // when the user navigates away before the model responds). A failed
+     // first round-trip still leaves the message in the log; the user can
+     // /retry without re-typing.
+-    const turnStartLogIndex = this.log.length;
++    const turnStartLogIndex = this.log.totalLength;
+     this.appendAndPersist({ role: "user", content: userInput });
+     const toolSpecs = this.prefix.tools();
+     const rateLimitState = { shown: false };
+diff --git a/tests/desktop-btw-status.test.ts b/tests/desktop-btw-status.test.ts
+index 7ae7a4e28..06fdb2a7b 100644
+--- a/tests/desktop-btw-status.test.ts
++++ b/tests/desktop-btw-status.test.ts
+@@ -58,6 +58,7 @@ function makeState(): AppState {
+     activePlan: null,
+     usage: {
+       totalCostUsd: 0,
++      turnCostUsd: 0,
+       totalPromptTokens: 0,
+       totalCompletionTokens: 0,
+       cacheHitTokens: 0,
+diff --git a/tests/desktop-user-message.test.ts b/tests/desktop-user-message.test.ts
+index b705905a7..28c59394f 100644
+--- a/tests/desktop-user-message.test.ts
++++ b/tests/desktop-user-message.test.ts
+@@ -60,6 +60,7 @@ function makeState(messages: ChatMessage[] = []): AppState {
+     activePlan: null,
+     usage: {
+       totalCostUsd: 0,
++      turnCostUsd: 0,
+       totalPromptTokens: 0,
+       totalCompletionTokens: 0,
+       cacheHitTokens: 0,
+diff --git a/tests/loop-user-persist.test.ts b/tests/loop-user-persist.test.ts
+index cc533a5f2..6e202f25d 100644
+--- a/tests/loop-user-persist.test.ts
++++ b/tests/loop-user-persist.test.ts
+@@ -224,4 +224,82 @@ describe("loop persists user message at step entry (issue #943)", () => {
+     expect(secondRequestUsers).toEqual(["请按这次要求完整重写，不要局部微调"]);
+     expect(loadSessionMessages(sessionName).filter((m) => m.role === "user")).toHaveLength(1);
+   });
++
++  it("discarding an aborted turn preserves history outside the in-memory window", async () => {
++    const requestMessages: ChatMessage[][] = [];
++    let callCount = 0;
++    let markFirstRequestStarted!: () => void;
++    const firstRequestStarted = new Promise<void>((resolve) => {
++      markFirstRequestStarted = resolve;
++    });
++    const client = new DeepSeekClient({
++      apiKey: "sk-test",
++      fetch: vi.fn(
++        async (_url: unknown, init: { body?: string; signal?: AbortSignal } | undefined) => {
++          const body = init?.body ? JSON.parse(init.body) : {};
++          requestMessages.push(body.messages as ChatMessage[]);
++          if (callCount++ === 0) {
++            markFirstRequestStarted();
++            return new Promise<Response>((_resolve, reject) => {
++              init?.signal?.addEventListener("abort", () =>
++                reject(new DOMException("This operation was aborted", "AbortError")),
++              );
++            });
++          }
++          return new Response(
++            JSON.stringify({
++              choices: [
++                {
++                  index: 0,
++                  message: { role: "assistant", content: "ok" },
++                  finish_reason: "stop",
++                },
++              ],
++              usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
++            }),
++            { status: 200, headers: { "Content-Type": "application/json" } },
++          );
++        },
++      ) as unknown as typeof fetch,
++      retry: { maxAttempts: 1 },
++    });
++
++    const sessionName = "bug2287-discard-window-history";
++    const loop = new CacheFirstLoop({
++      client,
++      prefix: new ImmutablePrefix({ system: "s" }),
++      stream: false,
++      session: sessionName,
++      model: "deepseek-chat",
++    });
++
++    for (let i = 0; i < 105; i++) {
++      loop.appendAndPersist({ role: "user", content: `prior q ${i}` });
++      loop.appendAndPersist({ role: "assistant", content: `prior a ${i}` });
++    }
++    expect(loop.log.totalLength).toBeGreaterThan(loop.log.length);
++
++    const interrupted = (async () => {
++      for await (const ev of loop.step("aborted current prompt")) {
++        if (ev.role === "done") break;
++      }
++    })();
++
++    await firstRequestStarted;
++    loop.abort({ discardCurrentTurn: true });
++    await interrupted;
++
++    await loop.run("next prompt");
++
++    const secondRequestContents = requestMessages[1]!.map((m) => m.content);
++    expect(secondRequestContents).toContain("prior q 104");
++    expect(secondRequestContents).toContain("prior a 104");
++    expect(secondRequestContents).not.toContain("aborted current prompt");
++    expect(secondRequestContents).toContain("next prompt");
++
++    const persistedContents = loadSessionMessages(sessionName).map((m) => m.content);
++    expect(persistedContents).toContain("prior q 104");
++    expect(persistedContents).toContain("prior a 104");
++    expect(persistedContents).not.toContain("aborted current prompt");
++  });
+ });

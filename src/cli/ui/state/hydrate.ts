@@ -49,6 +49,9 @@ export function hydrateCardsFromMessages(messages: ReadonlyArray<ChatMessage>): 
       }
       if (m.tool_calls?.length) {
         for (const tc of m.tool_calls) {
+          // A persisted session can carry a partial tool_call (a streaming delta
+          // saved before its function landed); skip it instead of crashing hydration.
+          if (!tc.function) continue;
           let parsedArgs: unknown = tc.function.arguments;
           try {
             parsedArgs = JSON.parse(tc.function.arguments);
