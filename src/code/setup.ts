@@ -17,6 +17,7 @@ import { bootstrapSemanticSearchInCodeMode } from "../index/semantic/tool.js";
 import { ToolRegistry } from "../tools.js";
 import { registerChoiceTool } from "../tools/choice.js";
 import { registerCodeQueryTools } from "../tools/code-query.js";
+import { registerConnectToolSource } from "../tools/connect-source.js";
 import { registerFilesystemTools } from "../tools/filesystem.js";
 import { registerJavaSourceTool } from "../tools/java-source.js";
 import { JobRegistry } from "../tools/jobs.js";
@@ -44,6 +45,16 @@ export interface CodeToolsetOpts {
   onJobsChanged?: () => void;
   /** Shared `{current: callback}` sink the TUI populates after mount. Setup forwards it into every `spawnSubagent` so live progress events reach the rich subagent row even though setup runs before the UI does. */
   subagentSink?: SubagentSink;
+  /**
+   * Token economy mode.
+   * - `"full"` (default): all tools registered at boot — standard behavior.
+   * - `"economy"`: only core coding tools at boot. Optional tool sources
+   *   (web, skills, plan/scaffold, java, code-query, memory) are registered
+   *   as dormant and activated on demand via `connect_tool_source`. Each
+   *   activation costs one cache-miss turn but reduces the first-request
+   *   prefix by up to 20K+ tokens.
+   */
+  tokenMode?: "full" | "economy";
 }
 
 export interface CodeToolset {
@@ -66,6 +77,7 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
 
   const outlineThresholdBytes = loadFilesystemOutlineThresholdBytes();
   const registerRooted = (root: string): void => {
+    // Core tools — always registered, economy or full.
     registerFilesystemTools(tools, {
       rootDir: root,
       outlineThresholdBytes,
@@ -74,7 +86,6 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
     const cfg = readConfig(opts.configPath);
     registerShellTools(tools, {
       rootDir: root,
-      // Global allowlist applies everywhere; project list adds to it (#2059).
       extraAllowed: () => [
         ...new Set([
           ...loadGlobalShellAllowed(opts.configPath),
@@ -86,8 +97,8 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
       onJobsChanged: opts.onJobsChanged,
       sensitivePaths: cfg.sensitivePaths,
     });
-    registerMemoryTools(tools, { projectRoot: root });
-    registerCodeQueryTools(tools, { rootDir: root });
+    // In economy mode, memory + code-query are optional sources activated on demand.
+    // In full mode, registered immediately below.
   };
 
   const reBootstrapSemantic = async (root: string): Promise<{ enabled: boolean }> => {
@@ -96,28 +107,19 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
     return result;
   };
 
+  // Phase 1: Register core tools (always-on, economy + full).
   registerRooted(opts.rootDir);
-  registerPlanTool(tools);
-  registerChoiceTool(tools);
   registerTodoTool(tools);
-  registerScaffoldTools(tools, { projectRoot: opts.rootDir });
-  if (searchEnabled()) {
-    registerWebTools(tools);
-  }
-  if (loadJavaSourceEnabled()) {
-    registerJavaSourceTool(tools, { projectRoot: opts.rootDir });
-  }
-  // Lazy: constructing DeepSeekClient throws when DEEPSEEK_API_KEY is unset,
-  // which would kill `reasonix code` before the setup wizard can prompt for
-  // one. Defer to first subagent dispatch — by then the user has either keyed
-  // in or we error per-call instead of at boot.
+
+  // Phase 2: Optional tool sources. In economy mode these are wrapped in
+  // deferred activation functions and wired through connect_tool_source.
+  // In full mode they're registered immediately (current behavior).
+
+  // Deferred subagent client — avoids throwing when DEEPSEEK_API_KEY is
+  // unset at boot (setup wizard hasn't prompted yet).
   let subagentClient: DeepSeekClient | null = null;
-  registerSkillTools(tools, {
-    projectRoot: opts.rootDir,
-    customSkillPaths: loadResolvedSkillPaths(opts.rootDir),
-    subagentModels: loadSubagentModels(),
-    onSkillInstalled: opts.onSkillInstalled,
-    subagentRunner: async (skill, task, signal) => {
+  const buildSubagentRunner = (): import("../tools/skills.js").SubagentRunner => {
+    return async (skill, task, signal) => {
       if (!subagentClient) {
         const ep = loadEndpoint();
         subagentClient = new DeepSeekClient({ apiKey: ep.apiKey, baseUrl: ep.baseUrl });
@@ -131,15 +133,97 @@ export async function buildCodeToolset(opts: CodeToolsetOpts): Promise<CodeTools
         model: skill.model,
         allowedTools: skill.allowedTools,
         skillName: skill.name,
-        // Late-bound: the TUI's `useSubagent` writes the live callback into
-        // SHARED_SUBAGENT_SINK after mount. Until then `.current` is null
-        // and the events are silently dropped — that's fine for non-TUI
-        // callers (`reasonix chat --transcript`, library use).
         sink: opts.subagentSink ?? SHARED_SUBAGENT_SINK,
       });
       return formatSubagentResult(result);
-    },
-  });
+    };
+  };
+
+  // Builder for skill tools — called once in full mode, deferred in economy mode.
+  const buildSkills = (): number => {
+    const before = tools.specs().length;
+    registerSkillTools(tools, {
+      projectRoot: opts.rootDir,
+      customSkillPaths: loadResolvedSkillPaths(opts.rootDir),
+      subagentModels: loadSubagentModels(),
+      onSkillInstalled: opts.onSkillInstalled,
+      subagentRunner: buildSubagentRunner(),
+    });
+    return tools.specs().length - before;
+  };
+
+  const isEconomy = opts.tokenMode === "economy";
+
+  if (isEconomy) {
+    // Economy mode: core tools only at boot. Register connect_tool_source
+    // with deferred activation functions for optional sources.
+    const sources: Record<string, () => number> = {};
+
+    // skills — run_skill + install_skill + built-in subagent wrappers
+    sources["skills"] = buildSkills;
+
+    // web — web_search + web_fetch
+    if (searchEnabled()) {
+      sources["web"] = () => {
+        const before = tools.specs().length;
+        registerWebTools(tools);
+        return tools.specs().length - before;
+      };
+    }
+
+    // plan — submit_plan + revise_plan + ask_choice
+    sources["plan"] = () => {
+      const before = tools.specs().length;
+      registerPlanTool(tools);
+      registerChoiceTool(tools);
+      return tools.specs().length - before;
+    };
+
+    // scaffold — scaffolding/boilerplate tools
+    sources["scaffold"] = () => {
+      const before = tools.specs().length;
+      registerScaffoldTools(tools, { projectRoot: opts.rootDir });
+      return tools.specs().length - before;
+    };
+
+    // java_source — Java source analysis
+    if (loadJavaSourceEnabled()) {
+      sources["java_source"] = () => {
+        const before = tools.specs().length;
+        registerJavaSourceTool(tools, { projectRoot: opts.rootDir });
+        return tools.specs().length - before;
+      };
+    }
+
+    // memory + code_query — registered root-bound but deferred in economy
+    sources["memory"] = () => {
+      const before = tools.specs().length;
+      registerMemoryTools(tools, { projectRoot: opts.rootDir });
+      return tools.specs().length - before;
+    };
+
+    sources["code_query"] = () => {
+      const before = tools.specs().length;
+      registerCodeQueryTools(tools, { rootDir: opts.rootDir });
+      return tools.specs().length - before;
+    };
+
+    registerConnectToolSource(tools, { registry: tools, sources });
+  } else {
+    // Full mode: register everything immediately (current behavior).
+    buildSkills();
+    registerPlanTool(tools);
+    registerChoiceTool(tools);
+    registerScaffoldTools(tools, { projectRoot: opts.rootDir });
+    if (searchEnabled()) {
+      registerWebTools(tools);
+    }
+    if (loadJavaSourceEnabled()) {
+      registerJavaSourceTool(tools, { projectRoot: opts.rootDir });
+    }
+    registerMemoryTools(tools, { projectRoot: opts.rootDir });
+    registerCodeQueryTools(tools, { rootDir: opts.rootDir });
+  }
 
   const semantic = await reBootstrapSemantic(opts.rootDir);
 

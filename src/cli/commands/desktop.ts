@@ -54,6 +54,7 @@ import {
   loadResolvedSkillPaths,
   loadShowSystemEvents,
   loadSubagentModels,
+  loadTokenMode,
   loadTavilyApiKey,
   loadWorkspaceDir,
   normalizeMcpConfig,
@@ -2129,6 +2130,7 @@ export async function desktopCommand(opts: DesktopOptions): Promise<void> {
       rootDir: tab.rootDir,
       onSkillInstalled: () => emitSkills(tab),
       onJobsChanged: () => emitJobs(),
+      tokenMode: loadTokenMode(),
     });
     tab.toolset = toolset;
     tab.system = codeSystemPrompt(tab.rootDir, {
@@ -2376,6 +2378,7 @@ export async function desktopCommand(opts: DesktopOptions): Promise<void> {
       rootDir: target,
       onSkillInstalled: () => emitSkills(tab),
       onJobsChanged: () => emitJobs(),
+      tokenMode: loadTokenMode(),
     });
     tab.system = codeSystemPrompt(target, {
       hasSemanticSearch: tab.toolset.semantic.enabled,

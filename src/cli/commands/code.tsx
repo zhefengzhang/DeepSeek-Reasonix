@@ -7,6 +7,7 @@ import {
   DEFAULT_MODEL,
   bridgeEndpointEnv,
   loadModel,
+  loadTokenMode,
   normalizeMcpConfig,
   readConfig,
 } from "../../config.js";
@@ -81,6 +82,7 @@ export async function codeCommand(opts: CodeOptions = {}): Promise<void> {
   markPhase("semantic_bootstrap_start");
   const { tools, jobs, registerRooted, reBootstrapSemantic, semantic } = await buildCodeToolset({
     rootDir,
+    tokenMode: loadTokenMode(),
   });
   markPhase(
     semantic.enabled ? "semantic_bootstrap_done_enabled" : "semantic_bootstrap_done_skipped",

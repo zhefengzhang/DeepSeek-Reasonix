@@ -238,7 +238,7 @@ export class CacheFirstLoop {
     this.hookCwd = opts.hookCwd ?? process.cwd();
     this.confirmationGate = opts.confirmationGate ?? defaultPauseGate;
     this._rebuildSystem = opts.rebuildSystem ?? null;
-    this.maxIterPerTurn = opts.maxIterPerTurn ?? CacheFirstLoop.DEFAULT_MAX_ITER_PER_TURN;
+    this.maxIterPerTurn = CacheFirstLoop.DEFAULT_MAX_ITER_PER_TURN;
 
     this._streamPreference = opts.stream ?? true;
     this.stream = this._streamPreference;
@@ -744,7 +744,7 @@ export class CacheFirstLoop {
     // when the user navigates away before the model responds). A failed
     // first round-trip still leaves the message in the log; the user can
     // /retry without re-typing.
-    const turnStartLogIndex = this.log.length;
+    const turnStartLogIndex = this.log.totalLength;
     this.appendAndPersist({ role: "user", content: userInput });
     const toolSpecs = this.prefix.tools();
     const rateLimitState = { shown: false };

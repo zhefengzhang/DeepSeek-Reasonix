@@ -32,6 +32,7 @@ import {
   loadMaxIterPerTurn,
   loadModel,
   loadReasoningEffort,
+  loadTokenMode,
   normalizeMcpConfig,
   readConfig,
 } from "../../config.js";
@@ -163,7 +164,7 @@ async function buildSession(opts: {
   systemAppend?: string;
 }): Promise<Session> {
   const model = opts.modelOverride || loadModel() || DEFAULT_MODEL;
-  const toolset = await buildCodeToolset({ rootDir: opts.rootDir });
+  const toolset = await buildCodeToolset({ rootDir: opts.rootDir, tokenMode: loadTokenMode() });
   // Bridge MCP tools BEFORE building the prefix so their specs make it into the cache key.
   const mcpClients = await loadMcpServers(
     toolset.tools,

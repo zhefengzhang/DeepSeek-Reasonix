@@ -278,6 +278,8 @@ export interface ReasonixConfig {
   /** Maximum tool-call iterations per turn. Prevents runaway loops from consuming
    *  unlimited API budget. Default 50. Env `REASONIX_MAX_ITER` overrides. */
   maxIterPerTurn?: number;
+  /** Token economy mode — "full" (default) or "economy" (lazy-load optional tools). */
+  tokenMode?: TokenMode;
   projects?: {
     [absoluteRootDir: string]: {
       shellAllowed?: string[];
@@ -1311,6 +1313,17 @@ export function clearProjectPathAllowed(
 }
 
 /** Unknown values fall back to "review" so hand-edited bad config gets the safe default. */
+export type TokenMode = "full" | "economy";
+
+/** Load the token economy mode preference. Environment variable overrides config. */
+export function loadTokenMode(path: string = defaultConfigPath()): TokenMode {
+  const fromEnv = process.env.REASONIX_TOKEN_MODE;
+  if (fromEnv === "economy" || fromEnv === "full") return fromEnv;
+  const fromConfig = readConfig(path).tokenMode;
+  if (fromConfig === "economy" || fromConfig === "full") return fromConfig;
+  return "economy";
+}
+
 export function loadEditMode(path: string = defaultConfigPath()): EditMode {
   const v = readConfig(path).editMode;
   if (v === "auto" || v === "yolo" || v === "plan") return v;

@@ -43,13 +43,6 @@ function parentDir(path: string): string {
   return parts.join("/") || "/";
 }
 
-function isDescendantOf(child: string, parent: string): boolean {
-  const c = child.replace(/\\/g, "/").toLowerCase();
-  const p = parent.replace(/\\/g, "/").toLowerCase();
-  if (!p.endsWith("/")) return c.startsWith(p + "/");
-  return c.startsWith(p);
-}
-
 // --------------- helpers ---------------
 
 function gitStatusIcon(kind: string): string {
@@ -291,6 +284,27 @@ export function FileTree({
     }
   }, [loadTree, onOpenFile]);
 
+  /** Walk the existing tree and update a single node's children without rebuilding siblings.
+   *  Returns the updated tree. Mutates expandedRef. */
+  const updateNode = useCallback(
+    (
+      nodes: TreeNode[],
+      targetPath: string,
+      updating: TreeNode[],
+    ): TreeNode[] => {
+      return nodes.map((node): TreeNode => {
+        if (node.path === targetPath) {
+          return { ...node, expanded: true, children: updating, loading: false };
+        }
+        if (node.kind === "dir" && node.children.length > 0) {
+          return { ...node, children: updateNode(node.children, targetPath, updating) };
+        }
+        return node;
+      });
+    },
+    [],
+  );
+
   const toggleExpand = useCallback(
     async (nodePath: string) => {
       const allEntries = treeCache.current.get("__entries") as unknown as FileEntry[] | undefined;
@@ -298,49 +312,42 @@ export function FileTree({
 
       if (expandedRef.current.has(nodePath)) {
         expandedRef.current.delete(nodePath);
-        // Rebuild children of the root
-        const rootChildren = buildChildren(allEntries, workspaceDir?.replace(/\\/g, "/") ?? "");
-        setChildren(rootChildren);
+        // Collapse: rebuild the target node's parent chain so its children are removed.
+        // We rebuild from root to ensure all siblings stay intact.
+        setChildren((prev) =>
+          collapseNode(prev, nodePath),
+        );
       } else {
         expandedRef.current.add(nodePath);
-        const rootChildren = buildChildren(allEntries, workspaceDir?.replace(/\\/g, "/") ?? "");
-        // Need to recursively expand the node and its children
-        const expanded = await expandNode(
-          rootChildren,
-          nodePath,
-          allEntries,
+        const childNodes = buildChildren(allEntries, nodePath);
+        // Use functional update so we don't lose sibling state during
+        // the async buildChildren call.
+        setChildren((prev) =>
+          updateNode(prev, nodePath, childNodes),
         );
-        setChildren(expanded);
       }
     },
-    [workspaceDir, buildChildren],
+    [buildChildren, updateNode],
   );
 
-  const expandNode = async (
-    nodes: TreeNode[],
-    targetPath: string,
-    allEntries: FileEntry[],
-  ): Promise<TreeNode[]> => {
-    const result: TreeNode[] = [];
-    for (const node of nodes) {
-      if (isDescendantOf(targetPath, node.path) || node.path === targetPath) {
-        if (node.kind === "dir") {
-          const childNodes = buildChildren(allEntries, node.path);
-          const expandedChildren = await expandNode(childNodes, targetPath, allEntries);
-          result.push({
-            ...node,
-            expanded: node.path === targetPath || expandedRef.current.has(node.path),
-            children: expandedChildren,
-          });
-        } else {
-          result.push(node);
+  /** Walk the existing tree and collapse the target node. Siblings are untouched. */
+  const collapseNode = useCallback(
+    (nodes: TreeNode[], targetPath: string): TreeNode[] => {
+      return nodes.map((node): TreeNode => {
+        if (node.path === targetPath) {
+          return { ...node, expanded: false, children: [] };
         }
-      } else {
-        result.push(node);
-      }
-    }
-    return result;
-  };
+        if (node.kind === "dir" && node.children.length > 0) {
+          const updated = collapseNode(node.children, targetPath);
+          if (updated !== node.children) {
+            return { ...node, children: updated };
+          }
+        }
+        return node;
+      });
+    },
+    [],
+  );
 
   // --------------- context menu handlers ---------------
 
