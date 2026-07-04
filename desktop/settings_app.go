@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"net/url"
@@ -55,6 +56,7 @@ type ProviderView struct {
 	SupportedEfforts  []string                    `json:"supportedEfforts"`
 	DefaultEffort     string                      `json:"defaultEffort"`
 	ModelOverrides    []ProviderModelOverrideView `json:"modelOverrides"`
+	HeadroomEnabled   bool                        `json:"headroomEnabled"`
 }
 
 type ProviderModelOverrideView struct {
@@ -243,6 +245,8 @@ type SettingsView struct {
 	AutoApproveTools bool `json:"autoApproveTools"`
 	// Bypass is the legacy JSON key for the same live state.
 	Bypass bool `json:"bypass"`
+	// HeadroomStatus is the live state of the local headroom compression proxy.
+	HeadroomStatus *HeadroomStatusView `json:"headroomStatus,omitempty"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -465,6 +469,7 @@ func providerViewFromEntryForRootWithResolver(p config.ProviderEntry, builtIn, a
 		SupportedEfforts:  nonNil(p.SupportedEfforts),
 		DefaultEffort:     p.DefaultEffort,
 		ModelOverrides:    providerModelOverridesForView(p.ModelOverrides, models),
+		HeadroomEnabled:   p.HeadroomEnabled,
 	}
 }
 
@@ -600,6 +605,12 @@ func (a *App) Settings() SettingsView {
 	if shell == "" {
 		shell = "auto"
 	}
+	// Get headroom status
+	var headroomStatus *HeadroomStatusView
+	if a.headroom != nil {
+		hs := a.headroom.status()
+		headroomStatus = &hs
+	}
 	root := a.activeWorkspaceRoot()
 	writeRoots := cfg.WriteRootsForRoot(root)
 	effectiveWorkspaceRoot := ""
@@ -658,6 +669,7 @@ func (a *App) Settings() SettingsView {
 		ProviderKinds:           nonNil(provider.Kinds()),
 		AutoApproveTools:        ctrl != nil && ctrl.AutoApproveTools(),
 		Bypass:                  ctrl != nil && ctrl.AutoApproveTools(),
+		HeadroomStatus:          headroomStatus,
 	}
 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
 	resolver := config.NewCredentialResolverForRoot(root)
@@ -1174,9 +1186,13 @@ func (a *App) rebuild() error {
 	}
 	path := agent.ContinueSessionPath(prevPath, ctrl.SessionDir(), ctrl.Label())
 	if err := tab.ensureSessionLease(path); err != nil {
-		ctrl.Close()
-		tab.releaseSessionLease()
-		return err
+		if errors.Is(err, agent.ErrSessionLeaseHeld) {
+			slog.Warn("settings rebuild: session lease already held; continuing", "path", path, "err", err)
+		} else {
+			ctrl.Close()
+			tab.releaseSessionLease()
+			return err
+		}
 	}
 	if len(carried) > 0 {
 		carried = withFreshSystemPrompt(carried, systemPromptFrom(ctrl.History()))
@@ -1501,6 +1517,29 @@ func (a *App) SaveProvider(p ProviderView) error {
 		e.ReasoningProtocol = p.ReasoningProtocol
 		e.Thinking = providerThinkingForSettings(p.Thinking)
 		e.SupportedEfforts = p.SupportedEfforts
+		e.HeadroomEnabled = p.HeadroomEnabled
+		// Ensure "headroom" is in the status bar when headroom is enabled
+		if p.HeadroomEnabled {
+			headroomInItems := false
+			for _, item := range c.Desktop.StatusBarItems {
+				if item == "headroom" {
+					headroomInItems = true
+					break
+				}
+			}
+			if !headroomInItems {
+				c.Desktop.StatusBarItems = append(c.Desktop.StatusBarItems, "headroom")
+			}
+			// Auto-start the proxy immediately so the controller rebuild
+			// doesn't point a provider at a proxy that isn't running yet.
+			if a.headroom != nil && !a.headroom.healthCheck() {
+				// Apply preset so CLI flags reflect config, not Go zero values
+				c.Headroom.ApplyPreset(c.Headroom.HeadroomPreset())
+				if err := a.headroom.start(c, headroomUpstreamURL(p.BaseURL)); err != nil {
+					slog.Warn("headroom: auto-start on provider save failed", "err", err)
+				}
+			}
+		}
 		e.DefaultEffort = p.DefaultEffort
 		e.Model = ""
 		e.Models = nil

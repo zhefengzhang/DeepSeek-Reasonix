@@ -158,6 +158,8 @@ type App struct {
 	skillRootsCache skillRootsCache
 
 	heartbeat *HeartbeatEngine // scheduled heartbeat tasks; nil until startup
+
+	headroom *headroomSidecar // Headroom context-compression proxy; nil until first use
 }
 
 type skillRootsCache struct {
@@ -338,6 +340,7 @@ func NewApp() *App {
 		mediaTokens:      newMediaTokenStore(),
 		botInstalls:      map[string]*botInstallSession{},
 		botRuntime:       newDesktopBotRuntime(),
+		headroom:         newHeadroomSidecar(),
 	}
 }
 
@@ -370,6 +373,14 @@ func (a *App) startup(ctx context.Context) {
 	a.heartbeat = newHeartbeatEngine(a)
 	a.heartbeat.Start()
 
+	// Auto-start Headroom proxy if any provider enables it
+	a.autoStartHeadroom()
+
+	// Poll headroom stats every 5 seconds for the status bar
+	if a.headroom != nil {
+		a.goSafe("pollHeadroomStats", a.pollHeadroomStats)
+	}
+
 	go a.restoreOrBuildTabs()
 	a.goSafe("refreshBotRuntime", a.refreshBotRuntime)
 	a.goSafe("sendStartupPing", a.sendStartupPing)
@@ -378,6 +389,10 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) beforeClose(ctx context.Context) bool {
+	// Stop headroom proxy first — a stale process blocks fresh starts
+	if a.headroom != nil {
+		a.headroom.stop()
+	}
 	if a.forceQuit.Swap(false) || consumeSystemQuitRequested() {
 		return false
 	}
@@ -614,13 +629,13 @@ func (a *App) createTabEntry(scope, workspaceRoot, topicID string) *WorkspaceTab
 	return a.createTabEntryWithID(scope, workspaceRoot, topicID, newTabID())
 }
 
-func desktopNewSessionDefaults() (string, string) {
+func desktopNewSessionDefaults() (string, string, bool) {
 	cfg := config.LoadForEdit(config.UserConfigPath())
-	return strings.TrimSpace(cfg.DefaultModel), normalizeToolApprovalMode(cfg.DesktopDefaultToolApprovalMode())
+	return strings.TrimSpace(cfg.DefaultModel), normalizeToolApprovalMode(cfg.DesktopDefaultToolApprovalMode()), cfg.Agent.AutoPlan == "on"
 }
 
 func (a *App) createTabEntryWithID(scope, workspaceRoot, topicID, id string) *WorkspaceTab {
-	model, toolApprovalMode := desktopNewSessionDefaults()
+	model, toolApprovalMode, autoPlan := desktopNewSessionDefaults()
 	return &WorkspaceTab{
 		ID:               id,
 		Scope:            scope,
@@ -629,7 +644,7 @@ func (a *App) createTabEntryWithID(scope, workspaceRoot, topicID, id string) *Wo
 		TopicTitle:       topicTitleForTab(scope, workspaceRoot, topicID),
 		model:            model,
 		tokenMode:        boot.TokenModeFull,
-		mode:             tabModeFromAxes(false, toolApprovalMode == control.ToolApprovalYolo),
+		mode:             tabModeFromAxes(autoPlan, toolApprovalMode == control.ToolApprovalYolo),
 		toolApprovalMode: toolApprovalMode,
 		disabledMCP:      map[string]ServerView{},
 	}
@@ -650,6 +665,9 @@ func (a *App) snapshotAllTabs() {
 func (a *App) shutdown(context.Context) {
 	if a.heartbeat != nil {
 		a.heartbeat.Stop()
+	}
+	if a.headroom != nil {
+		a.headroom.stop()
 	}
 	a.stopBotRuntime()
 	a.stopTray()
@@ -2483,7 +2501,7 @@ func (a *App) openTransientBlankRuntime(scope, workspaceRoot string) error {
 		}
 	}
 
-	model, toolApprovalMode := desktopNewSessionDefaults()
+	model, toolApprovalMode, _ := desktopNewSessionDefaults()
 	sessionPath, err := createEmptySessionFile(desktopSessionDir(actualRoot), model)
 	if err != nil {
 		return err
@@ -7935,4 +7953,135 @@ func (a *App) ConnectKey(apiKey string) (string, error) {
 		a.mu.Unlock()
 	}
 	return warning, nil
+}
+
+// autoStartHeadroom starts the headroom proxy if any provider has HeadroomEnabled.
+func (a *App) autoStartHeadroom() {
+	if a.headroom == nil {
+		slog.Debug("headroom: auto-start skipped — sidecar nil")
+		return
+	}
+	cfg, _, err := a.loadDesktopUserConfigForView()
+	if err != nil {
+		slog.Warn("headroom: auto-start failed to load config", "err", err)
+		return
+	}
+	slog.Debug("headroom: loaded config", "providers", len(cfg.Providers))
+	// Find the first provider with HeadroomEnabled and extract its upstream.
+	var upstreamURL string
+	for _, p := range cfg.Providers {
+		slog.Debug("headroom: checking provider", "name", p.Name, "enabled", p.HeadroomEnabled, "base", p.BaseURL)
+		if p.HeadroomEnabled && p.BaseURL != "" {
+			upstreamURL = headroomUpstreamURL(p.BaseURL)
+			break
+		}
+	}
+	if upstreamURL == "" {
+		slog.Debug("headroom: auto-start skipped — no enabled provider with base_url")
+		return
+	}
+	cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
+	if err := a.headroom.start(cfg, upstreamURL); err != nil {
+		slog.Warn("headroom: auto-start failed", "err", err)
+	}
+}
+
+// pollHeadroomStats periodically checks the headroom proxy health and emits
+// events to the frontend for the status bar indicator.
+func (a *App) pollHeadroomStats() {
+	if a.headroom == nil || a.ctx == nil {
+		return
+	}
+	ticker := time.NewTicker(5 * time.Second)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-a.ctx.Done():
+			return
+		case <-ticker.C:
+			status := a.headroom.status()
+			runtime.EventsEmit(a.ctx, "headroom:stats", status)
+		}
+	}
+}
+
+// HeadroomStatus returns the current headroom proxy status for the frontend.
+func (a *App) HeadroomStatus() HeadroomStatusView {
+	if a.headroom == nil {
+		return HeadroomStatusView{Installed: false, Running: false, Port: 8787}
+	}
+	return a.headroom.status()
+}
+
+// StartHeadroom manually starts the headroom proxy.
+func (a *App) StartHeadroom() {
+	if a.headroom == nil {
+		return
+	}
+	cfg, _, err := a.loadDesktopUserConfigForView()
+	if err != nil {
+		return
+	}
+	// Find the first provider with HeadroomEnabled.
+	var upstreamURL string
+	for _, p := range cfg.Providers {
+		if p.HeadroomEnabled && p.BaseURL != "" {
+			upstreamURL = headroomUpstreamURL(p.BaseURL)
+			break
+		}
+	}
+	if upstreamURL == "" {
+		return
+	}
+	cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
+	if err := a.headroom.start(cfg, upstreamURL); err != nil {
+		slog.Warn("headroom: manual start failed", "err", err)
+	}
+}
+
+// StopHeadroom manually stops the headroom proxy.
+func (a *App) StopHeadroom() {
+	if a.headroom != nil {
+		a.headroom.stop()
+	}
+}
+
+// HeadroomConfig returns the current headroom configuration for the frontend.
+func (a *App) HeadroomConfig() HeadroomConfigView {
+	cfg, _, err := a.loadDesktopUserConfigForView()
+	if err != nil {
+		return HeadroomConfigView{Preset: "coding"}
+	}
+	return headroomConfigViewFrom(&cfg.Headroom)
+}
+
+// SaveHeadroomConfig persists headroom configuration changes from the frontend.
+func (a *App) SaveHeadroomConfig(v HeadroomConfigView) error {
+	return a.applyConfigOnly(func(c *config.Config) error {
+		if v.Preset != "" {
+			c.Headroom.Preset = v.Preset
+		}
+		if v.CodeAware != nil {
+			c.Headroom.CodeAware = *v.CodeAware
+		}
+		if v.CCR != nil {
+			c.Headroom.CCR = *v.CCR
+		}
+		if v.ProtectErrors != nil {
+			c.Headroom.ProtectErrors = v.ProtectErrors
+		}
+		if v.MinTokens != nil {
+			c.Headroom.MinTokens = *v.MinTokens
+		}
+		if v.DisableKompress != nil {
+			c.Headroom.DisableKompress = v.DisableKompress
+		}
+		if v.RequestTimeout != nil {
+			c.Headroom.RequestTimeout = *v.RequestTimeout
+		}
+		if v.CompressToolResults != nil {
+			c.Headroom.CompressToolResults = *v.CompressToolResults
+		}
+		return nil
+	})
 }

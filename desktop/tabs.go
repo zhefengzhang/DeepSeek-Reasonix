@@ -1553,7 +1553,7 @@ func (a *App) EnsureBlankTab(scope, workspaceRoot string) (TabMeta, error) {
 	if scope == "global" {
 		actualRoot = globalRoot
 	}
-	defaultModel, defaultToolApprovalMode := desktopNewSessionDefaults()
+	defaultModel, defaultToolApprovalMode, _ := desktopNewSessionDefaults()
 
 	a.mu.Lock()
 	for _, id := range a.orderedTabIDsLocked() {

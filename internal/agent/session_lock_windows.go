@@ -15,6 +15,10 @@ func lockSessionFile(path string) (func(), error) {
 		return nil, err
 	}
 	handle := windows.Handle(f.Fd())
+	// Prevent child processes (e.g. headroom proxy) from inheriting this
+	// handle. If a child inherits the lock, the lock survives the parent's
+	// exit and blocks the next process from writing the session file.
+	_ = windows.SetHandleInformation(handle, windows.HANDLE_FLAG_INHERIT, 0)
 	var overlapped windows.Overlapped
 	if err := windows.LockFileEx(handle, windows.LOCKFILE_EXCLUSIVE_LOCK, 0, 1, 0, &overlapped); err != nil {
 		_ = f.Close()
@@ -32,6 +36,7 @@ func tryLockSessionLeaseFile(path string) (func(), error) {
 		return nil, err
 	}
 	handle := windows.Handle(f.Fd())
+	_ = windows.SetHandleInformation(handle, windows.HANDLE_FLAG_INHERIT, 0)
 	var overlapped windows.Overlapped
 	flags := uint32(windows.LOCKFILE_EXCLUSIVE_LOCK | windows.LOCKFILE_FAIL_IMMEDIATELY)
 	if err := windows.LockFileEx(handle, flags, 0, 1, 0, &overlapped); err != nil {

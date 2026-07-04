@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -242,18 +243,13 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 		return nil, err
 	}
 	// Output style: fold the selected persona/tone block into the base prompt
-	// before language/memory/skills append, so a "replace" style (keep-coding
+	// before memory/skills/policies append, so a "replace" style (keep-coding
 	// false) still keeps those. Applied once, into the cache-stable prefix.
 	if st, ok := outputstyle.Resolve(cfg.Agent.OutputStyle, outputstyle.Dirs()); ok {
 		sysPrompt = outputstyle.Apply(sysPrompt, st)
 	}
-	sysPrompt += "\n\n" + config.UserDecisionPolicy
-	sysPrompt += "\n\n" + config.LanguagePolicy
 	if workspaceLine := currentWorkspacePromptLine(root); workspaceLine != "" {
 		sysPrompt += "\n\n" + workspaceLine
-	}
-	if tokenEconomy {
-		sysPrompt += "\n\n" + tokenEconomyPrompt
 	}
 	if cfg.EnvironmentEnabled() {
 		shellLabel := shell.Kind.String()
@@ -300,6 +296,13 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 	allSkills := allSkillStore.List()
 	if !tokenEconomy {
 		sysPrompt = skill.ApplyIndex(sysPrompt, skills)
+	}
+	// Policies are appended last so the durable user context (memory) and tool
+	// surface (skills index) stay closer to the base prompt for cache coherence.
+	sysPrompt += "\n\n" + config.UserDecisionPolicy
+	sysPrompt += "\n\n" + config.LanguagePolicy
+	if tokenEconomy {
+		sysPrompt += "\n\n" + tokenEconomyPrompt
 	}
 
 	reg := tool.NewRegistry()
@@ -1441,9 +1444,30 @@ func NewProvider(e *config.ProviderEntry) (provider.Provider, error) {
 // NewProviderWithProxy builds a provider.Provider with the configured ordinary
 // network proxy settings.
 func NewProviderWithProxy(e *config.ProviderEntry, proxy netclient.ProxySpec) (provider.Provider, error) {
+	baseURL := e.BaseURL
+	if e.HeadroomEnabled {
+		port := headroomProxyPort()
+		if e.Kind == "openai" || e.Kind == "" {
+			baseURL = fmt.Sprintf("http://127.0.0.1:%d/v1", port)
+		} else {
+			baseURL = fmt.Sprintf("http://127.0.0.1:%d", port)
+		}
+	}
+	timeout := 0
+	addNoProxy := false
+	if e.HeadroomEnabled {
+		cfg, err := config.Load()
+		if err == nil {
+			timeout = cfg.Headroom.HeadroomRequestTimeout()
+		}
+		if timeout <= 0 {
+			timeout = 300
+		}
+		addNoProxy = true
+	}
 	return provider.New(e.Kind, provider.Config{
 		Name:    e.Name,
-		BaseURL: e.BaseURL,
+		BaseURL: baseURL,
 		Model:   e.Model,
 		APIKey:  e.APIKey(),
 		// Pass the key's env var so auth failures can name where to fix it, plus
@@ -1461,6 +1485,8 @@ func NewProviderWithProxy(e *config.ProviderEntry, proxy netclient.ProxySpec) (p
 			"proxy_spec":         proxy,
 			"vision":             config.EffectiveVision(e),
 			"vision_detail":      e.VisionDetail,
+			"request_timeout_seconds": timeout,
+			"no_proxy_localhost":      addNoProxy,
 		},
 	})
 }
@@ -1785,4 +1811,24 @@ func providerNames(cfg *config.Config) string {
 		names[i] = p.Name
 	}
 	return strings.Join(names, "/")
+}
+
+// headroomProxyPort returns the configured headroom proxy port, defaulting to 8787.
+func headroomProxyPort() int {
+	cfg, err := config.Load()
+	if err != nil {
+		return 8787
+	}
+	return cfg.Headroom.HeadroomPort()
+}
+
+// headroomReachable checks if the headroom proxy is responding (1s timeout).
+func headroomReachable(port int) bool {
+	client := &http.Client{Timeout: time.Second}
+	resp, err := client.Get(fmt.Sprintf("http://127.0.0.1:%d/livez", port))
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+	return resp.StatusCode == 200
 }
