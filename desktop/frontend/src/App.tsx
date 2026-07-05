@@ -1043,6 +1043,7 @@ export default function App() {
   const [desktopPlatform, setDesktopPlatform] = useState<DesktopPlatform>(detectBrowserPlatform);
   const [statusBarStyle, setStatusBarStyle] = useState<"icon" | "text">("text");
   const [statusBarItems, setStatusBarItems] = useState<StatusBarItemId[]>(() => [...DEFAULT_STATUS_BAR_ITEMS]);
+  const [headroomStats, setHeadroomStats] = useState<import("./lib/types").HeadroomStatusView | undefined>(undefined);
   const [renamingTopicId, setRenamingTopicId] = useState<string | null>(null);
   const [topicTitleDraft, setTopicTitleDraft] = useState("");
   const topicExportOpen = useOverlayStore((s) => s.topicExportOpen);
@@ -1227,6 +1228,13 @@ export default function App() {
       setSettingsTarget("general");
     });
   }, [closeTransientOverlays]);
+  // Subscribe to headroom proxy stats events
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.runtime) return;
+    return window.runtime.EventsOn("headroom:stats", (stats: any) => {
+      setHeadroomStats(stats as import("./lib/types").HeadroomStatusView);
+    });
+  }, []);
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onResize = () => setViewportWidth(window.innerWidth);
@@ -3578,6 +3586,7 @@ export default function App() {
               insertRequest={composerInsertRequest}
               readOnly={Boolean(activeTab?.readOnly)}
               disabled={rewindCommitting || state.messageAction != null || state.approval != null || state.ask != null || clearContextPending}
+              headroomStats={headroomStats}
               submitDisabled={!controllerReady}
               decisionPending={rewindCommitting || state.messageAction != null || state.approval != null || state.ask != null || clearContextPending}
               ready={controllerReady}
@@ -3595,6 +3604,7 @@ export default function App() {
               context={state.context}
               usage={state.usage}
               balance={state.balance}
+              headroomStats={headroomStats}
               running={state.running || rewindCommitting}
               sessionTurns={sessionTurns}
               sessionTokens={state.sessionTokens}
@@ -3680,6 +3690,7 @@ export default function App() {
                   tabId={activeTabId}
                   context={state.context}
                   usage={state.usage}
+                  headroomStats={headroomStats}
                   sessionTokens={state.sessionTokens}
                   sessionCost={state.sessionCost}
                   sessionCurrency={state.sessionCurrency}

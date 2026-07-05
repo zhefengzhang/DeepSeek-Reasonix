@@ -257,6 +257,13 @@ func (t *WorkspaceTab) ensureSessionLease(path string) error {
 	}
 	lease, err := agent.TryAcquireSessionLease(key)
 	if err != nil {
+		// If the lease is already held by the current process (in-memory
+		// map), it means we tried to re-acquire a session we already own.
+		// This happens during controller rebuild after settings changes.
+		// Treat it as success: the existing lease is still valid.
+		if errors.Is(err, agent.ErrSessionLeaseHeld) && t.sessionLease != nil {
+			return nil
+		}
 		return err
 	}
 	t.releaseSessionLease()
@@ -1553,7 +1560,7 @@ func (a *App) EnsureBlankTab(scope, workspaceRoot string) (TabMeta, error) {
 	if scope == "global" {
 		actualRoot = globalRoot
 	}
-	defaultModel, defaultToolApprovalMode := desktopNewSessionDefaults()
+	defaultModel, defaultToolApprovalMode, _ := desktopNewSessionDefaults()
 
 	a.mu.Lock()
 	for _, id := range a.orderedTabIDsLocked() {

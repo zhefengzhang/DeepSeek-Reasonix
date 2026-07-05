@@ -75,6 +75,8 @@ import type {
   WorkspaceChangesView,
   GitCommitView,
   GitCommitDetailView,
+  HeadroomStatusView,
+  HeadroomConfigView,
   WorkspaceView,
 } from "./types";
 
@@ -373,6 +375,12 @@ export interface AppBindings {
   // New native-feel bindings (added with the desktop native-feel plan).
   ConfirmAction(req: NativeConfirmRequest): Promise<boolean>;
   SaveWindowState(state: DesktopWindowState): Promise<void>;
+  // Headroom context-compression proxy bindings.
+  HeadroomStatus(): Promise<HeadroomStatusView>;
+  StartHeadroom(): Promise<void>;
+  StopHeadroom(): Promise<void>;
+  HeadroomConfig(): Promise<HeadroomConfigView>;
+  SaveHeadroomConfig(cfg: HeadroomConfigView): Promise<void>;
 }
 
 // Compile-time drift check. Exclude<A, B> extracts keys in A that are missing
@@ -3407,5 +3415,14 @@ function makeMockApp(): AppBindings {
         ],
       };
     },
+    HeadroomStatus: async () => ({
+      running: false,
+      installed: false,
+      port: 8787,
+    }),
+    StartHeadroom: async () => {},
+    StopHeadroom: async () => {},
+    HeadroomConfig: async () => ({ preset: "coding", codeAware: true, ccr: false, protectErrors: true, minTokens: 250, disableKompress: true, requestTimeout: 120, compressToolResults: true }),
+    SaveHeadroomConfig: async () => {},
   };
 }

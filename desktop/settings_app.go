@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"net/url"
@@ -55,6 +56,7 @@ type ProviderView struct {
 	SupportedEfforts  []string                    `json:"supportedEfforts"`
 	DefaultEffort     string                      `json:"defaultEffort"`
 	ModelOverrides    []ProviderModelOverrideView `json:"modelOverrides"`
+	HeadroomEnabled   bool                        `json:"headroomEnabled"`
 }
 
 type ProviderModelOverrideView struct {
@@ -243,6 +245,8 @@ type SettingsView struct {
 	AutoApproveTools bool `json:"autoApproveTools"`
 	// Bypass is the legacy JSON key for the same live state.
 	Bypass bool `json:"bypass"`
+	// HeadroomStatus is the live state of the local headroom compression proxy.
+	HeadroomStatus *HeadroomStatusView `json:"headroomStatus,omitempty"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -465,6 +469,7 @@ func providerViewFromEntryForRootWithResolver(p config.ProviderEntry, builtIn, a
 		SupportedEfforts:  nonNil(p.SupportedEfforts),
 		DefaultEffort:     p.DefaultEffort,
 		ModelOverrides:    providerModelOverridesForView(p.ModelOverrides, models),
+		HeadroomEnabled:   p.HeadroomEnabled,
 	}
 }
 
@@ -600,6 +605,12 @@ func (a *App) Settings() SettingsView {
 	if shell == "" {
 		shell = "auto"
 	}
+	// Get headroom status
+	var headroomStatus *HeadroomStatusView
+	if a.headroom != nil {
+		hs := a.headroom.status()
+		headroomStatus = &hs
+	}
 	root := a.activeWorkspaceRoot()
 	writeRoots := cfg.WriteRootsForRoot(root)
 	effectiveWorkspaceRoot := ""
@@ -658,6 +669,7 @@ func (a *App) Settings() SettingsView {
 		ProviderKinds:           nonNil(provider.Kinds()),
 		AutoApproveTools:        ctrl != nil && ctrl.AutoApproveTools(),
 		Bypass:                  ctrl != nil && ctrl.AutoApproveTools(),
+		HeadroomStatus:          headroomStatus,
 	}
 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
 	resolver := config.NewCredentialResolverForRoot(root)
@@ -1174,9 +1186,13 @@ func (a *App) rebuild() error {
 	}
 	path := agent.ContinueSessionPath(prevPath, ctrl.SessionDir(), ctrl.Label())
 	if err := tab.ensureSessionLease(path); err != nil {
-		ctrl.Close()
-		tab.releaseSessionLease()
-		return err
+		if errors.Is(err, agent.ErrSessionLeaseHeld) {
+			slog.Warn("settings rebuild: session lease already held; continuing", "path", path, "err", err)
+		} else {
+			ctrl.Close()
+			tab.releaseSessionLease()
+			return err
+		}
 	}
 	if len(carried) > 0 {
 		carried = withFreshSystemPrompt(carried, systemPromptFrom(ctrl.History()))
@@ -1480,7 +1496,21 @@ func providerDefaultForModels(currentDefault string, models []string) string {
 // `models` even when only one model is selected, while `model` remains populated
 // in-memory for validation/back-compat. The shared key/endpoint live on the entry.
 func (a *App) SaveProvider(p ProviderView) error {
-	return a.applyConfigChange(func(c *config.Config) error {
+	// For enable: start proxy before rebuild so the new controller can
+	// route through headroom immediately. The proxy start (up to 15s
+	// health-check) must NOT block the Wails binding, so we do it here,
+	// outside applyConfigChange, where the config lock is not held.
+	if p.HeadroomEnabled && a.headroom != nil && !a.headroom.healthCheck() {
+		cfg, err := config.Load()
+		if err == nil {
+			cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
+			if err := a.headroom.start(cfg, headroomUpstreamURL(p.BaseURL)); err != nil {
+				slog.Warn("headroom: pre-start on provider save failed", "err", err)
+			}
+		}
+	}
+
+	if err := a.applyConfigChange(func(c *config.Config) error {
 		e := config.ProviderEntry{Name: p.Name}
 		for i := range c.Providers {
 			if c.Providers[i].Name == p.Name {
@@ -1501,6 +1531,27 @@ func (a *App) SaveProvider(p ProviderView) error {
 		e.ReasoningProtocol = p.ReasoningProtocol
 		e.Thinking = providerThinkingForSettings(p.Thinking)
 		e.SupportedEfforts = p.SupportedEfforts
+		e.HeadroomEnabled = p.HeadroomEnabled
+		if p.HeadroomEnabled {
+			headroomInItems := false
+			for _, item := range c.Desktop.StatusBarItems {
+				if item == "headroom" {
+					headroomInItems = true
+					break
+				}
+			}
+			if !headroomInItems {
+				c.Desktop.StatusBarItems = append(c.Desktop.StatusBarItems, "headroom")
+			}
+		} else {
+			filtered := make([]string, 0, len(c.Desktop.StatusBarItems))
+			for _, item := range c.Desktop.StatusBarItems {
+				if item != "headroom" {
+					filtered = append(filtered, item)
+				}
+			}
+			c.Desktop.StatusBarItems = filtered
+		}
 		e.DefaultEffort = p.DefaultEffort
 		e.Model = ""
 		e.Models = nil
@@ -1508,7 +1559,7 @@ func (a *App) SaveProvider(p ProviderView) error {
 		e.VisionModels = nil
 		models := chatProviderModels(p.Models)
 		if len(models) > 0 {
-			e.Model = models[0] // also satisfies validateProvider's model requirement
+			e.Model = models[0]
 			e.Models = models
 			e.ModelOverrides = providerModelOverridesForSave(p.ModelOverrides, models)
 			if p.VisionModelsSet || len(p.VisionModels) > 0 {
@@ -1528,7 +1579,16 @@ func (a *App) SaveProvider(p ProviderView) error {
 		}
 		addProviderAccess(c, p.Name)
 		return nil
-	})
+	}); err != nil {
+		return err
+	}
+
+	// For disable: stop proxy after rebuild so the controller no longer
+	// routes through it before we tear the proxy down.
+	if !p.HeadroomEnabled && a.headroom != nil {
+		a.headroom.stop()
+	}
+	return nil
 }
 
 // AddOfficialProviderAccess adds one curated desktop provider template to the
