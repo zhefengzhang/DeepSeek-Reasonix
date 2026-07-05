@@ -66,6 +66,10 @@ type WorkspaceTab struct {
 	saving       bool
 	saveAgain    bool
 	saveFailures int
+	// lastAutosaveWarnAt debounces the user-facing autosave-failure notice:
+	// a persistently failing disk (AV hold, full volume) otherwise emits a
+	// chat warning for every completed turn. Logs are never debounced.
+	lastAutosaveWarnAt time.Time
 
 	// closing is set under saveMu when the tab is being torn down. Once set,
 	// tabSnapshotLoop stops taking new snapshot work and CloseTab waits on
@@ -241,8 +245,14 @@ func (t *WorkspaceTab) hasActiveRuntimeWork() bool {
 	return status.Running || status.PendingPrompt || status.BackgroundJobs > 0
 }
 
+// sessionRuntimeKey is the comparison/map key for "same session" checks. It
+// layers agent.CanonicalSessionPath on top of the desktop path normalization
+// so the key matches the form held by session leases (lowercased on Windows).
+// Comparing a lease's Path() against a raw tab path without this fold made
+// every rebuild on Windows look like a foreign holder (self-lock, #5999).
+// Keys are identities only — never use them as display or file paths.
 func sessionRuntimeKey(path string) string {
-	return canonicalTabSessionPath(path)
+	return agent.CanonicalSessionPath(canonicalTabSessionPath(path))
 }
 
 var sessionLeaseAcquireHookForTest func()
@@ -433,7 +443,7 @@ func (a *App) detachSessionRuntime(tab *WorkspaceTab) bool {
 	}
 	a.mu.Lock()
 	a.ensureDetachedSessionsLocked()
-	tab.SessionPath = key
+	tab.SessionPath = canonicalTabSessionPath(path)
 	a.detachedSessions[key] = tab
 	a.mu.Unlock()
 	return true
@@ -444,8 +454,10 @@ func (a *App) detachSessionRuntime(tab *WorkspaceTab) bool {
 // ActivityStatus, disabledMCP, ...) are written under a.mu by bound methods
 // and the event sink, and the disabledMCP map read would otherwise race those
 // writers. The session lease is transferred separately by the caller through
-// the sessionLeaseMu helpers.
-func cloneDetachedRuntimeTab(tab *WorkspaceTab, key string) *WorkspaceTab {
+// the sessionLeaseMu helpers. key is the runtime identity (map key / tab id
+// hash); path is the real session path — keys are case-folded on Windows and
+// must not leak into SessionPath, which is displayed and persisted.
+func cloneDetachedRuntimeTab(tab *WorkspaceTab, key, path string) *WorkspaceTab {
 	if tab == nil {
 		return nil
 	}
@@ -461,7 +473,7 @@ func cloneDetachedRuntimeTab(tab *WorkspaceTab, key string) *WorkspaceTab {
 		SharedHostKey:    tab.SharedHostKey,
 		TopicID:          tab.TopicID,
 		TopicTitle:       tab.TopicTitle,
-		SessionPath:      key,
+		SessionPath:      canonicalTabSessionPath(path),
 		Ctrl:             tab.Ctrl,
 		Label:            tab.Label,
 		Ready:            tab.Ready,
@@ -501,12 +513,13 @@ func (a *App) detachRuntimeForReplacement(tab *WorkspaceTab) bool {
 		a.mu.Unlock()
 		return false
 	}
-	key := sessionRuntimeKey(tab.currentSessionPath())
+	sourcePath := tab.currentSessionPath()
+	key := sessionRuntimeKey(sourcePath)
 	if key == "" {
 		a.mu.Unlock()
 		return false
 	}
-	detached := cloneDetachedRuntimeTab(tab, key)
+	detached := cloneDetachedRuntimeTab(tab, key, sourcePath)
 	if detached == nil {
 		a.mu.Unlock()
 		return false
@@ -529,7 +542,10 @@ func (a *App) detachRuntimeForReplacement(tab *WorkspaceTab) bool {
 	return true
 }
 
-func applyRuntimeTab(target, source *WorkspaceTab, key string, wailsCtx context.Context, app *App) {
+// applyRuntimeTab moves source's runtime (controller, sink, lease, telemetry)
+// onto target. path is the real session path for display/persistence; the
+// case-folded runtime key must never be written into SessionPath.
+func applyRuntimeTab(target, source *WorkspaceTab, path string, wailsCtx context.Context, app *App) {
 	if target == nil || source == nil {
 		return
 	}
@@ -546,7 +562,7 @@ func applyRuntimeTab(target, source *WorkspaceTab, key string, wailsCtx context.
 	target.Ctrl = source.Ctrl
 	target.sink = source.sink
 	target.adoptSessionLease(source.takeSessionLease())
-	target.SessionPath = key
+	target.SessionPath = canonicalTabSessionPath(path)
 	target.SharedHostKey = source.SharedHostKey
 	target.Label = source.Label
 	target.Ready = true
@@ -578,7 +594,7 @@ func (a *App) attachExistingSessionRuntime(tab *WorkspaceTab, path string, wails
 	detached := a.detachedSessions[key]
 	if detached != nil {
 		delete(a.detachedSessions, key)
-		applyRuntimeTab(tab, detached, key, wailsCtx, a)
+		applyRuntimeTab(tab, detached, path, wailsCtx, a)
 		if current := a.tabs[tab.ID]; current == tab {
 			a.saveTabsLocked()
 		}
@@ -609,7 +625,7 @@ func (a *App) attachExistingSessionRuntime(tab *WorkspaceTab, path string, wails
 	if a.activeTabID == source.ID {
 		a.activeTabID = tab.ID
 	}
-	applyRuntimeTab(tab, source, key, wailsCtx, a)
+	applyRuntimeTab(tab, source, path, wailsCtx, a)
 	a.saveTabsLocked()
 	attachedCtrl := tab.Ctrl
 	a.mu.Unlock()
@@ -2396,6 +2412,22 @@ func (a *App) tabBuildSuperseded(tab *WorkspaceTab, generation uint64) bool {
 	return a.tabBuildSupersededLocked(tab, generation)
 }
 
+// supersedeTabBuildLocked invalidates any in-flight startup build and cancels
+// its context. A synchronous rebuild (model/effort/token switch) that has
+// already installed its controller calls this so a slower blank-session build
+// cannot finish afterward, overwrite tab.Ctrl, and release or steal the
+// session lease the switch just bound. Callers must hold a.mu.
+func (a *App) supersedeTabBuildLocked(tab *WorkspaceTab) {
+	if tab == nil {
+		return
+	}
+	tab.buildGeneration++
+	if tab.buildCancel != nil {
+		tab.buildCancel()
+		tab.buildCancel = nil
+	}
+}
+
 // abandonSupersededBuild cleans up after a build that lost tab ownership
 // mid-flight (removed tab, or a session rebind bumped the generation). It
 // releases only what THIS build acquired — its controller, its own
@@ -2556,7 +2588,7 @@ func (a *App) buildTabControllerWithContext(tab *WorkspaceTab, loadedSession loa
 			a.mu.Unlock()
 			return
 		}
-		tab.StartupErr = err.Error()
+		tab.StartupErr = userFacingSessionLeaseError("", err).Error()
 		tab.Ready = true
 		tab.releaseSessionLease()
 		a.mu.Unlock()
@@ -2682,7 +2714,7 @@ func (a *App) buildTabControllerWithContext(tab *WorkspaceTab, loadedSession loa
 			a.abandonSupersededBuild(tab, nil, rootKey, "")
 			return
 		}
-		tab.StartupErr = err.Error()
+		tab.StartupErr = userFacingSessionLeaseError("", err).Error()
 		tab.Ready = true
 		hostKey := takeTabSharedHostKey(tab)
 		tab.releaseSessionLease()
@@ -2759,6 +2791,7 @@ func (a *App) buildTabControllerWithContext(tab *WorkspaceTab, loadedSession loa
 				a.emitReady(wailsCtx, tab.ID)
 				return
 			}
+			preLeaseKey := tab.sessionLeaseRuntimeKey()
 			if err := tab.ensureSessionLease(path); err != nil {
 				a.mu.Lock()
 				if a.tabBuildSupersededLocked(tab, buildGeneration) {
@@ -2766,10 +2799,13 @@ func (a *App) buildTabControllerWithContext(tab *WorkspaceTab, loadedSession loa
 					a.abandonSupersededBuild(tab, ctrl, rootKey, "")
 					return
 				}
-				tab.StartupErr = err.Error()
+				tab.StartupErr = userFacingSessionLeaseError("", err).Error()
 				tab.Ready = true
 				hostKey := takeTabSharedHostKey(tab)
-				tab.releaseSessionLease()
+				// Release only a lease bound to THIS build's session: a failed
+				// ensure leaves any prior lease untouched, and that lease may
+				// belong to a runtime a concurrent switch just installed.
+				tab.releaseSessionLeaseForKey(sessionRuntimeKey(path))
 				a.mu.Unlock()
 				ctrl.Close()
 				if hostKey != "" {
@@ -2780,8 +2816,12 @@ func (a *App) buildTabControllerWithContext(tab *WorkspaceTab, loadedSession loa
 			}
 			// Remember which lease THIS build bound: if the build is later
 			// superseded, only a lease still carrying this key may be
-			// released (see abandonSupersededBuild).
-			acquiredLeaseKey = sessionRuntimeKey(path)
+			// released (see abandonSupersededBuild). A fast-path reuse means
+			// the lease existed before this build (bound by a concurrent
+			// switch or recovery) — it is not ours to release.
+			if key := sessionRuntimeKey(path); key != preLeaseKey {
+				acquiredLeaseKey = key
+			}
 			// Re-check ownership right after the (potentially slow) lease
 			// bind: a rebind that superseded this build while ensure was in
 			// flight has already retargeted the tab, and continuing into
@@ -3129,6 +3169,10 @@ func (a *App) ctrlByTabID(tabID string) control.SessionAPI {
 
 const maxTabSnapshotFailureRetries = 2
 
+// autosaveWarnInterval rate-limits the user-facing autosave-failure notice
+// per tab; slog keeps recording every failure regardless.
+const autosaveWarnInterval = 5 * time.Minute
+
 func tabSnapshotRetryDelay(failures int) time.Duration {
 	switch {
 	case failures <= 1:
@@ -3202,7 +3246,6 @@ func (a *App) tabSnapshotLoop(tab *WorkspaceTab) {
 				}
 			} else {
 				snapshotErr = err
-				a.reportTabSnapshotError(tab, "autosave", err)
 			}
 		}
 		tab.saveMu.Lock()
@@ -3219,22 +3262,36 @@ func (a *App) tabSnapshotLoop(tab *WorkspaceTab) {
 			tab.saving = false
 			tab.saveCond.Broadcast()
 			tab.saveMu.Unlock()
+			if snapshotErr != nil {
+				slog.Warn("desktop: session autosave failed during teardown", "tab", tab.ID, "err", snapshotErr)
+			}
 			return
 		}
 		if tab.saveAgain {
 			tab.saveAgain = false
 			tab.saveMu.Unlock()
+			if snapshotErr != nil {
+				slog.Warn("desktop: session autosave failed; newer snapshot queued", "tab", tab.ID, "err", snapshotErr)
+			}
 			continue
 		}
 		if snapshotErr != nil && tab.saveFailures <= maxTabSnapshotFailureRetries {
 			delay := tabSnapshotRetryDelay(tab.saveFailures)
+			attempt := tab.saveFailures
 			tab.saveMu.Unlock()
+			// Retries are routine (transient AV/indexer holds); tell the user
+			// only when the whole burst gives up, not once per attempt.
+			slog.Warn("desktop: session autosave failed; retrying", "tab", tab.ID, "attempt", attempt, "err", snapshotErr)
 			time.Sleep(delay)
 			continue
 		}
+		exhausted := snapshotErr
 		tab.saving = false
 		tab.saveCond.Broadcast()
 		tab.saveMu.Unlock()
+		if exhausted != nil {
+			a.reportTabSnapshotError(tab, "autosave", exhausted)
+		}
 		return
 	}
 }
@@ -3569,12 +3626,7 @@ func singleSurfaceTabsFile(f desktopTabsFile) desktopTabsFile {
 }
 
 func desktopConfigDir() string {
-	dir, err := os.UserConfigDir()
-	if err != nil {
-		home, _ := os.UserHomeDir()
-		return filepath.Join(home, ".reasonix")
-	}
-	return filepath.Join(dir, "reasonix")
+	return config.ReasonixHomeDir()
 }
 
 func (a *App) saveTabsLocked() {
@@ -4677,7 +4729,12 @@ func (a *App) handleTabSessionRecovered(tab *WorkspaceTab) func(control.SessionR
 					reason = "lease_held"
 				}
 				a.emitRuntimeEvent("session:recovery-failed", sessionRecoveryFailedEvent{Reason: reason})
-				return fmt.Errorf("acquire recovery session lease: %w", err)
+				// This error propagates out through ctrl.Snapshot() into chat
+				// notices and bridge returns (reportTabSnapshotError). The raw
+				// path/holder id stayed in the slog line above; keep it out of
+				// the surfaced message.
+				return fmt.Errorf("acquire recovery session lease: %w",
+					userFacingSessionLeaseError("", err))
 			}
 		}
 		meta := info.Meta
@@ -5091,22 +5148,33 @@ func migrateLegacySessionsIntoGlobalTopics(dir string) []string {
 			}
 		}
 
-		meta, err := agent.EnsureBranchMeta(info.Path)
+		migrated, err := func() (bool, error) {
+			// Read-modify-write on the branch-meta sidecar: hold the per-path
+			// meta lock so agent-side writers (autosave revision bumps,
+			// in-flight markers) can't interleave between the load and save
+			// below and lose their fields.
+			unlock := agent.LockSessionMetaPath(info.Path)
+			defer unlock()
+			meta, err := agent.EnsureBranchMeta(info.Path)
+			if err != nil {
+				return false, err
+			}
+			// Preserve scoped sessions only when their existing ownership matches
+			// the directory being migrated.
+			if !legacySessionMetaMatchesMigrationTarget(meta, scope, workspaceRoot) {
+				return false, nil
+			}
+			meta.Scope = scope
+			meta.WorkspaceRoot = workspaceRoot
+			meta.TopicID = topicID
+			meta.TopicTitle = title
+			return true, agent.SaveBranchMetaPreserveUpdated(info.Path, meta)
+		}()
 		if err != nil {
 			deferred = true
 			continue
 		}
-		// Preserve scoped sessions only when their existing ownership matches
-		// the directory being migrated.
-		if !legacySessionMetaMatchesMigrationTarget(meta, scope, workspaceRoot) {
-			continue
-		}
-		meta.Scope = scope
-		meta.WorkspaceRoot = workspaceRoot
-		meta.TopicID = topicID
-		meta.TopicTitle = title
-		if err := agent.SaveBranchMetaPreserveUpdated(info.Path, meta); err != nil {
-			deferred = true
+		if !migrated {
 			continue
 		}
 		if topicTitles == nil {
@@ -5206,7 +5274,22 @@ func restoreSessionTopicIndex(dir, sessionPath string) error {
 		return err
 	}
 	if !ok || strings.TrimSpace(meta.TopicID) == "" {
+		// The migration pass takes per-session meta locks itself, so it must
+		// run outside the lock taken below.
 		migrateLegacySessionsIntoGlobalTopics(dir)
+		return nil
+	}
+
+	// Read-modify-write on the branch-meta sidecar: re-read and save under the
+	// per-path meta lock so a concurrent save's revision bump can't land in
+	// between and get rolled back by the write at the end.
+	unlock := agent.LockSessionMetaPath(sessionPath)
+	defer unlock()
+	meta, ok, err = agent.LoadBranchMeta(sessionPath)
+	if err != nil {
+		return err
+	}
+	if !ok || strings.TrimSpace(meta.TopicID) == "" {
 		return nil
 	}
 
@@ -5558,12 +5641,19 @@ func (a *App) updateTopicSessionTitles(topicID, title string) {
 	}
 	for _, dir := range a.knownSessionDirs() {
 		for _, match := range topicSessionMatches(dir, topicID) {
+			// Read-modify-write on the branch-meta sidecar: hold the per-path
+			// meta lock so a concurrent save's revision bump can't land between
+			// the load and save below and get rolled back by this write.
+			unlock := agent.LockSessionMetaPath(match.path)
 			meta, ok, err := agent.LoadBranchMeta(match.path)
 			if err != nil || !ok {
+				unlock()
 				continue
 			}
 			meta.TopicTitle = title
-			if err := agent.SaveBranchMetaPreserveUpdated(match.path, meta); err == nil {
+			err = agent.SaveBranchMetaPreserveUpdated(match.path, meta)
+			unlock()
+			if err == nil {
 				invalidateTopicSessionIndex(dir)
 			}
 		}
@@ -6624,12 +6714,7 @@ func newTopicID() string {
 }
 
 func globalWorkspaceRoot() string {
-	dir, err := os.UserConfigDir()
-	if err != nil {
-		home, _ := os.UserHomeDir()
-		return filepath.Join(home, ".reasonix", "global-workspace")
-	}
-	return filepath.Join(dir, "reasonix", "global-workspace")
+	return filepath.Join(desktopConfigDir(), "global-workspace")
 }
 
 func ensureGlobalWorkspaceRoot() (string, error) {
@@ -7024,7 +7109,15 @@ func canonicalTabSessionPath(path string) string {
 	if validPath, _, err := validateSessionPath(config.SessionDir(), path); err == nil {
 		return validPath
 	}
-	return path
+	// Project-scope sessions live outside config.SessionDir(), so validation
+	// against it always fails. Still normalize the shape: without clean+abs,
+	// the same file spelled with a different separator or a relative prefix
+	// splits into distinct runtime keys.
+	cleaned := filepath.Clean(path)
+	if abs, err := filepath.Abs(cleaned); err == nil {
+		return abs
+	}
+	return cleaned
 }
 
 func (a *App) rememberTabSessionPath(tab *WorkspaceTab, path string) {
