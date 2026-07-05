@@ -1921,6 +1921,7 @@ export const en = {
   "settings.headroomRequestTimeoutHint": "Seconds before the request times out. Increase for slow ML compression.",
   "settings.headroomNotInstalled": "Headroom not installed — run: pip install headroom-ai[proxy]",
   "settings.headroomNotEnabled": "Headroom installed but not enabled — enable it in provider settings",
+  "settings.headroomStarting": "Headroom starting... (first load may take 30s)",
   "settings.headroomRunning": "Headroom proxy running (port {port})",
   "settings.headroomStopped": "Headroom proxy stopped",
   "settings.headroomTokensSaved": "{n} tokens saved ({pct}%)",

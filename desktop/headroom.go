@@ -80,9 +80,12 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamURL string) error {
 	if h.running && headroomReachable(h.port) {
 		return nil // already running and alive
 	}
-	// If the port is claimed but unreachable, reset state so we can restart.
+	if h.warming {
+		return nil // already starting (async health-check in progress)
+	}
+	// Reset state for a fresh start.
 	h.running = false
-	h.warming = false
+	h.warming = true
 
 	port := cfg.Headroom.HeadroomPort()
 	h.port = port
@@ -167,26 +170,11 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamURL string) error {
 
 	slog.Info("headroom: proxy started", "port", port, "pid", cmd.Process.Pid, "log", logPath)
 
-	// Wait for the proxy to become reachable. First startup may be slow —
-	// headroom loads ONNX models and warms up Kompress engines.
-	reachable := false
-	for i := 0; i < 30; i++ {
-		time.Sleep(500 * time.Millisecond)
-		if headroomReachable(port) {
-			reachable = true
-			break
-		}
-	}
-	if !reachable {
-		// Process started but isn't answering; let it run but mark not running.
-		slog.Warn("headroom: proxy started but not reachable within 15s", "port", port)
-		h.running = false
-		return fmt.Errorf("headroom proxy started on port %d but not reachable after 15s", port)
-	}
+	// Async health-check: headroom may take 15-30s to load ONNX models on
+	// slower machines (integrated GPU, HDD). Don't block start() — the
+	// caller should return quickly so the Wails binding doesn't time out.
+	go h.waitForReachable(port)
 
-	h.running = true
-	h.warming = false
-	slog.Info("headroom: proxy reachable", "port", port)
 	return nil
 }
 
@@ -206,6 +194,25 @@ func (h *headroomSidecar) stop() {
 	h.cmd = nil
 	h.running = false
 	h.warming = false
+}
+
+// waitForReachable polls the proxy's livez endpoint in the background
+// until it responds or a 120s timeout expires. Called as a goroutine
+// from start() so it doesn't block the Wails binding. Slow machines
+// (integrated GPU, HDD) may need extended time to load ONNX models.
+func (h *headroomSidecar) waitForReachable(port int) {
+	for i := 0; i < 240; i++ {
+		time.Sleep(500 * time.Millisecond)
+		if headroomReachable(port) {
+			h.mu.Lock()
+			h.running = true
+			h.warming = false
+			h.mu.Unlock()
+			slog.Info("headroom: proxy reachable", "port", port)
+			return
+		}
+	}
+	slog.Warn("headroom: proxy not reachable within 120s", "port", port)
 }
 
 // status returns a snapshot of the proxy state for the frontend, fetching

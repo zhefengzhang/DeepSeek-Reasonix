@@ -1923,6 +1923,7 @@ export const zh: Record<DictKey, string> = {
   "settings.headroomRequestTimeoutHint": "请求超时秒数。ML 压缩慢时可增大。",
   "settings.headroomNotInstalled": "Headroom 未安装 — 运行: pip install headroom-ai[proxy]",
   "settings.headroomNotEnabled": "Headroom 已安装但未启用 — 在 provider 设置中开启",
+  "settings.headroomStarting": "Headroom 正在启动...（首次加载可能需要 30 秒）",
   "settings.headroomRunning": "Headroom 代理运行中 (端口 {port})",
   "settings.headroomStopped": "Headroom 代理已停止",
   "settings.headroomTokensSaved": "节省 {n} tokens ({pct}%)",
