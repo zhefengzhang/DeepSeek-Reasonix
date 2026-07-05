@@ -1,0 +1,1862 @@
+diff --git a/desktop/app.go b/desktop/app.go
+index 451a5d98f..886f15a21 100644
+--- a/desktop/app.go
++++ b/desktop/app.go
+@@ -158,6 +158,8 @@ type App struct {
+ 	skillRootsCache skillRootsCache
+ 
+ 	heartbeat *HeartbeatEngine // scheduled heartbeat tasks; nil until startup
++
++	headroom *headroomSidecar // Headroom context-compression proxy; nil until first use
+ }
+ 
+ type skillRootsCache struct {
+@@ -338,6 +340,7 @@ func NewApp() *App {
+ 		mediaTokens:      newMediaTokenStore(),
+ 		botInstalls:      map[string]*botInstallSession{},
+ 		botRuntime:       newDesktopBotRuntime(),
++		headroom:         newHeadroomSidecar(),
+ 	}
+ }
+ 
+@@ -370,6 +373,14 @@ func (a *App) startup(ctx context.Context) {
+ 	a.heartbeat = newHeartbeatEngine(a)
+ 	a.heartbeat.Start()
+ 
++	// Auto-start Headroom proxy if any provider enables it
++	a.autoStartHeadroom()
++
++	// Poll headroom stats every 5 seconds for the status bar
++	if a.headroom != nil {
++		a.goSafe("pollHeadroomStats", a.pollHeadroomStats)
++	}
++
+ 	go a.restoreOrBuildTabs()
+ 	a.goSafe("refreshBotRuntime", a.refreshBotRuntime)
+ 	a.goSafe("sendStartupPing", a.sendStartupPing)
+@@ -378,6 +389,10 @@ func (a *App) startup(ctx context.Context) {
+ }
+ 
+ func (a *App) beforeClose(ctx context.Context) bool {
++	// Stop headroom proxy first — a stale process blocks fresh starts
++	if a.headroom != nil {
++		a.headroom.stop()
++	}
+ 	if a.forceQuit.Swap(false) || consumeSystemQuitRequested() {
+ 		return false
+ 	}
+@@ -614,13 +629,13 @@ func (a *App) createTabEntry(scope, workspaceRoot, topicID string) *WorkspaceTab
+ 	return a.createTabEntryWithID(scope, workspaceRoot, topicID, newTabID())
+ }
+ 
+-func desktopNewSessionDefaults() (string, string) {
++func desktopNewSessionDefaults() (string, string, bool) {
+ 	cfg := config.LoadForEdit(config.UserConfigPath())
+-	return strings.TrimSpace(cfg.DefaultModel), normalizeToolApprovalMode(cfg.DesktopDefaultToolApprovalMode())
++	return strings.TrimSpace(cfg.DefaultModel), normalizeToolApprovalMode(cfg.DesktopDefaultToolApprovalMode()), cfg.Agent.AutoPlan == "on"
+ }
+ 
+ func (a *App) createTabEntryWithID(scope, workspaceRoot, topicID, id string) *WorkspaceTab {
+-	model, toolApprovalMode := desktopNewSessionDefaults()
++	model, toolApprovalMode, autoPlan := desktopNewSessionDefaults()
+ 	return &WorkspaceTab{
+ 		ID:               id,
+ 		Scope:            scope,
+@@ -629,7 +644,7 @@ func (a *App) createTabEntryWithID(scope, workspaceRoot, topicID, id string) *Wo
+ 		TopicTitle:       topicTitleForTab(scope, workspaceRoot, topicID),
+ 		model:            model,
+ 		tokenMode:        boot.TokenModeFull,
+-		mode:             tabModeFromAxes(false, toolApprovalMode == control.ToolApprovalYolo),
++		mode:             tabModeFromAxes(autoPlan, toolApprovalMode == control.ToolApprovalYolo),
+ 		toolApprovalMode: toolApprovalMode,
+ 		disabledMCP:      map[string]ServerView{},
+ 	}
+@@ -651,6 +666,9 @@ func (a *App) shutdown(context.Context) {
+ 	if a.heartbeat != nil {
+ 		a.heartbeat.Stop()
+ 	}
++	if a.headroom != nil {
++		a.headroom.stop()
++	}
+ 	a.stopBotRuntime()
+ 	a.stopTray()
+ 	// Save window geometry synchronously from Go so it's persisted even if the
+@@ -2483,7 +2501,7 @@ func (a *App) openTransientBlankRuntime(scope, workspaceRoot string) error {
+ 		}
+ 	}
+ 
+-	model, toolApprovalMode := desktopNewSessionDefaults()
++	model, toolApprovalMode, _ := desktopNewSessionDefaults()
+ 	sessionPath, err := createEmptySessionFile(desktopSessionDir(actualRoot), model)
+ 	if err != nil {
+ 		return err
+@@ -7936,3 +7954,134 @@ func (a *App) ConnectKey(apiKey string) (string, error) {
+ 	}
+ 	return warning, nil
+ }
++
++// autoStartHeadroom starts the headroom proxy if any provider has HeadroomEnabled.
++func (a *App) autoStartHeadroom() {
++	if a.headroom == nil {
++		slog.Debug("headroom: auto-start skipped — sidecar nil")
++		return
++	}
++	cfg, _, err := a.loadDesktopUserConfigForView()
++	if err != nil {
++		slog.Warn("headroom: auto-start failed to load config", "err", err)
++		return
++	}
++	slog.Debug("headroom: loaded config", "providers", len(cfg.Providers))
++	// Find the first provider with HeadroomEnabled and extract its upstream.
++	var upstreamURL string
++	for _, p := range cfg.Providers {
++		slog.Debug("headroom: checking provider", "name", p.Name, "enabled", p.HeadroomEnabled, "base", p.BaseURL)
++		if p.HeadroomEnabled && p.BaseURL != "" {
++			upstreamURL = headroomUpstreamURL(p.BaseURL)
++			break
++		}
++	}
++	if upstreamURL == "" {
++		slog.Debug("headroom: auto-start skipped — no enabled provider with base_url")
++		return
++	}
++	cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
++	if err := a.headroom.start(cfg, upstreamURL); err != nil {
++		slog.Warn("headroom: auto-start failed", "err", err)
++	}
++}
++
++// pollHeadroomStats periodically checks the headroom proxy health and emits
++// events to the frontend for the status bar indicator.
++func (a *App) pollHeadroomStats() {
++	if a.headroom == nil || a.ctx == nil {
++		return
++	}
++	ticker := time.NewTicker(5 * time.Second)
++	defer ticker.Stop()
++	for {
++		select {
++		case <-a.ctx.Done():
++			return
++		case <-ticker.C:
++			status := a.headroom.status()
++			runtime.EventsEmit(a.ctx, "headroom:stats", status)
++		}
++	}
++}
++
++// HeadroomStatus returns the current headroom proxy status for the frontend.
++func (a *App) HeadroomStatus() HeadroomStatusView {
++	if a.headroom == nil {
++		return HeadroomStatusView{Installed: false, Running: false, Port: 8787}
++	}
++	return a.headroom.status()
++}
++
++// StartHeadroom manually starts the headroom proxy.
++func (a *App) StartHeadroom() {
++	if a.headroom == nil {
++		return
++	}
++	cfg, _, err := a.loadDesktopUserConfigForView()
++	if err != nil {
++		return
++	}
++	// Find the first provider with HeadroomEnabled.
++	var upstreamURL string
++	for _, p := range cfg.Providers {
++		if p.HeadroomEnabled && p.BaseURL != "" {
++			upstreamURL = headroomUpstreamURL(p.BaseURL)
++			break
++		}
++	}
++	if upstreamURL == "" {
++		return
++	}
++	cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
++	if err := a.headroom.start(cfg, upstreamURL); err != nil {
++		slog.Warn("headroom: manual start failed", "err", err)
++	}
++}
++
++// StopHeadroom manually stops the headroom proxy.
++func (a *App) StopHeadroom() {
++	if a.headroom != nil {
++		a.headroom.stop()
++	}
++}
++
++// HeadroomConfig returns the current headroom configuration for the frontend.
++func (a *App) HeadroomConfig() HeadroomConfigView {
++	cfg, _, err := a.loadDesktopUserConfigForView()
++	if err != nil {
++		return HeadroomConfigView{Preset: "coding"}
++	}
++	return headroomConfigViewFrom(&cfg.Headroom)
++}
++
++// SaveHeadroomConfig persists headroom configuration changes from the frontend.
++func (a *App) SaveHeadroomConfig(v HeadroomConfigView) error {
++	return a.applyConfigOnly(func(c *config.Config) error {
++		if v.Preset != "" {
++			c.Headroom.Preset = v.Preset
++		}
++		if v.CodeAware != nil {
++			c.Headroom.CodeAware = *v.CodeAware
++		}
++		if v.CCR != nil {
++			c.Headroom.CCR = *v.CCR
++		}
++		if v.ProtectErrors != nil {
++			c.Headroom.ProtectErrors = v.ProtectErrors
++		}
++		if v.MinTokens != nil {
++			c.Headroom.MinTokens = *v.MinTokens
++		}
++		if v.DisableKompress != nil {
++			c.Headroom.DisableKompress = v.DisableKompress
++		}
++		if v.RequestTimeout != nil {
++			c.Headroom.RequestTimeout = *v.RequestTimeout
++		}
++		if v.CompressToolResults != nil {
++			c.Headroom.CompressToolResults = *v.CompressToolResults
++		}
++		return nil
++	})
++}
+diff --git a/desktop/frontend/src/App.tsx b/desktop/frontend/src/App.tsx
+index 4e021757b..59bb17299 100644
+--- a/desktop/frontend/src/App.tsx
++++ b/desktop/frontend/src/App.tsx
+@@ -1043,6 +1043,7 @@ export default function App() {
+   const [desktopPlatform, setDesktopPlatform] = useState<DesktopPlatform>(detectBrowserPlatform);
+   const [statusBarStyle, setStatusBarStyle] = useState<"icon" | "text">("text");
+   const [statusBarItems, setStatusBarItems] = useState<StatusBarItemId[]>(() => [...DEFAULT_STATUS_BAR_ITEMS]);
++  const [headroomStats, setHeadroomStats] = useState<import("./lib/types").HeadroomStatusView | undefined>(undefined);
+   const [renamingTopicId, setRenamingTopicId] = useState<string | null>(null);
+   const [topicTitleDraft, setTopicTitleDraft] = useState("");
+   const topicExportOpen = useOverlayStore((s) => s.topicExportOpen);
+@@ -1227,6 +1228,13 @@ export default function App() {
+       setSettingsTarget("general");
+     });
+   }, [closeTransientOverlays]);
++  // Subscribe to headroom proxy stats events
++  useEffect(() => {
++    if (typeof window === "undefined" || !window.runtime) return;
++    return window.runtime.EventsOn("headroom:stats", (stats: any) => {
++      setHeadroomStats(stats as import("./lib/types").HeadroomStatusView);
++    });
++  }, []);
+   useEffect(() => {
+     if (typeof window === "undefined") return;
+     const onResize = () => setViewportWidth(window.innerWidth);
+@@ -3595,6 +3603,7 @@ export default function App() {
+               context={state.context}
+               usage={state.usage}
+               balance={state.balance}
++              headroomStats={headroomStats}
+               running={state.running || rewindCommitting}
+               sessionTurns={sessionTurns}
+               sessionTokens={state.sessionTokens}
+@@ -3680,6 +3689,7 @@ export default function App() {
+                   tabId={activeTabId}
+                   context={state.context}
+                   usage={state.usage}
++                  headroomStats={headroomStats}
+                   sessionTokens={state.sessionTokens}
+                   sessionCost={state.sessionCost}
+                   sessionCurrency={state.sessionCurrency}
+diff --git a/desktop/frontend/src/components/Composer.tsx b/desktop/frontend/src/components/Composer.tsx
+index c13fbbc5b..d94f54e6e 100644
+--- a/desktop/frontend/src/components/Composer.tsx
++++ b/desktop/frontend/src/components/Composer.tsx
+@@ -2536,6 +2536,7 @@ export function Composer({
+               <ArrowUp size={16} />
+             </button>
+           </Tooltip>
++          <CompressingSpinner active={running && !retry && !disabled} />
+         </div>
+         <div className={composerMetaClass}>
+           <div className="composer-meta__params">
+@@ -2689,3 +2690,20 @@ export function Composer({
+     </div>
+   );
+ }
++
++// CompressingSpinner shows a "Compressing..." indicator during the headroom
++// compression phase (the first ~3 seconds after message submission).
++function CompressingSpinner({ active }: { active: boolean }) {
++  const [show, setShow] = useState(false);
++
++  useEffect(() => {
++    if (!active) { setShow(false); return; }
++    // Show the indicator 300ms after submission (avoid flash), auto-hide after 4s
++    const on = setTimeout(() => setShow(true), 300);
++    const off = setTimeout(() => setShow(false), 4000);
++    return () => { clearTimeout(on); clearTimeout(off); };
++  }, [active]);
++
++  if (!show) return null;
++  return <span className="composer__compressing">{'Compressing\u2026'}</span>;
++}
+diff --git a/desktop/frontend/src/components/ContextPanel.tsx b/desktop/frontend/src/components/ContextPanel.tsx
+index 78ce9f6a2..29f17b1bc 100644
+--- a/desktop/frontend/src/components/ContextPanel.tsx
++++ b/desktop/frontend/src/components/ContextPanel.tsx
+@@ -19,6 +19,7 @@ interface ContextPanelProps {
+   turnTokens?: number;
+   turnCost?: number;
+   balance?: BalanceInfo;
++  headroomStats?: import("../lib/types").HeadroomStatusView;
+   sessionGen?: number;
+   refreshKey?: number;
+ }
+@@ -296,6 +297,7 @@ export function ContextPanel({
+   turnTokens,
+   turnCost,
+   balance,
++  headroomStats,
+   sessionGen,
+   refreshKey,
+ }: ContextPanelProps) {
+@@ -503,6 +505,14 @@ export function ContextPanel({
+                 <MiniStat label={t("context.time")} value={fmtDuration(elapsed, t)} />
+                 <MiniStat label={t("context.requests")} value={requestCount > 0 ? String(requestCount) : "-"} />
+                 <MiniStat label={t("context.sessionTokensShort")} value={totalTokensMetric.display} title={totalTokensTitle} wide />
++                {headroomStats?.running ? (
++                  <MiniStat
++                    label={t("status.headroomLabel")}
++                    value={headroomStats.savingsPct != null && headroomStats.savingsPct > 0
++                      ? Math.round(headroomStats.savingsPct) + "%"
++                      : "-"}
++                  />
++                ) : null}
+               </div>
+             </div>
+           </section>
+diff --git a/desktop/frontend/src/components/SettingsPanel.tsx b/desktop/frontend/src/components/SettingsPanel.tsx
+index 03439c8cb..5c6ab7752 100644
+--- a/desktop/frontend/src/components/SettingsPanel.tsx
++++ b/desktop/frontend/src/components/SettingsPanel.tsx
+@@ -46,7 +46,7 @@ import {
+   shortcutDefinitions,
+   type ShortcutAction,
+ } from "../lib/keyboardShortcuts";
+-import type { BotAllowlistView, BotConnectionDiagnostic, BotConnectionView, BotInstallStartResult, BotSettingsView, HookConfigView, HooksSettingsView, NetworkView, ProviderView, SettingsTab, SettingsView } from "../lib/types";
++import type { BotAllowlistView, BotConnectionDiagnostic, BotConnectionView, BotInstallStartResult, BotSettingsView, HeadroomConfigView, HookConfigView, HooksSettingsView, NetworkView, ProviderView, SettingsTab, SettingsView } from "../lib/types";
+ import { InlineConfirmButton } from "./InlineConfirmButton";
+ import { Tooltip } from "./Tooltip";
+ import { AnchoredPopover } from "./AnchoredPopover";
+@@ -1089,6 +1089,8 @@ function statusBarItemLabel(id: StatusBarItemId, t: ReturnType<typeof useT>): st
+       return t("status.costLabel");
+     case "balance":
+       return t("status.balanceLabel");
++    case "headroom":
++      return t("status.headroomLabel");
+   }
+ }
+ 
+@@ -3403,6 +3405,9 @@ function ModelsSection({ s, busy, apply, backgroundApply }: ModelsSectionProps)
+       ) : (
+         <ProvidersSection s={s} busy={busy} apply={apply} />
+       )}
++      {hasHeadroomProviders(s) && (
++        <HeadroomSettingsSection s={s} busy={busy} />
++      )}
+     </>
+   );
+ }
+@@ -4102,6 +4107,15 @@ function ProviderAccessCard({
+ }) {
+   const t = useT();
+   const editableProvider = group.providers[0];
++  // Optimistic headroom state: immediately reflects the user's toggle without waiting for the save+reload round-trip.
++  const [headroomOptimistic, setHeadroomOptimistic] = useState<boolean | null>(null);
++  const headroomOn = headroomOptimistic !== null ? headroomOptimistic : (editableProvider?.headroomEnabled ?? false);
++  // Reset optimistic state when the actual provider value changes (after reload)
++  useEffect(() => {
++    if (headroomOptimistic !== null && headroomOptimistic === (editableProvider?.headroomEnabled ?? false)) {
++      setHeadroomOptimistic(null);
++    }
++  }, [editableProvider?.headroomEnabled, headroomOptimistic]);
+   const isDefault = group.providers.some((p) => p.name === defaultProvider);
+   const editingProvider = group.providers.find((p) => editing === p.name);
+   const primaryProviderExpanded = Boolean(editableProvider && editing === editableProvider.name);
+@@ -4166,6 +4180,49 @@ function ProviderAccessCard({
+         {group.keySource && <span title={group.keySourcePath || undefined}>{t("settings.keySource", { source: group.keySource })}</span>}
+       </div>
+ 
++      {/* Headroom compression toggle */}
++      {editableProvider && (
++        <div className="provider-headroom-row">
++          <label className="set-label">{t("settings.headroomCompression")}</label>
++          <div className="set-seg">
++            <button
++              className={`set-seg__btn${headroomOn ? " set-seg__btn--on" : ""}`}
++              disabled={busy}
++              onClick={async () => {
++                const next = !headroomOn;
++                setHeadroomOptimistic(next);
++                try {
++                  const updated = { ...editableProvider, headroomEnabled: next };
++                  await onSave(updated);
++                } catch {
++                  setHeadroomOptimistic(!next);
++                }
++              }}
++            >
++              {t("common.on")}
++            </button>
++            <button
++              className={`set-seg__btn${!headroomOn ? " set-seg__btn--on" : ""}`}
++              disabled={busy}
++              onClick={async () => {
++                setHeadroomOptimistic(false);
++                try {
++                  const updated = { ...editableProvider, headroomEnabled: false };
++                  await onSave(updated);
++                } catch {
++                  setHeadroomOptimistic(true);
++                }
++              }}
++            >
++              {t("common.off")}
++            </button>
++          </div>
++          {headroomOn && (
++            <span className="provider-headroom-badge">{t("settings.headroomActive")}</span>
++          )}
++        </div>
++      )}
++
+       <div className="provider-card-block">
+         <div className="provider-card-block__label">{t(group.configured ? "settings.enabledModels" : "settings.modelList")}</div>
+         <div className="provider-model-chips" aria-label={t(group.configured ? "settings.enabledModels" : "settings.modelList")}>
+@@ -5922,3 +5979,124 @@ function UpdatesSection({
+     </SettingsSection>
+   );
+ }
++
++
++// hasHeadroomProviders checks if any provider has headroom enabled.
++function hasHeadroomProviders(s: SettingsView): boolean {
++  return (s?.providers?.some((p) => p.headroomEnabled) || s?.headroomStatus != null) ?? false;
++}
++
++// HeadroomSettingsSection shows compression configuration.
++function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }) {
++  const t = useT();
++  const [expanded, setExpanded] = useState(false);
++  const [preset, setPreset] = useState("coding");
++  const [codeAware, setCodeAware] = useState(true);
++  const [ccr, setCcr] = useState(false);
++  const [protectErrors, setProtectErrors] = useState(false);
++  const [disableKompress, setDisableKompress] = useState(true);
++  const [minTokens, setMinTokens] = useState("250");
++  const [timeoutVal, setTimeoutVal] = useState("120");
++  const [compressToolResults, setCompressToolResults] = useState(true);
++
++  useEffect(() => {
++    app.HeadroomConfig().then((cfg) => {
++      if (cfg.preset) setPreset(cfg.preset);
++      if (cfg.codeAware !== undefined) setCodeAware(cfg.codeAware);
++      if (cfg.ccr !== undefined) setCcr(cfg.ccr);
++      if (cfg.protectErrors !== undefined) setProtectErrors(cfg.protectErrors);
++      if (cfg.disableKompress !== undefined) setDisableKompress(cfg.disableKompress);
++      if (cfg.minTokens) setMinTokens(String(cfg.minTokens));
++      if (cfg.requestTimeout) setTimeoutVal(String(cfg.requestTimeout));
++    }).catch(() => {});
++  }, []);
++
++  const save = async (fields: Partial<HeadroomConfigView>) => {
++    try { await app.SaveHeadroomConfig(fields as HeadroomConfigView); } catch {}
++  };
++
++  const handlePreset = (p: string) => {
++    setPreset(p);
++    save({ preset: p });
++    // Reload full config so ApplyPreset side effects (code_aware, ccr, etc.)
++    // are reflected in the UI immediately.
++    app.HeadroomConfig().then((cfg) => {
++      if (cfg.codeAware !== undefined) setCodeAware(cfg.codeAware);
++      if (cfg.ccr !== undefined) setCcr(cfg.ccr);
++      if (cfg.protectErrors !== undefined) setProtectErrors(cfg.protectErrors);
++      if (cfg.disableKompress !== undefined) setDisableKompress(cfg.disableKompress);
++      if (cfg.minTokens) setMinTokens(String(cfg.minTokens));
++      if (cfg.requestTimeout) setTimeoutVal(String(cfg.requestTimeout));
++    }).catch(() => {});
++  };
++
++  return (
++    <SettingsSection title={t("settings.headroomSettingsTitle")}>
++      {s?.headroomStatus && (
++        <div className={`provider-card-status provider-card-status--${s.headroomStatus.running ? "info" : "warn"}`}>
++          {s.headroomStatus.running
++            ? t("settings.headroomRunning", { port: String(s.headroomStatus.port) })
++            : t("settings.headroomNotInstalled")}
++        </div>
++      )}
++      <SettingsField label={t("settings.headroomPreset")} hint={t("settings.headroomPresetHint")}>
++        <div className="set-seg">
++          {(["coding", "writing", "custom"] as const).map((p) => (
++            <button key={p}
++              className={`set-seg__btn${preset === p ? " set-seg__btn--on" : ""}`}
++              disabled={busy}
++              onClick={() => handlePreset(p)}
++            >
++              {p === "coding" ? t("settings.headroomPresetCode") : p === "writing" ? t("settings.headroomPresetWrite") : t("settings.headroomPresetCustom")}
++            </button>
++          ))}
++        </div>
++      </SettingsField>
++      <SettingsField label={t("settings.headroomRequestTimeout")} hint={t("settings.headroomRequestTimeoutHint")}>
++        <input className="mem-input" type="number" min={10} max={600}
++          value={timeoutVal} disabled={busy}
++          onChange={(e) => setTimeoutVal(e.target.value)}
++          onBlur={async () => {
++            const val = parseInt(timeoutVal, 10);
++            if (val > 0) { await save({ requestTimeout: val }); }
++          }}
++          style={{ width: "80px" }}
++        />
++        <span className="set-suffix">s</span>
++      </SettingsField>
++      <button className="btn btn--small" disabled={busy} onClick={() => setExpanded(!expanded)}>
++        {expanded ? t("common.collapse") : t("common.expand")}
++      </button>
++      {expanded && (
++        <>
++          <SettingsField label={t("settings.headroomCodeAware")} hint={t("settings.headroomCodeAwareHint")}>
++            <ToggleSegment value={codeAware} disabled={busy} onChange={(v) => { setCodeAware(v); save({ codeAware: v }); }} />
++          </SettingsField>
++          <SettingsField label={t("settings.headroomCCR")} hint={t("settings.headroomCCRHint")}>
++            <ToggleSegment value={ccr} disabled={busy} onChange={(v) => { setCcr(v); save({ ccr: v }); }} />
++          </SettingsField>
++          <SettingsField label={t("settings.headroomProtectErrors")} hint={t("settings.headroomProtectErrorsHint")}>
++            <ToggleSegment value={protectErrors} disabled={busy} onChange={(v) => { setProtectErrors(v); save({ protectErrors: v }); }} />
++          </SettingsField>
++          <SettingsField label={t("settings.headroomDisableKompress")} hint={t("settings.headroomDisableKompressHint")}>
++            <ToggleSegment value={disableKompress} disabled={busy} onChange={(v) => { setDisableKompress(v); save({ disableKompress: v }); }} />
++          </SettingsField>
++          <SettingsField label={t("settings.headroomCompressToolResults")} hint={t("settings.headroomCompressToolResultsHint")}>
++            <ToggleSegment value={compressToolResults} disabled={busy} onChange={(v) => { setCompressToolResults(v); save({ compressToolResults: v }); }} />
++          </SettingsField>
++          <SettingsField label={t("settings.headroomMinTokens")} hint={t("settings.headroomMinTokensHint")}>
++            <input className="mem-input" type="number" min={50} max={1000}
++              value={minTokens} disabled={busy}
++              onChange={(e) => setMinTokens(e.target.value)}
++              onBlur={(e) => {
++                const v = parseInt(e.target.value, 10);
++                if (v > 0) { save({ minTokens: v }); }
++              }}
++              style={{ width: "80px" }}
++            />
++          </SettingsField>
++        </>
++      )}
++    </SettingsSection>
++  );
++}
+diff --git a/desktop/frontend/src/components/StatusBar.tsx b/desktop/frontend/src/components/StatusBar.tsx
+index 4e3880b57..d8b5acf3c 100644
+--- a/desktop/frontend/src/components/StatusBar.tsx
++++ b/desktop/frontend/src/components/StatusBar.tsx
+@@ -40,6 +40,19 @@ function contextAvgRate(ctx: ContextInfo): string | null {
+   return formatRate(hit, hit + miss);
+ }
+ 
++function headroomSavingsTooltip(stats: import("../lib/types").HeadroomStatusView | undefined, t: Translator): string {
++  if (!stats || !stats.running) return t("status.headroomOff");
++  if (stats.warming) return t("status.headroomWarming");
++  if (stats.savingsPct != null && stats.savingsPct > 0) {
++    return t("status.headroomSavings", {
++      pct: Math.round(stats.savingsPct),
++      tokens: (stats.tokensSaved ?? 0).toLocaleString(),
++      requests: String(stats.requests ?? 0),
++    });
++  }
++  return t("status.headroomRunning", { requests: String(stats.requests ?? 0) });
++}
++
+ function rateValueClass(rate: string | null): string {
+   if (rate === null) return "stat__value--empty";
+   const pct = Number.parseFloat(rate);
+@@ -149,6 +162,7 @@ export function StatusBar({
+   context,
+   usage,
+   balance,
++  headroomStats,
+   running,
+   sessionTurns,
+   sessionTokens,
+@@ -166,6 +180,7 @@ export function StatusBar({
+   context: ContextInfo;
+   usage?: WireUsage;
+   balance?: BalanceInfo;
++  headroomStats?: import("../lib/types").HeadroomStatusView;
+   running: boolean;
+   sessionTurns?: number;
+   sessionTokens?: number;
+@@ -313,6 +328,30 @@ export function StatusBar({
+         </span>
+       </Tooltip>
+     ),
++    headroom: headroomStats !== undefined ? (
++      <Tooltip label={headroomSavingsTooltip(headroomStats, t)} className="statusbar__metric statusbar__metric--headroom">
++        <span className="stat statusbar__headroom">
++          <MetricLabel style={metricLabelStyle} icon={<Zap size={12} />} label={t("status.headroomLabel")} />
++          <b className={
++            headroomStats.warming
++              ? "stat__value--notice"
++              : headroomStats.running && headroomStats.savingsPct && headroomStats.savingsPct > 0
++              ? "stat__value--green"
++              : headroomStats.running
++              ? undefined
++              : "stat__value--empty"
++          }>
++            {headroomStats.warming
++              ? "\u231B"
++              : headroomStats.running
++              ? headroomStats.savingsPct != null && headroomStats.savingsPct > 0
++                ? Math.round(headroomStats.savingsPct) + "%"
++                : "-"
++              : "-"}
++          </b>
++        </span>
++      </Tooltip>
++    ) : null,
+   };
+   const renderedItems = visibleItems
+     .map((id) => ({ id, node: itemRenderers[id] }))
+diff --git a/desktop/frontend/src/lib/bridge.ts b/desktop/frontend/src/lib/bridge.ts
+index ade01d4ae..a6b2b639a 100644
+--- a/desktop/frontend/src/lib/bridge.ts
++++ b/desktop/frontend/src/lib/bridge.ts
+@@ -75,6 +75,8 @@ import type {
+   WorkspaceChangesView,
+   GitCommitView,
+   GitCommitDetailView,
++  HeadroomStatusView,
++  HeadroomConfigView,
+   WorkspaceView,
+ } from "./types";
+ 
+@@ -373,6 +375,12 @@ export interface AppBindings {
+   // New native-feel bindings (added with the desktop native-feel plan).
+   ConfirmAction(req: NativeConfirmRequest): Promise<boolean>;
+   SaveWindowState(state: DesktopWindowState): Promise<void>;
++  // Headroom context-compression proxy bindings.
++  HeadroomStatus(): Promise<HeadroomStatusView>;
++  StartHeadroom(): Promise<void>;
++  StopHeadroom(): Promise<void>;
++  HeadroomConfig(): Promise<HeadroomConfigView>;
++  SaveHeadroomConfig(cfg: HeadroomConfigView): Promise<void>;
+ }
+ 
+ // Compile-time drift check. Exclude<A, B> extracts keys in A that are missing
+@@ -3407,5 +3415,14 @@ function makeMockApp(): AppBindings {
+         ],
+       };
+     },
++    HeadroomStatus: async () => ({
++      running: false,
++      installed: false,
++      port: 8787,
++    }),
++    StartHeadroom: async () => {},
++    StopHeadroom: async () => {},
++    HeadroomConfig: async () => ({ preset: "coding", codeAware: true, ccr: false, protectErrors: true, minTokens: 250, disableKompress: true, requestTimeout: 120, compressToolResults: true }),
++    SaveHeadroomConfig: async () => {},
+   };
+ }
+diff --git a/desktop/frontend/src/lib/statusBarItems.ts b/desktop/frontend/src/lib/statusBarItems.ts
+index abbb2e661..3a8e4e9f8 100644
+--- a/desktop/frontend/src/lib/statusBarItems.ts
++++ b/desktop/frontend/src/lib/statusBarItems.ts
+@@ -12,6 +12,7 @@ export const STATUS_BAR_ITEM_IDS = [
+   "compact",
+   "cost",
+   "balance",
++  "headroom",
+ ] as const;
+ 
+ export type StatusBarItemId = typeof STATUS_BAR_ITEM_IDS[number];
+diff --git a/desktop/frontend/src/lib/types.ts b/desktop/frontend/src/lib/types.ts
+index cbf1a45c9..3294c4371 100644
+--- a/desktop/frontend/src/lib/types.ts
++++ b/desktop/frontend/src/lib/types.ts
+@@ -890,6 +890,7 @@ export interface ProviderView {
+   supportedEfforts: string[]; // custom /effort levels; empty = use built-in Kind/BaseURL default
+   defaultEffort: string; // /effort level when user picks "auto" or unset; "" = supportedEfforts[0]
+   modelOverrides?: ProviderModelOverrideView[] | null;
++  headroomEnabled?: boolean; // routes through local Headroom compression proxy
+ }
+ 
+ export interface ProviderModelOverrideView {
+@@ -1078,6 +1079,29 @@ export interface BotInstallPollResult {
+   error: string;
+ }
+ 
++export interface HeadroomStatusView {
++  running: boolean;
++  version?: string;
++  installed: boolean;
++  port: number;
++  requests?: number;
++  tokensSaved?: number;
++  savingsPct?: number;
++  errorMessage?: string;
++  warming?: boolean;
++}
++
++export interface HeadroomConfigView {
++  preset?: string;      // "writing" | "coding" | "max"
++  codeAware?: boolean;
++  ccr?: boolean;
++  protectErrors?: boolean;
++  minTokens?: number;
++  disableKompress?: boolean;
++  requestTimeout?: number;
++  compressToolResults?: boolean;
++}
++
+ export interface HookConfigView {
+   event: string;
+   match?: string;
+@@ -1139,6 +1163,7 @@ export interface SettingsView {
+   providerKinds: string[]; // provider implementations the kernel registered (for the kind picker)
+   autoApproveTools: boolean;
+   bypass: boolean; // legacy JSON key for live YOLO/full-access tool auto-approval
++  headroomStatus?: HeadroomStatusView;
+ }
+ 
+ export interface DesktopStartupSettingsView {
+diff --git a/desktop/frontend/src/locales/en.ts b/desktop/frontend/src/locales/en.ts
+index d1bc6be61..1920784ac 100644
+--- a/desktop/frontend/src/locales/en.ts
++++ b/desktop/frontend/src/locales/en.ts
+@@ -18,6 +18,8 @@ export const en = {
+   "common.collapse": "Collapse",
+   "common.none": "none",
+   "common.auto": "auto",
++  "common.on": "On",
++  "common.off": "Off",
+   "common.busyHint": "Finish or stop the current turn first",
+   "common.loading": "Loading…",
+   "composer.readOnlyChannel": "Channel conversation is read-only",
+@@ -537,6 +539,11 @@ export const en = {
+   "status.tokens": "tokens",
+   "status.retrying": "retrying ({attempt}/{max})…",
+   "status.balanceTitle": "Wallet balance",
++  "status.headroomLabel": "Headroom",
++  "status.headroomOff": "Headroom proxy not running — enable it in provider settings",
++  "status.headroomWarming": "Kompress warming up — first request may be slow",
++  "status.headroomRunning": "Headroom proxy running ({requests} requests, no savings yet)",
++  "status.headroomSavings": "Headroom compressed {pct}% ({tokens} tokens saved across {requests} requests)",
+   "status.spendTitle": "Estimated billable spend in this session, including model, subagent, and helper calls",
+ 
+   // ── Heartbeat ──
+@@ -1889,6 +1896,33 @@ export const en = {
+   "mock.changedFile2Prompt": "Record project context",
+   "mock.changedFile1Path": "docs/dev-standard.md",
+   "mock.changedFile2Path": ".reasonix/project.md",
++  "settings.headroomCompression": "Headroom compression",
++  "settings.headroomActive": "Active",
++  "settings.headroomPresetCode": "Code",
++  "settings.headroomPreset": "Preset",
++  "settings.headroomPresetWrite": "Write",
++  "settings.headroomPresetMax": "Max",
++  "settings.headroomPresetCustom": "Custom",
++  "settings.headroomSettingsTitle": "Headroom Compression Settings",
++  "settings.headroomCodeAware": "Code-aware compression (AST)",
++  "settings.headroomCCR": "Reversible compression (CCR)",
++  "settings.headroomProtectErrors": "Protect error outputs",
++  "settings.headroomMinTokens": "Minimum token threshold",
++  "settings.headroomDisableKompress": "Disable ML Kompress (faster, lower ratio)",
++  "settings.headroomRequestTimeout": "Request timeout (seconds)",
++  "settings.headroomPresetHint": "Select a compression profile. Custom settings below override the preset.",
++  "settings.headroomCodeAwareHint": "AST-level code compression. Requires headroom-ai[code]. Recommended for programming.",
++  "settings.headroomCCRHint": "Reversible compression: LLM can retrieve originals via headroom_retrieve. Recommended for writing.",
++  "settings.headroomProtectErrorsHint": "Keep error messages verbatim. Turn OFF for max compression at risk of detail loss.",
++  "settings.headroomDisableKompressHint": "ML text model (500MB+). Disabled on Windows — ONNX Runtime may crash without GPU.",
++  "settings.headroomCompressToolResultsHint": "When enabled, tool outputs enter compression. Higher ratio, small risk of detail loss.",
++  "settings.headroomCompressToolResults": "Aggressive tool output compression",
++  "settings.headroomMinTokensHint": "Minimum tokens to attempt compression. Lower = more aggressive.",
++  "settings.headroomRequestTimeoutHint": "Seconds before the request times out. Increase for slow ML compression.",
++  "settings.headroomNotInstalled": "Headroom not installed — run: pip install headroom-ai[proxy]",
++  "settings.headroomRunning": "Headroom proxy running (port {port})",
++  "settings.headroomStopped": "Headroom proxy stopped",
++  "settings.headroomTokensSaved": "{n} tokens saved ({pct}%)",
+ };
+ 
+ export type DictKey = keyof typeof en;
+diff --git a/desktop/frontend/src/locales/zh-TW.ts b/desktop/frontend/src/locales/zh-TW.ts
+index d7633c5e6..414847193 100644
+--- a/desktop/frontend/src/locales/zh-TW.ts
++++ b/desktop/frontend/src/locales/zh-TW.ts
+@@ -19,6 +19,8 @@ export const zhTW: Record<DictKey, string> = {
+   "common.collapse": "收起",
+   "common.none": "無",
+   "common.auto": "自動",
++  "common.on": "開啟",
++  "common.off": "關閉",
+   "common.busyHint": "請先完成或停止當前回合",
+   "common.loading": "載入中…",
+   "composer.readOnlyChannel": "渠道會話唯讀",
+@@ -390,6 +392,11 @@ export const zhTW: Record<DictKey, string> = {
+   "status.tokens": "tokens",
+   "status.retrying": "正在重試 ({attempt}/{max})…",
+   "status.balanceTitle": "錢包餘額",
++  "status.headroomLabel": "Headroom",
++  "status.headroomOff": "Headroom 代理未執行 — 在 Provider 設定中啟用",
++  "status.headroomWarming": "Kompress 預熱中 — 首次請求可能較慢",
++  "status.headroomRunning": "Headroom 代理執行中 ({requests} 請求，暫無壓縮)",
++  "status.headroomSavings": "Headroom 壓縮 {pct}%（節省 {tokens} tokens，共 {requests} 次請求）",
+   "status.spendTitle": "本會話估算計費費用，包含主模型、子代理和輔助呼叫",
+ 
+   // ── Heartbeat ──
+@@ -1275,6 +1282,33 @@ export const zhTW: Record<DictKey, string> = {
+   "mock.changedFile2Prompt": "記錄專案上下文",
+   "mock.changedFile1Path": "docs/dev-standard.md",
+   "mock.changedFile2Path": ".reasonix/project.md",
++  "settings.headroomCompression": "Headroom 壓縮",
++  "settings.headroomActive": "已啟用",
++  "settings.headroomPresetCode": "程式",
++  "settings.headroomPreset": "預設",
++  "settings.headroomPresetWrite": "寫作",
++  "settings.headroomPresetMax": "最大",
++  "settings.headroomPresetCustom": "自訂",
++  "settings.headroomSettingsTitle": "Headroom 壓縮設定",
++  "settings.headroomCodeAware": "程式碼感知壓縮 (AST)",
++  "settings.headroomCCR": "可逆壓縮 (CCR)",
++  "settings.headroomProtectErrors": "保護錯誤輸出",
++  "settings.headroomMinTokens": "最小壓縮閾值",
++  "settings.headroomDisableKompress": "禁用 ML Kompress（更快、更低壓縮率）",
++  "settings.headroomRequestTimeout": "請求超時（秒）",
++  "settings.headroomPresetHint": "選擇壓縮預設。下方的自訂設定會覆蓋預設值。",
++  "settings.headroomCodeAwareHint": "AST 級程式碼壓縮。需 headroom-ai[code]。程式場景推薦。",
++  "settings.headroomCCRHint": "可逆壓縮：LLM 可透過 headroom_retrieve 取回原文。寫作場景推薦。",
++  "settings.headroomProtectErrorsHint": "保留錯誤訊息原文。關閉可獲得更高壓縮比，但可能遺失細節。",
++  "settings.headroomDisableKompressHint": "ML 文字模型（500MB+）。Windows 上禁用——無 GPU 的 ONNX Runtime 可能崩潰。",
++  "settings.headroomCompressToolResultsHint": "啟用後 tool 輸出將進入壓縮流程。更高壓縮比，略有細節損失風險。",
++  "settings.headroomCompressToolResults": "激進工具輸出壓縮",
++  "settings.headroomMinTokensHint": "嘗試壓縮的最小 token 數。越小越激進。",
++  "settings.headroomRequestTimeoutHint": "請求超時秒數。ML 壓縮慢時可增大。",
++  "settings.headroomNotInstalled": "Headroom 未安裝 — 執行: pip install headroom-ai[proxy]",
++  "settings.headroomRunning": "Headroom 代理執行中 (連接埠 {port})",
++  "settings.headroomStopped": "Headroom 代理已停止",
++  "settings.headroomTokensSaved": "節省 {n} tokens ({pct}%)",
+   "tabBar.closeTab": "關閉標籤頁",
+   "tabBar.closeOtherTabs": "關閉其他標籤頁",
+   "tabBar.closeTabsToRight": "關閉右側標籤頁",
+diff --git a/desktop/frontend/src/locales/zh.ts b/desktop/frontend/src/locales/zh.ts
+index a840c22d5..449e5899b 100644
+--- a/desktop/frontend/src/locales/zh.ts
++++ b/desktop/frontend/src/locales/zh.ts
+@@ -19,6 +19,8 @@ export const zh: Record<DictKey, string> = {
+   "common.collapse": "收起",
+   "common.none": "无",
+   "common.auto": "自动",
++  "common.on": "开启",
++  "common.off": "关闭",
+   "common.busyHint": "请先完成或停止当前回合",
+   "common.loading": "加载中…",
+   "composer.readOnlyChannel": "渠道会话只读",
+@@ -538,6 +540,11 @@ export const zh: Record<DictKey, string> = {
+   "status.tokens": "tokens",
+   "status.retrying": "正在重试 ({attempt}/{max})…",
+   "status.balanceTitle": "钱包余额",
++  "status.headroomLabel": "Headroom",
++  "status.headroomOff": "Headroom 代理未运行 — 在 Provider 设置中启用",
++  "status.headroomWarming": "Kompress 预热中 — 首次请求可能较慢",
++  "status.headroomRunning": "Headroom 代理运行中 ({requests} 请求，暂无压缩)",
++  "status.headroomSavings": "Headroom 压缩 {pct}%（节省 {tokens} tokens，共 {requests} 次请求）",
+   "status.spendTitle": "当前会话估算计费费用，包含主模型、子代理和辅助调用",
+ 
+   // ── Heartbeat ──
+@@ -1891,4 +1898,31 @@ export const zh: Record<DictKey, string> = {
+   "mock.changedFile2Prompt": "记录项目上下文",
+   "mock.changedFile1Path": "docs/dev-standard.md",
+   "mock.changedFile2Path": ".reasonix/project.md",
++  "settings.headroomCompression": "Headroom 压缩",
++  "settings.headroomActive": "已启用",
++  "settings.headroomPresetCode": "编程",
++  "settings.headroomPreset": "预设",
++  "settings.headroomPresetWrite": "写作",
++  "settings.headroomPresetMax": "最大",
++  "settings.headroomPresetCustom": "自定义",
++  "settings.headroomSettingsTitle": "Headroom 压缩设置",
++  "settings.headroomCodeAware": "代码感知压缩 (AST)",
++  "settings.headroomCCR": "可逆压缩 (CCR)",
++  "settings.headroomProtectErrors": "保护错误输出",
++  "settings.headroomMinTokens": "最小压缩阈值",
++  "settings.headroomDisableKompress": "禁用 ML Kompress（更快、更低压缩率）",
++  "settings.headroomRequestTimeout": "请求超时（秒）",
++  "settings.headroomPresetHint": "选择压缩预设。下方的自定义设置会覆盖预设值。",
++  "settings.headroomCodeAwareHint": "AST 级代码压缩。需 headroom-ai[code]。编程场景推荐。",
++  "settings.headroomCCRHint": "可逆压缩：LLM 可通过 headroom_retrieve 取回原文。写作场景推荐。",
++  "settings.headroomProtectErrorsHint": "保留错误信息原文。关闭可获得更高压缩比，但可能丢失细节。",
++  "settings.headroomDisableKompressHint": "ML 文本模型（500MB+）。Windows 上禁用——无 GPU 的 ONNX Runtime 可能崩溃。",
++  "settings.headroomCompressToolResultsHint": "启用后 tool 输出将进入压缩流程。更高压缩比，略有细节损失风险。",
++  "settings.headroomCompressToolResults": "激进工具输出压缩",
++  "settings.headroomMinTokensHint": "尝试压缩的最小 token 数。越小越激进。",
++  "settings.headroomRequestTimeoutHint": "请求超时秒数。ML 压缩慢时可增大。",
++  "settings.headroomNotInstalled": "Headroom 未安装 — 运行: pip install headroom-ai[proxy]",
++  "settings.headroomRunning": "Headroom 代理运行中 (端口 {port})",
++  "settings.headroomStopped": "Headroom 代理已停止",
++  "settings.headroomTokensSaved": "节省 {n} tokens ({pct}%)",
+ };
+diff --git a/desktop/frontend/src/styles.css b/desktop/frontend/src/styles.css
+index 0fe92d7da..4cfe9b9eb 100644
+--- a/desktop/frontend/src/styles.css
++++ b/desktop/frontend/src/styles.css
+@@ -28244,3 +28244,19 @@ body > .mermaid-diagram--fullscreen {
+     min-width: 0;
+   }
+ }
++
++
++/* Compressing indicator */
++.composer__compressing {
++  display: inline-flex;
++  align-items: center;
++  gap: 4px;
++  margin-right: 6px;
++  font-size: 12px;
++  color: var(--text-secondary);
++  animation: composer-compressing-pulse 1.2s ease-in-out infinite;
++}
++@keyframes composer-compressing-pulse {
++  0%, 100% { opacity: 0.5; }
++  50%      { opacity: 1; }
++}
+diff --git a/desktop/headroom.go b/desktop/headroom.go
+new file mode 100644
+index 000000000..fc28f9b49
+--- /dev/null
++++ b/desktop/headroom.go
+@@ -0,0 +1,333 @@
++// Package main (desktop) provides the headroom-sidecar proxy for context compression.
++// Headroom compresses tool outputs before they reach the LLM, reducing token usage.
++// See https://github.com/headroomlabs-ai/headroom
++//
++// The sidecar manages a local proxy process and exposes its status via the
++// desktop Settings panel and status bar. It is opt-in per provider (HeadroomEnabled).
++package main
++
++import (
++	"bufio"
++	"encoding/json"
++	"fmt"
++	"io"
++	"log/slog"
++	"net/http"
++	"net/url"
++	"os"
++	"os/exec"
++	"path/filepath"
++	"runtime"
++	"sync"
++	"syscall"
++	"time"
++
++	"reasonix/internal/config"
++)
++
++// HeadroomStatusView is the frontend-facing proxy status payload.
++type HeadroomStatusView struct {
++	Running      bool    `json:"running"`
++	Version      string  `json:"version,omitempty"`
++	Installed    bool    `json:"installed"`
++	Port         int     `json:"port"`
++	Requests     int     `json:"requests,omitempty"`
++	TokensSaved  int64   `json:"tokensSaved,omitempty"`
++	SavingsPct   float64 `json:"savingsPct,omitempty"`
++	ErrorMessage string  `json:"errorMessage,omitempty"`
++	Warming      bool    `json:"warming,omitempty"`
++}
++
++// HeadroomConfigView is the frontend-facing subset of headroom config.
++type HeadroomConfigView struct {
++	Preset              string `json:"preset,omitempty"`
++	CodeAware           *bool  `json:"codeAware,omitempty"`
++	CCR                 *bool  `json:"ccr,omitempty"`
++	ProtectErrors       *bool  `json:"protectErrors,omitempty"`
++	MinTokens           *int   `json:"minTokens,omitempty"`
++	DisableKompress     *bool  `json:"disableKompress,omitempty"`
++	RequestTimeout      *int   `json:"requestTimeout,omitempty"`
++	CompressToolResults *bool  `json:"compressToolResults,omitempty"`
++}
++
++// headroomSidecar manages the local headroom-ai proxy subprocess.
++type headroomSidecar struct {
++	mu         sync.Mutex
++	cmd        *exec.Cmd   // running proxy process
++	port       int
++	startedAt  time.Time
++	running    bool
++	warming    bool
++	requests   int
++	tokensSaved int64
++	savingsPct float64
++}
++
++func newHeadroomSidecar() *headroomSidecar {
++	return &headroomSidecar{
++		port: 8787,
++	}
++}
++
++// start launches the headroom proxy as a subprocess. upstreamURL is the
++// protocol+host of the provider (e.g. "https://api.deepseek.com") — headroom
++// appends the request path when forwarding.
++func (h *headroomSidecar) start(cfg *config.Config, upstreamURL string) error {
++	h.mu.Lock()
++	defer h.mu.Unlock()
++
++	if h.running {
++		return nil // already running
++	}
++
++	port := cfg.Headroom.HeadroomPort()
++	h.port = port
++
++	// Resolve the headroom-ai binary from PATH.
++	binPath, err := exec.LookPath("headroom")
++	if err != nil {
++		h.running = false
++		return fmt.Errorf("headroom binary not found on PATH; install with: pip install headroom-ai[proxy,code]: %w", err)
++	}
++
++	// Build args: headroom proxy --port <port>
++	args := []string{"proxy"}
++	args = append(args, "--port", fmt.Sprintf("%d", port))
++	if upstreamURL != "" {
++		args = append(args, "--openai-api-url", upstreamURL)
++	}
++	if cfg.Headroom.HeadroomMode() == "token" {
++		args = append(args, "--mode", "token")
++	} else {
++		args = append(args, "--mode", "cache")
++	}
++	if !cfg.Headroom.HeadroomCodeAware() {
++		args = append(args, "--no-code-aware")
++	}
++	if !cfg.Headroom.HeadroomCCR() {
++		args = append(args, "--no-ccr-inject-tool")
++	}
++	if cfg.Headroom.HeadroomProtectErrors() {
++		// Protect the built-in tools from lossy compression.
++		args = append(args, "--protect-tool-results", "Bash,Grep,Read,Glob,Write,Edit")
++	}
++	if cfg.Headroom.HeadroomDisableKompress() {
++		args = append(args, "--disable-kompress")
++	}
++	if cfg.Headroom.RequestTimeout > 0 {
++		args = append(args, "--request-timeout-seconds", fmt.Sprintf("%d", cfg.Headroom.RequestTimeout))
++	}
++
++	// Persist headroom request logs to a temp file for diagnostics.
++	logDir := filepath.Join(os.TempDir(), "reasonix-headroom")
++	_ = os.MkdirAll(logDir, 0700)
++	logPath := filepath.Join(logDir, "headroom.log")
++	args = append(args, "--log-file", logPath)
++
++	cmd := exec.Command(binPath, args...)
++	// Pipe stdout/stderr into slog. Hide the Windows console window — the
++	// proxy runs as a background service; its status is in the app status bar.
++	if runtime.GOOS == "windows" {
++		cmd.SysProcAttr = &syscall.SysProcAttr{
++			HideWindow: true,
++		}
++	}
++	stdoutPipe, _ := cmd.StdoutPipe()
++	stderrPipe, _ := cmd.StderrPipe()
++	h.cmd = cmd
++	h.startedAt = time.Now()
++	h.warming = true
++	h.running = false // set to true after health check passes
++
++	if err := cmd.Start(); err != nil {
++		return fmt.Errorf("headroom proxy start: %w", err)
++	}
++
++	// Stream headroom output to slog in background goroutines.
++	go streamOutput(stdoutPipe, slog.Info, "headroom", port)
++	go streamOutput(stderrPipe, slog.Warn, "headroom", port)
++
++	slog.Info("headroom: proxy started", "port", port, "pid", cmd.Process.Pid, "log", logPath)
++
++	// Wait for the proxy to become reachable. First startup may be slow —
++	// headroom loads ONNX models and warms up Kompress engines.
++	reachable := false
++	for i := 0; i < 30; i++ {
++		time.Sleep(500 * time.Millisecond)
++		if headroomReachable(port) {
++			reachable = true
++			break
++		}
++	}
++	if !reachable {
++		// Process started but isn't answering; let it run but mark not running.
++		slog.Warn("headroom: proxy started but not reachable within 15s", "port", port)
++		h.running = false
++		return fmt.Errorf("headroom proxy started on port %d but not reachable after 15s", port)
++	}
++
++	h.running = true
++	h.warming = false
++	slog.Info("headroom: proxy reachable", "port", port)
++	return nil
++}
++
++// stop kills the headroom proxy process.
++func (h *headroomSidecar) stop() {
++	h.mu.Lock()
++	defer h.mu.Unlock()
++
++	if h.cmd != nil && h.cmd.Process != nil {
++		slog.Info("headroom: stopping proxy", "pid", h.cmd.Process.Pid)
++		if err := h.cmd.Process.Kill(); err != nil {
++			slog.Warn("headroom: kill failed", "err", err)
++		}
++		// Wait for cleanup.
++		_ = h.cmd.Wait()
++	}
++	h.cmd = nil
++	h.running = false
++	h.warming = false
++}
++
++// status returns a snapshot of the proxy state for the frontend, fetching
++// live counters from the proxy's /stats endpoint.
++func (h *headroomSidecar) status() HeadroomStatusView {
++	h.mu.Lock()
++	port := h.port
++	running := h.running
++	warming := h.warming
++	h.mu.Unlock()
++
++	v := HeadroomStatusView{
++		Running:   running,
++		Port:      port,
++		Warming:   warming,
++		Installed: h.isInstalled(),
++	}
++	if !running {
++		v.ErrorMessage = "headroom proxy not running"
++		return v
++	}
++
++	// Fetch live counters from the proxy's /stats endpoint.
++	stats, err := h.fetchStats(port)
++	if err != nil {
++		slog.Debug("headroom: stats fetch failed", "port", port, "err", err)
++		return v
++	}
++	v.Requests = stats.Requests.Total
++	v.TokensSaved = int64(stats.Tokens.Saved)
++	v.SavingsPct = stats.Tokens.SavingsPercent
++	return v
++}
++
++// headroomStatsResponse is a minimal parse of the proxy /stats JSON.
++type headroomStatsResponse struct {
++	Requests struct {
++		Total int `json:"total"`
++	} `json:"requests"`
++	Tokens struct {
++		Saved          int     `json:"saved"`
++		SavingsPercent float64 `json:"savings_percent"`
++	} `json:"tokens"`
++}
++
++// fetchStats calls the headroom proxy's /stats endpoint and parses the response.
++func (h *headroomSidecar) fetchStats(port int) (*headroomStatsResponse, error) {
++	client := &http.Client{Timeout: 2 * time.Second}
++	resp, err := client.Get(fmt.Sprintf("http://127.0.0.1:%d/stats", port))
++	if err != nil {
++		return nil, err
++	}
++	defer resp.Body.Close()
++
++	var stats headroomStatsResponse
++	if err := json.NewDecoder(resp.Body).Decode(&stats); err != nil {
++		return nil, err
++	}
++	return &stats, nil
++}
++
++// healthCheck performs a quick HTTP GET to the proxy's livez endpoint.
++func (h *headroomSidecar) healthCheck() bool {
++	h.mu.Lock()
++	port := h.port
++	h.mu.Unlock()
++
++	if port <= 0 {
++		return false
++	}
++	return headroomReachable(port)
++}
++
++// isInstalled checks whether the headroom binary exists on PATH.
++func (h *headroomSidecar) isInstalled() bool {
++	_, err := exec.LookPath("headroom")
++	return err == nil
++}
++
++// headroomReachable checks if the headroom proxy is responding on the given port.
++func headroomReachable(port int) bool {
++	client := &http.Client{Timeout: time.Second}
++	resp, err := client.Get(fmt.Sprintf("http://127.0.0.1:%d/livez", port))
++	if err != nil {
++		return false
++	}
++	defer resp.Body.Close()
++	return resp.StatusCode == 200
++}
++
++// headroomConfigViewFrom converts a HeadroomConfig to the frontend view type.
++func headroomConfigViewFrom(cfg *config.HeadroomConfig) HeadroomConfigView {
++	v := HeadroomConfigView{
++		Preset: cfg.HeadroomPreset(),
++	}
++	ca := cfg.HeadroomCodeAware()
++	v.CodeAware = &ca
++	ccr := cfg.HeadroomCCR()
++	v.CCR = &ccr
++	pe := cfg.HeadroomProtectErrors()
++	v.ProtectErrors = &pe
++	mt := cfg.HeadroomMinTokens()
++	v.MinTokens = &mt
++	dk := cfg.HeadroomDisableKompress()
++	v.DisableKompress = &dk
++	rt := cfg.HeadroomRequestTimeout()
++	v.RequestTimeout = &rt
++	v.CompressToolResults = &cfg.CompressToolResults
++	return v
++}
++
++// headroomUpstreamURL extracts the protocol+host from a provider BaseURL for
++// use with headroom's --openai-api-url flag. Headroom appends the request
++// path (/v1/chat/completions) when forwarding, so we must strip any path
++// suffix (e.g. "/v1") from the configured BaseURL.
++//
++// Examples:
++//
++//	"https://api.deepseek.com"      → "https://api.deepseek.com"
++//	"https://api.deepseek.com/v1"   → "https://api.deepseek.com"
++func headroomUpstreamURL(baseURL string) string {
++	u, err := url.Parse(baseURL)
++	if err != nil {
++		return ""
++	}
++	return u.Scheme + "://" + u.Host
++}
++
++// streamOutput reads lines from a pipe and logs them via the provided function.
++// Used to capture headroom's stdout (info) and stderr (warn) into slog.
++func streamOutput(pipe io.ReadCloser, logFn func(string, ...any), tag string, port int) {
++	if pipe == nil {
++		return
++	}
++	scanner := bufio.NewScanner(pipe)
++	for scanner.Scan() {
++		line := scanner.Text()
++		if line == "" {
++			continue
++		}
++		logFn(tag+": "+line, "port", port)
++	}
++}
+diff --git a/desktop/settings_app.go b/desktop/settings_app.go
+index a1ead197d..154e9e05d 100644
+--- a/desktop/settings_app.go
++++ b/desktop/settings_app.go
+@@ -2,6 +2,7 @@ package main
+ 
+ import (
+ 	"context"
++	"errors"
+ 	"fmt"
+ 	"log/slog"
+ 	"net/url"
+@@ -55,6 +56,7 @@ type ProviderView struct {
+ 	SupportedEfforts  []string                    `json:"supportedEfforts"`
+ 	DefaultEffort     string                      `json:"defaultEffort"`
+ 	ModelOverrides    []ProviderModelOverrideView `json:"modelOverrides"`
++	HeadroomEnabled   bool                        `json:"headroomEnabled"`
+ }
+ 
+ type ProviderModelOverrideView struct {
+@@ -243,6 +245,8 @@ type SettingsView struct {
+ 	AutoApproveTools bool `json:"autoApproveTools"`
+ 	// Bypass is the legacy JSON key for the same live state.
+ 	Bypass bool `json:"bypass"`
++	// HeadroomStatus is the live state of the local headroom compression proxy.
++	HeadroomStatus *HeadroomStatusView `json:"headroomStatus,omitempty"`
+ }
+ 
+ // DesktopStartupSettingsView is the lightweight Settings subset needed during
+@@ -465,6 +469,7 @@ func providerViewFromEntryForRootWithResolver(p config.ProviderEntry, builtIn, a
+ 		SupportedEfforts:  nonNil(p.SupportedEfforts),
+ 		DefaultEffort:     p.DefaultEffort,
+ 		ModelOverrides:    providerModelOverridesForView(p.ModelOverrides, models),
++		HeadroomEnabled:   p.HeadroomEnabled,
+ 	}
+ }
+ 
+@@ -600,6 +605,12 @@ func (a *App) Settings() SettingsView {
+ 	if shell == "" {
+ 		shell = "auto"
+ 	}
++	// Get headroom status
++	var headroomStatus *HeadroomStatusView
++	if a.headroom != nil {
++		hs := a.headroom.status()
++		headroomStatus = &hs
++	}
+ 	root := a.activeWorkspaceRoot()
+ 	writeRoots := cfg.WriteRootsForRoot(root)
+ 	effectiveWorkspaceRoot := ""
+@@ -658,6 +669,7 @@ func (a *App) Settings() SettingsView {
+ 		ProviderKinds:           nonNil(provider.Kinds()),
+ 		AutoApproveTools:        ctrl != nil && ctrl.AutoApproveTools(),
+ 		Bypass:                  ctrl != nil && ctrl.AutoApproveTools(),
++		HeadroomStatus:          headroomStatus,
+ 	}
+ 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
+ 	resolver := config.NewCredentialResolverForRoot(root)
+@@ -1174,9 +1186,13 @@ func (a *App) rebuild() error {
+ 	}
+ 	path := agent.ContinueSessionPath(prevPath, ctrl.SessionDir(), ctrl.Label())
+ 	if err := tab.ensureSessionLease(path); err != nil {
+-		ctrl.Close()
+-		tab.releaseSessionLease()
+-		return err
++		if errors.Is(err, agent.ErrSessionLeaseHeld) {
++			slog.Warn("settings rebuild: session lease already held; continuing", "path", path, "err", err)
++		} else {
++			ctrl.Close()
++			tab.releaseSessionLease()
++			return err
++		}
+ 	}
+ 	if len(carried) > 0 {
+ 		carried = withFreshSystemPrompt(carried, systemPromptFrom(ctrl.History()))
+@@ -1501,6 +1517,29 @@ func (a *App) SaveProvider(p ProviderView) error {
+ 		e.ReasoningProtocol = p.ReasoningProtocol
+ 		e.Thinking = providerThinkingForSettings(p.Thinking)
+ 		e.SupportedEfforts = p.SupportedEfforts
++		e.HeadroomEnabled = p.HeadroomEnabled
++		// Ensure "headroom" is in the status bar when headroom is enabled
++		if p.HeadroomEnabled {
++			headroomInItems := false
++			for _, item := range c.Desktop.StatusBarItems {
++				if item == "headroom" {
++					headroomInItems = true
++					break
++				}
++			}
++			if !headroomInItems {
++				c.Desktop.StatusBarItems = append(c.Desktop.StatusBarItems, "headroom")
++			}
++			// Auto-start the proxy immediately so the controller rebuild
++			// doesn't point a provider at a proxy that isn't running yet.
++			if a.headroom != nil && !a.headroom.healthCheck() {
++				// Apply preset so CLI flags reflect config, not Go zero values
++				c.Headroom.ApplyPreset(c.Headroom.HeadroomPreset())
++				if err := a.headroom.start(c, headroomUpstreamURL(p.BaseURL)); err != nil {
++					slog.Warn("headroom: auto-start on provider save failed", "err", err)
++				}
++			}
++		}
+ 		e.DefaultEffort = p.DefaultEffort
+ 		e.Model = ""
+ 		e.Models = nil
+diff --git a/desktop/tabs.go b/desktop/tabs.go
+index a3978553a..ba301e387 100644
+--- a/desktop/tabs.go
++++ b/desktop/tabs.go
+@@ -1553,7 +1553,7 @@ func (a *App) EnsureBlankTab(scope, workspaceRoot string) (TabMeta, error) {
+ 	if scope == "global" {
+ 		actualRoot = globalRoot
+ 	}
+-	defaultModel, defaultToolApprovalMode := desktopNewSessionDefaults()
++	defaultModel, defaultToolApprovalMode, _ := desktopNewSessionDefaults()
+ 
+ 	a.mu.Lock()
+ 	for _, id := range a.orderedTabIDsLocked() {
+diff --git a/internal/agent/compact.go b/internal/agent/compact.go
+index c9de070a2..7a483aa32 100644
+--- a/internal/agent/compact.go
++++ b/internal/agent/compact.go
+@@ -75,7 +75,7 @@ Commands run (builds, tests, git) and their relevant results — what passed, wh
+ Problems hit and how they were resolved (or not), so the same dead ends are not repeated.
+ 
+ ## Pending & next step
+-What is still in progress or unstarted, and the single most concrete next action to take.
++What is still in progress or unstarted, and the single most concrete next action to take.Prioritise the intent in the user's most recent message so it is not lost across the compaction boundary.
+ 
+ Rules: be terse — bullet points and fragments, not prose. Preserve identifiers, paths, and numbers exactly. Do NOT invent anything not present in the messages; if something is unknown, leave it out rather than guessing.`
+ 
+diff --git a/internal/agent/coordinator.go b/internal/agent/coordinator.go
+index cbc91d34e..9ef57dfc2 100644
+--- a/internal/agent/coordinator.go
++++ b/internal/agent/coordinator.go
+@@ -22,11 +22,17 @@ const DefaultPlannerPrompt = `You are the planner in a two-model coding agent.
+ Given a task, produce a concise, ordered plan for the executor model to carry out.
+ Use the read-only tools available to you when the task needs context from the
+ workspace, user rules, or docs; keep that research targeted and stop once you
+-have enough evidence. Do not write full implementations or attempt side effects.
+-Do not ask the user how to trigger the executor and do not say you are waiting
++have enough evidence. If the task is straightforward and you already have enough
++context, skip research entirely.
++Do not write full implementations or attempt side effects.
+ for the executor. Output executor-ready instructions: what to do, which files or
+-commands are relevant, expected blockers, and key decisions. Keep it short and
+-actionable.`
++commands are relevant, expected blockers and edge cases, and key decisions.
++When referencing code, include file paths and line numbers.
++When the task is to review, audit, or improve something (e.g. system prompts,
++code quality, architecture): first present your findings and recommendations as a
++concise report, then explicitly ask the user whether to proceed with the changes.
++Only if the user confirms should you output executor-ready instructions.
++Keep it short and actionable.`
+ 
+ const executorHandoffMarker = "Reasonix executor handoff"
+ 
+diff --git a/internal/agent/session_lock_windows.go b/internal/agent/session_lock_windows.go
+index ae2635b5f..6fbf22172 100644
+--- a/internal/agent/session_lock_windows.go
++++ b/internal/agent/session_lock_windows.go
+@@ -15,6 +15,10 @@ func lockSessionFile(path string) (func(), error) {
+ 		return nil, err
+ 	}
+ 	handle := windows.Handle(f.Fd())
++	// Prevent child processes (e.g. headroom proxy) from inheriting this
++	// handle. If a child inherits the lock, the lock survives the parent's
++	// exit and blocks the next process from writing the session file.
++	_ = windows.SetHandleInformation(handle, windows.HANDLE_FLAG_INHERIT, 0)
+ 	var overlapped windows.Overlapped
+ 	if err := windows.LockFileEx(handle, windows.LOCKFILE_EXCLUSIVE_LOCK, 0, 1, 0, &overlapped); err != nil {
+ 		_ = f.Close()
+@@ -32,6 +36,7 @@ func tryLockSessionLeaseFile(path string) (func(), error) {
+ 		return nil, err
+ 	}
+ 	handle := windows.Handle(f.Fd())
++	_ = windows.SetHandleInformation(handle, windows.HANDLE_FLAG_INHERIT, 0)
+ 	var overlapped windows.Overlapped
+ 	flags := uint32(windows.LOCKFILE_EXCLUSIVE_LOCK | windows.LOCKFILE_FAIL_IMMEDIATELY)
+ 	if err := windows.LockFileEx(handle, flags, 0, 1, 0, &overlapped); err != nil {
+diff --git a/internal/agent/task.go b/internal/agent/task.go
+index 3818532a4..ed37bbe35 100644
+--- a/internal/agent/task.go
++++ b/internal/agent/task.go
+@@ -22,7 +22,10 @@ import (
+ const DefaultTaskSystemPrompt = `You are a sub-agent invoked by a parent coding agent to carry out one focused task.
+ Use the provided tools to investigate or act. Return a single final answer that is concise
+ and self-contained — the parent will see only that answer, not your tool calls or reasoning.
+-If you need to ask for clarification, fail with a precise question instead of guessing.`
++If the task cannot be completed, return a clear failure description: what was attempted,
++what went wrong, and what the parent could try instead. Do not retry indefinitely — fail
++after one retry on transient errors. If you need clarification, fail with a precise question
++instead of guessing.`
+ 
+ // DefaultReadOnlyTaskSystemPrompt steers read-only sub-agents toward isolated
+ // research. They never receive writer tools, persisted transcript controls, or
+diff --git a/internal/boot/boot.go b/internal/boot/boot.go
+index b7b03904d..897d7270f 100644
+--- a/internal/boot/boot.go
++++ b/internal/boot/boot.go
+@@ -14,6 +14,7 @@ import (
+ 	"fmt"
+ 	"io"
+ 	"log/slog"
++	"net/http"
+ 	"os"
+ 	"path/filepath"
+ 	"runtime"
+@@ -242,19 +243,14 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
+ 		return nil, err
+ 	}
+ 	// Output style: fold the selected persona/tone block into the base prompt
+-	// before language/memory/skills append, so a "replace" style (keep-coding
++	// before memory/skills/policies append, so a "replace" style (keep-coding
+ 	// false) still keeps those. Applied once, into the cache-stable prefix.
+ 	if st, ok := outputstyle.Resolve(cfg.Agent.OutputStyle, outputstyle.Dirs()); ok {
+ 		sysPrompt = outputstyle.Apply(sysPrompt, st)
+ 	}
+-	sysPrompt += "\n\n" + config.UserDecisionPolicy
+-	sysPrompt += "\n\n" + config.LanguagePolicy
+ 	if workspaceLine := currentWorkspacePromptLine(root); workspaceLine != "" {
+ 		sysPrompt += "\n\n" + workspaceLine
+ 	}
+-	if tokenEconomy {
+-		sysPrompt += "\n\n" + tokenEconomyPrompt
+-	}
+ 	if cfg.EnvironmentEnabled() {
+ 		shellLabel := shell.Kind.String()
+ 		if strings.TrimSpace(cfg.Tools.Shell.Path) != "" {
+@@ -301,6 +297,13 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
+ 	if !tokenEconomy {
+ 		sysPrompt = skill.ApplyIndex(sysPrompt, skills)
+ 	}
++	// Policies are appended last so the durable user context (memory) and tool
++	// surface (skills index) stay closer to the base prompt for cache coherence.
++	sysPrompt += "\n\n" + config.UserDecisionPolicy
++	sysPrompt += "\n\n" + config.LanguagePolicy
++	if tokenEconomy {
++		sysPrompt += "\n\n" + tokenEconomyPrompt
++	}
+ 
+ 	reg := tool.NewRegistry()
+ 	bashSpec := sandbox.Spec{Mode: cfg.BashMode(), WriteRoots: cfg.WriteRootsForRoot(root), ForbidReadRoots: cfg.ForbidReadRootsForRoot(root), Network: cfg.Sandbox.Network}
+@@ -1441,9 +1444,30 @@ func NewProvider(e *config.ProviderEntry) (provider.Provider, error) {
+ // NewProviderWithProxy builds a provider.Provider with the configured ordinary
+ // network proxy settings.
+ func NewProviderWithProxy(e *config.ProviderEntry, proxy netclient.ProxySpec) (provider.Provider, error) {
++	baseURL := e.BaseURL
++	if e.HeadroomEnabled {
++		port := headroomProxyPort()
++		if e.Kind == "openai" || e.Kind == "" {
++			baseURL = fmt.Sprintf("http://127.0.0.1:%d/v1", port)
++		} else {
++			baseURL = fmt.Sprintf("http://127.0.0.1:%d", port)
++		}
++	}
++	timeout := 0
++	addNoProxy := false
++	if e.HeadroomEnabled {
++		cfg, err := config.Load()
++		if err == nil {
++			timeout = cfg.Headroom.HeadroomRequestTimeout()
++		}
++		if timeout <= 0 {
++			timeout = 300
++		}
++		addNoProxy = true
++	}
+ 	return provider.New(e.Kind, provider.Config{
+ 		Name:    e.Name,
+-		BaseURL: e.BaseURL,
++		BaseURL: baseURL,
+ 		Model:   e.Model,
+ 		APIKey:  e.APIKey(),
+ 		// Pass the key's env var so auth failures can name where to fix it, plus
+@@ -1461,6 +1485,8 @@ func NewProviderWithProxy(e *config.ProviderEntry, proxy netclient.ProxySpec) (p
+ 			"proxy_spec":         proxy,
+ 			"vision":             config.EffectiveVision(e),
+ 			"vision_detail":      e.VisionDetail,
++			"request_timeout_seconds": timeout,
++			"no_proxy_localhost":      addNoProxy,
+ 		},
+ 	})
+ }
+@@ -1786,3 +1812,23 @@ func providerNames(cfg *config.Config) string {
+ 	}
+ 	return strings.Join(names, "/")
+ }
++
++// headroomProxyPort returns the configured headroom proxy port, defaulting to 8787.
++func headroomProxyPort() int {
++	cfg, err := config.Load()
++	if err != nil {
++		return 8787
++	}
++	return cfg.Headroom.HeadroomPort()
++}
++
++// headroomReachable checks if the headroom proxy is responding (1s timeout).
++func headroomReachable(port int) bool {
++	client := &http.Client{Timeout: time.Second}
++	resp, err := client.Get(fmt.Sprintf("http://127.0.0.1:%d/livez", port))
++	if err != nil {
++		return false
++	}
++	defer resp.Body.Close()
++	return resp.StatusCode == 200
++}
+diff --git a/internal/config/config.go b/internal/config/config.go
+index c6b927737..4a21e2051 100644
+--- a/internal/config/config.go
++++ b/internal/config/config.go
+@@ -59,6 +59,7 @@ type Config struct {
+ 	LSP              LSPConfig           `toml:"lsp"`
+ 	Bot              BotConfig           `toml:"bot"`
+ 	Serve            ServeConfig         `toml:"serve"`
++	Headroom         HeadroomConfig      `toml:"headroom"`
+ 
+ 	providerSources          map[string]providerSourceScope
+ 	shadowedProjectProviders []ProviderEntry
+@@ -323,6 +324,7 @@ var defaultDesktopStatusBarItems = []string{
+ 	"compact",
+ 	"cost",
+ 	"balance",
++	"headroom",
+ }
+ 
+ var knownDesktopStatusBarItems = desktopStatusBarItemSet(defaultDesktopStatusBarItems)
+@@ -1072,6 +1074,9 @@ type ProviderEntry struct {
+ 	// NoProxy reaches this provider's base_url directly, never through the proxy.
+ 	// For China-only endpoints a foreign-exit proxy resets the TLS handshake (#2803).
+ 	NoProxy bool `toml:"no_proxy"`
++	// HeadroomEnabled routes this provider through the local Headroom
++	// context-compression proxy. Requires headroom proxy to be running.
++	HeadroomEnabled bool `toml:"headroom_enabled"`
+ }
+ 
+ type ProviderModelOverride struct {
+@@ -1746,3 +1751,148 @@ func (c *Config) providerNames() string {
+ 	}
+ 	return strings.Join(names, ", ")
+ }
++
++// HeadroomConfig controls the Headroom context-compression proxy sidecar.
++type HeadroomConfig struct {
++	Port                int    `toml:"port"`
++	Mode                string `toml:"mode"`
++	AutoStart           *bool  `toml:"auto_start"`
++	Preset              string `toml:"preset"`
++	CodeAware           bool   `toml:"code_aware"`
++	CCR                 bool   `toml:"ccr"`
++	ProtectErrors       *bool  `toml:"protect_errors"`
++	MinTokens           int    `toml:"min_tokens"`
++	DisableKompress     *bool  `toml:"disable_kompress"`
++	RequestTimeout      int    `toml:"request_timeout"`
++	CompressToolResults bool   `toml:"compress_tool_results"`
++}
++
++func (h *HeadroomConfig) HeadroomPort() int {
++	if h == nil || h.Port <= 0 {
++		return 8787
++	}
++	return h.Port
++}
++
++func (h *HeadroomConfig) HeadroomMode() string {
++	if h == nil || h.Mode == "" {
++		return "token"
++	}
++	return h.Mode
++}
++
++func (h *HeadroomConfig) HeadroomAutoStart() bool {
++	return h == nil || h.AutoStart == nil || *h.AutoStart
++}
++
++func (h *HeadroomConfig) HeadroomPreset() string {
++	if h == nil || h.Preset == "" {
++		return "coding"
++	}
++	return h.Preset
++}
++
++func (h *HeadroomConfig) HeadroomCodeAware() bool {
++	if h == nil {
++		return true
++	}
++	return h.CodeAware
++}
++
++func (h *HeadroomConfig) HeadroomCCR() bool {
++	if h == nil {
++		return false
++	}
++	return h.CCR
++}
++
++func (h *HeadroomConfig) HeadroomProtectErrors() bool {
++	if h == nil || h.ProtectErrors == nil {
++		return true
++	}
++	return *h.ProtectErrors
++}
++
++func (h *HeadroomConfig) HeadroomMinTokens() int {
++	if h == nil || h.MinTokens <= 0 {
++		return 250
++	}
++	return h.MinTokens
++}
++
++func (h *HeadroomConfig) HeadroomDisableKompress() bool {
++	if h == nil || h.DisableKompress == nil {
++		return false
++	}
++	return *h.DisableKompress
++}
++
++func (h *HeadroomConfig) HeadroomRequestTimeout() int {
++	if h == nil || h.RequestTimeout <= 0 {
++		return 300
++	}
++	return h.RequestTimeout
++}
++
++func (h *HeadroomConfig) ApplyPreset(preset string) {
++	if h == nil {
++		return
++	}
++	h.Preset = preset
++	switch preset {
++	case "writing":
++		h.CodeAware = false
++		h.CCR = true
++		if h.ProtectErrors == nil {
++			pe := false
++			h.ProtectErrors = &pe
++		}
++		if h.MinTokens == 0 {
++			h.MinTokens = 100
++		}
++		if h.DisableKompress == nil {
++			dk := true
++			h.DisableKompress = &dk
++		}
++		if h.RequestTimeout == 0 {
++			h.RequestTimeout = 120
++		}
++		h.CompressToolResults = true
++	case "max":
++		h.CodeAware = true
++		h.CCR = false
++		if h.ProtectErrors == nil {
++			pe := false
++			h.ProtectErrors = &pe
++		}
++		if h.MinTokens == 0 {
++			h.MinTokens = 100
++		}
++		if h.DisableKompress == nil {
++			dk := true
++			h.DisableKompress = &dk
++		}
++		if h.RequestTimeout == 0 {
++			h.RequestTimeout = 300
++		}
++		h.CompressToolResults = true
++	default: // "coding"
++		h.CodeAware = true
++		h.CCR = false
++		if h.ProtectErrors == nil {
++			pe := true
++			h.ProtectErrors = &pe
++		}
++		if h.MinTokens == 0 {
++			h.MinTokens = 250
++		}
++		if h.DisableKompress == nil {
++			dk := true
++			h.DisableKompress = &dk
++		}
++		if h.RequestTimeout == 0 {
++			h.RequestTimeout = 120
++		}
++		h.CompressToolResults = true
++	}
++}
+diff --git a/internal/config/render.go b/internal/config/render.go
+index dda77cdbc..3e794329f 100644
+--- a/internal/config/render.go
++++ b/internal/config/render.go
+@@ -349,10 +349,47 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
+ 			if p.NoProxy {
+ 				b.WriteString("no_proxy    = true   # reach this base_url directly, never via the proxy\n")
+ 			}
++			if p.HeadroomEnabled {
++				b.WriteString("headroom_enabled = true   # route through local Headroom compression proxy\n")
++			}
+ 			b.WriteString("\n")
+ 		}
+ 	}
+ 
++	b.WriteString("# Headroom context-compression proxy. Install: pip install headroom-ai[proxy,code]\n")
++	b.WriteString("[headroom]\n")
++	if c.Headroom.Port > 0 {
++		fmt.Fprintf(&b, "port   = %d\n", c.Headroom.Port)
++	}
++	if c.Headroom.Mode != "" {
++		fmt.Fprintf(&b, "mode   = %q\n", c.Headroom.Mode)
++	}
++	if c.Headroom.AutoStart != nil {
++		fmt.Fprintf(&b, "auto_start = %v\n", *c.Headroom.AutoStart)
++	}
++	if c.Headroom.Preset != "" {
++		fmt.Fprintf(&b, "preset = %q   # coding | writing | max\n", c.Headroom.Preset)
++	}
++	if c.Headroom.CodeAware {
++		b.WriteString("code_aware = true\n")
++	}
++	if c.Headroom.CCR {
++		b.WriteString("ccr   = true\n")
++	}
++	if c.Headroom.ProtectErrors != nil {
++		fmt.Fprintf(&b, "protect_errors = %v\n", *c.Headroom.ProtectErrors)
++	}
++	if c.Headroom.MinTokens > 0 {
++		fmt.Fprintf(&b, "min_tokens = %d\n", c.Headroom.MinTokens)
++	}
++	if c.Headroom.DisableKompress != nil {
++		fmt.Fprintf(&b, "disable_kompress = %v\n", *c.Headroom.DisableKompress)
++	}
++	if c.Headroom.RequestTimeout > 0 {
++		fmt.Fprintf(&b, "request_timeout = %d\n", c.Headroom.RequestTimeout)
++	}
++	b.WriteString("\n")
++
+ 	b.WriteString("[tools]\n")
+ 	if len(c.Tools.Enabled) == 0 {
+ 		b.WriteString("enabled = []   # empty = all built-in tools\n")
+diff --git a/internal/provider/openai/openai.go b/internal/provider/openai/openai.go
+index 626dad7e2..ab8d10a48 100644
+--- a/internal/provider/openai/openai.go
++++ b/internal/provider/openai/openai.go
+@@ -22,6 +22,7 @@ import (
+ 	"fmt"
+ 	"io"
+ 	"net/http"
++	"net/url"
+ 	"sort"
+ 	"strings"
+ 	"sync"
+@@ -171,12 +172,36 @@ func New(cfg provider.Config) (provider.Provider, error) {
+ 
+ func newHTTPClient(cfg provider.Config) (*http.Client, error) {
+ 	spec, _ := cfg.Extra["proxy_spec"].(netclient.ProxySpec)
+-	return netclient.NewHTTPClient(spec, netclient.TransportOptions{
++	client, err := netclient.NewHTTPClient(spec, netclient.TransportOptions{
+ 		DialTimeout:           30 * time.Second,
+ 		KeepAlive:             30 * time.Second,
+ 		TLSHandshakeTimeout:   15 * time.Second,
+-		ResponseHeaderTimeout: 120 * time.Second, // models can think for a while before the first token
++		ResponseHeaderTimeout: 120 * time.Second,
+ 	})
++	if err != nil {
++		return nil, err
++	}
++	// When headroom rewrites base_url to localhost, force proxy bypass for
++	// localhost addresses regardless of proxy mode (custom/auto/env).
++	if noProxyLocal, _ := cfg.Extra["no_proxy_localhost"].(bool); noProxyLocal && client.Transport != nil {
++		if tr, ok := client.Transport.(*http.Transport); ok && tr.Proxy != nil {
++			origProxy := tr.Proxy
++			tr.Proxy = func(req *http.Request) (*url.URL, error) {
++				if req.URL != nil {
++					host := req.URL.Hostname()
++					if host == "127.0.0.1" || host == "localhost" || strings.HasSuffix(host, ".local") {
++						return nil, nil
++					}
++				}
++				return origProxy(req)
++			}
++		}
++	}
++	// Apply request timeout override (used by headroom proxy to accommodate ML compression)
++	if ts, ok := cfg.Extra["request_timeout_seconds"].(int); ok && ts > 0 {
++		client.Timeout = time.Duration(ts) * time.Second
++	}
++	return client, nil
+ }
+ 
+ type client struct {

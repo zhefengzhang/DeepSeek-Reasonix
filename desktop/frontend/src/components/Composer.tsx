@@ -447,6 +447,7 @@ export function Composer({
   guidanceConsumedKey,
   guidanceConsumedText,
   guidanceQueuePreviewItems,
+  headroomStats
 }: {
   running: boolean;
   collaborationMode: CollaborationMode;
@@ -473,6 +474,7 @@ export function Composer({
   onSetTokenMode: (mode: TokenMode) => void;
   insertRequest?: ComposerInsertRequest | null;
   disabled?: boolean;
+  headroomStats?: import("../lib/types").HeadroomStatusView;
   submitDisabled?: boolean;
   readOnly?: boolean;
   decisionPending?: boolean;
@@ -2512,7 +2514,7 @@ export function Composer({
               <ArrowUp size={16} />
             </button>
           </Tooltip>
-          <CompressingSpinner active={running && !retry && !disabled} />
+          <CompressingSpinner active={running && !retry && !disabled && headroomStats?.running === true} />
         </div>
         <div className={composerMetaClass}>
           <div className="composer-meta__params">

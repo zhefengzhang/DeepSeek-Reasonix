@@ -1353,6 +1353,14 @@ func (a *App) SaveProvider(p ProviderView) error {
 					}
 				}
 			}
+		} else {
+			filtered := make([]string, 0, len(c.Desktop.StatusBarItems))
+			for _, item := range c.Desktop.StatusBarItems {
+				if item != "headroom" {
+					filtered = append(filtered, item)
+				}
+			}
+			c.Desktop.StatusBarItems = filtered
 		}
 		e.DefaultEffort = p.DefaultEffort
 		e.Model = ""

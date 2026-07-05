@@ -486,7 +486,7 @@ export const en = {
   "status.headroomOff": "Headroom proxy not running — enable it in provider settings",
   "status.headroomWarming": "Kompress warming up — first request may be slow",
   "status.headroomRunning": "Headroom proxy running ({requests} requests, no savings yet)",
-  "status.headroomSavings": "Headroom compressed {pct}% ({tokens} tokens saved across {requests} requests)",
+  "status.headroomSavings": "Headroom compressed {pct}% ({tokens} tokens saved across {requests} requests, saved {cost})",
   "status.spendTitle": "Estimated billable spend in this session, including model, subagent, and helper calls",
 
   // ── Heartbeat ──
@@ -1827,9 +1827,12 @@ export const en = {
   "settings.headroomMinTokensHint": "Minimum tokens to attempt compression. Lower = more aggressive.",
   "settings.headroomRequestTimeoutHint": "Seconds before the request times out. Increase for slow ML compression.",
   "settings.headroomNotInstalled": "Headroom not installed — run: pip install headroom-ai[proxy]",
+  "settings.headroomNotEnabled": "Headroom installed but not enabled — enable it in provider settings",
+  "settings.headroomStarting": "Headroom starting... (first load may take 30s)",
   "settings.headroomRunning": "Headroom proxy running (port {port})",
   "settings.headroomStopped": "Headroom proxy stopped",
   "settings.headroomTokensSaved": "{n} tokens saved ({pct}%)",
+  "settings.headroomRestartNotice": "Changes to compression settings restart the proxy service. Active conversations may briefly pause.",
 };
 
 export type DictKey = keyof typeof en;

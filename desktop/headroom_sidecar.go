@@ -30,29 +30,33 @@ var hrmHTTPClient = &http.Client{Timeout: 3 * time.Second}
 
 // HeadroomStatusView is returned to the frontend.
 type HeadroomStatusView struct {
-	Running      bool   `json:"running"`
-	Version      string `json:"version,omitempty"`
-	Installed    bool   `json:"installed"`
-	Port         int    `json:"port"`
-	Requests     int    `json:"requests,omitempty"`
-	TokensSaved  int    `json:"tokensSaved,omitempty"`
+	Running      bool    `json:"running"`
+	Version      string  `json:"version,omitempty"`
+	Installed    bool    `json:"installed"`
+	Port         int     `json:"port"`
+	Requests     int     `json:"requests,omitempty"`
+	TokensSaved  int     `json:"tokensSaved,omitempty"`
 	SavingsPct   float64 `json:"savingsPct,omitempty"`
-	ErrorMessage string `json:"errorMessage,omitempty"`
-	Warming      bool   `json:"warming,omitempty"` // true when Kompress enabled but not yet used
+	CostSaved    float64 `json:"costSaved,omitempty"`
+	CostCurrency string  `json:"costCurrency,omitempty"`
+	ErrorMessage string  `json:"errorMessage,omitempty"`
+	Warming      bool    `json:"warming,omitempty"` // true when Kompress enabled but not yet used
 }
 
 // headroomSidecar wraps the headroom proxy subprocess.
 type headroomSidecar struct {
-	mu           sync.Mutex
-	cmd          *exec.Cmd
-	port         int
-	mode         string
-	cancel       context.CancelFunc
-	stopped      chan struct{}
-	installedAt  time.Time  // zero until first probe
-	installedVal bool       // cached result of installed()
-	versionVal   string     // cached result of version()
-	wasEverReady bool       // true once the proxy has been healthy at least once
+	mu              sync.Mutex
+	cmd             *exec.Cmd
+	port            int
+	mode            string
+	cancel          context.CancelFunc
+	stopped         chan struct{}
+	installedAt     time.Time  // zero until first probe
+	installedVal    bool       // cached result of installed()
+	versionVal      string     // cached result of version()
+	wasEverReady    bool       // true once the proxy has been healthy at least once
+	inputPricePer1M float64    // input cost per 1M tokens in user currency
+	priceCurrency   string     // e.g. "¥"
 }
 
 func newHeadroomSidecar() *headroomSidecar {
@@ -112,6 +116,19 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
+	// Capture input pricing for cost-saved display from the first headroom-enabled provider.
+	h.inputPricePer1M = 0
+	h.priceCurrency = ""
+	for i := range cfg.Providers {
+		if cfg.Providers[i].HeadroomEnabled {
+			if p := cfg.Providers[i].PriceForModel(cfg.Providers[i].DefaultModel()); p != nil {
+				h.inputPricePer1M = p.Input
+				h.priceCurrency = p.Currency
+			}
+			break
+		}
+	}
+
 	if h.cmd != nil && h.cmd.Process != nil {
 		return fmt.Errorf("headroom proxy is already running (pid %d)", h.cmd.Process.Pid)
 	}
@@ -144,18 +161,34 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 	env := append(os.Environ(),
 		"OPENAI_TARGET_API_URL="+upstreamBaseURL,
 		"ANTHROPIC_TARGET_API_URL="+upstreamBaseURL,
-		// Block HuggingFace downloads — tokenizer models are fetched on first
-		// use and timeout 230+ seconds when HF is unreachable (common in China).
-		// The proxy falls back to tiktoken / character counting gracefully.
-		"HF_HUB_OFFLINE=1",
-		"TRANSFORMERS_OFFLINE=1",
 	)
 	// Compression engine flags — driven by config fields, not hardcoded
+	disableKompress := cfg.Headroom.HeadroomDisableKompress()
+	if disableKompress {
+		// Block HuggingFace downloads — tokenizer models are fetched on first
+		// use and timeout 230+ seconds when HF is unreachable (common in China).
+		// When Kompress is disabled, the proxy falls back to tiktoken / character
+		// counting gracefully, so no models are needed.
+		env = append(env, "HF_HUB_OFFLINE=1", "TRANSFORMERS_OFFLINE=1")
+		env = append(env, "HEADROOM_DISABLE_KOMPRESS=1")
+	} else {
+		// Kompress enabled — allow model downloads to a persistent cache so
+		// FastEmbed models survive temp-directory cleanup on Windows.
+		cacheDir := filepath.Join(os.Getenv("APPDATA"), "reasonix", "models")
+		if runtime.GOOS != "windows" {
+			cacheDir = filepath.Join(os.Getenv("HOME"), ".cache", "reasonix", "models")
+		}
+		if err := os.MkdirAll(cacheDir, 0700); err != nil {
+			slog.Warn("headroom: could not create model cache dir", "dir", cacheDir, "err", err)
+		} else {
+			env = append(env,
+				"FASTEMBED_CACHE_DIR="+cacheDir,
+				"HEADROOM_ALLOW_MODEL_DOWNLOAD=1",
+			)
+		}
+	}
 	if cfg.Headroom.CodeAware {
 		env = append(env, "HEADROOM_CODE_AWARE_ENABLED=1")
-	}
-	if cfg.Headroom.HeadroomDisableKompress() {
-		env = append(env, "HEADROOM_DISABLE_KOMPRESS=1")
 	}
 	if cfg.Headroom.CCR {
 		env = append(env, "HEADROOM_CCR_ENABLED=1")
@@ -256,6 +289,10 @@ func (h *headroomSidecar) status() HeadroomStatusView {
 			v.Requests = stats.Requests
 			v.TokensSaved = stats.TokensSaved
 			v.SavingsPct = stats.SavingsPct
+			if h.inputPricePer1M > 0 {
+				v.CostSaved = float64(stats.TokensSaved) * h.inputPricePer1M / 1_000_000
+				v.CostCurrency = h.priceCurrency
+			}
 		}
 	}
 
@@ -637,14 +674,22 @@ func (a *App) emitHeadroomStats() {
 	if !isKompressDisabled(port) {
 		warming = kompressRunSeconds(port) == 0
 	}
+	costSaved := 0.0
+	costCurrency := ""
+	if a.headroom.inputPricePer1M > 0 {
+		costSaved = float64(stats.TokensSaved) * a.headroom.inputPricePer1M / 1_000_000
+		costCurrency = a.headroom.priceCurrency
+	}
 	a.emitRuntimeEvent("headroom:stats", HeadroomStatusView{
-		Running:     true,
-		Installed:   true,
-		Port:        port,
-		Requests:    stats.Requests,
-		TokensSaved: stats.TokensSaved,
-		SavingsPct:  stats.SavingsPct,
-		Warming:     warming,
+		Running:      true,
+		Installed:    true,
+		Port:         port,
+		Requests:     stats.Requests,
+		TokensSaved:  stats.TokensSaved,
+		SavingsPct:   stats.SavingsPct,
+		CostSaved:    costSaved,
+		CostCurrency: costCurrency,
+		Warming:      warming,
 	})
 }
 

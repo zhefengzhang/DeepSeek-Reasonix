@@ -339,7 +339,7 @@ export const zhTW: Record<DictKey, string> = {
   "status.headroomOff": "Headroom 代理未執行 — 在 Provider 設定中啟用",
   "status.headroomWarming": "Kompress 預熱中 — 首次請求可能較慢",
   "status.headroomRunning": "Headroom 代理執行中 ({requests} 請求，暫無壓縮)",
-  "status.headroomSavings": "Headroom 壓縮 {pct}%（節省 {tokens} tokens，共 {requests} 次請求）",
+  "status.headroomSavings": "Headroom 壓縮 {pct}%（節省 {tokens} tokens，共 {requests} 次請求，節省 {cost}）",
   "status.spendTitle": "本會話估算計費費用，包含主模型、子代理和輔助呼叫",
 
   // ── Heartbeat ──
@@ -1206,13 +1206,15 @@ export const zhTW: Record<DictKey, string> = {
   "settings.headroomCodeAwareHint": "AST 級程式碼壓縮。需 headroom-ai[code]。程式場景推薦。",
   "settings.headroomCCRHint": "可逆壓縮：LLM 可透過 headroom_retrieve 取回原文。寫作場景推薦。",
   "settings.headroomProtectErrorsHint": "保留錯誤訊息原文。關閉可獲得更高壓縮比，但可能遺失細節。",
-  "settings.headroomDisableKompressHint": "ML 文字模型（500MB+）。Windows 上禁用——無 GPU 的 ONNX Runtime 可能崩潰。",
-
+  "settings.headroomDisableKompressHint": "ML 文字模型（500MB+）。更高的压缩率但是占用更多 CPU 资源。",
+  "settings.headroomRestartNotice": "修改壓縮設定後會重啟代理服務，當前會話可能會出現短暫中斷。",
   "settings.headroomCompressToolResultsHint": "啟用後 tool 輸出將進入壓縮流程。更高壓縮比，略有細節損失風險。",
   "settings.headroomCompressToolResults": "激進工具輸出壓縮",
   "settings.headroomMinTokensHint": "嘗試壓縮的最小 token 數。越小越激進。",
   "settings.headroomRequestTimeoutHint": "請求超時秒數。ML 壓縮慢時可增大。",
   "settings.headroomNotInstalled": "Headroom 未安裝 — 執行: pip install headroom-ai[proxy]",
+  "settings.headroomNotEnabled": "Headroom 已安裝但未啟用 — 在 Provider 設定中開啟",
+  "settings.headroomStarting": "Headroom 正在啟動...（首次載入可能需要 30 秒）",
   "settings.headroomRunning": "Headroom 代理執行中 (連接埠 {port})",
   "settings.headroomStopped": "Headroom 代理已停止",
   "settings.headroomTokensSaved": "節省 {n} tokens ({pct}%)",

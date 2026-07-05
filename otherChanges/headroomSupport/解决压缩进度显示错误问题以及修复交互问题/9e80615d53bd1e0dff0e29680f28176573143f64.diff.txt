@@ -1,0 +1,278 @@
+diff --git a/desktop/app.go b/desktop/app.go
+index 886f15a21..f72528cec 100644
+--- a/desktop/app.go
++++ b/desktop/app.go
+@@ -8057,7 +8057,7 @@ func (a *App) HeadroomConfig() HeadroomConfigView {
+ 
+ // SaveHeadroomConfig persists headroom configuration changes from the frontend.
+ func (a *App) SaveHeadroomConfig(v HeadroomConfigView) error {
+-	return a.applyConfigOnly(func(c *config.Config) error {
++	if err := a.applyConfigOnly(func(c *config.Config) error {
+ 		if v.Preset != "" {
+ 			c.Headroom.Preset = v.Preset
+ 		}
+@@ -8083,5 +8083,28 @@ func (a *App) SaveHeadroomConfig(v HeadroomConfigView) error {
+ 			c.Headroom.CompressToolResults = *v.CompressToolResults
+ 		}
+ 		return nil
+-	})
++	}); err != nil {
++		return err
++	}
++	// Restart the proxy so new CLI flags take effect immediately.
++	if a.headroom == nil || !a.headroom.healthCheck() {
++		return nil
++	}
++	cfg, err := config.Load()
++	if err != nil {
++		return fmt.Errorf("headroom: reload config after save: %w", err)
++	}
++	cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
++	var upstreamURL string
++	for _, p := range cfg.Providers {
++		if p.HeadroomEnabled && p.BaseURL != "" {
++			upstreamURL = headroomUpstreamURL(p.BaseURL)
++			break
++		}
++	}
++	a.headroom.stop()
++	if err := a.headroom.start(cfg, upstreamURL); err != nil {
++		slog.Warn("headroom: restart after config save failed", "err", err)
++	}
++	return nil
+ }
+diff --git a/desktop/frontend/src/App.tsx b/desktop/frontend/src/App.tsx
+index 59bb17299..3b59c7987 100644
+--- a/desktop/frontend/src/App.tsx
++++ b/desktop/frontend/src/App.tsx
+@@ -3586,6 +3586,7 @@ export default function App() {
+               insertRequest={composerInsertRequest}
+               readOnly={Boolean(activeTab?.readOnly)}
+               disabled={rewindCommitting || state.messageAction != null || state.approval != null || state.ask != null || clearContextPending}
++              headroomStats={headroomStats}
+               submitDisabled={!controllerReady}
+               decisionPending={rewindCommitting || state.messageAction != null || state.approval != null || state.ask != null || clearContextPending}
+               ready={controllerReady}
+diff --git a/desktop/frontend/src/components/Composer.tsx b/desktop/frontend/src/components/Composer.tsx
+index d94f54e6e..4a68abb52 100644
+--- a/desktop/frontend/src/components/Composer.tsx
++++ b/desktop/frontend/src/components/Composer.tsx
+@@ -454,6 +454,7 @@ export function Composer({
+   guidanceConsumedKey,
+   guidanceConsumedText,
+   guidanceQueuePreviewItems,
++  headroomStats,
+ }: {
+   running: boolean;
+   collaborationMode: CollaborationMode;
+@@ -480,6 +481,7 @@ export function Composer({
+   onSetTokenMode: (mode: TokenMode) => void;
+   insertRequest?: ComposerInsertRequest | null;
+   disabled?: boolean;
++  headroomStats?: import("../lib/types").HeadroomStatusView;
+   submitDisabled?: boolean;
+   readOnly?: boolean;
+   decisionPending?: boolean;
+@@ -2536,7 +2538,7 @@ export function Composer({
+               <ArrowUp size={16} />
+             </button>
+           </Tooltip>
+-          <CompressingSpinner active={running && !retry && !disabled} />
++          <CompressingSpinner active={running && !retry && !disabled && headroomStats?.running === true} />
+         </div>
+         <div className={composerMetaClass}>
+           <div className="composer-meta__params">
+@@ -2691,14 +2693,13 @@ export function Composer({
+   );
+ }
+ 
+-// CompressingSpinner shows a "Compressing..." indicator during the headroom
+-// compression phase (the first ~3 seconds after message submission).
++// CompressingSpinner shows a "Compressing..." indicator when headroom is
++// actively compressing the submitted turn.
+ function CompressingSpinner({ active }: { active: boolean }) {
+   const [show, setShow] = useState(false);
+ 
+   useEffect(() => {
+     if (!active) { setShow(false); return; }
+-    // Show the indicator 300ms after submission (avoid flash), auto-hide after 4s
+     const on = setTimeout(() => setShow(true), 300);
+     const off = setTimeout(() => setShow(false), 4000);
+     return () => { clearTimeout(on); clearTimeout(off); };
+diff --git a/desktop/frontend/src/components/SettingsPanel.tsx b/desktop/frontend/src/components/SettingsPanel.tsx
+index 5c6ab7752..94b8961a9 100644
+--- a/desktop/frontend/src/components/SettingsPanel.tsx
++++ b/desktop/frontend/src/components/SettingsPanel.tsx
+@@ -6031,7 +6031,7 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
+   };
+ 
+   return (
+-    <SettingsSection title={t("settings.headroomSettingsTitle")}>
++    <SettingsSection title={t("settings.headroomSettingsTitle")} description={t("settings.headroomRestartNotice")}>
+       {s?.headroomStatus && (
+         <div className={`provider-card-status provider-card-status--${s.headroomStatus.running ? "info" : "warn"}`}>
+           {s.headroomStatus.running
+diff --git a/desktop/frontend/src/locales/en.ts b/desktop/frontend/src/locales/en.ts
+index d595cfe32..84f178f8a 100644
+--- a/desktop/frontend/src/locales/en.ts
++++ b/desktop/frontend/src/locales/en.ts
+@@ -1923,6 +1923,7 @@ export const en = {
+   "settings.headroomRunning": "Headroom proxy running (port {port})",
+   "settings.headroomStopped": "Headroom proxy stopped",
+   "settings.headroomTokensSaved": "{n} tokens saved ({pct}%)",
++  "settings.headroomRestartNotice": "Changes to compression settings restart the proxy service. Active conversations may briefly pause.",
+ };
+ 
+ export type DictKey = keyof typeof en;
+diff --git a/desktop/frontend/src/locales/zh-TW.ts b/desktop/frontend/src/locales/zh-TW.ts
+index 141a18ff3..4f3dd347a 100644
+--- a/desktop/frontend/src/locales/zh-TW.ts
++++ b/desktop/frontend/src/locales/zh-TW.ts
+@@ -1300,7 +1300,7 @@ export const zhTW: Record<DictKey, string> = {
+   "settings.headroomCodeAwareHint": "AST 級程式碼壓縮。需 headroom-ai[code]。程式場景推薦。",
+   "settings.headroomCCRHint": "可逆壓縮：LLM 可透過 headroom_retrieve 取回原文。寫作場景推薦。",
+   "settings.headroomProtectErrorsHint": "保留錯誤訊息原文。關閉可獲得更高壓縮比，但可能遺失細節。",
+-  "settings.headroomDisableKompressHint": "ML 文字模型（500MB+）。Windows 上禁用——無 GPU 的 ONNX Runtime 可能崩潰。",
++  "settings.headroomDisableKompressHint": "ML 文字模型（500MB+）。更高的压缩率但是占用更多 CPU 资源。",
+   "settings.headroomCompressToolResultsHint": "啟用後 tool 輸出將進入壓縮流程。更高壓縮比，略有細節損失風險。",
+   "settings.headroomCompressToolResults": "激進工具輸出壓縮",
+   "settings.headroomMinTokensHint": "嘗試壓縮的最小 token 數。越小越激進。",
+@@ -1309,6 +1309,7 @@ export const zhTW: Record<DictKey, string> = {
+   "settings.headroomRunning": "Headroom 代理執行中 (連接埠 {port})",
+   "settings.headroomStopped": "Headroom 代理已停止",
+   "settings.headroomTokensSaved": "節省 {n} tokens ({pct}%)",
++  "settings.headroomRestartNotice": "修改壓縮設定後會重啟代理服務，當前會話可能會出現短暫中斷。",
+   "tabBar.closeTab": "關閉標籤頁",
+   "tabBar.closeOtherTabs": "關閉其他標籤頁",
+   "tabBar.closeTabsToRight": "關閉右側標籤頁",
+diff --git a/desktop/frontend/src/locales/zh.ts b/desktop/frontend/src/locales/zh.ts
+index b36641785..edbd5b60f 100644
+--- a/desktop/frontend/src/locales/zh.ts
++++ b/desktop/frontend/src/locales/zh.ts
+@@ -1916,7 +1916,7 @@ export const zh: Record<DictKey, string> = {
+   "settings.headroomCodeAwareHint": "AST 级代码压缩。需 headroom-ai[code]。编程场景推荐。",
+   "settings.headroomCCRHint": "可逆压缩：LLM 可通过 headroom_retrieve 取回原文。写作场景推荐。",
+   "settings.headroomProtectErrorsHint": "保留错误信息原文。关闭可获得更高压缩比，但可能丢失细节。",
+-  "settings.headroomDisableKompressHint": "ML 文本模型（500MB+）。Windows 上禁用——无 GPU 的 ONNX Runtime 可能崩溃。",
++  "settings.headroomDisableKompressHint": "ML 文本模型（500MB+）。更高的压缩率但是占用更多 CPU 资源。",
+   "settings.headroomCompressToolResultsHint": "启用后 tool 输出将进入压缩流程。更高压缩比，略有细节损失风险。",
+   "settings.headroomCompressToolResults": "激进工具输出压缩",
+   "settings.headroomMinTokensHint": "尝试压缩的最小 token 数。越小越激进。",
+@@ -1925,4 +1925,5 @@ export const zh: Record<DictKey, string> = {
+   "settings.headroomRunning": "Headroom 代理运行中 (端口 {port})",
+   "settings.headroomStopped": "Headroom 代理已停止",
+   "settings.headroomTokensSaved": "节省 {n} tokens ({pct}%)",
++  "settings.headroomRestartNotice": "修改压缩设置后会重启代理服务，当前会话可能会出现短暂中断。",
+ };
+diff --git a/desktop/frontend/src/styles.css b/desktop/frontend/src/styles.css
+index 4cfe9b9eb..dbe5f939e 100644
+--- a/desktop/frontend/src/styles.css
++++ b/desktop/frontend/src/styles.css
+@@ -28260,3 +28260,4 @@ body > .mermaid-diagram--fullscreen {
+   0%, 100% { opacity: 0.5; }
+   50%      { opacity: 1; }
+ }
++
+diff --git a/desktop/headroom.go b/desktop/headroom.go
+index 8c367e55c..e57d340d8 100644
+--- a/desktop/headroom.go
++++ b/desktop/headroom.go
+@@ -77,9 +77,12 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamURL string) error {
+ 	h.mu.Lock()
+ 	defer h.mu.Unlock()
+ 
+-	if h.running {
+-		return nil // already running
++	if h.running && headroomReachable(h.port) {
++		return nil // already running and alive
+ 	}
++	// If the port is claimed but unreachable, reset state so we can restart.
++	h.running = false
++	h.warming = false
+ 
+ 	port := cfg.Headroom.HeadroomPort()
+ 	h.port = port
+diff --git a/desktop/settings_app.go b/desktop/settings_app.go
+index 154e9e05d..f111ac564 100644
+--- a/desktop/settings_app.go
++++ b/desktop/settings_app.go
+@@ -1496,7 +1496,21 @@ func providerDefaultForModels(currentDefault string, models []string) string {
+ // `models` even when only one model is selected, while `model` remains populated
+ // in-memory for validation/back-compat. The shared key/endpoint live on the entry.
+ func (a *App) SaveProvider(p ProviderView) error {
+-	return a.applyConfigChange(func(c *config.Config) error {
++	// For enable: start proxy before rebuild so the new controller can
++	// route through headroom immediately. The proxy start (up to 15s
++	// health-check) must NOT block the Wails binding, so we do it here,
++	// outside applyConfigChange, where the config lock is not held.
++	if p.HeadroomEnabled && a.headroom != nil && !a.headroom.healthCheck() {
++		cfg, err := config.Load()
++		if err == nil {
++			cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
++			if err := a.headroom.start(cfg, headroomUpstreamURL(p.BaseURL)); err != nil {
++				slog.Warn("headroom: pre-start on provider save failed", "err", err)
++			}
++		}
++	}
++
++	if err := a.applyConfigChange(func(c *config.Config) error {
+ 		e := config.ProviderEntry{Name: p.Name}
+ 		for i := range c.Providers {
+ 			if c.Providers[i].Name == p.Name {
+@@ -1518,7 +1532,6 @@ func (a *App) SaveProvider(p ProviderView) error {
+ 		e.Thinking = providerThinkingForSettings(p.Thinking)
+ 		e.SupportedEfforts = p.SupportedEfforts
+ 		e.HeadroomEnabled = p.HeadroomEnabled
+-		// Ensure "headroom" is in the status bar when headroom is enabled
+ 		if p.HeadroomEnabled {
+ 			headroomInItems := false
+ 			for _, item := range c.Desktop.StatusBarItems {
+@@ -1530,15 +1543,14 @@ func (a *App) SaveProvider(p ProviderView) error {
+ 			if !headroomInItems {
+ 				c.Desktop.StatusBarItems = append(c.Desktop.StatusBarItems, "headroom")
+ 			}
+-			// Auto-start the proxy immediately so the controller rebuild
+-			// doesn't point a provider at a proxy that isn't running yet.
+-			if a.headroom != nil && !a.headroom.healthCheck() {
+-				// Apply preset so CLI flags reflect config, not Go zero values
+-				c.Headroom.ApplyPreset(c.Headroom.HeadroomPreset())
+-				if err := a.headroom.start(c, headroomUpstreamURL(p.BaseURL)); err != nil {
+-					slog.Warn("headroom: auto-start on provider save failed", "err", err)
++		} else {
++			filtered := make([]string, 0, len(c.Desktop.StatusBarItems))
++			for _, item := range c.Desktop.StatusBarItems {
++				if item != "headroom" {
++					filtered = append(filtered, item)
+ 				}
+ 			}
++			c.Desktop.StatusBarItems = filtered
+ 		}
+ 		e.DefaultEffort = p.DefaultEffort
+ 		e.Model = ""
+@@ -1547,7 +1559,7 @@ func (a *App) SaveProvider(p ProviderView) error {
+ 		e.VisionModels = nil
+ 		models := chatProviderModels(p.Models)
+ 		if len(models) > 0 {
+-			e.Model = models[0] // also satisfies validateProvider's model requirement
++			e.Model = models[0]
+ 			e.Models = models
+ 			e.ModelOverrides = providerModelOverridesForSave(p.ModelOverrides, models)
+ 			if p.VisionModelsSet || len(p.VisionModels) > 0 {
+@@ -1567,7 +1579,16 @@ func (a *App) SaveProvider(p ProviderView) error {
+ 		}
+ 		addProviderAccess(c, p.Name)
+ 		return nil
+-	})
++	}); err != nil {
++		return err
++	}
++
++	// For disable: stop proxy after rebuild so the controller no longer
++	// routes through it before we tear the proxy down.
++	if !p.HeadroomEnabled && a.headroom != nil {
++		a.headroom.stop()
++	}
++	return nil
+ }
+ 
+ // AddOfficialProviderAccess adds one curated desktop provider template to the

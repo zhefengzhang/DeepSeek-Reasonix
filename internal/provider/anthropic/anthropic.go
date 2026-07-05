@@ -110,7 +110,24 @@ func New(cfg provider.Config) (provider.Provider, error) {
 
 func newHTTPClient(cfg provider.Config) (*http.Client, error) {
 	spec, _ := cfg.Extra["proxy_spec"].(netclient.ProxySpec)
-	return netclient.NewHTTPClient(spec, netclient.TransportOptions{})
+	// When headroom rewrites base_url to localhost, ensure localhost is excluded
+	// from the system proxy (VPN), otherwise the connection will fail.
+	// DirectHosts works in ALL proxy modes (auto/env/custom), unlike NoProxy
+	// which is only honored in ModeCustom.
+	if noProxyLocal, _ := cfg.Extra["no_proxy_localhost"].(bool); noProxyLocal {
+		spec.DirectHosts = append(spec.DirectHosts, "127.0.0.1", "localhost", ".local")
+		if spec.NoProxy == "" {
+			spec.NoProxy = "127.0.0.1,localhost,.local"
+		} else {
+			spec.NoProxy = spec.NoProxy + ",127.0.0.1,localhost,.local"
+		}
+	}
+	return netclient.NewHTTPClient(spec, netclient.TransportOptions{
+		DialTimeout:           30 * time.Second,
+		KeepAlive:             30 * time.Second,
+		TLSHandshakeTimeout:   15 * time.Second,
+		ResponseHeaderTimeout: 120 * time.Second,
+	})
 }
 
 type client struct {
