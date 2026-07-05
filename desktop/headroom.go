@@ -34,6 +34,8 @@ type HeadroomStatusView struct {
 	Requests     int     `json:"requests,omitempty"`
 	TokensSaved  int64   `json:"tokensSaved,omitempty"`
 	SavingsPct   float64 `json:"savingsPct,omitempty"`
+	CostSaved    float64 `json:"costSaved,omitempty"`
+	CostCurrency string  `json:"costCurrency,omitempty"`
 	ErrorMessage string  `json:"errorMessage,omitempty"`
 	Warming      bool    `json:"warming,omitempty"`
 }
@@ -52,15 +54,14 @@ type HeadroomConfigView struct {
 
 // headroomSidecar manages the local headroom-ai proxy subprocess.
 type headroomSidecar struct {
-	mu         sync.Mutex
-	cmd        *exec.Cmd   // running proxy process
-	port       int
-	startedAt  time.Time
-	running    bool
-	warming    bool
-	requests   int
-	tokensSaved int64
-	savingsPct float64
+	mu             sync.Mutex
+	cmd            *exec.Cmd   // running proxy process
+	port           int
+	startedAt      time.Time
+	running        bool
+	warming        bool
+	inputPricePer1M float64 // input cost per 1M tokens in user currency
+	priceCurrency  string   // e.g. "¥"
 }
 
 func newHeadroomSidecar() *headroomSidecar {
@@ -82,6 +83,19 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamURL string) error {
 
 	port := cfg.Headroom.HeadroomPort()
 	h.port = port
+
+	// Capture Reasonix input pricing for cost-saved display.
+	h.inputPricePer1M = 0
+	h.priceCurrency = ""
+	for i := range cfg.Providers {
+		if cfg.Providers[i].HeadroomEnabled {
+			if p := cfg.Providers[i].PriceForModel(cfg.Providers[i].DefaultModel()); p != nil {
+				h.inputPricePer1M = p.Input
+				h.priceCurrency = p.Currency
+			}
+			break
+		}
+	}
 
 	// Resolve the headroom-ai binary from PATH.
 	binPath, err := exec.LookPath("headroom")
@@ -219,6 +233,10 @@ func (h *headroomSidecar) status() HeadroomStatusView {
 	v.Requests = stats.Requests.Total
 	v.TokensSaved = int64(stats.Tokens.Saved)
 	v.SavingsPct = stats.Tokens.SavingsPercent
+	if h.inputPricePer1M > 0 {
+		v.CostSaved = float64(stats.Tokens.Saved) * h.inputPricePer1M / 1_000_000
+		v.CostCurrency = h.priceCurrency
+	}
 	return v
 }
 

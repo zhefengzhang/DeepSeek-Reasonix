@@ -543,7 +543,7 @@ export const en = {
   "status.headroomOff": "Headroom proxy not running — enable it in provider settings",
   "status.headroomWarming": "Kompress warming up — first request may be slow",
   "status.headroomRunning": "Headroom proxy running ({requests} requests, no savings yet)",
-  "status.headroomSavings": "Headroom compressed {pct}% ({tokens} tokens saved across {requests} requests)",
+  "status.headroomSavings": "Headroom compressed {pct}% ({tokens} tokens saved across {requests} requests, saved {cost})",
   "status.spendTitle": "Estimated billable spend in this session, including model, subagent, and helper calls",
 
   // ── Heartbeat ──

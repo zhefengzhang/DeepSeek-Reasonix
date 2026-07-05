@@ -396,7 +396,7 @@ export const zhTW: Record<DictKey, string> = {
   "status.headroomOff": "Headroom 代理未執行 — 在 Provider 設定中啟用",
   "status.headroomWarming": "Kompress 預熱中 — 首次請求可能較慢",
   "status.headroomRunning": "Headroom 代理執行中 ({requests} 請求，暫無壓縮)",
-  "status.headroomSavings": "Headroom 壓縮 {pct}%（節省 {tokens} tokens，共 {requests} 次請求）",
+  "status.headroomSavings": "Headroom 壓縮 {pct}%（節省 {tokens} tokens，共 {requests} 次請求，節省 {cost}）",
   "status.spendTitle": "本會話估算計費費用，包含主模型、子代理和輔助呼叫",
 
   // ── Heartbeat ──

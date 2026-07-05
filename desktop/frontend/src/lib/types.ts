@@ -1087,6 +1087,8 @@ export interface HeadroomStatusView {
   requests?: number;
   tokensSaved?: number;
   savingsPct?: number;
+  costSaved?: number;
+  costCurrency?: string;
   errorMessage?: string;
   warming?: boolean;
 }

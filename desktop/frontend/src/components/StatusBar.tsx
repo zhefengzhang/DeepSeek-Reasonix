@@ -44,10 +44,14 @@ function headroomSavingsTooltip(stats: import("../lib/types").HeadroomStatusView
   if (!stats || !stats.running) return t("status.headroomOff");
   if (stats.warming) return t("status.headroomWarming");
   if (stats.savingsPct != null && stats.savingsPct > 0) {
+    const cost = stats.costSaved != null && stats.costSaved > 0
+      ? (stats.costCurrency ?? "") + stats.costSaved.toFixed(4)
+      : "¥0";
     return t("status.headroomSavings", {
       pct: Math.round(stats.savingsPct),
       tokens: (stats.tokensSaved ?? 0).toLocaleString(),
       requests: String(stats.requests ?? 0),
+      cost: cost,
     });
   }
   return t("status.headroomRunning", { requests: String(stats.requests ?? 0) });
