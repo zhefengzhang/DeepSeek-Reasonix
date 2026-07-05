@@ -53,6 +53,7 @@ type ProviderView struct {
 	SupportedEfforts  []string                    `json:"supportedEfforts"`
 	DefaultEffort     string                      `json:"defaultEffort"`
 	ModelOverrides    []ProviderModelOverrideView `json:"modelOverrides"`
+	HeadroomEnabled   bool   `json:"headroomEnabled"`
 }
 
 type ProviderModelOverrideView struct {
@@ -193,6 +194,8 @@ type SettingsView struct {
 	AutoApproveTools bool `json:"autoApproveTools"`
 	// Bypass is the legacy JSON key for the same live state.
 	Bypass bool `json:"bypass"`
+	// HeadroomStatus is the live state of the local headroom compression proxy.
+	HeadroomStatus *HeadroomStatusView `json:"headroomStatus,omitempty"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -406,6 +409,7 @@ func providerViewFromEntryForRootWithResolver(p config.ProviderEntry, builtIn, a
 		SupportedEfforts:  nonNil(p.SupportedEfforts),
 		DefaultEffort:     p.DefaultEffort,
 		ModelOverrides:    providerModelOverridesForView(p.ModelOverrides, models),
+		HeadroomEnabled:   p.HeadroomEnabled,
 	}
 }
 
@@ -531,6 +535,12 @@ func (a *App) Settings() SettingsView {
 	if shell == "" {
 		shell = "auto"
 	}
+		// Get headroom status
+	var headroomStatus *HeadroomStatusView
+	if a.headroom != nil {
+		hs := a.headroom.status()
+		headroomStatus = &hs
+	}
 	v := SettingsView{
 		DefaultModel:      cfg.DefaultModel,
 		PlannerModel:      cfg.Agent.PlannerModel,
@@ -582,6 +592,7 @@ func (a *App) Settings() SettingsView {
 		ProviderKinds:           nonNil(provider.Kinds()),
 		AutoApproveTools:        ctrl != nil && ctrl.AutoApproveTools(),
 		Bypass:                  ctrl != nil && ctrl.AutoApproveTools(),
+		HeadroomStatus:          headroomStatus,
 	}
 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
 	root := a.activeWorkspaceRoot()
@@ -1307,6 +1318,42 @@ func (a *App) SaveProvider(p ProviderView) error {
 		e.ContextWindow = p.ContextWindow
 		e.ReasoningProtocol = p.ReasoningProtocol
 		e.SupportedEfforts = p.SupportedEfforts
+		e.HeadroomEnabled = p.HeadroomEnabled
+		// Ensure "headroom" is in the status bar when headroom is enabled
+		if p.HeadroomEnabled {
+			headroomInItems := false
+			for _, item := range c.Desktop.StatusBarItems {
+				if item == "headroom" {
+					headroomInItems = true
+					break
+				}
+			}
+			if !headroomInItems {
+				c.Desktop.StatusBarItems = append(c.Desktop.StatusBarItems, "headroom")
+			}
+			// Auto-start the proxy immediately so the controller rebuild
+			// doesn't point a provider at a proxy that isn't running yet.
+			if a.headroom != nil && !a.headroom.healthCheck() {
+				// Apply preset so CodeAware/CCR env vars reflect config, not Go zero values
+				c.Headroom.ApplyPreset(c.Headroom.HeadroomPreset())
+				// Compute upstream from the provider view directly (not from config,
+				// which hasn't been upserted yet).
+				upstreamURL := p.BaseURL
+				if upstreamURL != "" {
+					base := strings.TrimRight(upstreamURL, "/")
+					if p.Kind == "openai" || p.Kind == "" {
+						upstreamURL = base + "/v1"
+					} else {
+						upstreamURL = base
+					}
+				}
+				if upstreamURL != "" {
+					if err := a.headroom.start(c, upstreamURL); err != nil {
+						slog.Warn("headroom: auto-start on provider save failed", "err", err)
+					}
+				}
+			}
+		}
 		e.DefaultEffort = p.DefaultEffort
 		e.Model = ""
 		e.Models = nil
