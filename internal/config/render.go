@@ -358,9 +358,46 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
 			if p.NoProxy {
 				b.WriteString("no_proxy    = true   # reach this base_url directly, never via the proxy\n")
 			}
+			if p.HeadroomEnabled {
+				b.WriteString("headroom_enabled = true   # route through local Headroom compression proxy\n")
+			}
 			b.WriteString("\n")
 		}
 	}
+
+	b.WriteString("# Headroom context-compression proxy. Install: pip install headroom-ai[proxy,code]\n")
+	b.WriteString("[headroom]\n")
+	if c.Headroom.Port > 0 {
+		fmt.Fprintf(&b, "port   = %d\n", c.Headroom.Port)
+	}
+	if c.Headroom.Mode != "" {
+		fmt.Fprintf(&b, "mode   = %q\n", c.Headroom.Mode)
+	}
+	if c.Headroom.AutoStart != nil {
+		fmt.Fprintf(&b, "auto_start = %v\n", *c.Headroom.AutoStart)
+	}
+	if c.Headroom.Preset != "" {
+		fmt.Fprintf(&b, "preset = %q   # coding | writing | max\n", c.Headroom.Preset)
+	}
+	if c.Headroom.CodeAware {
+		b.WriteString("code_aware = true\n")
+	}
+	if c.Headroom.CCR {
+		b.WriteString("ccr   = true\n")
+	}
+	if c.Headroom.ProtectErrors != nil {
+		fmt.Fprintf(&b, "protect_errors = %v\n", *c.Headroom.ProtectErrors)
+	}
+	if c.Headroom.MinTokens > 0 {
+		fmt.Fprintf(&b, "min_tokens = %d\n", c.Headroom.MinTokens)
+	}
+	if c.Headroom.DisableKompress != nil {
+		fmt.Fprintf(&b, "disable_kompress = %v\n", *c.Headroom.DisableKompress)
+	}
+	if c.Headroom.RequestTimeout > 0 {
+		fmt.Fprintf(&b, "request_timeout = %d\n", c.Headroom.RequestTimeout)
+	}
+	b.WriteString("\n")
 
 	b.WriteString("[tools]\n")
 	if len(c.Tools.Enabled) == 0 {

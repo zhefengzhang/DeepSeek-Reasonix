@@ -59,6 +59,7 @@ type Config struct {
 	LSP              LSPConfig           `toml:"lsp"`
 	Bot              BotConfig           `toml:"bot"`
 	Serve            ServeConfig         `toml:"serve"`
+	Headroom         HeadroomConfig      `toml:"headroom"`
 
 	providerSources          map[string]providerSourceScope
 	shadowedProjectProviders []ProviderEntry
@@ -323,6 +324,7 @@ var defaultDesktopStatusBarItems = []string{
 	"compact",
 	"cost",
 	"balance",
+	"headroom",
 }
 
 var knownDesktopStatusBarItems = desktopStatusBarItemSet(defaultDesktopStatusBarItems)
@@ -1091,6 +1093,9 @@ type ProviderEntry struct {
 	// NoProxy reaches this provider's base_url directly, never through the proxy.
 	// For China-only endpoints a foreign-exit proxy resets the TLS handshake (#2803).
 	NoProxy bool `toml:"no_proxy"`
+	// HeadroomEnabled routes this provider through the local Headroom
+	// context-compression proxy. Requires headroom proxy to be running.
+	HeadroomEnabled bool `toml:"headroom_enabled"`
 }
 
 type ProviderModelOverride struct {

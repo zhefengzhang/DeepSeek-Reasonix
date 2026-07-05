@@ -455,6 +455,7 @@ export function Composer({
   guidanceConsumedKey,
   guidanceConsumedText,
   guidanceQueuePreviewItems,
+  headroomStats,
 }: {
   running: boolean;
   collaborationMode: CollaborationMode;
@@ -481,6 +482,7 @@ export function Composer({
   onSetTokenMode: (mode: TokenMode) => void;
   insertRequest?: ComposerInsertRequest | null;
   disabled?: boolean;
+  headroomStats?: import("../lib/types").HeadroomStatusView;
   submitDisabled?: boolean;
   readOnly?: boolean;
   decisionPending?: boolean;
@@ -2553,6 +2555,7 @@ export function Composer({
               <ArrowUp size={16} />
             </button>
           </Tooltip>
+          <CompressingSpinner active={running && !retry && !disabled && headroomStats?.running === true} />
         </div>
         <div className={composerMetaClass}>
           <div className="composer-meta__params">
@@ -2705,4 +2708,21 @@ export function Composer({
       </div>
     </div>
   );
+}
+
+
+// CompressingSpinner shows a "Compressing..." indicator when headroom is
+// actively compressing the submitted turn.
+function CompressingSpinner({ active }: { active: boolean }) {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (!active) { setShow(false); return; }
+    const on = setTimeout(() => setShow(true), 300);
+    const off = setTimeout(() => setShow(false), 4000);
+    return () => { clearTimeout(on); clearTimeout(off); };
+  }, [active]);
+
+  if (!show) return null;
+  return <span className="composer__compressing">{'Compressing\u2026'}</span>;
 }

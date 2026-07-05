@@ -1045,6 +1045,8 @@ export default function App() {
   useWailsResizeFix(desktopPlatform === "windows");
   const [statusBarStyle, setStatusBarStyle] = useState<"icon" | "text">("text");
   const [statusBarItems, setStatusBarItems] = useState<StatusBarItemId[]>(() => [...DEFAULT_STATUS_BAR_ITEMS]);
+  const [headroomStats, setHeadroomStats] = useState<import("./lib/types").HeadroomStatusView | undefined>(undefined);
+  void setHeadroomStats; // used in EventsOn callback below — tsc can't see closure usage
   const [renamingTopicId, setRenamingTopicId] = useState<string | null>(null);
   const [topicTitleDraft, setTopicTitleDraft] = useState("");
   const topicExportOpen = useOverlayStore((s) => s.topicExportOpen);
@@ -3580,6 +3582,7 @@ export default function App() {
               insertRequest={composerInsertRequest}
               readOnly={Boolean(activeTab?.readOnly)}
               disabled={rewindCommitting || state.messageAction != null || state.approval != null || state.ask != null || clearContextPending}
+              headroomStats={headroomStats}
               submitDisabled={!controllerReady}
               decisionPending={rewindCommitting || state.messageAction != null || state.approval != null || state.ask != null || clearContextPending}
               ready={controllerReady}
@@ -3597,6 +3600,7 @@ export default function App() {
               context={state.context}
               usage={state.usage}
               balance={state.balance}
+              headroomStats={headroomStats}
               running={state.running || rewindCommitting}
               sessionTurns={sessionTurns}
               sessionTokens={state.sessionTokens}
@@ -3689,6 +3693,7 @@ export default function App() {
                   turnTokens={state.turnTotalTokens}
                   turnCost={state.turnCost}
                   balance={state.balance}
+                  headroomStats={headroomStats}
                   sessionGen={state.sessionGen}
                   refreshKey={dockRefreshKey}
                 />

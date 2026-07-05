@@ -263,6 +263,13 @@ func (t *WorkspaceTab) ensureSessionLease(path string) error {
 	lease, err := agent.TryAcquireSessionLease(key)
 	if err != nil {
 		t.sessionLeaseMu.Unlock()
+		// If the lease is already held by the current process (in-memory
+		// map), it means we tried to re-acquire a session we already own.
+		// This happens during controller rebuild after settings changes.
+		// Treat it as success: the existing lease is still valid.
+		if errors.Is(err, agent.ErrSessionLeaseHeld) && t.sessionLease != nil {
+			return nil
+		}
 		return err
 	}
 	if hook := sessionLeaseAcquireHookForTest; hook != nil {

@@ -893,6 +893,7 @@ export interface ProviderView {
   supportedEfforts: string[]; // custom /effort levels; empty = use built-in Kind/BaseURL default
   defaultEffort: string; // /effort level when user picks "auto" or unset; "" = supportedEfforts[0]
   modelOverrides?: ProviderModelOverrideView[] | null;
+  headroomEnabled?: boolean; // routes through local Headroom compression proxy
 }
 
 export interface ProviderPresetView {
@@ -1157,6 +1158,31 @@ export interface BotInstallPollResult {
   error: string;
 }
 
+export interface HeadroomStatusView {
+  running: boolean;
+  version?: string;
+  installed: boolean;
+  port: number;
+  requests?: number;
+  tokensSaved?: number;
+  savingsPct?: number;
+  costSaved?: number;
+  costCurrency?: string;
+  errorMessage?: string;
+  warming?: boolean;
+}
+
+export interface HeadroomConfigView {
+  preset?: string;      // "writing" | "coding" | "max"
+  codeAware?: boolean;
+  ccr?: boolean;
+  protectErrors?: boolean;
+  minTokens?: number;
+  disableKompress?: boolean;
+  requestTimeout?: number;
+  compressToolResults?: boolean;
+}
+
 export interface HookConfigView {
   event: string;
   match?: string;
@@ -1219,6 +1245,7 @@ export interface SettingsView {
   providerKinds: string[]; // provider implementations the kernel registered (for the kind picker)
   autoApproveTools: boolean;
   bypass: boolean; // legacy JSON key for live YOLO/full-access tool auto-approval
+  headroomStatus?: HeadroomStatusView;
 }
 
 export interface DesktopStartupSettingsView {

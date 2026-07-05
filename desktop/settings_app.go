@@ -57,6 +57,7 @@ type ProviderView struct {
 	SupportedEfforts  []string                    `json:"supportedEfforts"`
 	DefaultEffort     string                      `json:"defaultEffort"`
 	ModelOverrides    []ProviderModelOverrideView `json:"modelOverrides"`
+	HeadroomEnabled   bool                        `json:"headroomEnabled"`
 }
 
 type ProviderPresetView struct {
@@ -285,6 +286,8 @@ type SettingsView struct {
 	AutoApproveTools bool `json:"autoApproveTools"`
 	// Bypass is the legacy JSON key for the same live state.
 	Bypass bool `json:"bypass"`
+	// HeadroomStatus is the live state of the local headroom compression proxy.
+	HeadroomStatus *HeadroomStatusView `json:"headroomStatus,omitempty"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -876,6 +879,7 @@ func (a *App) Settings() SettingsView {
 		CheckUpdates:            cfg.DesktopCheckUpdates(),
 		Telemetry:               cfg.DesktopTelemetry(),
 		Metrics:                 cfg.DesktopMetrics(),
+		HeadroomStatus:          headroomStatusForSettings(a.headroom),
 		MemoryCompiler:          cfg.MemoryCompilerEnabled(),
 		ExpandThinking:          cfg.Desktop.ExpandThinking,
 		ConfigPath:              cfgPath,
@@ -1947,6 +1951,7 @@ func saveProviderConfig(c *config.Config, p ProviderView) error {
 	e.Thinking = providerThinkingForSettings(p.Thinking)
 	e.SupportedEfforts = p.SupportedEfforts
 	e.DefaultEffort = p.DefaultEffort
+	e.HeadroomEnabled = p.HeadroomEnabled
 	e.Model = ""
 	e.Models = nil
 	e.Default = ""
@@ -1979,9 +1984,53 @@ func saveProviderConfig(c *config.Config, p ProviderView) error {
 // `models` even when only one model is selected, while `model` remains populated
 // in-memory for validation/back-compat. The shared key/endpoint live on the entry.
 func (a *App) SaveProvider(p ProviderView) error {
-	return a.applyConfigChange(func(c *config.Config) error {
-		return saveProviderConfig(c, p)
-	})
+	// For enable: start proxy before rebuild so the new controller can
+	// route through headroom immediately.
+	if p.HeadroomEnabled && a.headroom != nil && !a.headroom.healthCheck() {
+		cfg, err := config.Load()
+		if err == nil {
+			cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
+			if err := a.headroom.start(cfg, headroomUpstreamURL(p.BaseURL)); err != nil {
+				slog.Warn("headroom: pre-start on provider save failed", "err", err)
+			}
+		}
+	}
+
+	if err := a.applyConfigChange(func(c *config.Config) error {
+		if err := saveProviderConfig(c, p); err != nil {
+			return err
+		}
+		if p.HeadroomEnabled {
+			headroomInItems := false
+			for _, item := range c.Desktop.StatusBarItems {
+				if item == "headroom" {
+					headroomInItems = true
+					break
+				}
+			}
+			if !headroomInItems {
+				c.Desktop.StatusBarItems = append(c.Desktop.StatusBarItems, "headroom")
+			}
+		} else {
+			filtered := make([]string, 0, len(c.Desktop.StatusBarItems))
+			for _, item := range c.Desktop.StatusBarItems {
+				if item != "headroom" {
+					filtered = append(filtered, item)
+				}
+			}
+			c.Desktop.StatusBarItems = filtered
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+
+	// For disable: stop proxy after rebuild so the controller no longer
+	// routes through it before we tear the proxy down.
+	if !p.HeadroomEnabled && a.headroom != nil {
+		a.headroom.stop()
+	}
+	return nil
 }
 
 // SaveProviderWithKey saves a custom provider and its credential as one settings

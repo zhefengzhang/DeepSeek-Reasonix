@@ -29500,3 +29500,18 @@ body > .mermaid-diagram--fullscreen {
     min-width: 0;
   }
 }
+
+/* Compressing indicator */
+.composer__compressing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  animation: composer-compressing-pulse 1.2s ease-in-out infinite;
+}
+@keyframes composer-compressing-pulse {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 1; }
+}

@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 	"sync"
@@ -201,12 +202,33 @@ func New(cfg provider.Config) (provider.Provider, error) {
 
 func newHTTPClient(cfg provider.Config) (*http.Client, error) {
 	spec, _ := cfg.Extra["proxy_spec"].(netclient.ProxySpec)
-	return netclient.NewHTTPClient(spec, netclient.TransportOptions{
+	client, err := netclient.NewHTTPClient(spec, netclient.TransportOptions{
 		DialTimeout:           30 * time.Second,
 		KeepAlive:             30 * time.Second,
 		TLSHandshakeTimeout:   15 * time.Second,
-		ResponseHeaderTimeout: 120 * time.Second, // models can think for a while before the first token
+		ResponseHeaderTimeout: 120 * time.Second,
 	})
+	if err != nil {
+		return nil, err
+	}
+	if noProxyLocal, _ := cfg.Extra["no_proxy_localhost"].(bool); noProxyLocal && client.Transport != nil {
+		if tr, ok := client.Transport.(*http.Transport); ok && tr.Proxy != nil {
+			origProxy := tr.Proxy
+			tr.Proxy = func(req *http.Request) (*url.URL, error) {
+				if req.URL != nil {
+					host := req.URL.Hostname()
+					if host == "127.0.0.1" || host == "localhost" || strings.HasSuffix(host, ".local") {
+						return nil, nil
+					}
+				}
+				return origProxy(req)
+			}
+		}
+	}
+	if ts, ok := cfg.Extra["request_timeout_seconds"].(int); ok && ts > 0 {
+		client.Timeout = time.Duration(ts) * time.Second
+	}
+	return client, nil
 }
 
 type client struct {

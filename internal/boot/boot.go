@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -1441,29 +1442,69 @@ func NewProvider(e *config.ProviderEntry) (provider.Provider, error) {
 // NewProviderWithProxy builds a provider.Provider with the configured ordinary
 // network proxy settings.
 func NewProviderWithProxy(e *config.ProviderEntry, proxy netclient.ProxySpec) (provider.Provider, error) {
+	baseURL := e.BaseURL
+	if e.HeadroomEnabled {
+		port := headroomProxyPort()
+		if e.Kind == "openai" || e.Kind == "" {
+			baseURL = fmt.Sprintf("http://127.0.0.1:%d/v1", port)
+		} else {
+			baseURL = fmt.Sprintf("http://127.0.0.1:%d", port)
+		}
+	}
+	timeout := 0
+	addNoProxy := false
+	if e.HeadroomEnabled {
+		cfg, err := config.Load()
+		if err == nil {
+			timeout = cfg.Headroom.HeadroomRequestTimeout()
+		}
+		if timeout <= 0 {
+			timeout = 300
+		}
+		addNoProxy = true
+	}
 	return provider.New(e.Kind, provider.Config{
 		Name:    e.Name,
-		BaseURL: e.BaseURL,
+		BaseURL: baseURL,
 		Model:   e.Model,
 		APIKey:  e.APIKey(),
-		// Pass the key's env var so auth failures can name where to fix it, plus
-		// provider-kind-specific knobs. EffectiveEffort applies a configured
-		// default_effort when the user has not explicitly selected /effort.
 		Extra: map[string]any{
-			"api_key_env":        e.APIKeyEnv,
-			"api_key_source":     e.APIKeySourceLabel(),
-			"thinking":           e.Thinking,
-			"effort":             config.EffectiveEffort(e),
-			"reasoning_protocol": config.ReasoningProtocolForEntry(e),
-			"chat_url":           e.ChatURL,
-			"headers":            e.Headers,
-			"extra_body":         e.ExtraBody,
-			"auth_header":        e.AuthHeader,
-			"proxy_spec":         proxy,
-			"vision":             config.EffectiveVision(e),
-			"vision_detail":      e.VisionDetail,
+			"api_key_env":            e.APIKeyEnv,
+			"api_key_source":         e.APIKeySourceLabel(),
+			"thinking":               e.Thinking,
+			"effort":                 config.EffectiveEffort(e),
+			"reasoning_protocol":     config.ReasoningProtocolForEntry(e),
+			"chat_url":               e.ChatURL,
+			"headers":                e.Headers,
+			"extra_body":             e.ExtraBody,
+			"auth_header":            e.AuthHeader,
+			"proxy_spec":             proxy,
+			"vision":                 config.EffectiveVision(e),
+			"vision_detail":          e.VisionDetail,
+			"request_timeout_seconds": timeout,
+			"no_proxy_localhost":      addNoProxy,
 		},
 	})
+}
+
+// headroomProxyPort returns the configured headroom proxy port, defaulting to 8787.
+func headroomProxyPort() int {
+	cfg, err := config.Load()
+	if err != nil {
+		return 8787
+	}
+	return cfg.Headroom.HeadroomPort()
+}
+
+// headroomReachable checks if the headroom proxy is responding (1s timeout).
+func headroomReachable(port int) bool {
+	client := &http.Client{Timeout: time.Second}
+	resp, err := client.Get(fmt.Sprintf("http://127.0.0.1:%d/livez", port))
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+	return resp.StatusCode == 200
 }
 
 // addBuiltins adds enabled built-in tools to reg. An empty list means all of

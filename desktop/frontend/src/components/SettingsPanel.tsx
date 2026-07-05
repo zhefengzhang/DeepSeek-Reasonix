@@ -46,7 +46,7 @@ import {
   shortcutDefinitions,
   type ShortcutAction,
 } from "../lib/keyboardShortcuts";
-import type { BotAccessView, BotAllowlistView, BotConnectionDiagnostic, BotConnectionView, BotInstallStartResult, BotRouteView, BotSettingsView, HookConfigView, HooksSettingsView, NetworkView, ProviderPresetView, ProviderView, SettingsTab, SettingsView } from "../lib/types";
+import type { BotAccessView, BotAllowlistView, BotConnectionDiagnostic, BotConnectionView, BotInstallStartResult, BotRouteView, BotSettingsView, HeadroomConfigView, HookConfigView, HooksSettingsView, NetworkView, ProviderPresetView, ProviderView, SettingsTab, SettingsView } from "../lib/types";
 import { InlineConfirmButton } from "./InlineConfirmButton";
 import { Tooltip } from "./Tooltip";
 import { AnchoredPopover } from "./AnchoredPopover";
@@ -1294,6 +1294,8 @@ function statusBarItemLabel(id: StatusBarItemId, t: ReturnType<typeof useT>): st
       return t("status.costLabel");
     case "balance":
       return t("status.balanceLabel");
+    case "headroom":
+      return t("status.headroomLabel");
   }
 }
 
@@ -4138,6 +4140,9 @@ function ModelsSection({ s, busy, apply, backgroundApply }: ModelsSectionProps) 
       ) : (
         <ProvidersSection s={s} busy={busy} apply={apply} />
       )}
+      {hasHeadroomProviders(s) && (
+        <HeadroomSettingsSection s={s} busy={busy} />
+      )}
     </>
   );
 }
@@ -5067,6 +5072,15 @@ function ProviderAccessCard({
 }) {
   const t = useT();
   const editableProvider = group.providers[0];
+  // Optimistic headroom state: immediately reflects the user's toggle without waiting for the save+reload round-trip.
+  const [headroomOptimistic, setHeadroomOptimistic] = useState<boolean | null>(null);
+  const headroomOn = headroomOptimistic !== null ? headroomOptimistic : (editableProvider?.headroomEnabled ?? false);
+  // Reset optimistic state when the actual provider value changes (after reload)
+  useEffect(() => {
+    if (headroomOptimistic !== null && headroomOptimistic === (editableProvider?.headroomEnabled ?? false)) {
+      setHeadroomOptimistic(null);
+    }
+  }, [editableProvider?.headroomEnabled, headroomOptimistic]);
   const isDefault = group.providers.some((p) => p.name === defaultProvider);
   const editingProvider = group.providers.find((p) => editing === p.name);
   const primaryProviderExpanded = Boolean(editableProvider && editing === editableProvider.name);
@@ -5130,6 +5144,49 @@ function ProviderAccessCard({
         <span>{group.apiKeyEnv || t("common.none")}</span>
         {group.keySource && <span title={group.keySourcePath || undefined}>{t("settings.keySource", { source: group.keySource })}</span>}
       </div>
+
+      {/* Headroom compression toggle */}
+      {editableProvider && (
+        <div className="provider-headroom-row">
+          <label className="set-label">{t("settings.headroomCompression")}</label>
+          <div className="set-seg">
+            <button
+              className={`set-seg__btn${headroomOn ? " set-seg__btn--on" : ""}`}
+              disabled={busy}
+              onClick={async () => {
+                const next = !headroomOn;
+                setHeadroomOptimistic(next);
+                try {
+                  const updated = { ...editableProvider, headroomEnabled: next };
+                  await onSave(updated);
+                } catch {
+                  setHeadroomOptimistic(!next);
+                }
+              }}
+            >
+              {t("common.on")}
+            </button>
+            <button
+              className={`set-seg__btn${!headroomOn ? " set-seg__btn--on" : ""}`}
+              disabled={busy}
+              onClick={async () => {
+                setHeadroomOptimistic(false);
+                try {
+                  const updated = { ...editableProvider, headroomEnabled: false };
+                  await onSave(updated);
+                } catch {
+                  setHeadroomOptimistic(true);
+                }
+              }}
+            >
+              {t("common.off")}
+            </button>
+          </div>
+          {headroomOn && (
+            <span className="provider-headroom-badge">{t("settings.headroomActive")}</span>
+          )}
+        </div>
+      )}
 
       <div className="provider-card-block">
         <div className="provider-card-block__label">{t(group.configured ? "settings.enabledModels" : "settings.modelList")}</div>
@@ -6969,6 +7026,131 @@ function UpdatesSection({
         <Tooltip label={configPath} fill block className="mem-hint settings-config-path">
           {t("settings.config", { path: configPath })}
         </Tooltip>
+      )}
+    </SettingsSection>
+  );
+}
+
+
+// hasHeadroomProviders checks if any provider has headroom enabled.
+function hasHeadroomProviders(s: SettingsView): boolean {
+  return (s?.providers?.some((p) => p.headroomEnabled) || s?.headroomStatus != null) ?? false;
+}
+
+// HeadroomSettingsSection shows compression configuration.
+function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }) {
+  const t = useT();
+  const [expanded, setExpanded] = useState(false);
+  const [preset, setPreset] = useState("coding");
+  const [codeAware, setCodeAware] = useState(true);
+  const [ccr, setCcr] = useState(false);
+  const [protectErrors, setProtectErrors] = useState(false);
+  const [disableKompress, setDisableKompress] = useState(true);
+  const [minTokens, setMinTokens] = useState("250");
+  const [timeoutVal, setTimeoutVal] = useState("120");
+  const [compressToolResults, setCompressToolResults] = useState(true);
+
+  useEffect(() => {
+    app.HeadroomConfig().then((cfg) => {
+      if (cfg.preset) setPreset(cfg.preset);
+      if (cfg.codeAware !== undefined) setCodeAware(cfg.codeAware);
+      if (cfg.ccr !== undefined) setCcr(cfg.ccr);
+      if (cfg.protectErrors !== undefined) setProtectErrors(cfg.protectErrors);
+      if (cfg.disableKompress !== undefined) setDisableKompress(cfg.disableKompress);
+      if (cfg.minTokens) setMinTokens(String(cfg.minTokens));
+      if (cfg.requestTimeout) setTimeoutVal(String(cfg.requestTimeout));
+    }).catch(() => {});
+  }, []);
+
+  const save = async (fields: Partial<HeadroomConfigView>) => {
+    try { await app.SaveHeadroomConfig(fields as HeadroomConfigView); } catch {}
+  };
+
+  const handlePreset = (p: string) => {
+    setPreset(p);
+    save({ preset: p });
+    // Reload full config so ApplyPreset side effects (code_aware, ccr, etc.)
+    // are reflected in the UI immediately.
+    app.HeadroomConfig().then((cfg) => {
+      if (cfg.codeAware !== undefined) setCodeAware(cfg.codeAware);
+      if (cfg.ccr !== undefined) setCcr(cfg.ccr);
+      if (cfg.protectErrors !== undefined) setProtectErrors(cfg.protectErrors);
+      if (cfg.disableKompress !== undefined) setDisableKompress(cfg.disableKompress);
+      if (cfg.minTokens) setMinTokens(String(cfg.minTokens));
+      if (cfg.requestTimeout) setTimeoutVal(String(cfg.requestTimeout));
+    }).catch(() => {});
+  };
+
+  return (
+    <SettingsSection title={t("settings.headroomSettingsTitle")} description={t("settings.headroomRestartNotice")}>
+      {s?.headroomStatus && (
+        <div className={`provider-card-status provider-card-status--${s.headroomStatus.running ? "info" : "warn"}`}>
+          {s.headroomStatus.running
+            ? t("settings.headroomRunning", { port: String(s.headroomStatus.port) })
+            : s.headroomStatus.warming
+              ? t("settings.headroomStarting")
+              : s.headroomStatus.installed
+                ? t("settings.headroomNotEnabled")
+                : t("settings.headroomNotInstalled")}
+        </div>
+      )}
+      <SettingsField label={t("settings.headroomPreset")} hint={t("settings.headroomPresetHint")}>
+        <div className="set-seg">
+          {(["coding", "writing", "custom"] as const).map((p) => (
+            <button key={p}
+              className={`set-seg__btn${preset === p ? " set-seg__btn--on" : ""}`}
+              disabled={busy}
+              onClick={() => handlePreset(p)}
+            >
+              {p === "coding" ? t("settings.headroomPresetCode") : p === "writing" ? t("settings.headroomPresetWrite") : t("settings.headroomPresetCustom")}
+            </button>
+          ))}
+        </div>
+      </SettingsField>
+      <SettingsField label={t("settings.headroomRequestTimeout")} hint={t("settings.headroomRequestTimeoutHint")}>
+        <input className="mem-input" type="number" min={10} max={600}
+          value={timeoutVal} disabled={busy}
+          onChange={(e) => setTimeoutVal(e.target.value)}
+          onBlur={async () => {
+            const val = parseInt(timeoutVal, 10);
+            if (val > 0) { await save({ requestTimeout: val }); }
+          }}
+          style={{ width: "80px" }}
+        />
+        <span className="set-suffix">s</span>
+      </SettingsField>
+      <button className="btn btn--small" disabled={busy} onClick={() => setExpanded(!expanded)}>
+        {expanded ? t("common.collapse") : t("common.expand")}
+      </button>
+      {expanded && (
+        <>
+          <SettingsField label={t("settings.headroomCodeAware")} hint={t("settings.headroomCodeAwareHint")}>
+            <ToggleSegment value={codeAware} disabled={busy} onChange={(v) => { setCodeAware(v); save({ codeAware: v }); }} />
+          </SettingsField>
+          <SettingsField label={t("settings.headroomCCR")} hint={t("settings.headroomCCRHint")}>
+            <ToggleSegment value={ccr} disabled={busy} onChange={(v) => { setCcr(v); save({ ccr: v }); }} />
+          </SettingsField>
+          <SettingsField label={t("settings.headroomProtectErrors")} hint={t("settings.headroomProtectErrorsHint")}>
+            <ToggleSegment value={protectErrors} disabled={busy} onChange={(v) => { setProtectErrors(v); save({ protectErrors: v }); }} />
+          </SettingsField>
+          <SettingsField label={t("settings.headroomDisableKompress")} hint={t("settings.headroomDisableKompressHint")}>
+            <ToggleSegment value={disableKompress} disabled={busy} onChange={(v) => { setDisableKompress(v); save({ disableKompress: v }); }} />
+          </SettingsField>
+          <SettingsField label={t("settings.headroomCompressToolResults")} hint={t("settings.headroomCompressToolResultsHint")}>
+            <ToggleSegment value={compressToolResults} disabled={busy} onChange={(v) => { setCompressToolResults(v); save({ compressToolResults: v }); }} />
+          </SettingsField>
+          <SettingsField label={t("settings.headroomMinTokens")} hint={t("settings.headroomMinTokensHint")}>
+            <input className="mem-input" type="number" min={50} max={1000}
+              value={minTokens} disabled={busy}
+              onChange={(e) => setMinTokens(e.target.value)}
+              onBlur={(e) => {
+                const v = parseInt(e.target.value, 10);
+                if (v > 0) { save({ minTokens: v }); }
+              }}
+              style={{ width: "80px" }}
+            />
+          </SettingsField>
+        </>
       )}
     </SettingsSection>
   );
