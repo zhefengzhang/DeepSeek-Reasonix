@@ -1306,6 +1306,7 @@ export const zhTW: Record<DictKey, string> = {
   "settings.headroomMinTokensHint": "嘗試壓縮的最小 token 數。越小越激進。",
   "settings.headroomRequestTimeoutHint": "請求超時秒數。ML 壓縮慢時可增大。",
   "settings.headroomNotInstalled": "Headroom 未安裝 — 執行: pip install headroom-ai[proxy]",
+  "settings.headroomNotEnabled": "Headroom 已安裝但未啟用 — 在 Provider 設定中開啟",
   "settings.headroomRunning": "Headroom 代理執行中 (連接埠 {port})",
   "settings.headroomStopped": "Headroom 代理已停止",
   "settings.headroomTokensSaved": "節省 {n} tokens ({pct}%)",

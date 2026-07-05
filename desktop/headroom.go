@@ -100,15 +100,16 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamURL string) error {
 		}
 	}
 
-	// Resolve the headroom-ai binary from PATH.
-	binPath, err := exec.LookPath("headroom")
+	// Resolve the headroom-ai binary — try PATH first, python -m fallback.
+	binPath, argsDelta, err := findHeadroom()
 	if err != nil {
 		h.running = false
-		return fmt.Errorf("headroom binary not found on PATH; install with: pip install headroom-ai[proxy,code]: %w", err)
+		return fmt.Errorf("headroom not found; install with: pip install headroom-ai[proxy,code]: %w", err)
 	}
 
 	// Build args: headroom proxy --port <port>
-	args := []string{"proxy"}
+	args := append([]string{}, argsDelta...)
+	args = append(args, "proxy")
 	args = append(args, "--port", fmt.Sprintf("%d", port))
 	if upstreamURL != "" {
 		args = append(args, "--openai-api-url", upstreamURL)
@@ -282,10 +283,29 @@ func (h *headroomSidecar) healthCheck() bool {
 	return headroomReachable(port)
 }
 
-// isInstalled checks whether the headroom binary exists on PATH.
+// isInstalled checks whether the headroom binary exists on PATH
+// or can be launched via python -m headroom.
 func (h *headroomSidecar) isInstalled() bool {
-	_, err := exec.LookPath("headroom")
+	_, _, err := findHeadroom()
 	return err == nil
+}
+
+// findHeadroom locates the headroom CLI — checks PATH first, then falls
+// back to "python -m headroom" so users who installed headroom-ai via pip
+// but don't have Python Scripts on PATH can still use the proxy.
+func findHeadroom() (binPath string, prependArgs []string, err error) {
+	if p, e := exec.LookPath("headroom"); e == nil {
+		return p, nil, nil
+	}
+	// Fallback: python -m headroom (handles pip-installed headroom when
+	// Python Scripts dir is not on PATH).
+	if p, e := exec.LookPath("python"); e == nil {
+		cmd := exec.Command(p, "-m", "headroom", "proxy", "--help")
+		if cmd.Run() == nil {
+			return p, []string{"-m", "headroom"}, nil
+		}
+	}
+	return "", nil, fmt.Errorf("headroom not found on PATH and python -m headroom failed")
 }
 
 // headroomReachable checks if the headroom proxy is responding on the given port.

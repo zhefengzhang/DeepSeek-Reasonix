@@ -6036,7 +6036,9 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
         <div className={`provider-card-status provider-card-status--${s.headroomStatus.running ? "info" : "warn"}`}>
           {s.headroomStatus.running
             ? t("settings.headroomRunning", { port: String(s.headroomStatus.port) })
-            : t("settings.headroomNotInstalled")}
+            : s.headroomStatus.installed
+              ? t("settings.headroomNotEnabled")
+              : t("settings.headroomNotInstalled")}
         </div>
       )}
       <SettingsField label={t("settings.headroomPreset")} hint={t("settings.headroomPresetHint")}>

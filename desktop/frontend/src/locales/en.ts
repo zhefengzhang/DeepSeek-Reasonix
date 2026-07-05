@@ -1920,6 +1920,7 @@ export const en = {
   "settings.headroomMinTokensHint": "Minimum tokens to attempt compression. Lower = more aggressive.",
   "settings.headroomRequestTimeoutHint": "Seconds before the request times out. Increase for slow ML compression.",
   "settings.headroomNotInstalled": "Headroom not installed — run: pip install headroom-ai[proxy]",
+  "settings.headroomNotEnabled": "Headroom installed but not enabled — enable it in provider settings",
   "settings.headroomRunning": "Headroom proxy running (port {port})",
   "settings.headroomStopped": "Headroom proxy stopped",
   "settings.headroomTokensSaved": "{n} tokens saved ({pct}%)",
