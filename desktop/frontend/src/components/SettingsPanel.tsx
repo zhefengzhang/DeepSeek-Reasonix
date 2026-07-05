@@ -6031,7 +6031,7 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
   };
 
   return (
-    <SettingsSection title={t("settings.headroomSettingsTitle")}>
+    <SettingsSection title={t("settings.headroomSettingsTitle")} description={t("settings.headroomRestartNotice")}>
       {s?.headroomStatus && (
         <div className={`provider-card-status provider-card-status--${s.headroomStatus.running ? "info" : "warn"}`}>
           {s.headroomStatus.running

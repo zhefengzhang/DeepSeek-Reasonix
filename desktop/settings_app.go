@@ -1496,7 +1496,21 @@ func providerDefaultForModels(currentDefault string, models []string) string {
 // `models` even when only one model is selected, while `model` remains populated
 // in-memory for validation/back-compat. The shared key/endpoint live on the entry.
 func (a *App) SaveProvider(p ProviderView) error {
-	return a.applyConfigChange(func(c *config.Config) error {
+	// For enable: start proxy before rebuild so the new controller can
+	// route through headroom immediately. The proxy start (up to 15s
+	// health-check) must NOT block the Wails binding, so we do it here,
+	// outside applyConfigChange, where the config lock is not held.
+	if p.HeadroomEnabled && a.headroom != nil && !a.headroom.healthCheck() {
+		cfg, err := config.Load()
+		if err == nil {
+			cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
+			if err := a.headroom.start(cfg, headroomUpstreamURL(p.BaseURL)); err != nil {
+				slog.Warn("headroom: pre-start on provider save failed", "err", err)
+			}
+		}
+	}
+
+	if err := a.applyConfigChange(func(c *config.Config) error {
 		e := config.ProviderEntry{Name: p.Name}
 		for i := range c.Providers {
 			if c.Providers[i].Name == p.Name {
@@ -1518,7 +1532,6 @@ func (a *App) SaveProvider(p ProviderView) error {
 		e.Thinking = providerThinkingForSettings(p.Thinking)
 		e.SupportedEfforts = p.SupportedEfforts
 		e.HeadroomEnabled = p.HeadroomEnabled
-		// Ensure "headroom" is in the status bar when headroom is enabled
 		if p.HeadroomEnabled {
 			headroomInItems := false
 			for _, item := range c.Desktop.StatusBarItems {
@@ -1530,15 +1543,14 @@ func (a *App) SaveProvider(p ProviderView) error {
 			if !headroomInItems {
 				c.Desktop.StatusBarItems = append(c.Desktop.StatusBarItems, "headroom")
 			}
-			// Auto-start the proxy immediately so the controller rebuild
-			// doesn't point a provider at a proxy that isn't running yet.
-			if a.headroom != nil && !a.headroom.healthCheck() {
-				// Apply preset so CLI flags reflect config, not Go zero values
-				c.Headroom.ApplyPreset(c.Headroom.HeadroomPreset())
-				if err := a.headroom.start(c, headroomUpstreamURL(p.BaseURL)); err != nil {
-					slog.Warn("headroom: auto-start on provider save failed", "err", err)
+		} else {
+			filtered := make([]string, 0, len(c.Desktop.StatusBarItems))
+			for _, item := range c.Desktop.StatusBarItems {
+				if item != "headroom" {
+					filtered = append(filtered, item)
 				}
 			}
+			c.Desktop.StatusBarItems = filtered
 		}
 		e.DefaultEffort = p.DefaultEffort
 		e.Model = ""
@@ -1547,7 +1559,7 @@ func (a *App) SaveProvider(p ProviderView) error {
 		e.VisionModels = nil
 		models := chatProviderModels(p.Models)
 		if len(models) > 0 {
-			e.Model = models[0] // also satisfies validateProvider's model requirement
+			e.Model = models[0]
 			e.Models = models
 			e.ModelOverrides = providerModelOverridesForSave(p.ModelOverrides, models)
 			if p.VisionModelsSet || len(p.VisionModels) > 0 {
@@ -1567,7 +1579,16 @@ func (a *App) SaveProvider(p ProviderView) error {
 		}
 		addProviderAccess(c, p.Name)
 		return nil
-	})
+	}); err != nil {
+		return err
+	}
+
+	// For disable: stop proxy after rebuild so the controller no longer
+	// routes through it before we tear the proxy down.
+	if !p.HeadroomEnabled && a.headroom != nil {
+		a.headroom.stop()
+	}
+	return nil
 }
 
 // AddOfficialProviderAccess adds one curated desktop provider template to the

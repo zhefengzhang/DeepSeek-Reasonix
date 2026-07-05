@@ -1923,6 +1923,7 @@ export const en = {
   "settings.headroomRunning": "Headroom proxy running (port {port})",
   "settings.headroomStopped": "Headroom proxy stopped",
   "settings.headroomTokensSaved": "{n} tokens saved ({pct}%)",
+  "settings.headroomRestartNotice": "Changes to compression settings restart the proxy service. Active conversations may briefly pause.",
 };
 
 export type DictKey = keyof typeof en;

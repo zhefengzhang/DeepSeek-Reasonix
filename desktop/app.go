@@ -8057,7 +8057,7 @@ func (a *App) HeadroomConfig() HeadroomConfigView {
 
 // SaveHeadroomConfig persists headroom configuration changes from the frontend.
 func (a *App) SaveHeadroomConfig(v HeadroomConfigView) error {
-	return a.applyConfigOnly(func(c *config.Config) error {
+	if err := a.applyConfigOnly(func(c *config.Config) error {
 		if v.Preset != "" {
 			c.Headroom.Preset = v.Preset
 		}
@@ -8083,5 +8083,28 @@ func (a *App) SaveHeadroomConfig(v HeadroomConfigView) error {
 			c.Headroom.CompressToolResults = *v.CompressToolResults
 		}
 		return nil
-	})
+	}); err != nil {
+		return err
+	}
+	// Restart the proxy so new CLI flags take effect immediately.
+	if a.headroom == nil || !a.headroom.healthCheck() {
+		return nil
+	}
+	cfg, err := config.Load()
+	if err != nil {
+		return fmt.Errorf("headroom: reload config after save: %w", err)
+	}
+	cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
+	var upstreamURL string
+	for _, p := range cfg.Providers {
+		if p.HeadroomEnabled && p.BaseURL != "" {
+			upstreamURL = headroomUpstreamURL(p.BaseURL)
+			break
+		}
+	}
+	a.headroom.stop()
+	if err := a.headroom.start(cfg, upstreamURL); err != nil {
+		slog.Warn("headroom: restart after config save failed", "err", err)
+	}
+	return nil
 }

@@ -77,9 +77,12 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamURL string) error {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	if h.running {
-		return nil // already running
+	if h.running && headroomReachable(h.port) {
+		return nil // already running and alive
 	}
+	// If the port is claimed but unreachable, reset state so we can restart.
+	h.running = false
+	h.warming = false
 
 	port := cfg.Headroom.HeadroomPort()
 	h.port = port

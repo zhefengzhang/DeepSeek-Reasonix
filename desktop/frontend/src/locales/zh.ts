@@ -1916,7 +1916,7 @@ export const zh: Record<DictKey, string> = {
   "settings.headroomCodeAwareHint": "AST 级代码压缩。需 headroom-ai[code]。编程场景推荐。",
   "settings.headroomCCRHint": "可逆压缩：LLM 可通过 headroom_retrieve 取回原文。写作场景推荐。",
   "settings.headroomProtectErrorsHint": "保留错误信息原文。关闭可获得更高压缩比，但可能丢失细节。",
-  "settings.headroomDisableKompressHint": "ML 文本模型（500MB+）。Windows 上禁用——无 GPU 的 ONNX Runtime 可能崩溃。",
+  "settings.headroomDisableKompressHint": "ML 文本模型（500MB+）。更高的压缩率但是占用更多 CPU 资源。",
   "settings.headroomCompressToolResultsHint": "启用后 tool 输出将进入压缩流程。更高压缩比，略有细节损失风险。",
   "settings.headroomCompressToolResults": "激进工具输出压缩",
   "settings.headroomMinTokensHint": "尝试压缩的最小 token 数。越小越激进。",
@@ -1925,4 +1925,5 @@ export const zh: Record<DictKey, string> = {
   "settings.headroomRunning": "Headroom 代理运行中 (端口 {port})",
   "settings.headroomStopped": "Headroom 代理已停止",
   "settings.headroomTokensSaved": "节省 {n} tokens ({pct}%)",
+  "settings.headroomRestartNotice": "修改压缩设置后会重启代理服务，当前会话可能会出现短暂中断。",
 };
