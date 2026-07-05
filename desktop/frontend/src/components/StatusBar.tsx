@@ -41,8 +41,9 @@ function contextAvgRate(ctx: ContextInfo): string | null {
 }
 
 function headroomSavingsTooltip(stats: import("../lib/types").HeadroomStatusView | undefined, t: Translator): string {
-  if (!stats || !stats.running) return t("status.headroomOff");
+  if (!stats) return t("status.headroomOff");
   if (stats.warming) return t("status.headroomWarming");
+  if (!stats.running) return t("status.headroomOff");
   if (stats.savingsPct != null && stats.savingsPct > 0) {
     const cost = stats.costSaved != null && stats.costSaved > 0
       ? (stats.costCurrency ?? "") + stats.costSaved.toFixed(4)
