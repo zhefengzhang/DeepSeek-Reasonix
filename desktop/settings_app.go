@@ -511,6 +511,7 @@ func providerViewFromEntryForRootWithResolver(p config.ProviderEntry, builtIn, a
 		SupportedEfforts:  nonNil(p.SupportedEfforts),
 		DefaultEffort:     p.DefaultEffort,
 		ModelOverrides:    providerModelOverridesForView(p.ModelOverrides, models),
+		HeadroomEnabled:   p.HeadroomEnabled,
 	}
 }
 

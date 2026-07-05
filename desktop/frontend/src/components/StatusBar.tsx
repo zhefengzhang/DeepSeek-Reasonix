@@ -333,30 +333,28 @@ export function StatusBar({
         </span>
       </Tooltip>
     ),
-    headroom: headroomStats !== undefined ? (
+    headroom: (
       <Tooltip label={headroomSavingsTooltip(headroomStats, t)} className="statusbar__metric statusbar__metric--headroom">
         <span className="stat statusbar__headroom">
           <MetricLabel style={metricLabelStyle} icon={<Zap size={12} />} label={t("status.headroomLabel")} />
           <b className={
-            headroomStats.warming
+            headroomStats?.warming
               ? "stat__value--notice"
-              : headroomStats.running && headroomStats.savingsPct && headroomStats.savingsPct > 0
+              : headroomStats?.running && headroomStats?.savingsPct && headroomStats.savingsPct > 0
               ? "stat__value--green"
-              : headroomStats.running
-              ? undefined
               : "stat__value--empty"
           }>
-            {headroomStats.warming
+            {headroomStats?.warming
               ? "\u231B"
-              : headroomStats.running
-              ? headroomStats.savingsPct != null && headroomStats.savingsPct > 0
+              : headroomStats?.running
+              ? headroomStats?.savingsPct != null && headroomStats.savingsPct > 0
                 ? Math.round(headroomStats.savingsPct) + "%"
                 : "-"
               : "-"}
           </b>
         </span>
       </Tooltip>
-    ) : null,
+    ),
   };
   const renderedItems = visibleItems
     .map((id) => ({ id, node: itemRenderers[id] }))

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log/slog"
+	"net/http"
 	"time"
 
 	"reasonix/internal/config"
@@ -28,29 +29,64 @@ func (a *App) autoStartHeadroom() {
 		}
 	}
 	if upstreamURL == "" {
+		// No provider has headroom enabled. If a headroom proxy from a previous
+		// session is still alive on the port (orphan after crash/unclean shutdown),
+		// stop it now so Settings reflects the correct disabled state.
+		port := cfg.Headroom.HeadroomPort()
+		if headroomReachable(port) {
+			slog.Info("headroom: stopping orphan proxy from previous session", "port", port)
+			if resp, err := http.Get(fmt.Sprintf("http://127.0.0.1:%d/shutdown", port)); err == nil {
+				resp.Body.Close()
+			}
+		}
 		slog.Debug("headroom: auto-start skipped — no enabled provider with base_url")
 		return
 	}
 	cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
 	if err := a.headroom.start(cfg, upstreamURL); err != nil {
 		slog.Warn("headroom: auto-start failed", "err", err)
+	} else {
+		// Emit initial status immediately so the frontend shows the correct
+		// state even before the poll goroutine fires its first tick.
+		a.emitHeadroomStats()
 	}
 }
 
 // pollHeadroomStats periodically checks the headroom proxy health and emits
-// events to the frontend for the status bar indicator.
+// events to the frontend for the status bar indicator. Runs in a goroutine
+// with panic recovery — if a single iteration panics, the loop restarts.
 func (a *App) pollHeadroomStats() {
 	if a.headroom == nil || a.ctx == nil {
 		return
 	}
-	ticker := time.NewTicker(5 * time.Second)
-	defer ticker.Stop()
+
+	// Emit immediately on first call — no 5-second delay for the initial status.
+	a.emitHeadroomStats()
+
 	for {
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					slog.Error("headroom: poll recovered panic, restarting", "panic", r)
+				}
+			}()
+			ticker := time.NewTicker(5 * time.Second)
+			defer ticker.Stop()
+			for {
+				select {
+				case <-a.ctx.Done():
+					return
+				case <-ticker.C:
+					a.emitHeadroomStats()
+				}
+			}
+		}()
+		// If the inner func panicked and recovered, wait briefly before
+		// restarting the poll loop to avoid a tight crash loop.
 		select {
 		case <-a.ctx.Done():
 			return
-		case <-ticker.C:
-			a.emitHeadroomStats()
+		case <-time.After(time.Second):
 		}
 	}
 }

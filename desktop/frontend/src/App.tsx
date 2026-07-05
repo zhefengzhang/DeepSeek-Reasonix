@@ -1046,7 +1046,6 @@ export default function App() {
   const [statusBarStyle, setStatusBarStyle] = useState<"icon" | "text">("text");
   const [statusBarItems, setStatusBarItems] = useState<StatusBarItemId[]>(() => [...DEFAULT_STATUS_BAR_ITEMS]);
   const [headroomStats, setHeadroomStats] = useState<import("./lib/types").HeadroomStatusView | undefined>(undefined);
-  void setHeadroomStats; // used in EventsOn callback below — tsc can't see closure usage
   const [renamingTopicId, setRenamingTopicId] = useState<string | null>(null);
   const [topicTitleDraft, setTopicTitleDraft] = useState("");
   const topicExportOpen = useOverlayStore((s) => s.topicExportOpen);
@@ -1231,6 +1230,15 @@ export default function App() {
       setSettingsTarget("general");
     });
   }, [closeTransientOverlays]);
+  // Subscribe to headroom proxy stats — fetch initial state via binding, then
+  // receive live updates via EventsOn for real-time status bar updates.
+  useEffect(() => {
+    app.HeadroomStatus().then((stats) => setHeadroomStats(stats)).catch(() => {});
+    if (typeof window === "undefined" || !window.runtime) return;
+    return window.runtime.EventsOn("headroom:stats", (stats: any) => {
+      setHeadroomStats(stats as import("./lib/types").HeadroomStatusView);
+    });
+  }, []);
   useEffect(() => {
     if (typeof window === "undefined") return;
     const onResize = () => setViewportWidth(window.innerWidth);

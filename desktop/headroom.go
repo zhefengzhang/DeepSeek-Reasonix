@@ -274,8 +274,21 @@ func (h *headroomSidecar) status() HeadroomStatusView {
 		Installed: h.installed(),
 	}
 	if !running {
-		v.ErrorMessage = "headroom proxy not running"
-		return v
+		// Check if a headroom proxy from a previous session is still alive
+		// on the port (orphan process after crash/unclean shutdown). If so,
+		// adopt it so the frontend shows the correct running state.
+		if headroomReachable(port) {
+			h.mu.Lock()
+			h.running = true
+			h.warming = false
+			h.mu.Unlock()
+			v.Running = true
+			v.Warming = false
+			v.ErrorMessage = ""
+		} else {
+			v.ErrorMessage = "headroom proxy not running"
+			return v
+		}
 	}
 
 	stats, err := h.fetchStats(port)
