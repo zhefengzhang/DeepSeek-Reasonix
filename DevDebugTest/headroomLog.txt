@@ -1,0 +1,35 @@
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Scripts\headroom.exe\__main__.py", line 7, in <module>
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\click\core.py", line 1569, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\click\core.py", line 1490, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\click\core.py", line 1970, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\click\core.py", line 1353, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\click\core.py", line 907, in invoke
+    return callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\click\decorators.py", line 34, in new_func
+    return f(get_current_context(), *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\headroom\cli\proxy.py", line 1460, in proxy
+    run_server(config, **run_kwargs)
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\headroom\proxy\server.py", line 4265, in run_server
+    uvicorn.run(
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\uvicorn\main.py", line 579, in run
+    server.run()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\uvicorn\server.py", line 65, in run
+    self.config.setup_event_loop()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Lib\site-packages\uvicorn\config.py", line 476, in setup_event_loop
+    loop_setup: Callable | None = import_from_string(LOOP_SETUPS[self.loop])
+                                                     ~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'asyncio:SelectorEventLoop'
