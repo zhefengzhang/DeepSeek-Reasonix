@@ -134,12 +134,29 @@ func New(cfg provider.Config) (provider.Provider, error) {
 
 func newHTTPClient(cfg provider.Config) (*http.Client, error) {
 	spec, _ := cfg.Extra["proxy_spec"].(netclient.ProxySpec)
-	return netclient.NewHTTPClient(spec, netclient.TransportOptions{
+	// When headroom rewrites base_url to localhost, ensure localhost is excluded
+	// from the system proxy (VPN), otherwise the connection will fail.
+	if noProxyLocal, _ := cfg.Extra["no_proxy_localhost"].(bool); noProxyLocal {
+		if spec.NoProxy == "" {
+			spec.NoProxy = "127.0.0.1,localhost,.local"
+		} else {
+			spec.NoProxy = spec.NoProxy + ",127.0.0.1,localhost,.local"
+		}
+	}
+	client, err := netclient.NewHTTPClient(spec, netclient.TransportOptions{
 		DialTimeout:           30 * time.Second,
 		KeepAlive:             30 * time.Second,
 		TLSHandshakeTimeout:   15 * time.Second,
 		ResponseHeaderTimeout: 120 * time.Second, // models can think for a while before the first token
 	})
+	if err != nil {
+		return nil, err
+	}
+	// Apply request timeout override (used by headroom proxy to accommodate ML compression)
+	if ts, ok := cfg.Extra["request_timeout_seconds"].(int); ok && ts > 0 {
+		client.Timeout = time.Duration(ts) * time.Second
+	}
+	return client, nil
 }
 
 type client struct {

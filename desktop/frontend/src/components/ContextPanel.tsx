@@ -12,6 +12,7 @@ interface ContextPanelProps {
   tabId?: string;
   context?: ContextInfo;
   usage?: WireUsage;
+  headroomStats?: import("../lib/types").HeadroomStatusView;
   sessionTokens?: number;
   sessionCost?: number;
   sessionCurrency?: string;
@@ -274,6 +275,7 @@ export function ContextPanel({
   tabId,
   context,
   usage,
+  headroomStats,
   sessionTokens,
   sessionCost,
   sessionCurrency,
@@ -479,6 +481,14 @@ export function ContextPanel({
                 <MiniStat label={t("context.time")} value={fmtDuration(elapsed, t)} />
                 <MiniStat label={t("context.requests")} value={requestCount > 0 ? String(requestCount) : "-"} />
                 <MiniStat label={t("context.sessionTokensShort")} value={totalTokensMetric.display} title={totalTokensTitle} wide />
+                {headroomStats?.running ? (
+                  <MiniStat
+                    label={t("status.headroomLabel")}
+                    value={headroomStats.savingsPct != null && headroomStats.savingsPct > 0
+                      ? Math.round(headroomStats.savingsPct) + "%"
+                      : "-"}
+                  />
+                ) : null}
               </div>
             </div>
           </section>

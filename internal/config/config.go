@@ -59,6 +59,7 @@ type Config struct {
 	LSP              LSPConfig           `toml:"lsp"`
 	Bot              BotConfig           `toml:"bot"`
 	Serve            ServeConfig         `toml:"serve"`
+	Headroom         HeadroomConfig      `toml:"headroom"`
 
 	providerSources          map[string]providerSourceScope
 	shadowedProjectProviders []ProviderEntry
@@ -323,6 +324,7 @@ var defaultDesktopStatusBarItems = []string{
 	"compact",
 	"cost",
 	"balance",
+	"headroom",
 }
 
 var knownDesktopStatusBarItems = desktopStatusBarItemSet(defaultDesktopStatusBarItems)
@@ -1022,6 +1024,9 @@ type ProviderEntry struct {
 	// NoProxy reaches this provider's base_url directly, never through the proxy.
 	// For China-only endpoints a foreign-exit proxy resets the TLS handshake (#2803).
 	NoProxy bool `toml:"no_proxy"`
+	// HeadroomEnabled routes this provider through the local Headroom
+	// context-compression proxy. Requires headroom proxy to be running.
+	HeadroomEnabled bool `toml:"headroom_enabled"`
 }
 
 type ProviderModelOverride struct {
@@ -1029,6 +1034,167 @@ type ProviderModelOverride struct {
 	SupportedEfforts  []string `toml:"supported_efforts"`
 	DefaultEffort     string   `toml:"default_effort"`
 	Vision            *bool    `toml:"vision"`
+}
+
+// HeadroomConfig controls the Headroom context-compression proxy sidecar.
+// Headroom compresses tool outputs, logs, files, and RAG chunks before they
+// reach the LLM, reducing token usage by 60-95% while preserving answer quality.
+// See https://github.com/headroomlabs-ai/headroom
+type HeadroomConfig struct {
+	// Port is the local port the headroom proxy listens on. Default 8787.
+	Port int `toml:"port"`
+	// Mode selects the compression strategy: "token" or "cache". Default "token".
+	Mode string `toml:"mode"`
+	// AutoStart starts the headroom proxy when the app launches and any provider
+	// has HeadroomEnabled=true. Default true.
+	AutoStart *bool `toml:"auto_start"`
+	// Preset selects a named compression profile: "writing" | "coding" | "max".
+	// Each preset maps to a curated set of underlying knobs. Empty = "coding".
+	Preset string `toml:"preset"`
+	// CodeAware enables AST-level code compression via tree-sitter.
+	// Requires headroom-ai[code] extra. Recommended for programming workflows.
+	CodeAware bool `toml:"code_aware"`
+	// CCR enables Compress-Cache-Retrieve: compressed originals are stored locally
+	// and the LLM can call headroom_retrieve to fetch them on demand. Recommended
+	// for writing workflows where detail preservation matters.
+	CCR bool `toml:"ccr"`
+	// ProtectErrors prevents tool results classified as errors from being
+	// compressed. Default true — losing error details harms debugging.
+	ProtectErrors *bool `toml:"protect_errors"`
+	// MinTokens sets the minimum token count for content to be eligible for
+	// compression. Smaller values = more aggressive compression. Default 250.
+	MinTokens int `toml:"min_tokens"`
+	// DisableKompress disables the Kompress ML text compression engine (ModernBERT
+	// via ONNX Runtime). Disabling improves latency at the cost of compression ratio.
+	DisableKompress *bool `toml:"disable_kompress"`
+	// RequestTimeout overrides the HTTP request timeout (seconds) when routing
+	// through the headroom proxy. ML compression (Kompress) needs more time.
+	// Default 180 for max preset, 60 otherwise.
+	RequestTimeout int `toml:"request_timeout"`
+	// CompressToolResults clears the tool-exclusion list so tool outputs enter the
+	// compression pipeline. Default false.
+	CompressToolResults bool `toml:"compress_tool_results"`
+}
+
+// HeadroomPort returns the proxy port, defaulting to 8787.
+func (h *HeadroomConfig) HeadroomPort() int {
+	if h == nil || h.Port <= 0 {
+		return 8787
+	}
+	return h.Port
+}
+
+// HeadroomMode returns the compression mode, defaulting to "token".
+func (h *HeadroomConfig) HeadroomMode() string {
+	if h == nil || h.Mode == "" {
+		return "token"
+	}
+	return h.Mode
+}
+
+// HeadroomAutoStart reports whether the proxy should start automatically.
+func (h *HeadroomConfig) HeadroomAutoStart() bool {
+	return h == nil || h.AutoStart == nil || *h.AutoStart
+}
+
+// HeadroomPreset returns the selected compression preset, defaulting to "coding".
+func (h *HeadroomConfig) HeadroomPreset() string {
+	if h == nil || h.Preset == "" {
+		return "coding"
+	}
+	return h.Preset
+}
+
+// HeadroomCodeAware reports whether AST-level code compression is enabled.
+func (h *HeadroomConfig) HeadroomCodeAware() bool {
+	if h == nil {
+		return true
+	}
+	return h.CodeAware
+}
+
+// HeadroomCCR reports whether reversible compression (CCR) is enabled.
+func (h *HeadroomConfig) HeadroomCCR() bool {
+	if h == nil {
+		return true
+	}
+	return h.CCR
+}
+
+// HeadroomProtectErrors reports whether error tool results are protected.
+func (h *HeadroomConfig) HeadroomProtectErrors() bool {
+	if h == nil || h.ProtectErrors == nil {
+		return true
+	}
+	return *h.ProtectErrors
+}
+
+// HeadroomMinTokens returns the minimum token threshold for compression.
+func (h *HeadroomConfig) HeadroomMinTokens() int {
+	if h == nil || h.MinTokens <= 0 {
+		return 250
+	}
+	return h.MinTokens
+}
+
+// HeadroomDisableKompress reports whether the Kompress ML engine is disabled.
+func (h *HeadroomConfig) HeadroomDisableKompress() bool {
+	if h == nil || h.DisableKompress == nil {
+		return false
+	}
+	return *h.DisableKompress
+}
+
+// HeadroomRequestTimeout returns the HTTP request timeout in seconds for
+// requests routed through the headroom proxy.
+func (h *HeadroomConfig) HeadroomRequestTimeout() int {
+	if h == nil || h.RequestTimeout <= 0 {
+		return 300
+	}
+	return h.RequestTimeout
+}
+
+// ApplyPreset resolves a named preset to the underlying config knobs.
+// Only sets fields where the user has not explicitly configured (nil/zero).
+func (h *HeadroomConfig) ApplyPreset(preset string) {
+	if h == nil {
+		return
+	}
+	h.Preset = preset
+	switch preset {
+	case "writing":
+		h.CodeAware = false
+		h.CCR = true
+		if h.ProtectErrors == nil {
+			pe := true
+			h.ProtectErrors = &pe
+		}
+		if h.MinTokens == 0 { h.MinTokens = 250 }
+		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
+		if h.RequestTimeout == 0 { h.RequestTimeout = 120 }
+	case "max":
+		h.CodeAware = true
+		h.CCR = false
+		if h.ProtectErrors == nil {
+			pe := false
+			h.ProtectErrors = &pe
+		}
+		if h.MinTokens == 0 { h.MinTokens = 100 }
+		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
+		if h.RequestTimeout == 0 { h.RequestTimeout = 300 }
+		h.CompressToolResults = true // max preset always compresses tool results
+	default: // "coding"
+		h.CodeAware = true
+		h.CCR = false
+		if h.ProtectErrors == nil {
+			pe := true
+			h.ProtectErrors = &pe
+		}
+		if h.MinTokens == 0 { h.MinTokens = 250 }
+		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
+		if h.RequestTimeout == 0 { h.RequestTimeout = 120 }
+		h.CompressToolResults = true
+	}
 }
 
 // ModelList returns the models this provider exposes: the explicit `models` list,
@@ -1367,14 +1533,25 @@ func (c *Config) AutoStartPlugins() []PluginEntry {
 // DefaultSystemPrompt is used when config provides none.
 const DefaultSystemPrompt = `You are Reasonix, a coding agent focused on executing code tasks.
 Use the provided tools to read and write files and run shell commands.
-Principles: understand the request before acting; verify with tools instead of
-guessing; keep changes minimal and correct; briefly summarize what you did.
-For multi-step work, track progress with the todo_write tool: lay out the steps,
-keep exactly one in_progress, and flip each to completed as you finish it — update
-the list as you go, not just at the end.
-In plan mode the harness blocks writer tools: do read-only research, then write a
-concise plan as your reply and stop. The user is asked to approve before anything
-is changed; once approved, work through the steps, updating the task list as you go.`
+
+Core workflow:
+1. Understand — read relevant files and confirm the request before acting.
+2. Verify — use tools to check facts instead of guessing.
+3. Execute — make minimal, correct changes.
+4. Summarize — briefly state what you did and why.
+
+On tool errors: retry once if transient (network, timeout), then report the
+failure clearly and suggest an alternative approach. Do not silently skip work.
+
+For multi-step work, use todo_write to lay out steps, keep one in_progress,
+and flip each to completed as you go. Update the list continuously, not just at the end.
+
+Think briefly before each action — one or two sentences max — to confirm you
+understand what the tool call should achieve and that it matches the current goal.
+
+Reply in the same language the user is using: if they write in Chinese, answer
+in Chinese; if in English, answer in English. Switch when they switch. Keep code,
+identifiers, file paths, shell commands, and technical terms untranslated.`
 
 // UserDecisionPolicy is appended to every system prompt, including user-custom
 // prompts, so custom personas cannot accidentally remove the `ask` UI contract.

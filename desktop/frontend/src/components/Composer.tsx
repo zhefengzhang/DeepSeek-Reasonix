@@ -2512,6 +2512,7 @@ export function Composer({
               <ArrowUp size={16} />
             </button>
           </Tooltip>
+          <CompressingSpinner active={running && !retry && !disabled} />
         </div>
         <div className={composerMetaClass}>
           <div className="composer-meta__params">
@@ -2664,4 +2665,21 @@ export function Composer({
       </div>
     </div>
   );
+}
+
+// CompressingSpinner shows a "Compressing..." indicator during the headroom
+// compression phase (the first ~3 seconds after message submission).
+function CompressingSpinner({ active }: { active: boolean }) {
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (!active) { setShow(false); return; }
+    // Show the indicator 300ms after submission (avoid flash), auto-hide after 4s
+    const on = setTimeout(() => setShow(true), 300);
+    const off = setTimeout(() => setShow(false), 4000);
+    return () => { clearTimeout(on); clearTimeout(off); };
+  }, [active]);
+
+  if (!show) return null;
+  return <span className="composer__compressing">{'Compressing…'}</span>;
 }

@@ -153,6 +153,8 @@ type App struct {
 	skillRootsCache skillRootsCache
 
 	heartbeat *HeartbeatEngine // scheduled heartbeat tasks; nil until startup
+
+	headroom *headroomSidecar // Headroom context-compression proxy; nil until first use
 }
 
 type skillRootsCache struct {
@@ -333,6 +335,7 @@ func NewApp() *App {
 		mediaTokens:      newMediaTokenStore(),
 		botInstalls:      map[string]*botInstallSession{},
 		botRuntime:       newDesktopBotRuntime(),
+		headroom:         newHeadroomSidecar(),
 	}
 }
 
@@ -365,6 +368,14 @@ func (a *App) startup(ctx context.Context) {
 	a.heartbeat = newHeartbeatEngine(a)
 	a.heartbeat.Start()
 
+	// Auto-start Headroom proxy if any provider enables it
+	a.autoStartHeadroom()
+
+	// Poll headroom stats every 5 seconds for the status bar
+	if a.headroom != nil {
+		a.goSafe("pollHeadroomStats", a.pollHeadroomStats)
+	}
+
 	go a.restoreOrBuildTabs()
 	a.goSafe("refreshBotRuntime", a.refreshBotRuntime)
 	a.goSafe("sendStartupPing", a.sendStartupPing)
@@ -373,6 +384,10 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) beforeClose(ctx context.Context) bool {
+	// Stop headroom proxy first — a stale process blocks fresh starts
+	if a.headroom != nil {
+		a.headroom.stop()
+	}
 	if a.forceQuit.Swap(false) || consumeSystemQuitRequested() {
 		return false
 	}
@@ -645,6 +660,9 @@ func (a *App) snapshotAllTabs() {
 func (a *App) shutdown(context.Context) {
 	if a.heartbeat != nil {
 		a.heartbeat.Stop()
+	}
+	if a.headroom != nil {
+		a.headroom.stop()
 	}
 	a.stopBotRuntime()
 	a.stopTray()

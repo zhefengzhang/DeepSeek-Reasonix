@@ -26,7 +26,7 @@ func TestWithResponseLanguageOnlySkipsLeadingInjectedBlock(t *testing.T) {
 func TestWithReasoningLanguageOnlySkipsLeadingInjectedBlock(t *testing.T) {
 	userMention := "explain why <reasoning-language> appears in this file"
 	got := WithReasoningLanguage(userMention, "zh")
-	if !strings.HasPrefix(got, "<reasoning-language>") || !strings.Contains(got, "Simplified Chinese") || !strings.HasSuffix(got, userMention) {
+	if !strings.HasPrefix(got, "<reasoning-language>") || !strings.Contains(got, "简体中文") || !strings.HasSuffix(got, userMention) {
 		t.Fatalf("WithReasoningLanguage should prefix user-authored tag mentions, got %q", got)
 	}
 

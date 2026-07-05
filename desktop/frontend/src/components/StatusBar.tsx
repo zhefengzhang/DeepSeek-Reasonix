@@ -40,6 +40,19 @@ function contextAvgRate(ctx: ContextInfo): string | null {
   return formatRate(hit, hit + miss);
 }
 
+function headroomSavingsTooltip(stats: import("../lib/types").HeadroomStatusView | undefined, t: Translator): string {
+  if (!stats || !stats.running) return t("status.headroomOff");
+  if (stats.warming) return t("status.headroomWarming");
+  if (stats.savingsPct != null && stats.savingsPct > 0) {
+    return t("status.headroomSavings", {
+      pct: Math.round(stats.savingsPct),
+      tokens: (stats.tokensSaved ?? 0).toLocaleString(),
+      requests: String(stats.requests ?? 0),
+    });
+  }
+  return t("status.headroomRunning", { requests: String(stats.requests ?? 0) });
+}
+
 function rateValueClass(rate: string | null): string {
   if (rate === null) return "stat__value--empty";
   const pct = Number.parseFloat(rate);
@@ -149,6 +162,7 @@ export function StatusBar({
   context,
   usage,
   balance,
+  headroomStats,
   running,
   sessionTurns,
   sessionTokens,
@@ -166,6 +180,7 @@ export function StatusBar({
   context: ContextInfo;
   usage?: WireUsage;
   balance?: BalanceInfo;
+  headroomStats?: import("../lib/types").HeadroomStatusView;
   running: boolean;
   sessionTurns?: number;
   sessionTokens?: number;
@@ -313,10 +328,42 @@ export function StatusBar({
         </span>
       </Tooltip>
     ),
+    headroom: headroomStats !== undefined ? (
+      <Tooltip label={headroomSavingsTooltip(headroomStats, t)} className="statusbar__metric statusbar__metric--headroom">
+        <span className="stat statusbar__headroom">
+          <MetricLabel style={metricLabelStyle} icon={<Zap size={12} />} label={t("status.headroomLabel")} />
+          <b className={
+            headroomStats.warming
+              ? "stat__value--notice"
+              : headroomStats.running && headroomStats.savingsPct && headroomStats.savingsPct > 0
+              ? "stat__value--green"
+              : headroomStats.running
+              ? undefined
+              : "stat__value--empty"
+          }>
+            {headroomStats.warming
+              ? "⌛"
+              : headroomStats.running
+              ? headroomStats.savingsPct != null && headroomStats.savingsPct > 0
+                ? Math.round(headroomStats.savingsPct) + "%"
+                : "-"
+              : "-"}
+          </b>
+        </span>
+      </Tooltip>
+    ) : null,
   };
   const renderedItems = visibleItems
     .map((id) => ({ id, node: itemRenderers[id] }))
     .filter(({ node }) => node !== null && node !== undefined && node !== false);
+  // Always show headroom indicator when proxy status is known,
+  // even if "headroom" is not in the user's status_bar_items list.
+  if (headroomStats !== undefined && !renderedItems.some((i) => i.id === "headroom")) {
+    const hr = itemRenderers["headroom"];
+    if (hr !== null && hr !== undefined && hr !== false) {
+      renderedItems.push({ id: "headroom" as StatusBarItemId, node: hr });
+    }
+  }
   return (
     <div className={`statusbar statusbar--${metricLabelStyle}`}>
       <div className="statusbar__group statusbar__group--items">
