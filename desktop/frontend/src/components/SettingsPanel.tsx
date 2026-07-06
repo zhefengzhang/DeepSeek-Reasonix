@@ -5815,17 +5815,17 @@ function hasHeadroomProviders(s: SettingsView): boolean {
 function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }) {
   const t = useT();
   const [expanded, setExpanded] = useState(false);
-  const [preset, setPreset] = useState("coding");
-  const [mode, setMode] = useState<"token" | "cache">("token");
-  const [codeAware, setCodeAware] = useState(true);
-  const [ccr, setCcr] = useState(false);
-  const [protectErrors, setProtectErrors] = useState(false);
+  const [preset, setPreset] = useState(() => s?.headroomPreset ?? "coding");
+  const [mode, setMode] = useState<"token" | "cache">(() => (s?.headroomMode as "token" | "cache") ?? "token");
+  const [codeAware, setCodeAware] = useState(() => s?.headroomCodeAware ?? true);
+  const [ccr, setCcr] = useState(() => s?.headroomCCR ?? false);
+  const [protectErrors, setProtectErrors] = useState(() => s?.headroomProtectErrors ?? true);
   const [disableKompress, setDisableKompress] = useState(() => s?.headroomDisableKompress ?? true);
-  const [minTokens, setMinTokens] = useState("250");
-  const [timeoutVal, setTimeoutVal] = useState("120");
-  const [compressToolResults, setCompressToolResults] = useState(true);
-  const [showLogWindow, setShowLogWindow] = useState(false);
-  const [gpuBackend, setGpuBackend] = useState("auto");
+  const [minTokens, setMinTokens] = useState(() => String(s?.headroomMinTokens ?? 250));
+  const [timeoutVal, setTimeoutVal] = useState(() => String(s?.headroomRequestTimeout ?? 300));
+  const [compressToolResults, setCompressToolResults] = useState(() => s?.headroomCompressToolResults ?? true);
+  const [showLogWindow, setShowLogWindow] = useState(() => s?.headroomShowLogWindow ?? false);
+  const [gpuBackend, setGpuBackend] = useState(() => s?.headroomGpuBackend ?? "auto");
   const [keepAlive, setKeepAlive] = useState(() => s?.headroomKeepAlive ?? false);
 
   const save = async (fields: Partial<HeadroomConfigView>) => {

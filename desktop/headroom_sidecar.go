@@ -277,15 +277,12 @@ func (h *headroomSidecar) stop() {
 
 // status returns the current headroom proxy status.
 func (h *headroomSidecar) status() HeadroomStatusView {
-	h.mu.Lock()
-	running := h.cmd != nil && h.cmd.Process != nil
+	// Use health check as the primary indicator — the process may have been
+	// started externally (keepAlive) without a local cmd handle.
+	running := h.healthCheck()
 	port := h.port
-	h.mu.Unlock()
-
-	// Cross-check: if the process was killed externally (not via stop()),
-	// the cmd handle is stale. Use healthCheck for a definitive answer.
-	if running && !h.healthCheck() {
-		running = false
+	if port <= 0 {
+		port = 8787
 	}
 
 	v := HeadroomStatusView{

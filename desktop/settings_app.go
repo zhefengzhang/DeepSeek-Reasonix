@@ -198,8 +198,18 @@ type SettingsView struct {
 	HeadroomStatus *HeadroomStatusView `json:"headroomStatus,omitempty"`
 	// HeadroomDisableKompress mirrors the config so the settings panel
 	// initialises the toggle from the persisted value, not a hard-coded default.
-	HeadroomDisableKompress bool `json:"headroomDisableKompress"`
-	HeadroomKeepAlive      bool `json:"headroomKeepAlive"`
+	HeadroomDisableKompress bool   `json:"headroomDisableKompress"`
+	HeadroomKeepAlive      bool   `json:"headroomKeepAlive"`
+	HeadroomMode           string `json:"headroomMode"`
+	HeadroomPreset         string `json:"headroomPreset"`
+	HeadroomCodeAware      bool   `json:"headroomCodeAware"`
+	HeadroomCCR            bool   `json:"headroomCCR"`
+	HeadroomProtectErrors  bool   `json:"headroomProtectErrors"`
+	HeadroomMinTokens      int    `json:"headroomMinTokens"`
+	HeadroomRequestTimeout int    `json:"headroomRequestTimeout"`
+	HeadroomCompressToolResults bool `json:"headroomCompressToolResults"`
+	HeadroomShowLogWindow  bool   `json:"headroomShowLogWindow"`
+	HeadroomGpuBackend     string `json:"headroomGpuBackend"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -599,6 +609,16 @@ func (a *App) Settings() SettingsView {
 		HeadroomStatus:          headroomStatus,
 		HeadroomDisableKompress: cfg.Headroom.HeadroomDisableKompress(),
 		HeadroomKeepAlive:       cfg.Headroom.KeepAlive,
+		HeadroomMode:            cfg.Headroom.HeadroomMode(),
+		HeadroomPreset:          cfg.Headroom.HeadroomPreset(),
+		HeadroomCodeAware:       cfg.Headroom.HeadroomCodeAware(),
+		HeadroomCCR:             cfg.Headroom.HeadroomCCR(),
+		HeadroomProtectErrors:   cfg.Headroom.HeadroomProtectErrors(),
+		HeadroomMinTokens:       cfg.Headroom.HeadroomMinTokens(),
+		HeadroomRequestTimeout:  cfg.Headroom.HeadroomRequestTimeout(),
+		HeadroomCompressToolResults: cfg.Headroom.CompressToolResults,
+		HeadroomShowLogWindow:   cfg.Headroom.ShowLogWindow,
+		HeadroomGpuBackend:      cfg.Headroom.HeadroomGpuBackend(),
 	}
 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
 	root := a.activeWorkspaceRoot()

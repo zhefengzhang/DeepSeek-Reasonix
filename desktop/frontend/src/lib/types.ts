@@ -1101,6 +1101,16 @@ export interface SettingsView {
   bypass: boolean; // legacy JSON key for live YOLO/full-access tool auto-approval
   headroomDisableKompress?: boolean; // persisted config for settings panel init
   headroomKeepAlive?: boolean; // keep proxy running after Reasonix exits
+  headroomMode?: string;
+  headroomPreset?: string;
+  headroomCodeAware?: boolean;
+  headroomCCR?: boolean;
+  headroomProtectErrors?: boolean;
+  headroomMinTokens?: number;
+  headroomRequestTimeout?: number;
+  headroomCompressToolResults?: boolean;
+  headroomShowLogWindow?: boolean;
+  headroomGpuBackend?: string;
 }
 
 export interface DesktopStartupSettingsView {
