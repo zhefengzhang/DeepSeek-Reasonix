@@ -1956,17 +1956,6 @@ func saveProviderConfig(c *config.Config, p ProviderView) error {
 	e.SupportedEfforts = p.SupportedEfforts
 	e.DefaultEffort = p.DefaultEffort
 	e.HeadroomEnabled = p.HeadroomEnabled
-	// When the user explicitly disables headroom, also set auto_start=false
-	// so the proxy does not launch on the next app startup even if the config
-	// write races with a restart.
-	if !p.HeadroomEnabled {
-		asFalse := false
-		c.Headroom.AutoStart = &asFalse
-	} else if c.Headroom.AutoStart != nil && !*c.Headroom.AutoStart {
-		// Re-enabling when auto_start was explicitly disabled — clear the flag
-		// so the default (true) takes effect.
-		c.Headroom.AutoStart = nil
-	}
 	e.Model = ""
 	e.Models = nil
 	e.Default = ""
