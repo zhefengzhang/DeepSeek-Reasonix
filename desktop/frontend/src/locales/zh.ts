@@ -1829,6 +1829,10 @@ export const zh: Record<DictKey, string> = {
   "settings.headroomCCRHint": "可逆压缩：LLM 可通过 headroom_retrieve 取回原文。写作场景推荐。",
   "settings.headroomProtectErrorsHint": "保留错误信息原文。关闭可获得更高压缩比，但可能丢失细节。",
   "settings.headroomDisableKompressHint": "ML 文本模型（500MB+）。Windows 上禁用——无 GPU 的 ONNX Runtime 可能崩溃。",
+  "settings.headroomGpuBackend": "GPU 加速",
+  "settings.headroomGpuBackendHint": "选择 ML Kompress 的 GPU 后端。需启用 Kompress 并已下载模型。「自动检测」优先 CUDA > DirectML > CPU。",
+  "settings.headroomGpuBackendAuto": "自动检测",
+  "settings.headroomGpuBackendCPU": "仅 CPU",
   "settings.headroomLogWindowHint": "显示 Python 代理控制台窗口及实时日志。默认关闭以保持桌面整洁。",
 
   "settings.headroomCompressToolResultsHint": "启用后 tool 输出将进入压缩流程。更高压缩比，略有细节损失风险。",

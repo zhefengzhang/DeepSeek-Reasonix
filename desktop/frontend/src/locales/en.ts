@@ -1827,6 +1827,10 @@ export const en = {
   "settings.headroomCCRHint": "Reversible compression: LLM can retrieve originals via headroom_retrieve. Recommended for writing.",
   "settings.headroomProtectErrorsHint": "Keep error messages verbatim. Turn OFF for max compression at risk of detail loss.",
   "settings.headroomDisableKompressHint": "ML text model (500MB+). Disabled on Windows — ONNX Runtime may crash without GPU.",
+  "settings.headroomGpuBackend": "GPU acceleration",
+  "settings.headroomGpuBackendHint": "Select the GPU backend for ML Kompress. Requires Kompress enabled and model downloaded. 'Auto detect' prefers CUDA > DirectML > CPU.",
+  "settings.headroomGpuBackendAuto": "Auto detect",
+  "settings.headroomGpuBackendCPU": "CPU only",
   "settings.headroomLogWindowHint": "Show the Python proxy console window with live logs. Disabled by default for a clean desktop experience.",
 
   "settings.headroomCompressToolResultsHint": "When enabled, tool outputs enter compression. Higher ratio, small risk of detail loss.",

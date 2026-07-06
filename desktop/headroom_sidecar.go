@@ -42,6 +42,7 @@ type HeadroomStatusView struct {
 	LifetimeTokens int     `json:"lifetimeTokens,omitempty"`
 	LifetimePct    float64 `json:"lifetimePct,omitempty"`
 	LifetimeCost   float64 `json:"lifetimeCost,omitempty"`
+	DisableKompress bool  `json:"disableKompress,omitempty"` // true when Kompress ML is disabled
 	ErrorMessage string  `json:"errorMessage,omitempty"`
 	Warming      bool    `json:"warming,omitempty"` // true when Kompress enabled but not yet used
 }
@@ -194,6 +195,7 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 		}
 	}
 	h.kompressDisabled = disableKompress
+	env = append(env, "HEADROOM_GPU_BACKEND="+cfg.Headroom.HeadroomGpuBackend())
 	if cfg.Headroom.CodeAware {
 		env = append(env, "HEADROOM_CODE_AWARE_ENABLED=1")
 	}
@@ -446,6 +448,32 @@ port = os.environ.get("HEADROOM_PORT", "8787")
 mode = os.environ.get("HEADROOM_MODE", "token")
 code_aware = os.environ.get("HEADROOM_CODE_AWARE_ENABLED", "0") == "1"
 disable_kompress = os.environ.get("HEADROOM_DISABLE_KOMPRESS", "0") == "1"
+gpu_backend = os.environ.get("HEADROOM_GPU_BACKEND", "auto")
+
+# GPU backend: prefer ONNX GPU providers over CPU when available
+if not disable_kompress and gpu_backend != "cpu":
+    try:
+        import onnxruntime as ort
+        avail = ort.get_available_providers()
+        sel = []
+        if gpu_backend == "cuda" and "CUDAExecutionProvider" in avail:
+            sel = ["CUDAExecutionProvider"]
+        elif gpu_backend == "dml" and "DmlExecutionProvider" in avail:
+            sel = ["DmlExecutionProvider"]
+        elif gpu_backend == "auto":
+            for p in ["CUDAExecutionProvider", "DmlExecutionProvider"]:
+                if p in avail:
+                    sel = [p]
+                    break
+        if sel:
+            _orig_init = ort.InferenceSession.__init__
+            def _gpu_init(self, model_path, sess_options=None, providers=None, **kwargs):
+                if providers is None:
+                    providers = sel + ["CPUExecutionProvider"]
+                _orig_init(self, model_path, sess_options, providers, **kwargs)
+            ort.InferenceSession.__init__ = _gpu_init
+    except Exception:
+        pass  # GPU not available, falling back to CPU
 
 cli_args = ["--port", port, "--mode", mode]
 if code_aware:
@@ -616,6 +644,9 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 	if in.ShowLogWindow != nil {
 		cfg.Headroom.ShowLogWindow = *in.ShowLogWindow
 	}
+	if in.GpuBackend != "" {
+		cfg.Headroom.GpuBackend = in.GpuBackend
+	}
 	if err := cfg.SaveTo(path); err != nil {
 		return fmt.Errorf("save config: %w", err)
 	}
@@ -646,6 +677,7 @@ type HeadroomConfigView struct {
 	RequestTimeout  int    `json:"requestTimeout,omitempty"`
 	CompressToolResults *bool  `json:"compressToolResults,omitempty"`
 	ShowLogWindow   *bool  `json:"showLogWindow,omitempty"`
+	GpuBackend      string `json:"gpuBackend,omitempty"` // "auto" | "cpu" | "dml" | "cuda"
 }
 
 // StopHeadroom stops the headroom proxy (Wails binding).
@@ -733,9 +765,6 @@ func (a *App) emitHeadroomStats() {
 		return
 	}
 	warming := false
-	if !a.headroom.kompressDisabled {
-		warming = kompressRunSeconds(port) == 0
-	}
 	// Keep session data as-is (0 when no requests yet). Send lifetime data
 	// separately so the frontend can choose what to display.
 	tokensSaved := stats.TokensSaved

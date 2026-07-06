@@ -1033,6 +1033,7 @@ export interface HeadroomConfigView {
   requestTimeout?: number;
   compressToolResults?: boolean;
   showLogWindow?: boolean;
+  gpuBackend?: string;
 }
 
 export interface HookConfigView {
@@ -1097,6 +1098,7 @@ export interface SettingsView {
   providerKinds: string[]; // provider implementations the kernel registered (for the kind picker)
   autoApproveTools: boolean;
   bypass: boolean; // legacy JSON key for live YOLO/full-access tool auto-approval
+  headroomDisableKompress?: boolean; // persisted config for settings panel init
 }
 
 export interface DesktopStartupSettingsView {

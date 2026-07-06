@@ -196,6 +196,9 @@ type SettingsView struct {
 	Bypass bool `json:"bypass"`
 	// HeadroomStatus is the live state of the local headroom compression proxy.
 	HeadroomStatus *HeadroomStatusView `json:"headroomStatus,omitempty"`
+	// HeadroomDisableKompress mirrors the config so the settings panel
+	// initialises the toggle from the persisted value, not a hard-coded default.
+	HeadroomDisableKompress bool `json:"headroomDisableKompress"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -593,6 +596,7 @@ func (a *App) Settings() SettingsView {
 		AutoApproveTools:        ctrl != nil && ctrl.AutoApproveTools(),
 		Bypass:                  ctrl != nil && ctrl.AutoApproveTools(),
 		HeadroomStatus:          headroomStatus,
+		HeadroomDisableKompress: cfg.Headroom.HeadroomDisableKompress(),
 	}
 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
 	root := a.activeWorkspaceRoot()

@@ -5820,11 +5820,12 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
   const [codeAware, setCodeAware] = useState(true);
   const [ccr, setCcr] = useState(false);
   const [protectErrors, setProtectErrors] = useState(false);
-  const [disableKompress, setDisableKompress] = useState(true);
+  const [disableKompress, setDisableKompress] = useState(() => s?.headroomDisableKompress ?? true);
   const [minTokens, setMinTokens] = useState("250");
   const [timeoutVal, setTimeoutVal] = useState("120");
   const [compressToolResults, setCompressToolResults] = useState(true);
   const [showLogWindow, setShowLogWindow] = useState(false);
+  const [gpuBackend, setGpuBackend] = useState("auto");
 
   const save = async (fields: Partial<HeadroomConfigView>) => {
     try { await app.SaveHeadroomConfig(fields); } catch {}
@@ -5914,6 +5915,17 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
           </SettingsField>
           <SettingsField label={t("settings.headroomDisableKompress")} hint={t("settings.headroomDisableKompressHint")}>
             <ToggleSegment value={disableKompress} disabled={busy} onChange={(v) => { setDisableKompress(v); save({ disableKompress: v }); }} />
+          </SettingsField>
+          <SettingsField label={t("settings.headroomGpuBackend")} hint={t("settings.headroomGpuBackendHint")}>
+            <select className="mem-input" value={gpuBackend} disabled={busy}
+              onChange={(e) => { setGpuBackend(e.target.value); save({ gpuBackend: e.target.value }); }}
+              style={{ width: "160px" }}
+            >
+              <option value="auto">{t("settings.headroomGpuBackendAuto")}</option>
+              <option value="cpu">{t("settings.headroomGpuBackendCPU")}</option>
+              <option value="dml">DirectML (AMD)</option>
+              <option value="cuda">CUDA (NVIDIA)</option>
+            </select>
           </SettingsField>
           <SettingsField label={t("settings.headroomCompressToolResults")} hint={t("settings.headroomCompressToolResultsHint")}>
             <ToggleSegment value={compressToolResults} disabled={busy} onChange={(v) => { setCompressToolResults(v); save({ compressToolResults: v }); }} />

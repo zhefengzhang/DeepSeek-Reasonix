@@ -378,6 +378,9 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
 	if c.Headroom.ShowLogWindow {
 		b.WriteString("show_log_window = true\n")
 	}
+	if c.Headroom.GpuBackend != "" {
+		fmt.Fprintf(&b, "gpu_backend = %q   # auto|cpu|dml|cuda; GPU acceleration for ML Kompress\n", c.Headroom.GpuBackend)
+	}
 	b.WriteString("\n")
 
 	b.WriteString("[tools]\n")

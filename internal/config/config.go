@@ -1077,6 +1077,9 @@ type HeadroomConfig struct {
 	// ShowLogWindow shows the Python proxy console window with live logs.
 	// Default false (window hidden) for a clean desktop experience.
 	ShowLogWindow bool `toml:"show_log_window"`
+	// GpuBackend selects the GPU execution provider for Kompress ML inference.
+	// Values: "auto" (default) | "cpu" | "dml" (DirectML) | "cuda" (CUDA).
+	GpuBackend string `toml:"gpu_backend"`
 }
 
 // HeadroomPort returns the proxy port, defaulting to 8787.
@@ -1164,6 +1167,14 @@ func (h *HeadroomConfig) HeadroomShowLogWindow() bool {
 		return false
 	}
 	return h.ShowLogWindow
+}
+
+// HeadroomGpuBackend returns the GPU backend for Kompress ML, defaulting to "auto".
+func (h *HeadroomConfig) HeadroomGpuBackend() string {
+	if h == nil || h.GpuBackend == "" {
+		return "auto"
+	}
+	return h.GpuBackend
 }
 
 // ApplyPreset resolves a named preset to the underlying config knobs.

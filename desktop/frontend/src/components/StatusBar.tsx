@@ -42,7 +42,6 @@ function contextAvgRate(ctx: ContextInfo): string | null {
 
 function headroomSavingsTooltip(stats: import("../lib/types").HeadroomStatusView | undefined, t: Translator): string {
   if (!stats || !stats.running) return t("status.headroomOff");
-  if (stats.warming) return t("status.headroomWarming");
   // Always show lifetime data as primary summary
   if (stats.lifetimeTokens != null && stats.lifetimeTokens > 0) {
     const lifetimeCost = stats.lifetimeCost != null && stats.lifetimeCost > 0
@@ -349,9 +348,7 @@ export function StatusBar({
         <span className="stat statusbar__headroom">
           <MetricLabel style={metricLabelStyle} icon={<Zap size={12} />} label={t("status.headroomLabel")} />
           <b className={
-            headroomStats.warming
-              ? "stat__value--notice"
-              : headroomStats.running && headroomStats.lifetimePct != null && headroomStats.lifetimePct > 0
+            headroomStats.running && headroomStats.lifetimePct != null && headroomStats.lifetimePct > 0
               ? "stat__value--green"
               : headroomStats.running && headroomStats.lifetimeTokens != null && headroomStats.lifetimeTokens > 0
               ? "stat__value--green"
@@ -359,9 +356,7 @@ export function StatusBar({
               ? undefined
               : "stat__value--empty"
           }>
-            {headroomStats.warming
-              ? "⌛"
-              : headroomStats.running && headroomStats.lifetimePct != null && headroomStats.lifetimePct > 0
+            {headroomStats.running && headroomStats.lifetimePct != null && headroomStats.lifetimePct > 0
               ? Math.round(headroomStats.lifetimePct) + "%"
               : headroomStats.running && headroomStats.lifetimeTokens != null && headroomStats.lifetimeTokens > 0
               ? headroomStats.lifetimeTokens >= 1000000
