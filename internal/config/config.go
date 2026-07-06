@@ -1080,6 +1080,9 @@ type HeadroomConfig struct {
 	// GpuBackend selects the GPU execution provider for Kompress ML inference.
 	// Values: "auto" (default) | "cpu" | "dml" (DirectML) | "cuda" (CUDA).
 	GpuBackend string `toml:"gpu_backend"`
+	// KeepAlive keeps the proxy running after Reasonix exits so the next
+	// cold start is faster. Default false (proxy is stopped on exit).
+	KeepAlive bool `toml:"keep_alive"`
 }
 
 // HeadroomPort returns the proxy port, defaulting to 8787.
@@ -1175,6 +1178,15 @@ func (h *HeadroomConfig) HeadroomGpuBackend() string {
 		return "auto"
 	}
 	return h.GpuBackend
+}
+
+// HeadroomKeepAlive reports whether to keep the proxy running after
+// Reasonix exits. Default false — proxy is stopped on exit.
+func (h *HeadroomConfig) HeadroomKeepAlive() bool {
+	if h == nil {
+		return false
+	}
+	return h.KeepAlive
 }
 
 // ApplyPreset resolves a named preset to the underlying config knobs.

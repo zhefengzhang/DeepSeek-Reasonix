@@ -1034,6 +1034,7 @@ export interface HeadroomConfigView {
   compressToolResults?: boolean;
   showLogWindow?: boolean;
   gpuBackend?: string;
+  keepAlive?: boolean;
 }
 
 export interface HookConfigView {
@@ -1099,6 +1100,7 @@ export interface SettingsView {
   autoApproveTools: boolean;
   bypass: boolean; // legacy JSON key for live YOLO/full-access tool auto-approval
   headroomDisableKompress?: boolean; // persisted config for settings panel init
+  headroomKeepAlive?: boolean; // keep proxy running after Reasonix exits
 }
 
 export interface DesktopStartupSettingsView {

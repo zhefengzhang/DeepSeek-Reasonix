@@ -1844,6 +1844,8 @@ export const zh: Record<DictKey, string> = {
   "settings.headroomStarting": "Headroom 正在启动...（首次加载可能需要 30 秒）",
   "settings.headroomRunning": "Headroom 代理运行中 (端口 {port})",
   "settings.headroomStopped": "Headroom 代理已停止",
+  "settings.headroomKeepAlive": "退出后保持代理运行",
+  "settings.headroomKeepAliveHint": "Reasonix 退出后保持 Headroom 代理运行，加快下次启动速度。",
   "settings.headroomTokensSaved": "节省 {n} tokens ({pct}%)",
   "settings.headroomRestartNotice": "修改压缩设置后会重启代理服务，当前会话可能会出现短暂中断。",
 };

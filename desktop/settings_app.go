@@ -199,6 +199,7 @@ type SettingsView struct {
 	// HeadroomDisableKompress mirrors the config so the settings panel
 	// initialises the toggle from the persisted value, not a hard-coded default.
 	HeadroomDisableKompress bool `json:"headroomDisableKompress"`
+	HeadroomKeepAlive      bool `json:"headroomKeepAlive"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -597,6 +598,7 @@ func (a *App) Settings() SettingsView {
 		Bypass:                  ctrl != nil && ctrl.AutoApproveTools(),
 		HeadroomStatus:          headroomStatus,
 		HeadroomDisableKompress: cfg.Headroom.HeadroomDisableKompress(),
+		HeadroomKeepAlive:       cfg.Headroom.KeepAlive,
 	}
 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
 	root := a.activeWorkspaceRoot()

@@ -384,9 +384,15 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) beforeClose(ctx context.Context) bool {
-	// Stop headroom proxy first — a stale process blocks fresh starts
+	// Stop headroom proxy on exit unless the user opted to keep it alive
+	// for faster cold starts on the next launch.
 	if a.headroom != nil {
-		a.headroom.stop()
+		// Stop proxy on exit unless the user opted to keep it alive.
+		if cfg, err := config.Load(); err == nil && !cfg.Headroom.HeadroomKeepAlive() {
+			a.headroom.stop()
+		} else if err != nil {
+			a.headroom.stop() // safe default when config can't be loaded
+		}
 	}
 	if a.forceQuit.Swap(false) || consumeSystemQuitRequested() {
 		return false
@@ -662,7 +668,12 @@ func (a *App) shutdown(context.Context) {
 		a.heartbeat.Stop()
 	}
 	if a.headroom != nil {
-		a.headroom.stop()
+		// Stop proxy on exit unless the user opted to keep it alive.
+		if cfg, err := config.Load(); err == nil && !cfg.Headroom.HeadroomKeepAlive() {
+			a.headroom.stop()
+		} else if err != nil {
+			a.headroom.stop() // safe default when config can't be loaded
+		}
 	}
 	a.stopBotRuntime()
 	a.stopTray()

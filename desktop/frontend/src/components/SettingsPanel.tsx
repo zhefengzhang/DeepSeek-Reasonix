@@ -5826,6 +5826,7 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
   const [compressToolResults, setCompressToolResults] = useState(true);
   const [showLogWindow, setShowLogWindow] = useState(false);
   const [gpuBackend, setGpuBackend] = useState("auto");
+  const [keepAlive, setKeepAlive] = useState(() => s?.headroomKeepAlive ?? false);
 
   const save = async (fields: Partial<HeadroomConfigView>) => {
     try { await app.SaveHeadroomConfig(fields); } catch {}
@@ -5858,6 +5859,9 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
       )}
       <SettingsField label={t("settings.headroomLogWindow")} hint={t("settings.headroomLogWindowHint")}>
         <ToggleSegment value={showLogWindow} disabled={busy} onChange={(v) => { setShowLogWindow(v); save({ showLogWindow: v }); }} />
+      </SettingsField>
+      <SettingsField label={t("settings.headroomKeepAlive")} hint={t("settings.headroomKeepAliveHint")}>
+        <ToggleSegment value={keepAlive} disabled={busy} onChange={(v) => { setKeepAlive(v); save({ keepAlive: v }); }} />
       </SettingsField>
       <SettingsField label={t("settings.headroomMode")} hint={t("settings.headroomModeHint")}>
         <div className="set-seg">

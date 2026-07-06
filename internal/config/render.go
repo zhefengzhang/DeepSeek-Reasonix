@@ -381,6 +381,9 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
 	if c.Headroom.GpuBackend != "" {
 		fmt.Fprintf(&b, "gpu_backend = %q   # auto|cpu|dml|cuda; GPU acceleration for ML Kompress\n", c.Headroom.GpuBackend)
 	}
+	if c.Headroom.KeepAlive {
+		b.WriteString("keep_alive = true   # keep proxy running after Reasonix exits\n")
+	}
 	b.WriteString("\n")
 
 	b.WriteString("[tools]\n")

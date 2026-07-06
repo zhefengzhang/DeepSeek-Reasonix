@@ -1842,6 +1842,8 @@ export const en = {
   "settings.headroomStarting": "Headroom starting... (first load may take 30s)",
   "settings.headroomRunning": "Headroom proxy running (port {port})",
   "settings.headroomStopped": "Headroom proxy stopped",
+  "settings.headroomKeepAlive": "Keep proxy alive on exit",
+  "settings.headroomKeepAliveHint": "Keep the Headroom proxy running after Reasonix exits for faster cold starts.",
   "settings.headroomTokensSaved": "{n} tokens saved ({pct}%)",
   "settings.headroomRestartNotice": "Changes to compression settings restart the proxy service. Active conversations may briefly pause.",
 };

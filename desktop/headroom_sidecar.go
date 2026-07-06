@@ -512,6 +512,13 @@ func (a *App) autoStartHeadroom() {
 		slog.Warn("headroom: cannot determine upstream URL for auto-start")
 		return
 	}
+	// If the proxy is already running (left from a previous session with
+	// stop_on_exit=false), skip starting a new one.
+	if a.headroom.healthCheck() {
+		slog.Info("headroom: proxy already running, skipping auto-start")
+		a.headroom.startErr = ""
+		return
+	}
 	a.headroom.startErr = ""
 	if err := a.headroom.start(cfg, upstreamURL); err != nil {
 		a.headroom.startErr = err.Error()
@@ -647,11 +654,22 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 	if in.GpuBackend != "" {
 		cfg.Headroom.GpuBackend = in.GpuBackend
 	}
+	if in.KeepAlive != nil {
+		cfg.Headroom.KeepAlive = *in.KeepAlive
+	}
 	if err := cfg.SaveTo(path); err != nil {
 		return fmt.Errorf("save config: %w", err)
 	}
-	// Restart proxy if it was running — wait for port release first
-	if a.headroom != nil && a.headroom.healthCheck() {
+	// Restart proxy only when a runtime-affecting field changed.
+	// keepAlive is a pure shutdown-policy setting; it never needs a restart.
+	needsRestart := false
+	if in.Preset != "" || in.CodeAware != nil || in.CCR != nil || in.ProtectErrors != nil ||
+		in.MinTokens > 0 || in.DisableKompress != nil || in.RequestTimeout > 0 ||
+		in.CompressToolResults != nil || in.Mode != "" || in.ShowLogWindow != nil ||
+		in.GpuBackend != "" {
+		needsRestart = true
+	}
+	if needsRestart && a.headroom != nil && a.headroom.healthCheck() {
 		a.headroom.stop()
 		// Give the OS time to release the port before binding again.
 		// On Windows, SO_REUSEADDR is not the default, so a fresh process
@@ -678,6 +696,7 @@ type HeadroomConfigView struct {
 	CompressToolResults *bool  `json:"compressToolResults,omitempty"`
 	ShowLogWindow   *bool  `json:"showLogWindow,omitempty"`
 	GpuBackend      string `json:"gpuBackend,omitempty"` // "auto" | "cpu" | "dml" | "cuda"
+	KeepAlive       *bool  `json:"keepAlive,omitempty"`   // keep proxy running after exit
 }
 
 // StopHeadroom stops the headroom proxy (Wails binding).

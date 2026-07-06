@@ -1228,6 +1228,8 @@ export const zhTW: Record<DictKey, string> = {
   "settings.headroomStarting": "Headroom 正在啟動...（首次載入可能需要 30 秒）",
   "settings.headroomRunning": "Headroom 代理執行中 (連接埠 {port})",
   "settings.headroomStopped": "Headroom 代理已停止",
+  "settings.headroomKeepAlive": "退出後保持代理執行",
+  "settings.headroomKeepAliveHint": "Reasonix 退出後保持 Headroom 代理執行，加快下次啟動速度。",
   "settings.headroomTokensSaved": "節省 {n} tokens ({pct}%)",
   "tabBar.closeTab": "關閉標籤頁",
   "tabBar.closeOtherTabs": "關閉其他標籤頁",
