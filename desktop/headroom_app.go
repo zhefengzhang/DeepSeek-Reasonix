@@ -22,11 +22,11 @@ func (a *App) autoStartHeadroom() {
 		return
 	}
 	var upstreamURL string
-	for _, p := range cfg.Providers {
-		if p.HeadroomEnabled && p.BaseURL != "" {
-			upstreamURL = headroomUpstreamURL(p.BaseURL)
-			break
-		}
+	// Only auto-start if the default model's provider has headroom enabled.
+	// This prevents other providers (e.g. deepseek-flash) from inadvertently
+	// triggering headroom when the user toggled it off for their active model.
+	if entry, ok := cfg.ResolveModel(cfg.DefaultModel); ok && entry.HeadroomEnabled && entry.BaseURL != "" {
+		upstreamURL = headroomUpstreamURL(entry.BaseURL)
 	}
 	if upstreamURL == "" {
 		// No provider has headroom enabled. If a headroom proxy from a previous

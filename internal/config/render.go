@@ -360,6 +360,8 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
 			}
 			if p.HeadroomEnabled {
 				b.WriteString("headroom_enabled = true   # route through local Headroom compression proxy\n")
+			} else {
+				b.WriteString("headroom_enabled = false\n")
 			}
 			b.WriteString("\n")
 		}
