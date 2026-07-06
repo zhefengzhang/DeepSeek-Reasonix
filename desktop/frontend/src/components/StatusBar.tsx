@@ -43,16 +43,28 @@ function contextAvgRate(ctx: ContextInfo): string | null {
 function headroomSavingsTooltip(stats: import("../lib/types").HeadroomStatusView | undefined, t: Translator): string {
   if (!stats || !stats.running) return t("status.headroomOff");
   if (stats.warming) return t("status.headroomWarming");
-  if (stats.savingsPct != null && stats.savingsPct > 0) {
-    const cost = stats.costSaved != null && stats.costSaved > 0
-      ? (stats.costCurrency ?? "") + stats.costSaved.toFixed(4)
+  // Always show lifetime data as primary summary
+  if (stats.lifetimeTokens != null && stats.lifetimeTokens > 0) {
+    const lifetimeCost = stats.lifetimeCost != null && stats.lifetimeCost > 0
+      ? " (" + (stats.costCurrency ?? "") + stats.lifetimeCost.toFixed(4) + ")"
       : "";
-    return t("status.headroomSavings", {
-      pct: Math.round(stats.savingsPct),
-      tokens: (stats.tokensSaved ?? 0).toLocaleString(),
-      requests: String(stats.requests ?? 0),
-      cost,
+    let msg = t("status.headroomLifetime", {
+      tokens: stats.lifetimeTokens.toLocaleString(),
+      cost: lifetimeCost,
     });
+    // Append session details only when this session has actual requests
+    if (stats.requests != null && stats.requests > 0 && stats.savingsPct != null && stats.savingsPct > 0) {
+      const cost = stats.costSaved != null && stats.costSaved > 0
+        ? (stats.costCurrency ?? "") + stats.costSaved.toFixed(4)
+        : "";
+      msg += " — " + t("status.headroomSavings", {
+        pct: Math.round(stats.savingsPct),
+        tokens: (stats.tokensSaved ?? 0).toLocaleString(),
+        requests: String(stats.requests ?? 0),
+        cost,
+      });
+    }
+    return msg;
   }
   return t("status.headroomRunning", { requests: String(stats.requests ?? 0) });
 }
@@ -339,7 +351,9 @@ export function StatusBar({
           <b className={
             headroomStats.warming
               ? "stat__value--notice"
-              : headroomStats.running && headroomStats.savingsPct && headroomStats.savingsPct > 0
+              : headroomStats.running && headroomStats.lifetimePct != null && headroomStats.lifetimePct > 0
+              ? "stat__value--green"
+              : headroomStats.running && headroomStats.lifetimeTokens != null && headroomStats.lifetimeTokens > 0
               ? "stat__value--green"
               : headroomStats.running
               ? undefined
@@ -347,10 +361,14 @@ export function StatusBar({
           }>
             {headroomStats.warming
               ? "⌛"
-              : headroomStats.running
-              ? headroomStats.savingsPct != null && headroomStats.savingsPct > 0
-                ? Math.round(headroomStats.savingsPct) + "%"
-                : "-"
+              : headroomStats.running && headroomStats.lifetimePct != null && headroomStats.lifetimePct > 0
+              ? Math.round(headroomStats.lifetimePct) + "%"
+              : headroomStats.running && headroomStats.lifetimeTokens != null && headroomStats.lifetimeTokens > 0
+              ? headroomStats.lifetimeTokens >= 1000000
+                ? (headroomStats.lifetimeTokens / 1000000).toFixed(1) + "M"
+                : (headroomStats.lifetimeTokens >= 1000
+                  ? (headroomStats.lifetimeTokens / 1000).toFixed(1) + "K"
+                  : String(headroomStats.lifetimeTokens))
               : "-"}
           </b>
         </span>

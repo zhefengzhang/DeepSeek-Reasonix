@@ -1074,6 +1074,9 @@ type HeadroomConfig struct {
 	// CompressToolResults clears the tool-exclusion list so tool outputs enter the
 	// compression pipeline. Default false.
 	CompressToolResults bool `toml:"compress_tool_results"`
+	// ShowLogWindow shows the Python proxy console window with live logs.
+	// Default false (window hidden) for a clean desktop experience.
+	ShowLogWindow bool `toml:"show_log_window"`
 }
 
 // HeadroomPort returns the proxy port, defaulting to 8787.
@@ -1152,6 +1155,15 @@ func (h *HeadroomConfig) HeadroomRequestTimeout() int {
 		return 300
 	}
 	return h.RequestTimeout
+}
+
+// HeadroomShowLogWindow reports whether to show the proxy console window.
+// Default false (hidden) for a clean desktop experience.
+func (h *HeadroomConfig) HeadroomShowLogWindow() bool {
+	if h == nil {
+		return false
+	}
+	return h.ShowLogWindow
 }
 
 // ApplyPreset resolves a named preset to the underlying config knobs.

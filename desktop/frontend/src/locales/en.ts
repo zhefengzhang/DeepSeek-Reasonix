@@ -487,6 +487,7 @@ export const en = {
   "status.headroomWarming": "Kompress warming up — first request may be slow",
   "status.headroomRunning": "Headroom proxy running ({requests} requests, no savings yet)",
   "status.headroomSavings": "Headroom compressed {pct}% ({tokens} tokens saved across {requests} requests, saved {cost})",
+  "status.headroomLifetime": "Lifetime: {tokens} tokens saved{cost}",
   "status.spendTitle": "Estimated billable spend in this session, including model, subagent, and helper calls",
 
   // ── Heartbeat ──
@@ -1809,6 +1810,10 @@ export const en = {
   "settings.headroomPresetWrite": "Write",
   "settings.headroomPresetMax": "Max",
   "settings.headroomPresetCustom": "Custom",
+  "settings.headroomMode": "Compression mode",
+  "settings.headroomModeToken": "Token",
+  "settings.headroomModeCache": "Cache",
+  "settings.headroomLogWindow": "Show log window",
   "settings.headroomSettingsTitle": "Headroom Compression Settings",
   "settings.headroomCodeAware": "Code-aware compression (AST)",
   "settings.headroomCCR": "Reversible compression (CCR)",
@@ -1816,11 +1821,13 @@ export const en = {
   "settings.headroomMinTokens": "Minimum token threshold",
   "settings.headroomDisableKompress": "Disable ML Kompress (faster, lower ratio)",
   "settings.headroomRequestTimeout": "Request timeout (seconds)",
+  "settings.headroomModeHint": "Token: real-time token-level compression (default). Cache: reuses compressed results for repeated content; first request warms the cache.",
   "settings.headroomPresetHint": "Select a compression profile. Custom settings below override the preset.",
   "settings.headroomCodeAwareHint": "AST-level code compression. Requires headroom-ai[code]. Recommended for programming.",
   "settings.headroomCCRHint": "Reversible compression: LLM can retrieve originals via headroom_retrieve. Recommended for writing.",
   "settings.headroomProtectErrorsHint": "Keep error messages verbatim. Turn OFF for max compression at risk of detail loss.",
   "settings.headroomDisableKompressHint": "ML text model (500MB+). Disabled on Windows — ONNX Runtime may crash without GPU.",
+  "settings.headroomLogWindowHint": "Show the Python proxy console window with live logs. Disabled by default for a clean desktop experience.",
 
   "settings.headroomCompressToolResultsHint": "When enabled, tool outputs enter compression. Higher ratio, small risk of detail loss.",
   "settings.headroomCompressToolResults": "Aggressive tool output compression",

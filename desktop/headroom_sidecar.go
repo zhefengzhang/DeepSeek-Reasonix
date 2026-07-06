@@ -39,6 +39,9 @@ type HeadroomStatusView struct {
 	SavingsPct   float64 `json:"savingsPct,omitempty"`
 	CostSaved    float64 `json:"costSaved,omitempty"`
 	CostCurrency string  `json:"costCurrency,omitempty"`
+	LifetimeTokens int     `json:"lifetimeTokens,omitempty"`
+	LifetimePct    float64 `json:"lifetimePct,omitempty"`
+	LifetimeCost   float64 `json:"lifetimeCost,omitempty"`
 	ErrorMessage string  `json:"errorMessage,omitempty"`
 	Warming      bool    `json:"warming,omitempty"` // true when Kompress enabled but not yet used
 }
@@ -57,6 +60,9 @@ type headroomSidecar struct {
 	wasEverReady    bool       // true once the proxy has been healthy at least once
 	inputPricePer1M float64    // input cost per 1M tokens in user currency
 	priceCurrency   string     // e.g. "¥"
+	startErr        string     // last auto-start error; consumed by emitHeadroomStats
+	startRetried    bool       // true after one retry attempt from poll loop
+	kompressDisabled bool     // true when Kompress ML is disabled by config
 }
 
 func newHeadroomSidecar() *headroomSidecar {
@@ -187,6 +193,7 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 			)
 		}
 	}
+	h.kompressDisabled = disableKompress
 	if cfg.Headroom.CodeAware {
 		env = append(env, "HEADROOM_CODE_AWARE_ENABLED=1")
 	}
@@ -202,12 +209,16 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 	if mt := cfg.Headroom.HeadroomMinTokens(); mt > 0 {
 		env = append(env, "HEADROOM_MIN_TOKENS="+strconv.Itoa(mt))
 	}
+	env = append(env, "HEADROOM_MODE="+mode)
 	cmd.Env = env
 
 	// Capture stdout/stderr for logging
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
+	if !cfg.Headroom.HeadroomShowLogWindow() {
+		cmd.SysProcAttr = hideConsoleAttr()
+	}
 	if err := cmd.Start(); err != nil {
 		cancel()
 		return fmt.Errorf("start headroom proxy: %w", err)
@@ -286,12 +297,25 @@ func (h *headroomSidecar) status() HeadroomStatusView {
 		// Fetch live stats
 		stats, err := h.fetchStats(port)
 		if err == nil {
+			tokensSaved := stats.TokensSaved
+			savingsPct := stats.SavingsPct
+			lifetimePct := 0.0
+			if stats.LifetimeTokens > 0 && stats.LifetimeInput > 0 {
+				lifetimePct = float64(stats.LifetimeTokens) / float64(stats.LifetimeInput) * 100
+			}
 			v.Requests = stats.Requests
-			v.TokensSaved = stats.TokensSaved
-			v.SavingsPct = stats.SavingsPct
+			v.TokensSaved = tokensSaved
+			v.SavingsPct = savingsPct
+			v.LifetimeTokens = stats.LifetimeTokens
+			v.LifetimePct = lifetimePct
 			if h.inputPricePer1M > 0 {
-				v.CostSaved = float64(stats.TokensSaved) * h.inputPricePer1M / 1_000_000
 				v.CostCurrency = h.priceCurrency
+				if tokensSaved > 0 {
+					v.CostSaved = float64(tokensSaved) * h.inputPricePer1M / 1_000_000
+				}
+				if stats.LifetimeTokens > 0 {
+					v.LifetimeCost = float64(stats.LifetimeTokens) * h.inputPricePer1M / 1_000_000
+				}
 			}
 		}
 	}
@@ -321,9 +345,12 @@ func (h *headroomSidecar) healthCheck() bool {
 
 // proxyStats is the subset of /stats we care about.
 type proxyStats struct {
-	Requests    int
-	TokensSaved int
-	SavingsPct  float64
+	Requests        int
+	TokensSaved     int
+	SavingsPct      float64
+	LifetimeTokens  int     // persistent lifetime tokens saved
+	LifetimeUSD     float64 // persistent lifetime USD saved
+	LifetimeInput   int     // lifetime total input tokens
 }
 
 func (h *headroomSidecar) fetchStats(port int) (*proxyStats, error) {
@@ -347,16 +374,29 @@ func (h *headroomSidecar) fetchStats(port int) (*proxyStats, error) {
 				AvgCompressionPct  float64 `json:"avg_compression_pct"`
 			} `json:"compression"`
 		} `json:"summary"`
+		PersistentSavings *struct {
+			Lifetime struct {
+				TokensSaved      int     `json:"tokens_saved"`
+				SavingsUSD       float64 `json:"compression_savings_usd"`
+				TotalInputTokens int     `json:"total_input_tokens"`
+			} `json:"lifetime"`
+		} `json:"persistent_savings"`
 	}
 	if err := json.NewDecoder(resp.Body).Decode(&raw); err != nil {
 		return nil, err
 	}
 
-	return &proxyStats{
+	ps := &proxyStats{
 		Requests:    raw.Summary.APIRequests,
 		TokensSaved: raw.Summary.Compression.TotalTokensRemoved,
 		SavingsPct:  raw.Summary.Compression.AvgCompressionPct,
-	}, nil
+	}
+	if raw.PersistentSavings != nil {
+		ps.LifetimeTokens = raw.PersistentSavings.Lifetime.TokensSaved
+		ps.LifetimeUSD = raw.PersistentSavings.Lifetime.SavingsUSD
+		ps.LifetimeInput = raw.PersistentSavings.Lifetime.TotalInputTokens
+	}
+	return ps, nil
 }
 
 func (h *headroomSidecar) waitForReady(ctx context.Context, port int) {
@@ -436,22 +476,17 @@ func (a *App) autoStartHeadroom() {
 		slog.Debug("headroom: auto-start disabled in config")
 		return
 	}
-	// Apply compression preset and persist defaults only if the [headroom]
-	// section was ever lost (all fields at Go zero values).
-	needsSave := cfg.Headroom.Preset == "" && cfg.Headroom.CodeAware == false &&
-		cfg.Headroom.MinTokens == 0 && cfg.Headroom.RequestTimeout == 0
+	// Apply compression preset to memory so env-var flags in start() reflect
+	// the configured preset defaults — don't persist to disk on every boot.
 	cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
-	if needsSave {
-		if cfg.SaveTo(config.UserConfigPath()) != nil {
-			slog.Debug("headroom: could not persist defaults after recovery")
-		}
-	}
 	upstreamURL := upstreamURLForConfig(cfg)
 	if upstreamURL == "" {
 		slog.Warn("headroom: cannot determine upstream URL for auto-start")
 		return
 	}
+	a.headroom.startErr = ""
 	if err := a.headroom.start(cfg, upstreamURL); err != nil {
+		a.headroom.startErr = err.Error()
 		slog.Warn("headroom: auto-start failed", "err", err)
 	}
 }
@@ -575,6 +610,12 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 	if in.CompressToolResults != nil {
 		cfg.Headroom.CompressToolResults = *in.CompressToolResults
 	}
+	if in.Mode != "" {
+		cfg.Headroom.Mode = in.Mode
+	}
+	if in.ShowLogWindow != nil {
+		cfg.Headroom.ShowLogWindow = *in.ShowLogWindow
+	}
 	if err := cfg.SaveTo(path); err != nil {
 		return fmt.Errorf("save config: %w", err)
 	}
@@ -596,6 +637,7 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 // HeadroomConfigView carries headroom proxy settings from the frontend.
 type HeadroomConfigView struct {
 	Preset          string `json:"preset,omitempty"`
+	Mode            string `json:"mode,omitempty"`       // "token" | "cache"
 	CodeAware       *bool  `json:"codeAware,omitempty"`
 	CCR             *bool  `json:"ccr,omitempty"`
 	ProtectErrors   *bool  `json:"protectErrors,omitempty"`
@@ -603,6 +645,7 @@ type HeadroomConfigView struct {
 	DisableKompress *bool  `json:"disableKompress,omitempty"`
 	RequestTimeout  int    `json:"requestTimeout,omitempty"`
 	CompressToolResults *bool  `json:"compressToolResults,omitempty"`
+	ShowLogWindow   *bool  `json:"showLogWindow,omitempty"`
 }
 
 // StopHeadroom stops the headroom proxy (Wails binding).
@@ -644,12 +687,31 @@ func (a *App) emitHeadroomStats() {
 		port = 8787
 	}
 	if !a.headroom.healthCheck() {
-		// Report status only — proxy lifecycle is managed by autoStartHeadroom
-		// (startup) and SaveHeadroomConfig (settings save). The poller must
-		// not auto-start, otherwise a temporarily unresponsive proxy (busy
-		// compressing) would trigger a restart loop that breaks conversations.
+		// Single retry on first poll if auto-start failed and proxy never ran.
+		// This guards against transient failures (port race, slow python startup)
+		// without risking a restart loop on a formerly-healthy proxy.
+		if !a.headroom.wasEverReady && !a.headroom.startRetried {
+			a.headroom.startRetried = true
+			a.headroom.startErr = ""
+			cfg, err := config.Load()
+			if err == nil && HeadroomHasUpstream(cfg) {
+				cfg.Headroom.ApplyPreset(cfg.Headroom.HeadroomPreset())
+				if url := upstreamURLForConfig(cfg); url != "" {
+					if err := a.headroom.start(cfg, url); err != nil {
+						a.headroom.startErr = err.Error()
+						slog.Warn("headroom: retry start failed", "err", err)
+					}
+				}
+			}
+			// Re-check after retry attempt; fall through to emit below.
+		}
+		errMsg := a.headroom.startErr
+		if errMsg != "" {
+			slog.Warn("headroom: forwarding auto-start error to frontend", "error", errMsg)
+		}
 		a.emitRuntimeEvent("headroom:stats", HeadroomStatusView{
 			Running: false, Installed: a.headroom.installed(), Port: port,
+			ErrorMessage: errMsg,
 		})
 		return
 	}
@@ -671,25 +733,42 @@ func (a *App) emitHeadroomStats() {
 		return
 	}
 	warming := false
-	if !isKompressDisabled(port) {
+	if !a.headroom.kompressDisabled {
 		warming = kompressRunSeconds(port) == 0
 	}
+	// Keep session data as-is (0 when no requests yet). Send lifetime data
+	// separately so the frontend can choose what to display.
+	tokensSaved := stats.TokensSaved
+	savingsPct := stats.SavingsPct
+	lifetimePct := 0.0
+	if stats.LifetimeTokens > 0 && stats.LifetimeInput > 0 {
+		lifetimePct = float64(stats.LifetimeTokens) / float64(stats.LifetimeInput) * 100
+	}
 	costSaved := 0.0
+	lifetimeCost := 0.0
 	costCurrency := ""
 	if a.headroom.inputPricePer1M > 0 {
-		costSaved = float64(stats.TokensSaved) * a.headroom.inputPricePer1M / 1_000_000
 		costCurrency = a.headroom.priceCurrency
+		if tokensSaved > 0 {
+			costSaved = float64(tokensSaved) * a.headroom.inputPricePer1M / 1_000_000
+		}
+		if stats.LifetimeTokens > 0 {
+			lifetimeCost = float64(stats.LifetimeTokens) * a.headroom.inputPricePer1M / 1_000_000
+		}
 	}
 	a.emitRuntimeEvent("headroom:stats", HeadroomStatusView{
-		Running:      true,
-		Installed:    true,
-		Port:         port,
-		Requests:     stats.Requests,
-		TokensSaved:  stats.TokensSaved,
-		SavingsPct:   stats.SavingsPct,
-		CostSaved:    costSaved,
-		CostCurrency: costCurrency,
-		Warming:      warming,
+		Running:        true,
+		Installed:      true,
+		Port:           port,
+		Requests:       stats.Requests,
+		TokensSaved:    tokensSaved,
+		SavingsPct:     savingsPct,
+		CostSaved:      costSaved,
+		CostCurrency:   costCurrency,
+		LifetimeTokens: stats.LifetimeTokens,
+		LifetimePct:    lifetimePct,
+		LifetimeCost:   lifetimeCost,
+		Warming:        warming,
 	})
 }
 

@@ -3538,7 +3538,6 @@ export default function App() {
               insertRequest={composerInsertRequest}
               readOnly={Boolean(activeTab?.readOnly)}
               disabled={rewindCommitting || state.messageAction != null || state.approval != null || state.ask != null || clearContextPending}
-              headroomStats={headroomStats}
               submitDisabled={!controllerReady}
               decisionPending={rewindCommitting || state.messageAction != null || state.approval != null || state.ask != null || clearContextPending}
               ready={controllerReady}
@@ -3641,7 +3640,6 @@ export default function App() {
                   tabId={activeTabId}
                   context={state.context}
                   usage={state.usage}
-                  headroomStats={headroomStats}
                   sessionTokens={state.sessionTokens}
                   sessionCost={state.sessionCost}
                   sessionCurrency={state.sessionCurrency}

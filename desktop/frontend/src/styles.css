@@ -13216,6 +13216,11 @@ body > .mermaid-diagram--fullscreen {
   background: color-mix(in srgb, var(--warn) 10%, transparent);
   color: var(--warn);
 }
+.provider-card-status--error {
+  border-color: color-mix(in srgb, var(--danger) 38%, var(--border));
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: var(--danger);
+}
 .provider-model-draft {
   display: flex;
   flex-direction: column;
@@ -27761,16 +27766,3 @@ body > .mermaid-diagram--fullscreen {
 
 
 /* Compressing indicator */
-.composer__compressing {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-right: 6px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  animation: composer-compressing-pulse 1.2s ease-in-out infinite;
-}
-@keyframes composer-compressing-pulse {
-  0%, 100% { opacity: 0.5; }
-  50%      { opacity: 1; }
-}

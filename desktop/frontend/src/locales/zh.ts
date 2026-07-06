@@ -488,6 +488,7 @@ export const zh: Record<DictKey, string> = {
   "status.headroomWarming": "Kompress 预热中 — 首次请求可能较慢",
   "status.headroomRunning": "Headroom 代理运行中 ({requests} 请求，暂无压缩)",
   "status.headroomSavings": "Headroom 压缩 {pct}%（节省 {tokens} tokens，共 {requests} 次请求，节省 {cost}）",
+  "status.headroomLifetime": "累计: {tokens} tokens{cost}",
   "status.spendTitle": "当前会话估算计费费用，包含主模型、子代理和辅助调用",
 
   // ── Heartbeat ──
@@ -1811,6 +1812,10 @@ export const zh: Record<DictKey, string> = {
   "settings.headroomPresetWrite": "写作",
   "settings.headroomPresetMax": "最大",
   "settings.headroomPresetCustom": "自定义",
+  "settings.headroomMode": "压缩模式",
+  "settings.headroomModeToken": "Token",
+  "settings.headroomModeCache": "Cache",
+  "settings.headroomLogWindow": "显示日志窗口",
   "settings.headroomSettingsTitle": "Headroom 压缩设置",
   "settings.headroomCodeAware": "代码感知压缩 (AST)",
   "settings.headroomCCR": "可逆压缩 (CCR)",
@@ -1818,11 +1823,13 @@ export const zh: Record<DictKey, string> = {
   "settings.headroomMinTokens": "最小压缩阈值",
   "settings.headroomDisableKompress": "禁用 ML Kompress（更快、更低压缩率）",
   "settings.headroomRequestTimeout": "请求超时（秒）",
+  "settings.headroomModeHint": "Token：实时 token 级压缩，延迟低，适合交互式对话（默认）。Cache：缓存复用压缩结果，重复内容场景压缩率更高；首次请求预热缓存。",
   "settings.headroomPresetHint": "选择压缩预设。下方的自定义设置会覆盖预设值。",
   "settings.headroomCodeAwareHint": "AST 级代码压缩。需 headroom-ai[code]。编程场景推荐。",
   "settings.headroomCCRHint": "可逆压缩：LLM 可通过 headroom_retrieve 取回原文。写作场景推荐。",
   "settings.headroomProtectErrorsHint": "保留错误信息原文。关闭可获得更高压缩比，但可能丢失细节。",
   "settings.headroomDisableKompressHint": "ML 文本模型（500MB+）。Windows 上禁用——无 GPU 的 ONNX Runtime 可能崩溃。",
+  "settings.headroomLogWindowHint": "显示 Python 代理控制台窗口及实时日志。默认关闭以保持桌面整洁。",
 
   "settings.headroomCompressToolResultsHint": "启用后 tool 输出将进入压缩流程。更高压缩比，略有细节损失风险。",
   "settings.headroomCompressToolResults": "激进工具输出压缩",

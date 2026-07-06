@@ -5816,6 +5816,7 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
   const t = useT();
   const [expanded, setExpanded] = useState(false);
   const [preset, setPreset] = useState("coding");
+  const [mode, setMode] = useState<"token" | "cache">("token");
   const [codeAware, setCodeAware] = useState(true);
   const [ccr, setCcr] = useState(false);
   const [protectErrors, setProtectErrors] = useState(false);
@@ -5823,6 +5824,7 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
   const [minTokens, setMinTokens] = useState("250");
   const [timeoutVal, setTimeoutVal] = useState("120");
   const [compressToolResults, setCompressToolResults] = useState(true);
+  const [showLogWindow, setShowLogWindow] = useState(false);
 
   const save = async (fields: Partial<HeadroomConfigView>) => {
     try { await app.SaveHeadroomConfig(fields); } catch {}
@@ -5833,19 +5835,43 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
     save({ preset: p });
   };
 
+  const handleMode = (m: "token" | "cache") => {
+    setMode(m);
+    save({ mode: m });
+  };
+
   return (
     <SettingsSection title={t("settings.headroomSettingsTitle")} description={t("settings.headroomRestartNotice")}>
       {s?.headroomStatus && (
-        <div className={`provider-card-status provider-card-status--${s.headroomStatus.running ? "info" : "warn"}`}>
-          {s.headroomStatus.running
-            ? t("settings.headroomRunning", { port: String(s.headroomStatus.port) })
-            : s.headroomStatus.warming
-              ? t("settings.headroomStarting")
-              : s.headroomStatus.installed
-                ? t("settings.headroomNotEnabled")
-                : t("settings.headroomNotInstalled")}
+        <div className={`provider-card-status provider-card-status--${s.headroomStatus.running ? "info" : s.headroomStatus.errorMessage ? "error" : "warn"}`}>
+          {s.headroomStatus.errorMessage
+            ? s.headroomStatus.errorMessage
+            : s.headroomStatus.running
+              ? t("settings.headroomRunning", { port: String(s.headroomStatus.port) })
+              : s.headroomStatus.warming
+                ? t("settings.headroomStarting")
+                : s.headroomStatus.installed
+                  ? t("settings.headroomNotEnabled")
+                  : t("settings.headroomNotInstalled")}
         </div>
       )}
+      <SettingsField label={t("settings.headroomLogWindow")} hint={t("settings.headroomLogWindowHint")}>
+        <ToggleSegment value={showLogWindow} disabled={busy} onChange={(v) => { setShowLogWindow(v); save({ showLogWindow: v }); }} />
+      </SettingsField>
+      <SettingsField label={t("settings.headroomMode")} hint={t("settings.headroomModeHint")}>
+        <div className="set-seg">
+          {(["token", "cache"] as const).map((m) => (
+            <button
+              key={m}
+              className={`set-seg__btn${mode === m ? " set-seg__btn--on" : ""}`}
+              disabled={busy}
+              onClick={() => handleMode(m)}
+            >
+              {m === "token" ? t("settings.headroomModeToken") : t("settings.headroomModeCache")}
+            </button>
+          ))}
+        </div>
+      </SettingsField>
       <SettingsField label={t("settings.headroomPreset")} hint={t("settings.headroomPresetHint")}>
         <div className="set-seg">
           {(["coding", "custom"] as const).map((p) => (

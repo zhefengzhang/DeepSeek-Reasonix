@@ -1015,12 +1015,16 @@ export interface HeadroomStatusView {
   savingsPct?: number;
   costSaved?: number;
   costCurrency?: string;
+  lifetimeTokens?: number;
+  lifetimePct?: number;
+  lifetimeCost?: number;
   errorMessage?: string;
   warming?: boolean;
 }
 
 export interface HeadroomConfigView {
   preset?: string;      // "writing" | "coding" | "max"
+  mode?: "token" | "cache";
   codeAware?: boolean;
   ccr?: boolean;
   protectErrors?: boolean;
@@ -1028,6 +1032,7 @@ export interface HeadroomConfigView {
   disableKompress?: boolean;
   requestTimeout?: number;
   compressToolResults?: boolean;
+  showLogWindow?: boolean;
 }
 
 export interface HookConfigView {
