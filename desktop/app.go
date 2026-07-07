@@ -4969,11 +4969,7 @@ func (a *App) GetGuidancePrompt() string {
 	if tab == nil || tab.Ctrl == nil {
 		return ""
 	}
-	g, ok := tab.Ctrl.(interface{ GuidancePrompt() string })
-	if !ok {
-		return ""
-	}
-	return g.GuidancePrompt()
+	return tab.Ctrl.GuidancePrompt()
 }
 
 // SetGuidancePrompt sets the per-session guidance prompt.
@@ -4982,11 +4978,7 @@ func (a *App) SetGuidancePrompt(text string) error {
 	if tab == nil || tab.Ctrl == nil {
 		return fmt.Errorf("no active session")
 	}
-	s, ok := tab.Ctrl.(interface{ SetGuidancePrompt(string) })
-	if !ok {
-		return nil
-	}
-	s.SetGuidancePrompt(text)
+	tab.Ctrl.SetGuidancePrompt(text)
 	return nil
 }
 

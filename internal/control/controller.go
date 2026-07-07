@@ -1498,8 +1498,20 @@ func (c *Controller) SetPlanMode(v bool) {
 // every user message as a <guidance> block.
 func (c *Controller) SetGuidancePrompt(text string) {
 	c.mu.Lock()
-	defer c.mu.Unlock()
 	c.guidancePrompt = text
+	c.mu.Unlock()
+	// Persist to session meta so the prompt survives tab rebuilds and restarts.
+	if path := c.SessionPath(); path != "" {
+		meta, ok, err := agent.LoadBranchMeta(path)
+		if err != nil {
+			return
+		}
+		if !ok {
+			meta, _ = agent.EnsureBranchMeta(path)
+		}
+		meta.GuidancePrompt = text
+		agent.SaveBranchMetaPreserveUpdated(path, meta)
+	}
 }
 
 // GuidancePrompt returns the current per-session guidance prompt.
@@ -2478,6 +2490,7 @@ func (c *Controller) Resume(s *agent.Session, path string) {
 	c.loadGuardianSession()
 	c.recoverInterruptedTurn(path)
 	c.maybeColdResumePrune(path)
+	c.restoreGuidancePromptFromMeta(path)
 }
 
 func (c *Controller) loadGuardianSession() {
@@ -2778,6 +2791,18 @@ func (c *Controller) SetSessionPath(p string) {
 	c.mu.Unlock()
 	c.setActiveJobSession(p)
 	c.rebindCheckpoints(p)
+	c.restoreGuidancePromptFromMeta(p)
+}
+
+// restoreGuidancePromptFromMeta loads the per-session guidance prompt from the
+// session's BranchMeta sidecar file, if present. Safe to call on any path.
+func (c *Controller) restoreGuidancePromptFromMeta(path string) {
+	if path == "" {
+		return
+	}
+	if meta, ok, err := agent.LoadBranchMeta(path); err == nil && ok && meta.GuidancePrompt != "" {
+		c.guidancePrompt = meta.GuidancePrompt
+	}
 }
 
 // SessionDestroyHandle separates waiting for cancelled jobs from ending the

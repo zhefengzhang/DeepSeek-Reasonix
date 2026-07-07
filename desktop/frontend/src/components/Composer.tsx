@@ -659,7 +659,7 @@ export function Composer({
       setGuidancePrompt(v ?? "");
       setGuidanceLoaded(true);
     }).catch(() => {});
-  }, [draftKey]);
+  }, [draftKey, ready]);
 
   useEffect(() => {
     if (!running || !guidanceQueuePreviewKey) return;

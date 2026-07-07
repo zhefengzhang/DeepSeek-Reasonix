@@ -200,6 +200,8 @@ type Settings interface {
 	SetMemoryCompilerEnabled(enabled bool)
 	SetMemoryCompilerVerbosity(verbosity string)
 	SetDisplayRecorder(fn func(content, display string))
+	GuidancePrompt() string
+	SetGuidancePrompt(text string)
 }
 
 // SessionAPI is the full driving port — the composition of every sub-port. A

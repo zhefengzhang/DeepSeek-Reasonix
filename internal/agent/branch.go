@@ -33,6 +33,7 @@ type BranchMeta struct {
 	Mode             string    `json:"mode,omitempty"`
 	ToolApprovalMode string    `json:"tool_approval_mode,omitempty"`
 	Goal             string    `json:"goal,omitempty"`
+	GuidancePrompt   string    `json:"guidance_prompt,omitempty"`
 	// SchemaVersion records the BranchMeta version that last wrote the listing
 	// fields (Turns/Preview) FROM the session's content. It is stamped only by the
 	// writers that actually derive those counts — Controller.snapshot's
