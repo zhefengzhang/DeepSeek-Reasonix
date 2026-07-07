@@ -638,12 +638,10 @@ const EFFORT_PRESETS: readonly string[] = ["low", "medium", "high", "xhigh", "ma
 const REASONING_PROTOCOLS: readonly string[] = ["", "deepseek", "openai", "none"];
 const PROXY_TYPES = ["http", "https", "socks5", "socks5h"] as const;
 const LANGUAGE_PREFS: LangPref[] = ["", "zh", "en"];
-const AUTO_PLAN_MODES = ["off", "on"] as const;
 const TOOL_APPROVAL_MODES = ["ask", "auto", "yolo"] as const;
 const BOT_TOOL_APPROVAL_MODES = ["", "ask", "auto", "yolo"] as const;
 
 type ProxyMode = (typeof PROXY_MODES)[number];
-type AutoPlanMode = (typeof AUTO_PLAN_MODES)[number];
 
 function normalizeProxyMode(mode: string): ProxyMode {
   switch (mode) {
@@ -660,7 +658,7 @@ function normalizeNetworkView(network: NetworkView): NetworkView {
   return { ...network, proxyMode: normalizeProxyMode(network.proxyMode) };
 }
 
-function normalizeAutoPlan(mode: string | undefined): AutoPlanMode {
+function normalizeAutoPlan(mode: string | undefined): "off" | "on" {
   return mode === "ask" || mode === "on" ? "on" : "off";
 }
 
@@ -1056,7 +1054,6 @@ function GeneralSection({ s, busy, apply, agentRunning }: SectionProps & { agent
   const statusBarItemsPanelId = useId();
   useEffect(() => onDisplayModeChange((mode) => setDisplayMode(mode)), []);
   useEffect(() => () => mouseDragCleanupRef.current?.(), []);
-  const autoPlan = normalizeAutoPlan(s.autoPlan);
   const defaultToolApprovalMode = normalizeToolApprovalMode(s.defaultToolApprovalMode);
   const memoryCompilerEnabled = s.memoryCompilerEnabled !== false;
   const languagePref = normalizeLangPref(s.desktopLanguage);
@@ -1290,19 +1287,9 @@ function GeneralSection({ s, busy, apply, agentRunning }: SectionProps & { agent
           ))}
         </div>
       </SettingsField>
-      <SettingsField label={t("settings.autoPlan")}>
-        <div className="set-seg">
-          {AUTO_PLAN_MODES.map((mode) => (
-            <button
-              key={mode}
-              className={`set-seg__btn${autoPlan === mode ? " set-seg__btn--on" : ""}`}
-              disabled={busy}
-              onClick={() => void apply(() => app.SetAutoPlan(mode))}
-            >
-              {t(`settings.autoPlan.${mode}`)}
-            </button>
-          ))}
-        </div>
+      <SettingsField label={t("settings.planModeDefault")} hint={t("settings.planModeDefaultHint")}>
+        <ToggleSegment value={s?.planModeDefault ?? false} disabled={busy}
+          onChange={(v) => void apply(() => app.SetPlanModeDefault(v))} />
       </SettingsField>
       <SettingsField label={t("settings.memoryCompiler")} hint={t("settings.memoryCompilerHint")}>
         <ToggleSegment

@@ -14,6 +14,7 @@ export type ShortcutAction =
   | "textSize.decrease"
   | "textSize.reset"
   | "toolApproval.yolo"
+  | "planMode.toggle"
   | "shortcuts.show"
   | "topic.goto.1"
   | "topic.goto.2"
@@ -142,6 +143,19 @@ export const SHORTCUT_DEFINITIONS: readonly ShortcutDefinition[] = [
     labelKey: "shortcuts.action.yoloToggle",
     descriptionKey: "shortcuts.desc.yoloToggle",
     defaults: modCombo("y"),
+    preventDefault: true,
+    allowInEditable: true,
+  },
+  {
+    action: "planMode.toggle",
+    section: "session",
+    labelKey: "shortcuts.action.planModeToggle",
+    descriptionKey: "shortcuts.desc.planModeToggle",
+    defaults: {
+      darwin: { key: "p", meta: true, shift: true },
+      windows: { key: "p", ctrl: true, shift: true },
+      linux: { key: "p", ctrl: true, shift: true },
+    },
     preventDefault: true,
     allowInEditable: true,
   },

@@ -210,6 +210,7 @@ type SettingsView struct {
 	HeadroomCompressToolResults bool `json:"headroomCompressToolResults"`
 	HeadroomShowLogWindow  bool   `json:"headroomShowLogWindow"`
 	HeadroomGpuBackend     string `json:"headroomGpuBackend"`
+	PlanModeDefault        bool   `json:"planModeDefault"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -619,6 +620,7 @@ func (a *App) Settings() SettingsView {
 		HeadroomCompressToolResults: cfg.Headroom.CompressToolResults,
 		HeadroomShowLogWindow:   cfg.Headroom.ShowLogWindow,
 		HeadroomGpuBackend:      cfg.Headroom.HeadroomGpuBackend(),
+		PlanModeDefault:         cfg.Agent.PlanModeDefault,
 	}
 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
 	root := a.activeWorkspaceRoot()
@@ -1172,6 +1174,29 @@ func (a *App) SetAutoPlan(mode string) error {
 	if desktopAutoPlanMode(cfg.Agent.AutoPlan) == "on" && strings.TrimSpace(cfg.Agent.AutoPlanClassifier) != "" {
 		return a.rebuild()
 	}
+	return nil
+}
+
+// SetPlanModeDefault sets the default plan mode for new sessions.
+func (a *App) SetPlanModeDefault(v bool) error {
+	cfg, path, err := a.loadDesktopUserConfigForEdit()
+	if err != nil {
+		return err
+	}
+	cfg.Agent.PlanModeDefault = v
+	if err := cfg.SaveTo(path); err != nil {
+		return err
+	}
+	// Apply to all live sessions immediately so the change takes effect
+	// without creating new tabs or restarting.
+	a.mu.RLock()
+	for _, tab := range a.tabs {
+		if tab != nil && tab.Ctrl != nil {
+			tab.mode = tabModeFromAxes(v, currentTabToolApprovalMode(tab) == control.ToolApprovalYolo)
+			tab.Ctrl.SetPlanMode(v)
+		}
+	}
+	a.mu.RUnlock()
 	return nil
 }
 

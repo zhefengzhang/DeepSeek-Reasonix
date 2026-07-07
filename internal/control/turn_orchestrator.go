@@ -167,6 +167,9 @@ func (o *turnOrchestrator) runOrchestratedTurn(ctx context.Context, turn orchest
 	if todoArgs != "" && !c.hasTodoUpdateSince(execStart) {
 		c.completePlanTodos(todoArgs)
 	}
+	// Keep plan mode active so the next turn also starts with planning.
+	// Without this, the UI mode pill resets to "normal" after every turn.
+	c.SetPlanMode(true)
 	return nil
 }
 

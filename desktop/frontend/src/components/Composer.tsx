@@ -524,6 +524,8 @@ export function Composer({
   const [loadingPastChats, setLoadingPastChats] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [composerPrompt, setComposerPrompt] = useState<string | null>(null);
+  const [guidancePrompt, setGuidancePrompt] = useState("");
+  const [guidanceLoaded, setGuidanceLoaded] = useState(false);
   // Prompt history navigation (plain ↑/↓)
   // Use refs for values read inside async closures to avoid stale captures
   // on rapid key presses (the React closure trap).
@@ -650,6 +652,13 @@ export function Composer({
   useEffect(() => {
     setPendingGuidance([]);
     setGuidanceExpanded(false);
+  }, [draftKey]);
+
+  useEffect(() => {
+    app.GetGuidancePrompt().then((v) => {
+      setGuidancePrompt(v ?? "");
+      setGuidanceLoaded(true);
+    }).catch(() => {});
   }, [draftKey]);
 
   useEffect(() => {
@@ -1837,11 +1846,17 @@ export function Composer({
       return;
     }
 
-    if (matchesShortcut(e.nativeEvent, "toolApproval.yolo", shortcutPlatform) && !composing) {
-      e.preventDefault();
-      onToggleYoloApprovalMode();
-      return;
-    }
+	if (matchesShortcut(e.nativeEvent, "toolApproval.yolo", shortcutPlatform) && !composing) {
+	  e.preventDefault();
+	  onToggleYoloApprovalMode();
+	  return;
+	}
+
+	if (matchesShortcut(e.nativeEvent, "planMode.toggle", shortcutPlatform) && !composing) {
+	  e.preventDefault();
+	  onCycleMode();
+	  return;
+	}
 
     syncPromptHistoryGeneration();
 
@@ -2116,6 +2131,19 @@ export function Composer({
               <span />
             </span>
           </button>
+        </div>
+        <div className="composer-access-menu__section">
+          <div className="composer-access-menu__label">{t("composer.guidanceLabel")}</div>
+          <div className="composer-access-menu__hint">{t("composer.guidanceHint")}</div>
+          <textarea
+            className="composer-access-menu__textarea"
+            value={guidancePrompt}
+            onChange={(e) => setGuidancePrompt(e.target.value)}
+            onBlur={() => app.SetGuidancePrompt(guidancePrompt).catch(() => {})}
+            placeholder={t("composer.guidancePlaceholder")}
+            rows={3}
+            disabled={!guidanceLoaded}
+          />
         </div>
       </AnchoredPopover>
       <AnchoredPopover

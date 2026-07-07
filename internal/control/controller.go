@@ -162,8 +162,9 @@ type Controller struct {
 	running     bool
 	canceling   bool
 	autosaveWG  sync.WaitGroup
-	planMode    bool
-	sessionPath string
+	planMode      bool
+	guidancePrompt string
+	sessionPath   string
 	// turn counts model turns this session, passed to hooks in their payload.
 	turn int
 
@@ -265,8 +266,9 @@ type Options struct {
 	Policy        permission.Policy
 	Label         string
 	ModelRef      string
-	SystemPrompt  string
-	SessionDir    string
+	SystemPrompt    string
+	GuidancePrompt  string
+	SessionDir      string
 	SessionPath   string
 	Host          *plugin.Host
 	Commands      []command.Command
@@ -351,6 +353,7 @@ func New(opts Options) *Controller {
 		label:                      opts.Label,
 		modelRef:                   opts.ModelRef,
 		systemPrompt:               opts.SystemPrompt,
+		guidancePrompt:             opts.GuidancePrompt,
 		sessionDir:                 opts.SessionDir,
 		sessionPath:                opts.SessionPath,
 		commands:                   atomic.Pointer[[]command.Command]{},
@@ -1489,6 +1492,21 @@ func (c *Controller) SetPlanMode(v bool) {
 	if setter, ok := c.runner.(interface{ SetPlanMode(bool) }); ok {
 		setter.SetPlanMode(v)
 	}
+}
+
+// SetGuidancePrompt sets a per-session guidance prompt that is prepended to
+// every user message as a <guidance> block.
+func (c *Controller) SetGuidancePrompt(text string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.guidancePrompt = text
+}
+
+// GuidancePrompt returns the current per-session guidance prompt.
+func (c *Controller) GuidancePrompt() string {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.guidancePrompt
 }
 
 // SetAutoPlan updates the interactive auto-plan gate for subsequent turns.

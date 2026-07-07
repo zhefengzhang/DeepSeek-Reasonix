@@ -1111,6 +1111,7 @@ export interface SettingsView {
   headroomCompressToolResults?: boolean;
   headroomShowLogWindow?: boolean;
   headroomGpuBackend?: string;
+  planModeDefault?: boolean;
 }
 
 export interface DesktopStartupSettingsView {

@@ -206,6 +206,12 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
 			autoPlan = "off"
 		}
 		fmt.Fprintf(&b, "auto_plan   = %q   # user-level only: off|on; off keeps plan mode manual\n", autoPlan)
+		if c.Agent.PlanModeDefault {
+			b.WriteString("plan_mode_default = true   # new sessions start in plan mode\n")
+		}
+		if c.Agent.GuidancePrompt != "" {
+			fmt.Fprintf(&b, "guidance_prompt = %q\n", c.Agent.GuidancePrompt)
+		}
 		fmt.Fprintf(&b, "memory_compiler = { enabled = %v, verbosity = %q }   # user-level only: observe|compact\n", c.MemoryCompilerEnabled(), c.MemoryCompilerVerbosity())
 	}
 	if lang := c.ReasoningLanguage(); lang != "auto" {

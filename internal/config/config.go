@@ -892,6 +892,12 @@ type AgentConfig struct {
 	// text. Empty/auto follows the conversation language. Applied as transient
 	// turn context, not the stable prompt.
 	ReasoningLanguage string `toml:"reasoning_language"`
+	// PlanModeDefault sets the default plan mode for new sessions.
+	// false = normal mode, true = plan mode. Default false.
+	PlanModeDefault bool `toml:"plan_mode_default"`
+	// GuidancePrompt is prepended to every user message as a <guidance> block.
+	// Per-session override available via the chat command panel.
+	GuidancePrompt string `toml:"guidance_prompt"`
 	// AutoPlanClassifier optionally names a provider/model used to classify
 	// borderline auto-plan decisions. Empty keeps the zero-cost heuristic path.
 	AutoPlanClassifier string `toml:"auto_plan_classifier"`
@@ -1622,6 +1628,8 @@ func Default() *Config {
 			MaxSteps:            0,
 			PlannerMaxSteps:     0,
 			AutoPlan:            "off",
+			PlanModeDefault:      false,
+			GuidancePrompt:       "You must execute each task step by step with concrete tool calls (read_file, bash, grep, etc.). Do not give summary-only answers — every claim must be backed by tool output. Always verify your work before declaring completion.",
 			SoftCompactRatio:    0.5,
 			ToolResultSnipRatio: 0.6,
 			CompactRatio:        0.8,

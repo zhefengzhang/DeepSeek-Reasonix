@@ -637,6 +637,10 @@ func desktopNewSessionDefaults() (string, string) {
 
 func (a *App) createTabEntryWithID(scope, workspaceRoot, topicID, id string) *WorkspaceTab {
 	model, toolApprovalMode := desktopNewSessionDefaults()
+	planMode := false
+	if cfg := config.LoadForEdit(config.UserConfigPath()); cfg != nil {
+		planMode = cfg.Agent.PlanModeDefault
+	}
 	return &WorkspaceTab{
 		ID:               id,
 		Scope:            scope,
@@ -645,7 +649,7 @@ func (a *App) createTabEntryWithID(scope, workspaceRoot, topicID, id string) *Wo
 		TopicTitle:       topicTitleForTab(scope, workspaceRoot, topicID),
 		model:            model,
 		tokenMode:        boot.TokenModeFull,
-		mode:             tabModeFromAxes(false, toolApprovalMode == control.ToolApprovalYolo),
+		mode:             tabModeFromAxes(planMode, toolApprovalMode == control.ToolApprovalYolo),
 		toolApprovalMode: toolApprovalMode,
 		disabledMCP:      map[string]ServerView{},
 	}
@@ -4957,6 +4961,33 @@ func (a *App) ClearGoal() {
 
 func (a *App) ClearGoalForTab(tabID string) {
 	a.SetGoalForTab(tabID, "")
+}
+
+// GetGuidancePrompt returns the current session's guidance prompt.
+func (a *App) GetGuidancePrompt() string {
+	tab := a.activeTab()
+	if tab == nil || tab.Ctrl == nil {
+		return ""
+	}
+	g, ok := tab.Ctrl.(interface{ GuidancePrompt() string })
+	if !ok {
+		return ""
+	}
+	return g.GuidancePrompt()
+}
+
+// SetGuidancePrompt sets the per-session guidance prompt.
+func (a *App) SetGuidancePrompt(text string) error {
+	tab := a.activeTab()
+	if tab == nil || tab.Ctrl == nil {
+		return fmt.Errorf("no active session")
+	}
+	s, ok := tab.Ctrl.(interface{ SetGuidancePrompt(string) })
+	if !ok {
+		return nil
+	}
+	s.SetGuidancePrompt(text)
+	return nil
 }
 
 // SetAutoApproveTools toggles YOLO/full-access tool auto-approval:

@@ -1050,6 +1050,7 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 		Label:                  label,
 		ModelRef:               modelRef,
 		SystemPrompt:           sysPrompt,
+		GuidancePrompt:         cfg.Agent.GuidancePrompt,
 		SessionDir:             sessionDir,
 		Host:                   pluginHost,
 		Commands:               cmds,
@@ -1105,7 +1106,11 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 	if classifier != nil {
 		ctrlOpts.Classifier = classifier
 	}
-	return control.New(ctrlOpts), nil
+	ctrl := control.New(ctrlOpts)
+	if cfg.Agent.PlanModeDefault {
+		ctrl.SetPlanMode(true)
+	}
+	return ctrl, nil
 }
 
 func rememberPermissionRule(workspaceRoot, rule string) control.RememberResult {

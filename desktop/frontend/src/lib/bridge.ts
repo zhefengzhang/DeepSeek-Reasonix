@@ -157,6 +157,8 @@ export interface AppBindings {
   SetGoalForTab(tabID: string, goal: string): Promise<void>;
   ClearGoal(): Promise<void>;
   ClearGoalForTab(tabID: string): Promise<void>;
+  GetGuidancePrompt(): Promise<string>;
+  SetGuidancePrompt(text: string): Promise<void>;
   Compact(): Promise<void>;
   NewSession(): Promise<void>;
   ClearSession(): Promise<void>;
@@ -279,6 +281,7 @@ export interface AppBindings {
   SetSubagentModel(ref: string): Promise<void>;
   SetSubagentEffort(level: string): Promise<void>;
   SetAutoPlan(mode: string): Promise<void>;
+  SetPlanModeDefault(v: boolean): Promise<void>;
   SetDefaultToolApprovalMode(mode: string): Promise<void>;
   SaveProvider(p: ProviderView): Promise<void>;
   AddOfficialProviderAccess(kind: string, key: string): Promise<string>;
@@ -604,7 +607,11 @@ export const app: AppBindings = new Proxy({} as AppBindings, {
   get(_t, prop) {
     const target = realApp() ?? getMock();
     const v = (target as unknown as Record<string, unknown>)[String(prop)];
-    if (typeof v !== "function") return v;
+    if (typeof v !== "function") {
+      // Return a rejecting stub for methods missing from generated bindings.
+      // Prevents synchronous TypeError — callers with .catch() get a rejection.
+      return (..._args: unknown[]) => Promise.reject(new Error(`App.${String(prop)} is not available`));
+    }
     return (...args: unknown[]) => {
       const method = String(prop);
       const crumb = bridgeBreadcrumb(method);
@@ -1844,6 +1851,11 @@ function makeMockApp(): AppBindings {
         async ClearGoalForTab(tabID) {
           await this.SetGoalForTab(tabID, "");
         },
+        async GetGuidancePrompt() {
+          return "";
+        },
+        async SetGuidancePrompt(_text) {
+        },
         async Compact() {},
         async NewSession() {},
         async ClearSession() {},
@@ -2695,6 +2707,8 @@ function makeMockApp(): AppBindings {
     },
     async SetAutoPlan(mode: string) {
       settings.autoPlan = mode;
+    },
+    async SetPlanModeDefault(_v: boolean) {
     },
     async SetDefaultToolApprovalMode(mode: string) {
       settings.defaultToolApprovalMode = normalizeToolApprovalMode(mode);

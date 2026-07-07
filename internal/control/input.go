@@ -146,6 +146,7 @@ var syntheticPrefixes = []string{
 func (c *Controller) Compose(text string) string {
 	c.mu.Lock()
 	plan := c.planMode
+	guide := c.guidancePrompt
 	responseLanguage := c.responseLanguage
 	reasoningLanguage := c.reasoningLanguage
 	c.mu.Unlock()
@@ -161,6 +162,10 @@ func (c *Controller) Compose(text string) string {
 	}
 	if plan {
 		text = PlanModeMarker + "\n\n" + text
+	}
+	// Per-session guidance prompt wraps the user message as a <guidance> block.
+	if guide != "" {
+		text = "<guidance>\n" + guide + "\n</guidance>\n\n" + text
 	}
 	text = agent.WithResponseLanguage(text, responseLanguage)
 	text = agent.WithReasoningLanguage(text, reasoningLanguage)
