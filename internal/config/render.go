@@ -375,6 +375,9 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
 	if c.Headroom.RequestTimeout > 0 {
 		fmt.Fprintf(&b, "request_timeout = %d\n", c.Headroom.RequestTimeout)
 	}
+	if c.Headroom.CompressToolResults {
+		b.WriteString("compress_tool_results = true\n")
+	}
 	if c.Headroom.ShowLogWindow {
 		b.WriteString("show_log_window = true\n")
 	}
