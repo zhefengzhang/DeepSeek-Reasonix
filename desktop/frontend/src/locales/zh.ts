@@ -490,8 +490,8 @@ export const zh: Record<DictKey, string> = {
   "status.headroomOff": "Headroom 代理未运行 — 在 Provider 设置中启用",
   "status.headroomWarming": "Kompress 预热中 — 首次请求可能较慢",
   "status.headroomRunning": "Headroom 代理运行中 ({requests} 请求，暂无压缩)",
-  "status.headroomSavings": "Headroom 压缩 {pct}%（节省 {tokens} tokens，共 {requests} 次请求，节省 {cost}）",
-  "status.headroomLifetime": "累计: {tokens} tokens{cost}",
+  "status.headroomSavings": "Headroom 压缩 {pct}%（节省 {tokens} tokens，共 {requests} 次请求）",
+  "status.headroomLifetime": "累计: {tokens} tokens",
   "status.spendTitle": "当前会话估算计费费用，包含主模型、子代理和辅助调用",
 
   // ── Heartbeat ──

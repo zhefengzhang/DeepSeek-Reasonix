@@ -307,15 +307,6 @@ func (h *headroomSidecar) status() HeadroomStatusView {
 			v.SavingsPct = savingsPct
 			v.LifetimeTokens = stats.LifetimeTokens
 			v.LifetimePct = lifetimePct
-			if h.inputPricePer1M > 0 {
-				v.CostCurrency = h.priceCurrency
-				if tokensSaved > 0 {
-					v.CostSaved = float64(tokensSaved) * h.inputPricePer1M / 1_000_000
-				}
-				if stats.LifetimeTokens > 0 {
-					v.LifetimeCost = float64(stats.LifetimeTokens) * h.inputPricePer1M / 1_000_000
-				}
-			}
 		}
 	}
 
@@ -789,18 +780,6 @@ func (a *App) emitHeadroomStats() {
 	if stats.LifetimeTokens > 0 && stats.LifetimeInput > 0 {
 		lifetimePct = float64(stats.LifetimeTokens) / float64(stats.LifetimeInput) * 100
 	}
-	costSaved := 0.0
-	lifetimeCost := 0.0
-	costCurrency := ""
-	if a.headroom.inputPricePer1M > 0 {
-		costCurrency = a.headroom.priceCurrency
-		if tokensSaved > 0 {
-			costSaved = float64(tokensSaved) * a.headroom.inputPricePer1M / 1_000_000
-		}
-		if stats.LifetimeTokens > 0 {
-			lifetimeCost = float64(stats.LifetimeTokens) * a.headroom.inputPricePer1M / 1_000_000
-		}
-	}
 	a.emitRuntimeEvent("headroom:stats", HeadroomStatusView{
 		Running:        true,
 		Installed:      true,
@@ -808,11 +787,8 @@ func (a *App) emitHeadroomStats() {
 		Requests:       stats.Requests,
 		TokensSaved:    tokensSaved,
 		SavingsPct:     savingsPct,
-		CostSaved:      costSaved,
-		CostCurrency:   costCurrency,
 		LifetimeTokens: stats.LifetimeTokens,
 		LifetimePct:    lifetimePct,
-		LifetimeCost:   lifetimeCost,
 		Warming:        warming,
 	})
 }

@@ -44,23 +44,15 @@ function headroomSavingsTooltip(stats: import("../lib/types").HeadroomStatusView
   if (!stats || !stats.running) return t("status.headroomOff");
   // Always show lifetime data as primary summary
   if (stats.lifetimeTokens != null && stats.lifetimeTokens > 0) {
-    const lifetimeCost = stats.lifetimeCost != null && stats.lifetimeCost > 0
-      ? " (" + (stats.costCurrency ?? "") + stats.lifetimeCost.toFixed(4) + ")"
-      : "";
     let msg = t("status.headroomLifetime", {
       tokens: stats.lifetimeTokens.toLocaleString(),
-      cost: lifetimeCost,
     });
     // Append session details only when this session has actual requests
     if (stats.requests != null && stats.requests > 0 && stats.savingsPct != null && stats.savingsPct > 0) {
-      const cost = stats.costSaved != null && stats.costSaved > 0
-        ? (stats.costCurrency ?? "") + stats.costSaved.toFixed(4)
-        : "";
       msg += " — " + t("status.headroomSavings", {
         pct: Math.round(stats.savingsPct),
         tokens: (stats.tokensSaved ?? 0).toLocaleString(),
         requests: String(stats.requests ?? 0),
-        cost,
       });
     }
     return msg;
