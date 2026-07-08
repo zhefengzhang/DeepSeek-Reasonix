@@ -203,11 +203,7 @@ type SettingsView struct {
 	HeadroomMode           string `json:"headroomMode"`
 	HeadroomPreset         string `json:"headroomPreset"`
 	HeadroomCodeAware      bool   `json:"headroomCodeAware"`
-	HeadroomCCR            bool   `json:"headroomCCR"`
-	HeadroomProtectErrors  bool   `json:"headroomProtectErrors"`
-	HeadroomMinTokens      int    `json:"headroomMinTokens"`
 	HeadroomRequestTimeout int    `json:"headroomRequestTimeout"`
-	HeadroomCompressToolResults bool `json:"headroomCompressToolResults"`
 	HeadroomShowLogWindow  bool   `json:"headroomShowLogWindow"`
 	HeadroomGpuBackend     string `json:"headroomGpuBackend"`
 	PlanModeDefault        bool   `json:"planModeDefault"`
@@ -613,11 +609,7 @@ func (a *App) Settings() SettingsView {
 		HeadroomMode:            cfg.Headroom.HeadroomMode(),
 		HeadroomPreset:          cfg.Headroom.HeadroomPreset(),
 		HeadroomCodeAware:       cfg.Headroom.HeadroomCodeAware(),
-		HeadroomCCR:             cfg.Headroom.HeadroomCCR(),
-		HeadroomProtectErrors:   cfg.Headroom.HeadroomProtectErrors(),
-		HeadroomMinTokens:       cfg.Headroom.HeadroomMinTokens(),
 		HeadroomRequestTimeout:  cfg.Headroom.HeadroomRequestTimeout(),
-		HeadroomCompressToolResults: cfg.Headroom.CompressToolResults,
 		HeadroomShowLogWindow:   cfg.Headroom.ShowLogWindow,
 		HeadroomGpuBackend:      cfg.Headroom.HeadroomGpuBackend(),
 		PlanModeDefault:         cfg.Agent.PlanModeDefault,
@@ -1385,7 +1377,7 @@ func (a *App) SaveProvider(p ProviderView) error {
 			// Auto-start the proxy immediately so the controller rebuild
 			// doesn't point a provider at a proxy that isn't running yet.
 			if a.headroom != nil && !a.headroom.healthCheck() {
-				// Apply preset so CodeAware/CCR env vars reflect config, not Go zero values
+				// Apply preset so CodeAware env vars reflect config, not Go zero values
 				c.Headroom.ApplyPreset(c.Headroom.HeadroomPreset())
 				// Compute upstream from the provider view directly (not from config,
 				// which hasn't been upserted yet).

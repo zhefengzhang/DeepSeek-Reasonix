@@ -199,18 +199,6 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 	if cfg.Headroom.CodeAware {
 		env = append(env, "HEADROOM_CODE_AWARE_ENABLED=1")
 	}
-	if cfg.Headroom.CCR {
-		env = append(env, "HEADROOM_CCR_ENABLED=1")
-	}
-	if cfg.Headroom.CompressToolResults {
-		env = append(env, "HEADROOM_COMPRESS_TOOL_RESULTS=1")
-	}
-	if cfg.Headroom.HeadroomProtectErrors() {
-		env = append(env, "HEADROOM_PROTECT_TOOL_RESULTS=error")
-	}
-	if mt := cfg.Headroom.HeadroomMinTokens(); mt > 0 {
-		env = append(env, "HEADROOM_MIN_TOKENS="+strconv.Itoa(mt))
-	}
 	env = append(env, "HEADROOM_MODE="+mode)
 	cmd.Env = env
 
@@ -608,30 +596,18 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 	if in.Preset != "" {
 		cfg.Headroom.Preset = in.Preset
 		// ApplyPreset fills defaults for any unset fields — call it only for preset switching.
-		if in.CodeAware == nil && in.CCR == nil && in.ProtectErrors == nil && in.DisableKompress == nil && in.MinTokens == 0 && in.RequestTimeout == 0 {
+		if in.CodeAware == nil && in.DisableKompress == nil && in.RequestTimeout == 0 {
 			cfg.Headroom.ApplyPreset(in.Preset)
 		}
 	}
 	if in.CodeAware != nil {
 		cfg.Headroom.CodeAware = *in.CodeAware
 	}
-	if in.CCR != nil {
-		cfg.Headroom.CCR = *in.CCR
-	}
-	if in.ProtectErrors != nil {
-		cfg.Headroom.ProtectErrors = in.ProtectErrors
-	}
-	if in.MinTokens > 0 {
-		cfg.Headroom.MinTokens = in.MinTokens
-	}
 	if in.DisableKompress != nil {
 		cfg.Headroom.DisableKompress = in.DisableKompress
 	}
 	if in.RequestTimeout > 0 {
 		cfg.Headroom.RequestTimeout = in.RequestTimeout
-	}
-	if in.CompressToolResults != nil {
-		cfg.Headroom.CompressToolResults = *in.CompressToolResults
 	}
 	if in.Mode != "" {
 		cfg.Headroom.Mode = in.Mode
@@ -651,9 +627,9 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 	// Restart proxy only when a runtime-affecting field changed.
 	// keepAlive is a pure shutdown-policy setting; it never needs a restart.
 	needsRestart := false
-	if in.Preset != "" || in.CodeAware != nil || in.CCR != nil || in.ProtectErrors != nil ||
-		in.MinTokens > 0 || in.DisableKompress != nil || in.RequestTimeout > 0 ||
-		in.CompressToolResults != nil || in.Mode != "" || in.ShowLogWindow != nil ||
+	if in.Preset != "" || in.CodeAware != nil ||
+		in.DisableKompress != nil || in.RequestTimeout > 0 ||
+		in.Mode != "" || in.ShowLogWindow != nil ||
 		in.GpuBackend != "" {
 		needsRestart = true
 	}
@@ -676,12 +652,8 @@ type HeadroomConfigView struct {
 	Preset          string `json:"preset,omitempty"`
 	Mode            string `json:"mode,omitempty"`       // "token" | "cache"
 	CodeAware       *bool  `json:"codeAware,omitempty"`
-	CCR             *bool  `json:"ccr,omitempty"`
-	ProtectErrors   *bool  `json:"protectErrors,omitempty"`
-	MinTokens       int    `json:"minTokens,omitempty"`
 	DisableKompress *bool  `json:"disableKompress,omitempty"`
 	RequestTimeout  int    `json:"requestTimeout,omitempty"`
-	CompressToolResults *bool  `json:"compressToolResults,omitempty"`
 	ShowLogWindow   *bool  `json:"showLogWindow,omitempty"`
 	GpuBackend      string `json:"gpuBackend,omitempty"` // "auto" | "cpu" | "dml" | "cuda"
 	KeepAlive       *bool  `json:"keepAlive,omitempty"`   // keep proxy running after exit

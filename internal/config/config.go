@@ -1060,26 +1060,11 @@ type HeadroomConfig struct {
 	// CodeAware enables AST-level code compression via tree-sitter.
 	// Requires headroom-ai[code] extra. Recommended for programming workflows.
 	CodeAware bool `toml:"code_aware"`
-	// CCR enables Compress-Cache-Retrieve: compressed originals are stored locally
-	// and the LLM can call headroom_retrieve to fetch them on demand. Recommended
-	// for writing workflows where detail preservation matters.
-	CCR bool `toml:"ccr"`
-	// ProtectErrors prevents tool results classified as errors from being
-	// compressed. Default true — losing error details harms debugging.
-	ProtectErrors *bool `toml:"protect_errors"`
-	// MinTokens sets the minimum token count for content to be eligible for
-	// compression. Smaller values = more aggressive compression. Default 250.
-	MinTokens int `toml:"min_tokens"`
-	// DisableKompress disables the Kompress ML text compression engine (ModernBERT
-	// via ONNX Runtime). Disabling improves latency at the cost of compression ratio.
 	DisableKompress *bool `toml:"disable_kompress"`
 	// RequestTimeout overrides the HTTP request timeout (seconds) when routing
 	// through the headroom proxy. ML compression (Kompress) needs more time.
 	// Default 180 for max preset, 60 otherwise.
 	RequestTimeout int `toml:"request_timeout"`
-	// CompressToolResults clears the tool-exclusion list so tool outputs enter the
-	// compression pipeline. Default false.
-	CompressToolResults bool `toml:"compress_tool_results"`
 	// ShowLogWindow shows the Python proxy console window with live logs.
 	// Default false (window hidden) for a clean desktop experience.
 	ShowLogWindow bool `toml:"show_log_window"`
@@ -1128,29 +1113,8 @@ func (h *HeadroomConfig) HeadroomCodeAware() bool {
 	return h.CodeAware
 }
 
-// HeadroomCCR reports whether reversible compression (CCR) is enabled.
-func (h *HeadroomConfig) HeadroomCCR() bool {
-	if h == nil {
-		return true
-	}
-	return h.CCR
-}
 
-// HeadroomProtectErrors reports whether error tool results are protected.
-func (h *HeadroomConfig) HeadroomProtectErrors() bool {
-	if h == nil || h.ProtectErrors == nil {
-		return true
-	}
-	return *h.ProtectErrors
-}
 
-// HeadroomMinTokens returns the minimum token threshold for compression.
-func (h *HeadroomConfig) HeadroomMinTokens() int {
-	if h == nil || h.MinTokens <= 0 {
-		return 250
-	}
-	return h.MinTokens
-}
 
 // HeadroomDisableKompress reports whether the Kompress ML engine is disabled.
 func (h *HeadroomConfig) HeadroomDisableKompress() bool {
@@ -1205,36 +1169,16 @@ func (h *HeadroomConfig) ApplyPreset(preset string) {
 	switch preset {
 	case "writing":
 		h.CodeAware = false
-		h.CCR = true
-		if h.ProtectErrors == nil {
-			pe := true
-			h.ProtectErrors = &pe
-		}
-		if h.MinTokens == 0 { h.MinTokens = 250 }
 		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
 		if h.RequestTimeout == 0 { h.RequestTimeout = 120 }
 	case "max":
 		h.CodeAware = true
-		h.CCR = false
-		if h.ProtectErrors == nil {
-			pe := false
-			h.ProtectErrors = &pe
-		}
-		if h.MinTokens == 0 { h.MinTokens = 100 }
 		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
 		if h.RequestTimeout == 0 { h.RequestTimeout = 300 }
-		h.CompressToolResults = true // max preset always compresses tool results
 	default: // "coding"
 		h.CodeAware = true
-		h.CCR = false
-		if h.ProtectErrors == nil {
-			pe := true
-			h.ProtectErrors = &pe
-		}
-		if h.MinTokens == 0 { h.MinTokens = 250 }
 		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
 		if h.RequestTimeout == 0 { h.RequestTimeout = 120 }
-		h.CompressToolResults = true
 	}
 }
 

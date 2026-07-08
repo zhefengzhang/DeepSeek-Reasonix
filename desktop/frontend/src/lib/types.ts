@@ -1026,12 +1026,8 @@ export interface HeadroomConfigView {
   preset?: string;      // "writing" | "coding" | "max"
   mode?: "token" | "cache";
   codeAware?: boolean;
-  ccr?: boolean;
-  protectErrors?: boolean;
-  minTokens?: number;
   disableKompress?: boolean;
   requestTimeout?: number;
-  compressToolResults?: boolean;
   showLogWindow?: boolean;
   gpuBackend?: string;
   keepAlive?: boolean;
@@ -1104,11 +1100,7 @@ export interface SettingsView {
   headroomMode?: string;
   headroomPreset?: string;
   headroomCodeAware?: boolean;
-  headroomCCR?: boolean;
-  headroomProtectErrors?: boolean;
-  headroomMinTokens?: number;
   headroomRequestTimeout?: number;
-  headroomCompressToolResults?: boolean;
   headroomShowLogWindow?: boolean;
   headroomGpuBackend?: string;
   planModeDefault?: boolean;

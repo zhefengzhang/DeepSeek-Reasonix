@@ -5805,12 +5805,8 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
   const [preset, setPreset] = useState(() => s?.headroomPreset ?? "coding");
   const [mode, setMode] = useState<"token" | "cache">(() => (s?.headroomMode as "token" | "cache") ?? "token");
   const [codeAware, setCodeAware] = useState(() => s?.headroomCodeAware ?? true);
-  const [ccr, setCcr] = useState(() => s?.headroomCCR ?? false);
-  const [protectErrors, setProtectErrors] = useState(() => s?.headroomProtectErrors ?? true);
   const [disableKompress, setDisableKompress] = useState(() => s?.headroomDisableKompress ?? true);
-  const [minTokens, setMinTokens] = useState(() => String(s?.headroomMinTokens ?? 250));
   const [timeoutVal, setTimeoutVal] = useState(() => String(s?.headroomRequestTimeout ?? 300));
-  const [compressToolResults, setCompressToolResults] = useState(() => s?.headroomCompressToolResults ?? true);
   const [showLogWindow, setShowLogWindow] = useState(() => s?.headroomShowLogWindow ?? false);
   const [gpuBackend, setGpuBackend] = useState(() => s?.headroomGpuBackend ?? "auto");
   const [keepAlive, setKeepAlive] = useState(() => s?.headroomKeepAlive ?? false);
@@ -5898,12 +5894,6 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
           <SettingsField label={t("settings.headroomCodeAware")} hint={t("settings.headroomCodeAwareHint")}>
             <ToggleSegment value={codeAware} disabled={busy} onChange={(v) => { setCodeAware(v); save({ codeAware: v }); }} />
           </SettingsField>
-          <SettingsField label={t("settings.headroomCCR")} hint={t("settings.headroomCCRHint")}>
-            <ToggleSegment value={ccr} disabled={busy} onChange={(v) => { setCcr(v); save({ ccr: v }); }} />
-          </SettingsField>
-          <SettingsField label={t("settings.headroomProtectErrors")} hint={t("settings.headroomProtectErrorsHint")}>
-            <ToggleSegment value={protectErrors} disabled={busy} onChange={(v) => { setProtectErrors(v); save({ protectErrors: v }); }} />
-          </SettingsField>
           <SettingsField label={t("settings.headroomDisableKompress")} hint={t("settings.headroomDisableKompressHint")}>
             <ToggleSegment value={disableKompress} disabled={busy} onChange={(v) => { setDisableKompress(v); save({ disableKompress: v }); }} />
           </SettingsField>
@@ -5917,20 +5907,6 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
               <option value="dml">DirectML (AMD)</option>
               <option value="cuda">CUDA (NVIDIA)</option>
             </select>
-          </SettingsField>
-          <SettingsField label={t("settings.headroomCompressToolResults")} hint={t("settings.headroomCompressToolResultsHint")}>
-            <ToggleSegment value={compressToolResults} disabled={busy} onChange={(v) => { setCompressToolResults(v); save({ compressToolResults: v }); }} />
-          </SettingsField>
-          <SettingsField label={t("settings.headroomMinTokens")} hint={t("settings.headroomMinTokensHint")}>
-            <input className="mem-input" type="number" min={50} max={1000}
-              value={minTokens} disabled={busy}
-              onChange={(e) => setMinTokens(e.target.value)}
-              onBlur={(e) => {
-                const v = parseInt(e.target.value, 10);
-                if (v > 0) { save({ minTokens: v }); }
-              }}
-              style={{ width: "80px" }}
-            />
           </SettingsField>
         </>
       )}

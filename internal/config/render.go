@@ -366,23 +366,11 @@ func RenderTOMLForScope(c *Config, scope RenderScope) string {
 	if c.Headroom.CodeAware {
 		b.WriteString("code_aware = true\n")
 	}
-	if c.Headroom.CCR {
-		b.WriteString("ccr   = true\n")
-	}
-	if c.Headroom.ProtectErrors != nil {
-		fmt.Fprintf(&b, "protect_errors = %v\n", *c.Headroom.ProtectErrors)
-	}
-	if c.Headroom.MinTokens > 0 {
-		fmt.Fprintf(&b, "min_tokens = %d\n", c.Headroom.MinTokens)
-	}
 	if c.Headroom.DisableKompress != nil {
 		fmt.Fprintf(&b, "disable_kompress = %v\n", *c.Headroom.DisableKompress)
 	}
 	if c.Headroom.RequestTimeout > 0 {
 		fmt.Fprintf(&b, "request_timeout = %d\n", c.Headroom.RequestTimeout)
-	}
-	if c.Headroom.CompressToolResults {
-		b.WriteString("compress_tool_results = true\n")
 	}
 	if c.Headroom.ShowLogWindow {
 		b.WriteString("show_log_window = true\n")
