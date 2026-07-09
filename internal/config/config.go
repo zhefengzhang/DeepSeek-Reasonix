@@ -1170,7 +1170,7 @@ func (h *HeadroomConfig) ApplyPreset(preset string) {
 	case "writing":
 		h.CodeAware = false
 		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
-		if h.RequestTimeout == 0 { h.RequestTimeout = 120 }
+		if h.RequestTimeout == 0 { h.RequestTimeout = 300 }
 	case "max":
 		h.CodeAware = true
 		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
@@ -1178,7 +1178,7 @@ func (h *HeadroomConfig) ApplyPreset(preset string) {
 	default: // "coding"
 		h.CodeAware = true
 		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
-		if h.RequestTimeout == 0 { h.RequestTimeout = 120 }
+		if h.RequestTimeout == 0 { h.RequestTimeout = 300 }
 	}
 }
 

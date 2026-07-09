@@ -525,7 +525,6 @@ export function Composer({
   const [submitting, setSubmitting] = useState(false);
   const [composerPrompt, setComposerPrompt] = useState<string | null>(null);
   const [guidancePrompt, setGuidancePrompt] = useState("");
-  const [guidanceLoaded, setGuidanceLoaded] = useState(false);
   // Prompt history navigation (plain ↑/↓)
   // Use refs for values read inside async closures to avoid stale captures
   // on rapid key presses (the React closure trap).
@@ -655,9 +654,17 @@ export function Composer({
   }, [draftKey]);
 
   useEffect(() => {
-    app.GetGuidancePrompt().then((v) => {
+	app.GetGuidancePrompt().then((v) => {
       setGuidancePrompt(v ?? "");
-      setGuidanceLoaded(true);
+      // If still empty after first load, retry after 2s to catch slow
+      // BranchMeta restore on session resume.
+      if (!v) {
+        setTimeout(() => {
+          app.GetGuidancePrompt().then((v2) => {
+            if (v2) setGuidancePrompt(v2);
+          }).catch(() => {});
+        }, 2000);
+      }
     }).catch(() => {});
   }, [draftKey, ready]);
 
@@ -2142,7 +2149,6 @@ export function Composer({
             onBlur={() => app.SetGuidancePrompt(guidancePrompt).catch(() => {})}
             placeholder={t("composer.guidancePlaceholder")}
             rows={3}
-            disabled={!guidanceLoaded}
           />
         </div>
       </AnchoredPopover>

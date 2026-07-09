@@ -143,7 +143,6 @@ export function ApprovalModal({
   useEffect(() => {
     if (revisionOpen) {
       onRevisionActiveChange?.(true);
-      inputRef.current?.focus();
       return () => onRevisionActiveChange?.(false);
     }
     onRevisionActiveChange?.(false);

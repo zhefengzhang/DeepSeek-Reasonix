@@ -200,6 +200,9 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 		env = append(env, "HEADROOM_CODE_AWARE_ENABLED=1")
 	}
 	env = append(env, "HEADROOM_MODE="+mode)
+	if rt := cfg.Headroom.RequestTimeout; rt > 0 {
+		env = append(env, "HEADROOM_REQUEST_TIMEOUT="+strconv.Itoa(rt))
+	}
 	cmd.Env = env
 
 	// Capture stdout/stderr for logging
@@ -425,6 +428,7 @@ mode = os.environ.get("HEADROOM_MODE", "token")
 code_aware = os.environ.get("HEADROOM_CODE_AWARE_ENABLED", "0") == "1"
 disable_kompress = os.environ.get("HEADROOM_DISABLE_KOMPRESS", "0") == "1"
 gpu_backend = os.environ.get("HEADROOM_GPU_BACKEND", "auto")
+rt = os.environ.get("HEADROOM_REQUEST_TIMEOUT", "")
 
 # GPU backend: prefer ONNX GPU providers over CPU when available
 if not disable_kompress and gpu_backend != "cpu":
@@ -456,6 +460,9 @@ if code_aware:
     cli_args.append("--code-aware")
 if disable_kompress:
     cli_args.append("--disable-kompress")
+if rt:
+    cli_args.append("--request-timeout-seconds")
+    cli_args.append(rt)
 
 ctx = proxy.make_context("headroom", cli_args)
 proxy.invoke(ctx)
