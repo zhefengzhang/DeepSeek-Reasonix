@@ -1,0 +1,817 @@
+https://patch-diff.githubusercontent.com/raw/esengine/DeepSeek-Reasonix/pull/2314.diff
+
+diff --git a/benchmarks/real-world-cache/README.md b/benchmarks/real-world-cache/README.md
+index 9b1e554c2..4e407681d 100644
+--- a/benchmarks/real-world-cache/README.md
++++ b/benchmarks/real-world-cache/README.md
+@@ -59,8 +59,9 @@ hit rates:
+ 3. **`VolatileScratch`** — chain-of-thought / per-turn scratch lives outside
+    the cached prefix so it never poisons the next hit.
+ 4. **Auto-compact** — when context approaches the cap, older turns fold into
+-   a summary message *appended* to the prefix; the prefix itself isn't
+-   rewritten, so the cache survives the fold.
++   a summary message. The summary request is shaped to reuse the main agent's
++   already-cached system/tool/history prefix; the following main-agent request
++   still pays a cold miss for the newly synthesized summary segment.
+ 
+ DeepSeek gave us cacheable bytes. The four mechanisms above are how we keep
+ the bytes cacheable.
+diff --git a/scripts/probe-cache-shape.mts b/scripts/probe-cache-shape.mts
+new file mode 100644
+index 000000000..bd7ac0ce7
+--- /dev/null
++++ b/scripts/probe-cache-shape.mts
+@@ -0,0 +1,51 @@
++/**
++ * Deterministic cache-shape probe.
++ *
++ * This does not call DeepSeek. It validates local invariants that keep live
++ * prefix-cache hit rates high: stable tool-spec ordering, component prefix
++ * hashes, and explicit log rewrite tracking.
++ *
++ * Run: npx tsx scripts/probe-cache-shape.mts
++ */
++
++import assert from "node:assert/strict";
++import { AppendOnlyLog, ImmutablePrefix } from "../src/memory/runtime.js";
++import { ToolRegistry } from "../src/tools.js";
++import type { ToolSpec } from "../src/types.js";
++
++function tool(name: string): ToolSpec {
++  return {
++    type: "function",
++    function: {
++      name,
++      description: `${name} tool`,
++      parameters: { type: "object", properties: {} },
++    },
++  };
++}
++
++const registry = new ToolRegistry();
++registry.register({ name: "zeta", fn: async () => "z" });
++registry.register({ name: "alpha", fn: async () => "a" });
++assert.deepEqual(
++  registry.specs().map((s) => s.function.name),
++  ["alpha", "zeta"],
++  "ToolRegistry.specs() must be sorted by tool name",
++);
++
++const prefixA = new ImmutablePrefix({ system: "s", toolSpecs: [tool("read"), tool("write")] });
++const prefixB = new ImmutablePrefix({ system: "s", toolSpecs: [tool("write"), tool("read")] });
++assert.equal(prefixB.fingerprint, prefixA.fingerprint, "reordered tools should hash identically");
++assert.equal(
++  prefixB.componentHashes.tools,
++  prefixA.componentHashes.tools,
++  "tool component hash should be stable under reordered input",
++);
++
++const log = new AppendOnlyLog();
++log.append({ role: "user", content: "hello" });
++assert.equal(log.rewriteVersion, 0, "append must not count as a rewrite");
++log.compactInPlace([{ role: "assistant", content: "summary" }]);
++assert.equal(log.rewriteVersion, 1, "compactInPlace must count as a rewrite");
++
++console.log("PASS: deterministic cache-shape invariants hold");
+diff --git a/scripts/probe-long-session.mts b/scripts/probe-long-session.mts
+index 5ec7d7741..f96ab61aa 100644
+--- a/scripts/probe-long-session.mts
++++ b/scripts/probe-long-session.mts
+@@ -7,13 +7,21 @@
+  * Surfaces: cache trajectory, cost shape, anything degrading over time.
+  *
+  * Run: REASONIX_LOG_LEVEL=ERROR npx tsx scripts/probe-long-session.mts
++ * Reads DEEPSEEK_API_KEY from the environment, .env.testbak, or ~/.reasonix/config.json.
+  */
+ 
+-import { readFileSync } from "node:fs";
++import { existsSync, readFileSync } from "node:fs";
++import { homedir } from "node:os";
++import { join } from "node:path";
+ import { DeepSeekClient } from "../src/client.js";
+ import { CacheFirstLoop } from "../src/loop.js";
+ import { ImmutablePrefix } from "../src/memory/runtime.js";
+-import { DEEPSEEK_CONTEXT_TOKENS } from "../src/telemetry/stats.js";
++import {
++  DEEPSEEK_CONTEXT_TOKENS,
++  pricingFor,
++  type CacheChurnReason,
++  type TurnStats,
++} from "../src/telemetry/stats.js";
+ import { ToolRegistry } from "../src/tools.js";
+ 
+ // Force a small ctx window so the 50% fold threshold trips in a few
+@@ -21,18 +29,42 @@ import { ToolRegistry } from "../src/tools.js";
+ // id, real API call, just the local gauge is shrunk.
+ DEEPSEEK_CONTEXT_TOKENS["deepseek-chat"] = 50_000;
+ 
+-function loadDotenv(path: string) {
++function loadDotenv(path: string): void {
++  if (!existsSync(path)) return;
+   const txt = readFileSync(path, "utf8");
+   for (const line of txt.split(/\r?\n/)) {
+     const m = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
+     if (m && !process.env[m[1]]) process.env[m[1]] = m[2];
+   }
+ }
++
++function loadReasonixApiKey(): void {
++  if (process.env.DEEPSEEK_API_KEY) return;
++  const path = join(homedir(), ".reasonix", "config.json");
++  if (!existsSync(path)) return;
++  const cfg = JSON.parse(readFileSync(path, "utf8")) as {
++    apiKey?: string;
++    deepseekApiKey?: string;
++    endpoint?: { apiKey?: string };
++  };
++  const key = cfg.apiKey ?? cfg.deepseekApiKey ?? cfg.endpoint?.apiKey ?? "";
++  if (key) process.env.DEEPSEEK_API_KEY = key;
++}
++
+ loadDotenv("./.env.testbak");
++loadReasonixApiKey();
+ 
+-const PRICE_HIT_PER_M = 0.07;
+-const PRICE_MISS_PER_M = 0.27;
+-const PRICE_COMPLETION_PER_M = 1.1;
++function cacheRatio(usage: {
++  promptCacheHitTokens: number;
++  promptCacheMissTokens: number;
++}): number {
++  const total = usage.promptCacheHitTokens + usage.promptCacheMissTokens;
++  return total > 0 ? (usage.promptCacheHitTokens / total) * 100 : 0;
++}
++
++function formatReasons(reasons: readonly CacheChurnReason[]): string {
++  return reasons.length > 0 ? reasons.join(",") : "-";
++}
+ 
+ const docLine = (i: number, sec: string) =>
+   `[${sec}#${i}] section ${sec} entry ${i}: requirement traces to constraint ${(i % 7) + 1}, status ${i % 3 === 0 ? "open" : "closed"}, owner team-${(i % 5) + 1}, last touched 2026-04-${(i % 28) + 1}.`;
+@@ -69,11 +101,11 @@ async function main() {
+     maxToolIters: 4,
+   });
+ 
+-  let mutations = 0;
++  let rawRewrites = 0;
+   let folds = 0;
+   const origCompactInPlace = loop.log.compactInPlace.bind(loop.log);
+   loop.log.compactInPlace = (...args) => {
+-    mutations++;
++    rawRewrites++;
+     return origCompactInPlace(...args);
+   };
+ 
+@@ -100,48 +132,57 @@ async function main() {
+     "api-v2",
+   ];
+ 
+-  console.log("turn |  prompt  |   hit   |   miss  | hit% |  $/turn  |  $cum");
+-  console.log("-----+----------+---------+---------+------+----------+--------");
++  console.log("turn |  prompt  |   hit   |   miss  | hit% |  $/turn  |  $cum  | churn");
++  console.log("-----+----------+---------+---------+------+----------+--------+----------");
+ 
+   let cumCost = 0;
+   let forceSummaryHit = false;
++  const measured: Array<{
++    turn: number;
++    ratio: number;
++    forcedSummary: boolean;
++    reasons: CacheChurnReason[];
++  }> = [];
++  const pricing = pricingFor(model);
+ 
+   for (let i = 0; i < sections.length; i++) {
+     const t0 = Date.now();
+-    let usage: {
+-      promptTokens: number;
+-      completionTokens: number;
+-      promptCacheHitTokens: number;
+-      promptCacheMissTokens: number;
+-    } | null = null;
++    let stats: TurnStats | null = null;
+     let warning = "";
++    let turnForcedSummary = false;
+     for await (const ev of loop.step(`Read the "${sections[i]}" section.`)) {
+       if (ev.role === "assistant_final" && ev.stats?.usage) {
+-        usage = ev.stats.usage as typeof usage;
++        stats = ev.stats;
+       }
+       if (ev.role === "warning" && ev.content) {
+         warning = ev.content;
+         if (/folded \d+ messages/.test(ev.content)) folds++;
+       }
+-      if (ev.forcedSummary) forceSummaryHit = true;
++      if (ev.forcedSummary) {
++        forceSummaryHit = true;
++        turnForcedSummary = true;
++      }
+     }
+     const ms = Date.now() - t0;
++    const usage = stats?.usage;
+     if (!usage) {
+       console.log(
+         `${String(i).padStart(3)}  | (no usage)  -- ${warning ? `warning: ${warning}` : ""}`,
+       );
+       continue;
+     }
+-    const total = usage.promptCacheHitTokens + usage.promptCacheMissTokens;
+-    const ratio = total > 0 ? (usage.promptCacheHitTokens / total) * 100 : 0;
+-    const cost =
+-      (usage.promptCacheHitTokens * PRICE_HIT_PER_M +
+-        usage.promptCacheMissTokens * PRICE_MISS_PER_M +
+-        usage.completionTokens * PRICE_COMPLETION_PER_M) /
+-      1_000_000;
++    const ratio = cacheRatio(usage);
++    const cost = pricing
++      ? (usage.promptCacheHitTokens * pricing.inputCacheHit +
++          usage.promptCacheMissTokens * pricing.inputCacheMiss +
++          usage.completionTokens * pricing.output) /
++        1_000_000
++      : 0;
++    const reasons = stats.cacheDiagnostics?.prefixChangeReasons ?? [];
++    measured.push({ turn: i, ratio, forcedSummary: turnForcedSummary, reasons: [...reasons] });
+     cumCost += cost;
+     console.log(
+-      `${String(i).padStart(3)}  | ${String(usage.promptTokens).padStart(7)} | ${String(usage.promptCacheHitTokens).padStart(7)} | ${String(usage.promptCacheMissTokens).padStart(7)} | ${ratio.toFixed(1).padStart(4)} | $${cost.toFixed(5)} | $${cumCost.toFixed(4)}  ${ms}ms${warning ? ` (${warning.slice(0, 60)}…)` : ""}`,
++      `${String(i).padStart(3)}  | ${String(usage.promptTokens).padStart(7)} | ${String(usage.promptCacheHitTokens).padStart(7)} | ${String(usage.promptCacheMissTokens).padStart(7)} | ${ratio.toFixed(1).padStart(4)} | $${cost.toFixed(5)} | $${cumCost.toFixed(4)} | ${formatReasons(reasons)}  ${ms}ms${warning ? ` (${warning.slice(0, 60)}…)` : ""}`,
+     );
+     if (forceSummaryHit) {
+       console.log(
+@@ -151,14 +192,33 @@ async function main() {
+     }
+   }
+ 
+-  console.log(`\ntotal log.compactInPlace() calls: ${mutations} (expected: ${folds} folds)`);
++  console.log(`\ntotal raw log.compactInPlace() calls: ${rawRewrites} (${folds} fold warning events)`);
+   console.log(`total cost across session: $${cumCost.toFixed(4)}`);
+ 
+-  if (mutations !== folds) {
+-    console.log(`FAIL: ${mutations} mutations but only ${folds} fold events — unexpected mutation`);
++  const sustained = measured.filter((entry) => entry.turn >= 4 && !entry.forcedSummary);
++  const sustainedAvg =
++    sustained.length > 0
++      ? sustained.reduce((sum, entry) => sum + entry.ratio, 0) / sustained.length
++      : 0;
++  const unstablePrefixTurns = measured
++    .slice(1)
++    .filter((entry) => entry.reasons.some((reason) => reason !== "log_rewrite"));
++  console.log(`sustained cache hit average (turn >=4, pre-summary): ${sustainedAvg.toFixed(1)}%`);
++
++  if (unstablePrefixTurns.length > 0) {
++    const detail = unstablePrefixTurns
++      .map((entry) => `turn-${entry.turn}:${formatReasons(entry.reasons)}`)
++      .join(", ");
++    console.log(`FAIL: non-log prefix churn detected (${detail})`);
++    process.exit(1);
++  }
++  if (sustainedAvg < 85) {
++    console.log(`FAIL: sustained cache hit average ${sustainedAvg.toFixed(1)}% below 85% threshold`);
+     process.exit(1);
+   }
+-  console.log(`\nVERDICT: ${folds} fold(s) fired, no other mutations.`);
++  console.log(
++    `\nVERDICT: cache stayed warm through oversized tool results; raw rewrites are diagnostic, and force-summary cold miss is expected when triggered.`,
++  );
+ }
+ 
+ main().catch((e) => {
+diff --git a/scripts/probe-loop-cache.mts b/scripts/probe-loop-cache.mts
+index 32ea2566a..eda72c00c 100644
+--- a/scripts/probe-loop-cache.mts
++++ b/scripts/probe-loop-cache.mts
+@@ -7,23 +7,54 @@
+  * that the API-level append-vs-mutate primitive behaves as expected.
+  *
+  * Run: REASONIX_LOG_LEVEL=ERROR npx tsx scripts/probe-loop-cache.mts
+- * Reads DEEPSEEK_API_KEY from .env.testbak.
++ * Reads DEEPSEEK_API_KEY from the environment, .env.testbak, or ~/.reasonix/config.json.
+  */
+ 
+-import { readFileSync } from "node:fs";
++import { existsSync, readFileSync } from "node:fs";
++import { homedir } from "node:os";
++import { join } from "node:path";
+ import { CacheFirstLoop } from "../src/loop.js";
+ import { DeepSeekClient } from "../src/client.js";
+ import { ImmutablePrefix } from "../src/memory/runtime.js";
++import type { CacheChurnReason, TurnStats } from "../src/telemetry/stats.js";
+ import { ToolRegistry } from "../src/tools.js";
+ 
+-function loadDotenv(path: string) {
++function loadDotenv(path: string): void {
++  if (!existsSync(path)) return;
+   const txt = readFileSync(path, "utf8");
+   for (const line of txt.split(/\r?\n/)) {
+     const m = line.match(/^([A-Z_][A-Z0-9_]*)=(.*)$/);
+     if (m && !process.env[m[1]]) process.env[m[1]] = m[2];
+   }
+ }
++
++function loadReasonixApiKey(): void {
++  if (process.env.DEEPSEEK_API_KEY) return;
++  const path = join(homedir(), ".reasonix", "config.json");
++  if (!existsSync(path)) return;
++  const cfg = JSON.parse(readFileSync(path, "utf8")) as {
++    apiKey?: string;
++    deepseekApiKey?: string;
++    endpoint?: { apiKey?: string };
++  };
++  const key = cfg.apiKey ?? cfg.deepseekApiKey ?? cfg.endpoint?.apiKey ?? "";
++  if (key) process.env.DEEPSEEK_API_KEY = key;
++}
++
+ loadDotenv("./.env.testbak");
++loadReasonixApiKey();
++
++function cacheRatio(usage: {
++  promptCacheHitTokens: number;
++  promptCacheMissTokens: number;
++}): number {
++  const total = usage.promptCacheHitTokens + usage.promptCacheMissTokens;
++  return total > 0 ? (usage.promptCacheHitTokens / total) * 100 : 0;
++}
++
++function formatReasons(reasons: readonly CacheChurnReason[]): string {
++  return reasons.length > 0 ? reasons.join(",") : "-";
++}
+ 
+ const filler = (label: string, n: number): string =>
+   Array.from(
+@@ -67,49 +98,61 @@ async function main() {
+   loop.log.append({ role: "assistant", content: "noted." });
+ 
+   const ratios: number[] = [];
+-  let mutations = 0;
++  const observedChurn: Array<{ turn: number; reasons: CacheChurnReason[] }> = [];
++  let rawRewrites = 0;
+   const origCompactInPlace = loop.log.compactInPlace.bind(loop.log);
+   loop.log.compactInPlace = (...args: Parameters<typeof origCompactInPlace>) => {
+-    mutations++;
++    rawRewrites++;
+     return origCompactInPlace(...args);
+   };
+ 
+   for (let i = 0; i < 6; i++) {
+-    let usage: { promptTokens: number; promptCacheHitTokens: number; promptCacheMissTokens: number } | null = null;
++    let stats: TurnStats | null = null;
++    const rewritesBefore = rawRewrites;
+     for await (const ev of loop.step(`Turn ${i}: just say "ok ${i}".`)) {
+       if (ev.role === "assistant_final" && ev.stats?.usage) {
+-        usage = ev.stats.usage as typeof usage;
++        stats = ev.stats;
+       }
+     }
++    const usage = stats?.usage;
+     if (!usage) {
+       console.log(`turn-${i}: no usage captured`);
+       ratios.push(0);
+       continue;
+     }
+-    const total = usage.promptCacheHitTokens + usage.promptCacheMissTokens;
+-    const ratio = total > 0 ? (usage.promptCacheHitTokens / total) * 100 : 0;
++    const ratio = cacheRatio(usage);
++    const reasons = stats.cacheDiagnostics?.prefixChangeReasons ?? [];
++    observedChurn.push({ turn: i, reasons: [...reasons] });
+     console.log(
+-      `turn-${i}: prompt=${usage.promptTokens} hit=${usage.promptCacheHitTokens} miss=${usage.promptCacheMissTokens} hit%=${ratio.toFixed(1)}`,
++      `turn-${i}: prompt=${usage.promptTokens} hit=${usage.promptCacheHitTokens} miss=${usage.promptCacheMissTokens} hit%=${ratio.toFixed(1)} rawRewrites=${rawRewrites - rewritesBefore} churn=${formatReasons(reasons)}`,
+     );
+     ratios.push(ratio);
+   }
+ 
+-  console.log(`\ntotal log.compactInPlace() calls: ${mutations}`);
++  console.log(`\ntotal raw log.compactInPlace() calls: ${rawRewrites}`);
+   console.log(`cache hit % per turn: ${ratios.map((x) => x.toFixed(1)).join(", ")}`);
+ 
+   const warmRatios = ratios.slice(1);
+   const avgWarm = warmRatios.reduce((a, b) => a + b, 0) / warmRatios.length;
+   console.log(`warm-turn average (excluding cold start): ${avgWarm.toFixed(1)}%`);
+ 
+-  if (mutations > 0) {
+-    console.log(`\nFAIL: log was mutated ${mutations} time(s) — append-only invariant broken`);
++  const unstablePrefixTurns = observedChurn
++    .slice(1)
++    .filter((entry) => entry.reasons.some((reason) => reason !== "log_rewrite"));
++  if (unstablePrefixTurns.length > 0) {
++    const detail = unstablePrefixTurns
++      .map((entry) => `turn-${entry.turn}:${formatReasons(entry.reasons)}`)
++      .join(", ");
++    console.log(`\nFAIL: non-log prefix churn detected (${detail})`);
+     process.exit(1);
+   }
+   if (avgWarm < 80) {
+     console.log(`\nFAIL: warm-turn average ${avgWarm.toFixed(1)}% below 80% threshold`);
+     process.exit(1);
+   }
+-  console.log(`\nPASS: append-only sustained, cache hit avg ${avgWarm.toFixed(1)}%`);
++  console.log(
++    `\nPASS: cache stayed warm (avg ${avgWarm.toFixed(1)}%); raw rewrites are reported for diagnosis, not treated as cache failure`,
++  );
+ }
+ 
+ main().catch((e) => {
+diff --git a/src/cli/ui/App.tsx b/src/cli/ui/App.tsx
+index 5d5c6daec..5f410619b 100644
+--- a/src/cli/ui/App.tsx
++++ b/src/cli/ui/App.tsx
+@@ -959,6 +959,12 @@ function AppInner({
+     cacheHitRatio: 0,
+     lastPromptTokens: 0,
+     lastTurnCostUsd: 0,
++    totalCacheHitTokens: 0,
++    totalCacheMissTokens: 0,
++    lastCacheMissTokens: 0,
++    lastToolSchemaTokens: 0,
++    lastPrefixChanged: false,
++    lastPrefixChangeReasons: [],
+   });
+ 
+   const transcriptRef = useRef<WriteStream | null>(null);
+diff --git a/src/cli/ui/ReplayApp.tsx b/src/cli/ui/ReplayApp.tsx
+index 3a2152181..4febc86f1 100644
+--- a/src/cli/ui/ReplayApp.tsx
++++ b/src/cli/ui/ReplayApp.tsx
+@@ -62,6 +62,12 @@ export function ReplayApp({ meta, pages }: ReplayAppProps) {
+     // Replay is read-only — no live last-turn prompt tokens to show.
+     lastPromptTokens: 0,
+     lastTurnCostUsd: 0,
++    totalCacheHitTokens: 0,
++    totalCacheMissTokens: 0,
++    lastCacheMissTokens: 0,
++    lastToolSchemaTokens: 0,
++    lastPrefixChanged: false,
++    lastPrefixChangeReasons: [],
+   };
+ 
+   const prefixHash =
+diff --git a/src/cli/ui/ctx-breakdown.tsx b/src/cli/ui/ctx-breakdown.tsx
+index e3a9d2234..7db3dc7c7 100644
+--- a/src/cli/ui/ctx-breakdown.tsx
++++ b/src/cli/ui/ctx-breakdown.tsx
+@@ -18,6 +18,7 @@ export interface CtxBreakdownData {
+   toolsCount: number;
+   logMessages: number;
+   topTools: Array<{ name: string; tokens: number; turn: number }>;
++  topToolSchemas: Array<{ name: string; tokens: number }>;
+ }
+ 
+ /**
+@@ -54,6 +55,14 @@ export function computeCtxBreakdown(loop: CacheFirstLoop): CtxBreakdownData {
+   const logTokens = userTokens + assistantTokens + toolResultTokens + toolCallTokens;
+   const ctxMax = resolveContextTokens(loop.model);
+   const topTools = [...toolBreakdown].sort((a, b) => b.tokens - a.tokens).slice(0, 5);
++  const schemaCosts =
++    typeof loop.tools?.schemaTokenCosts === "function"
++      ? loop.tools.schemaTokenCosts()
++      : loop.prefix.toolSpecs.map((spec) => ({
++          name: spec.function.name,
++          tokens: countTokensBounded(JSON.stringify(spec)),
++        }));
++  const topToolSchemas = [...schemaCosts].sort((a, b) => b.tokens - a.tokens).slice(0, 5);
+   return {
+     systemTokens,
+     toolsTokens,
+@@ -63,6 +72,7 @@ export function computeCtxBreakdown(loop: CacheFirstLoop): CtxBreakdownData {
+     toolsCount: loop.prefix.toolSpecs.length,
+     logMessages: entries.length,
+     topTools,
++    topToolSchemas,
+   };
+ }
+ 
+@@ -154,6 +164,17 @@ export function CtxBreakdownBlock({ data }: { data: CtxBreakdownData }): React.R
+           ))}
+         </Box>
+       ) : null}
++      {data.topToolSchemas.length > 0 ? (
++        <Box marginTop={1} flexDirection="column">
++          <Text dim>{t("ctxBreakdown.topToolSchemas", { count: data.topToolSchemas.length })}</Text>
++          {data.topToolSchemas.map((tool) => (
++            <Box key={tool.name}>
++              <Text color={COLOR.info}>{`    ${tool.name.padEnd(28)}`}</Text>
++              <Text dim>{`  ${formatTokens(tool.tokens).padStart(8)}`}</Text>
++            </Box>
++          ))}
++        </Box>
++      ) : null}
+       <Box marginTop={1}>
+         <Text color={FG.faint}>{t("ctxBreakdown.compactHint")}</Text>
+       </Box>
+diff --git a/src/cli/ui/slash/handlers/observability.ts b/src/cli/ui/slash/handlers/observability.ts
+index bbb8ee371..82a772afa 100644
+--- a/src/cli/ui/slash/handlers/observability.ts
++++ b/src/cli/ui/slash/handlers/observability.ts
+@@ -62,6 +62,14 @@ const status: SlashHandler = (_args, loop, ctx) => {
+           cost: cost.toFixed(4),
+           turns: summary.turns,
+         });
++  const churn =
++    summary.lastPrefixChangeReasons.length > 0
++      ? ` · churn ${summary.lastPrefixChangeReasons.join(",")}`
++      : "";
++  const cacheDetailLine =
++    summary.turns > 0
++      ? `cache detail: miss ${compactNum(summary.totalCacheMissTokens)} total · last ${compactNum(summary.lastCacheMissTokens)} · schemas ${compactNum(summary.lastToolSchemaTokens)}${churn}`
++      : "";
+ 
+   const budgetLine =
+     typeof loop.budgetUsd === "number"
+@@ -118,6 +126,7 @@ const status: SlashHandler = (_args, loop, ctx) => {
+     mcpLine,
+     sessionLine,
+   ];
++  if (cacheDetailLine) lines.splice(3, 0, cacheDetailLine);
+   if (workspaceLine) lines.push(workspaceLine);
+   if (budgetLine) lines.push(budgetLine);
+   if (pendingLine) lines.push(pendingLine);
+diff --git a/src/context-manager.ts b/src/context-manager.ts
+index 9b3ff1b29..61fa8e76f 100644
+--- a/src/context-manager.ts
++++ b/src/context-manager.ts
+@@ -7,7 +7,12 @@ import { buildAssistantMessage } from "./loop/messages.js";
+ import { DEFAULT_MAX_RESULT_CHARS } from "./mcp/registry.js";
+ import type { AppendOnlyLog } from "./memory/runtime.js";
+ import { rewriteSession } from "./memory/session.js";
+-import { type SessionStats, resolveContextTokens } from "./telemetry/stats.js";
++import {
++  type SessionStats,
++  inputCostUsd,
++  pricingFor,
++  resolveContextTokens,
++} from "./telemetry/stats.js";
+ import { countTokensBounded, estimateRequestTokens } from "./tokenizer.js";
+ import type { ChatMessage, ToolSpec } from "./types.js";
+ 
+@@ -37,6 +42,12 @@ export const FORCE_SUMMARY_THRESHOLD = 0.8;
+ export const TURN_START_FOLD_THRESHOLD = 0.9;
+ /** Hard deadline for semantic fold summaries so a hung request cannot stall the turn loop. */
+ export const HISTORY_FOLD_SUMMARY_TIMEOUT_MS = 15_000;
++/** Normal-band folds should pay for themselves over a short horizon; aggressive folds still prioritize headroom. */
++export const HISTORY_FOLD_ECONOMIC_HORIZON_TURNS = 3;
++export const HISTORY_FOLD_MIN_ECONOMIC_SAVINGS_FRACTION = 0.15;
++export const HISTORY_FOLD_MIN_ECONOMIC_SAVINGS_USD = 0.002;
++/** Summary + next-turn cold segment reserve used by fold economics. */
++export const HISTORY_FOLD_SUMMARY_RESERVE_TOKENS = 4096;
+ /** Prepended to fold summary content so the model knows it's a synthesized recap.
+  *  Re-export of the shared constant so existing imports keep resolving. */
+ export const HISTORY_FOLD_MARKER = COMPACTION_SUMMARY_MARKER;
+@@ -71,6 +82,7 @@ export interface PostUsageDecision {
+   tailBudget?: number;
+   /** True when this fold is in the 70-85% band — used in user-facing messaging. */
+   aggressive?: boolean;
++  economics?: FoldEconomics;
+ }
+ 
+ export interface FoldResult {
+@@ -80,6 +92,57 @@ export interface FoldResult {
+   summaryChars: number;
+ }
+ 
++export interface FoldEconomics {
++  horizonTurns: number;
++  carryInputUsd: number;
++  foldInputUsd: number;
++  savingsUsd: number;
++  savingsFraction: number;
++  worthwhile: boolean;
++}
++
++export function estimateFoldEconomics(
++  usage: Usage,
++  model: string,
++  tailBudgetTokens: number,
++): FoldEconomics {
++  const pricing = pricingFor(model);
++  if (!pricing) {
++    return {
++      horizonTurns: HISTORY_FOLD_ECONOMIC_HORIZON_TURNS,
++      carryInputUsd: 0,
++      foldInputUsd: 0,
++      savingsUsd: 0,
++      savingsFraction: 0,
++      worthwhile: true,
++    };
++  }
++
++  const horizonTurns = HISTORY_FOLD_ECONOMIC_HORIZON_TURNS;
++  const carryInputUsd = inputCostUsd(model, usage) * horizonTurns;
++  const summaryCallUsd = inputCostUsd(model, usage);
++  const postFoldPromptTokens = Math.min(
++    usage.promptTokens,
++    tailBudgetTokens + HISTORY_FOLD_SUMMARY_RESERVE_TOKENS,
++  );
++  const postFoldColdUsd = (postFoldPromptTokens * pricing.inputCacheMiss) / 1_000_000;
++  const postFoldWarmUsd =
++    ((horizonTurns - 1) * postFoldPromptTokens * pricing.inputCacheHit) / 1_000_000;
++  const foldInputUsd = summaryCallUsd + postFoldColdUsd + postFoldWarmUsd;
++  const savingsUsd = carryInputUsd - foldInputUsd;
++  const savingsFraction = carryInputUsd > 0 ? savingsUsd / carryInputUsd : 0;
++  return {
++    horizonTurns,
++    carryInputUsd,
++    foldInputUsd,
++    savingsUsd,
++    savingsFraction,
++    worthwhile:
++      savingsUsd >= HISTORY_FOLD_MIN_ECONOMIC_SAVINGS_USD &&
++      savingsFraction >= HISTORY_FOLD_MIN_ECONOMIC_SAVINGS_FRACTION,
++  };
++}
++
+ function buildFoldSummaryInstruction(pinnedSkillNames: string[]): string {
+   const base =
+     "Summarize the conversation above as one self-contained prose recap. Preserve the user's " +
+@@ -158,11 +221,17 @@ export class ContextManager {
+       };
+     }
+     if (ratio > HISTORY_FOLD_THRESHOLD) {
++      const tailBudget = Math.floor(ctxMax * HISTORY_FOLD_TAIL_FRACTION);
++      const economics = estimateFoldEconomics(usage, model, tailBudget);
++      if (!economics.worthwhile) {
++        return { kind: "none", ...base, economics };
++      }
+       return {
+         kind: "fold",
+         ...base,
+-        tailBudget: Math.floor(ctxMax * HISTORY_FOLD_TAIL_FRACTION),
++        tailBudget,
+         aggressive: false,
++        economics,
+       };
+     }
+     return { kind: "none", ...base };
+diff --git a/src/i18n/EN.ts b/src/i18n/EN.ts
+index fe3a50648..e57d5d408 100644
+--- a/src/i18n/EN.ts
++++ b/src/i18n/EN.ts
+@@ -1699,6 +1699,7 @@ export const EN: TranslationSchema = {
+     title: "\u25a3 context",
+     compactHint: "  /compact folds (auto at 50%) \u00b7 /new wipes log",
+     topTools: "  top tool results by cost ({count}):",
++    topToolSchemas: "  top tool schemas by prompt cost ({count}):",
+     msg: "msg",
+     turnLabel: "turn",
+   },
+diff --git a/src/i18n/JA.ts b/src/i18n/JA.ts
+index 91c4fd830..e78135b93 100644
+--- a/src/i18n/JA.ts
++++ b/src/i18n/JA.ts
+@@ -1737,6 +1737,7 @@ export const JA: TranslationSchema = {
+     title: "\u25a3 コンテキスト",
+     compactHint: "  /compact で折りたたみ（50%で自動）\u00b7 /new でログ消去",
+     topTools: "  コスト上位のツール結果（{count}）:",
++    topToolSchemas: "  プロンプトコスト上位のツールスキーマ（{count}）:",
+     msg: "メッセージ",
+     turnLabel: "ターン",
+   },
+diff --git a/src/i18n/de.ts b/src/i18n/de.ts
+index fa7e57e13..514e0da6a 100644
+--- a/src/i18n/de.ts
++++ b/src/i18n/de.ts
+@@ -1651,6 +1651,7 @@ export const de: TranslationSchema = {
+     title: "▣ Kontext",
+     compactHint: "  /compact faltet (automatisch bei 50 %) · /new löscht Log",
+     topTools: "  Top-Tool-Ergebnisse nach Kosten ({count}):",
++    topToolSchemas: "  Top-Tool-Schemas nach Prompt-Kosten ({count}):",
+     msg: "Nachr",
+     turnLabel: "Turn",
+   },
+diff --git a/src/i18n/types.ts b/src/i18n/types.ts
+index 19732ae33..773badb44 100644
+--- a/src/i18n/types.ts
++++ b/src/i18n/types.ts
+@@ -685,6 +685,7 @@ export interface TranslationSchema {
+     title: string;
+     compactHint: string;
+     topTools: string;
++    topToolSchemas: string;
+     msg: string;
+     turnLabel: string;
+   };
+diff --git a/src/i18n/zh-CN.ts b/src/i18n/zh-CN.ts
+index f3f03151e..d12b82607 100644
+--- a/src/i18n/zh-CN.ts
++++ b/src/i18n/zh-CN.ts
+@@ -1603,6 +1603,7 @@ export const zhCN: TranslationSchema = {
+     title: "▣ 上下文",
+     compactHint: "  /compact 折叠（超过 50% 自动触发）· /new 清空日志",
+     topTools: "  常用工具（按成本排序，{count} 个）：",
++    topToolSchemas: "  工具 schema（按 prompt 成本排序，{count} 个）：",
+     msg: "条",
+     turnLabel: "轮",
+   },
+diff --git a/src/loop.ts b/src/loop.ts
+index 40fd0ee1e..3668edf57 100644
+--- a/src/loop.ts
++++ b/src/loop.ts
+@@ -57,14 +57,16 @@ import {
+ } from "./memory/session.js";
+ import { type RepairReport, ToolCallRepair } from "./repair/index.js";
+ import {
++  type PrefixDiagnosticHashes,
+   appendCacheDiagnostic,
+   buildCacheDiagnostic,
+   latestCacheDiagnostic,
+ } from "./telemetry/cache-diagnostics.js";
+-import { SessionStats, type TurnStats } from "./telemetry/stats.js";
++import { type CacheDiagnostics, SessionStats, type TurnStats } from "./telemetry/stats.js";
++import { countTokensBounded } from "./tokenizer.js";
+ import { ToolRegistry } from "./tools.js";
+ import { ReadTracker } from "./tools/read-tracker.js";
+-import type { ChatMessage, ToolCall } from "./types.js";
++import type { ChatMessage, ToolCall, ToolSpec } from "./types.js";
+ 
+ export const MID_TURN_STEER_WRAPPER =
+   "[Mid-turn steer queued by the user. Do not treat this as a new task; use it only as additional guidance for the current task after completing the current step.]";
+@@ -131,6 +133,15 @@ export interface LoopAbortOptions {
+   discardCurrentTurn?: boolean;
+ }
+ 
++interface CacheShapeSnapshot {
++  systemHash: string;
++  toolsHash: string;
++  fewShotsHash: string;
++  prefixHash: string;
++  logRewriteVersion: number;
++  toolSchemaTokens: number;
++}
++
+ function shrinkMessageForRetention(message: ChatMessage): ChatMessage {
+   if (message.role !== "assistant" || !Array.isArray(message.tool_calls)) return message;
+   return (
+@@ -210,6 +221,7 @@ export class CacheFirstLoop {
+   private _turnSelfCorrected = false;
+   private _foldedThisTurn = false;
+   private context!: ContextManager;
++  private _lastCacheShape: CacheShapeSnapshot | null = null;
+ 
+   /** Subscribe API so UI hooks can derive `running` from finally-guaranteed insertions. */
+   get inflight(): InflightSet {
+@@ -380,6 +392,7 @@ export class CacheFirstLoop {
+     this.stats.reset();
+     this._turn = 0;
+     this._budgetWarned = false;
++    this._lastCacheShape = null;
+     // Drain leftover steer text — otherwise the first step() after /new
+     // injects it as a user message and the next turn leaks prior intent.
+     this._steerQueue.length = 0;
+@@ -410,6 +423,7 @@ export class CacheFirstLoop {
+     this.log.compactInPlace([]);
+     this.scratch.reset();
+     this._inflight.clear();
++    this._lastCacheShape = null;
+     this._steerQueue.length = 0;
+     this._steerConsumed = false;
+     this.sessionName = opts.sessionName;
+@@ -552,6 +566,48 @@ export class CacheFirstLoop {
+     return [...this.prefix.toMessages(), ...healedMessages];
+   }
+ 
++  private cacheShapeForRequest(
++    prefixEvidence: PrefixDiagnosticHashes,
++    toolSpecs: readonly ToolSpec[],
++  ): CacheShapeSnapshot {
++    return {
++      systemHash: prefixEvidence.systemHash,
++      toolsHash: prefixEvidence.toolSpecsHash,
++      fewShotsHash: prefixEvidence.fewShotsHash,
++      prefixHash: prefixEvidence.prefixHash,
++      logRewriteVersion: this.log.rewriteVersion,
++      toolSchemaTokens: countTokensBounded(JSON.stringify(toolSpecs)),
++    };
++  }
++
++  private cacheDiagnosticsForUsage(
++    shape: CacheShapeSnapshot,
++    usage: TurnStats["usage"] | null,
++  ): CacheDiagnostics {
++    const prev = this._lastCacheShape;
++    const prefixChangeReasons: CacheDiagnostics["prefixChangeReasons"] = [];
++    if (prev) {
++      if (prev.systemHash !== shape.systemHash) prefixChangeReasons.push("system");
++      if (prev.toolsHash !== shape.toolsHash) prefixChangeReasons.push("tools");
++      if (prev.fewShotsHash !== shape.fewShotsHash) prefixChangeReasons.push("few_shots");
++      if (prev.logRewriteVersion !== shape.logRewriteVersion) {
++        prefixChangeReasons.push("log_rewrite");
++      }
++    }
++    return {
++      prefixHash: shape.prefixHash,
++      prefixChanged: prefixChangeReasons.length > 0,
++      prefixChangeReasons,
++      systemHash: shape.systemHash,
++      toolsHash: shape.toolsHash,
++      fewShotsHash: shape.fewShotsHash,
++      logRewriteVersion: shape.logRewriteVersion,
++      toolSchemaTokens: shape.toolSchemaTokens,
++      promptCacheMissTokens: usage?.promptCacheMissTokens ?? 0,
++      promptCacheHitTokens: usage?.promptCacheHitTokens ?? 0,
++    };
++  }
++
+   private healActiveLogBeforeSend(): ChatMessage[] {
+     // Skip the expensive 4-pass healing pipeline when the log hasn't
+     // changed since the last call — the common case bet
+
+[… truncated 21866 chars …]

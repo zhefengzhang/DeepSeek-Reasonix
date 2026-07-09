@@ -1,0 +1,260 @@
+$ npm --prefix desktop run build 2>&1
+[exit 0]
+
+> reasonix-desktop@0.52.0 build
+> tsc && vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 3148 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                                             [39m[1m[2m    0.39 kB[22m[1m[22m[2m │ gzip:     0.27 kB[22m
+[2mdist/[22m[32massets/geist-cyrillic-ext-700-normal-Bkix3SrV.woff     [39m[1m[2m    4.10 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-ext-600-normal-DokWo2US.woff     [39m[1m[2m    4.12 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-ext-500-normal-DWocS6Us.woff     [39m[1m[2m    4.12 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-vietnamese-600-normal-BFUgqsz8.woff2      [39m[1m[2m    4.16 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size3-Regular-CTq5MqoE.woff               [39m[1m[2m    4.42 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-symbols2-600-normal-hNuStSC5.woff    [39m[1m[2m    4.64 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-symbols2-500-normal-BYvOiszX.woff    [39m[1m[2m    4.70 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-symbols2-400-normal-B5fXMCGq.woff    [39m[1m[2m    4.74 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size4-Regular-Dl5lxZxV.woff2              [39m[1m[2m    4.93 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-vietnamese-400-normal-DMkecbls.woff2      [39m[1m[2m    4.97 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-vietnamese-600-normal-Cc8MFFhd.woff2      [39m[1m[2m    5.10 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-vietnamese-700-normal-DlLaEgI2.woff2      [39m[1m[2m    5.10 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-vietnamese-500-normal-DOriooB6.woff2      [39m[1m[2m    5.11 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-vietnamese-400-normal-CyOwoevh.woff  [39m[1m[2m    5.15 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size2-Regular-Dy4dx90m.woff2              [39m[1m[2m    5.21 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-vietnamese-500-normal-Do_laDd2.woff  [39m[1m[2m    5.26 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-ext-400-normal-DGGRlc-M.woff2       [39m[1m[2m    5.26 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-vietnamese-600-normal-wWJYj5oM.woff  [39m[1m[2m    5.27 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-ext-500-normal-C4iEst2y.woff2       [39m[1m[2m    5.43 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-ext-600-normal-DRtmH8MT.woff2       [39m[1m[2m    5.43 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-ext-700-normal-qfdV9bQt.woff2       [39m[1m[2m    5.44 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size1-Regular-mCD8mA8B.woff2              [39m[1m[2m    5.47 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-cyrillic-400-normal-DoshcOXv.woff2   [39m[1m[2m    5.55 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-vietnamese-400-normal-CfO6U8f5.woff       [39m[1m[2m    5.58 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-vietnamese-500-normal-DUFFHuDl.woff       [39m[1m[2m    5.63 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-vietnamese-700-normal-DOqkMreX.woff       [39m[1m[2m    5.64 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-vietnamese-600-normal-DpQesccB.woff       [39m[1m[2m    5.65 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-cyrillic-500-normal-BkE2O7RC.woff2   [39m[1m[2m    5.71 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-cyrillic-600-normal-U5brWheX.woff2   [39m[1m[2m    5.72 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size4-Regular-BF-4gkZK.woff               [39m[1m[2m    5.98 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-400-normal-DXusLSnH.woff2        [39m[1m[2m    6.12 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size2-Regular-oD1tc_U0.woff               [39m[1m[2m    6.19 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-500-normal-NWpm63d5.woff2        [39m[1m[2m    6.33 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-700-normal-BSHy2ewF.woff2        [39m[1m[2m    6.33 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-600-normal-BeW5VFD_.woff2        [39m[1m[2m    6.36 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size1-Regular-C195tn64.woff               [39m[1m[2m    6.50 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-vietnamese-400-normal-Bbgyi5SW.woff       [39m[1m[2m    6.50 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-vietnamese-500-normal-mJboJaSs.woff       [39m[1m[2m    6.60 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-vietnamese-700-normal-BZaoP0fm.woff       [39m[1m[2m    6.63 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-vietnamese-600-normal-BuLX-rYi.woff       [39m[1m[2m    6.64 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Caligraphic-Regular-Di6jR-x-.woff2        [39m[1m[2m    6.91 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Caligraphic-Bold-Dq_IR9rO.woff2           [39m[1m[2m    6.91 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-cyrillic-400-normal-CeA7eGSt.woff    [39m[1m[2m    6.98 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-ext-400-normal-C1xxG8eb.woff2  [39m[1m[2m    7.03 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-ext-400-normal-KugGGMne.woff        [39m[1m[2m    7.06 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-ext-500-normal-CDyCFkgU.woff2  [39m[1m[2m    7.08 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-ext-600-normal-DBcUF1m6.woff2  [39m[1m[2m    7.14 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-cyrillic-600-normal-QHfVBDB7.woff    [39m[1m[2m    7.18 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-cyrillic-500-normal-BgLpzsdg.woff    [39m[1m[2m    7.18 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-ext-500-normal-2j5mBUwD.woff        [39m[1m[2m    7.19 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-ext-600-normal-B8X0CLgF.woff        [39m[1m[2m    7.21 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-ext-700-normal-BoQ6DsYi.woff        [39m[1m[2m    7.22 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size3-Regular-DgpXs0kz.ttf                [39m[1m[2m    7.59 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Caligraphic-Regular-CTRA-rTL.woff         [39m[1m[2m    7.66 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-400-normal-obahsSVq.woff2        [39m[1m[2m    7.71 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Caligraphic-Bold-BEiXGLvX.woff            [39m[1m[2m    7.72 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-400-normal-B4URO6DV.woff2           [39m[1m[2m    7.78 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-400-normal-Cn3-e5nR.woff         [39m[1m[2m    7.81 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-ext-400-normal-CND6cjiG.woff2       [39m[1m[2m    7.83 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-500-normal-BasfLYem.woff2        [39m[1m[2m    7.90 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-700-normal-CjBOestx.woff2        [39m[1m[2m    7.90 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-500-normal-BIZE56-Y.woff2           [39m[1m[2m    7.92 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-700-normal-C3JjAnD8.woff2           [39m[1m[2m    7.92 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-ext-500-normal-BovoTgeE.woff2       [39m[1m[2m    7.94 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-600-normal-plRanbMR.woff2           [39m[1m[2m    7.94 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-600-normal-CWCymEST.woff2        [39m[1m[2m    7.97 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-ext-700-normal-BnofTsEi.woff2       [39m[1m[2m    7.98 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-ext-600-normal-CVFbg5dS.woff2       [39m[1m[2m    8.00 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-500-normal-CBpO5n4G.woff         [39m[1m[2m    8.00 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-700-normal-ByQXRVdm.woff         [39m[1m[2m    8.02 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-cyrillic-600-normal-DjSi8uLI.woff         [39m[1m[2m    8.03 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-ext-400-normal-a1APXIwD.woff   [39m[1m[2m    9.38 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-ext-500-normal-CzSM7th5.woff   [39m[1m[2m    9.51 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-ext-600-normal-bu4iM2UY.woff   [39m[1m[2m    9.56 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Script-Regular-D3wIWfF6.woff2             [39m[1m[2m    9.64 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-400-normal-HOLc17fK.woff         [39m[1m[2m    9.78 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-700-normal-DrXBdSj3.woff         [39m[1m[2m    9.91 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-400-normal-q2sYcFCs.woff            [39m[1m[2m    9.92 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-600-normal-4D_pXhcN.woff         [39m[1m[2m    9.94 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-500-normal-CxZf_p3X.woff         [39m[1m[2m    9.94 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-500-normal-Xzm54t5V.woff            [39m[1m[2m    9.98 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-700-normal-BUv2fZ6O.woff            [39m[1m[2m    9.98 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-greek-600-normal-BZpKdvQh.woff            [39m[1m[2m   10.03 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-ext-400-normal-BQZuk6qB.woff2    [39m[1m[2m   10.23 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Regular-DDBCnlJ7.woff2          [39m[1m[2m   10.34 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size4-Regular-DWFBv043.ttf                [39m[1m[2m   10.36 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-ext-500-normal-B0yAr1jD.woff2    [39m[1m[2m   10.43 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-ext-600-normal-Dfes3d0z.woff2    [39m[1m[2m   10.48 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-ext-700-normal-BjwYoWNd.woff2    [39m[1m[2m   10.50 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-ext-400-normal-DHhjwYCZ.woff        [39m[1m[2m   10.53 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Script-Regular-D5yQViql.woff              [39m[1m[2m   10.59 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-ext-500-normal-MJioTMEP.woff        [39m[1m[2m   10.66 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-ext-700-normal-BwiYGq1U.woff        [39m[1m[2m   10.68 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-ext-600-normal-hvJIbBav.woff        [39m[1m[2m   10.72 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Fraktur-Regular-CTYiF6lA.woff2            [39m[1m[2m   11.32 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Fraktur-Bold-CL6g_b3V.woff2               [39m[1m[2m   11.35 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size2-Regular-B7gKUWhC.ttf                [39m[1m[2m   11.51 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Italic-C3H0VqGB.woff2           [39m[1m[2m   12.03 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Bold-D1sUS0GD.woff2             [39m[1m[2m   12.22 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Size1-Regular-Dbsnue_I.ttf                [39m[1m[2m   12.23 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Regular-CS6fqUqJ.woff           [39m[1m[2m   12.32 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Caligraphic-Regular-wX97UBjC.ttf          [39m[1m[2m   12.34 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Caligraphic-Bold-ATXxdsX0.ttf             [39m[1m[2m   12.37 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-400-normal-DKaoCDn5.woff2      [39m[1m[2m   12.79 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-400-normal-B40WzpMT.woff2           [39m[1m[2m   12.96 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Fraktur-Regular-Dxdc4cR9.woff             [39m[1m[2m   13.21 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-500-normal-CTWBw9NS.woff2           [39m[1m[2m   13.30 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Fraktur-Bold-BsDP51OF.woff                [39m[1m[2m   13.30 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-ext-400-normal-DQukG94-.woff     [39m[1m[2m   13.34 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-700-normal-CFi8mLqe.woff2           [39m[1m[2m   13.36 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-600-normal-CSETrqM2.woff2           [39m[1m[2m   13.37 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-500-normal-C3sF8Y1B.woff2      [39m[1m[2m   13.38 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-600-normal-BHzjB6_C.woff2      [39m[1m[2m   13.39 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-ext-700-normal-LO58E6JB.woff     [39m[1m[2m   13.41 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-ext-500-normal-BmqWE9Dz.woff     [39m[1m[2m   13.45 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-cyrillic-ext-600-normal-Bcila6Z-.woff     [39m[1m[2m   13.46 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Typewriter-Regular-CO6r4hn1.woff2         [39m[1m[2m   13.57 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Italic-DN2j7dab.woff            [39m[1m[2m   14.11 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Bold-DbIhKOiC.woff              [39m[1m[2m   14.41 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Typewriter-Regular-C0xS9mPB.woff          [39m[1m[2m   16.03 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Math-BoldItalic-CZnvNsCZ.woff2            [39m[1m[2m   16.40 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Math-Italic-t53AETM-.woff2                [39m[1m[2m   16.44 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Script-Regular-C5JkGWo-.ttf               [39m[1m[2m   16.65 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-BoldItalic-DxDJ3AOS.woff2            [39m[1m[2m   16.78 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-400-normal-BXAprPdR.woff       [39m[1m[2m   16.90 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Italic-NWA7e6Wa.woff2                [39m[1m[2m   16.99 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-400-normal-cWY99Cna.woff            [39m[1m[2m   17.21 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-600-normal-C5fp8g0r.woff       [39m[1m[2m   17.37 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-mono-latin-500-normal-YfPbDI_o.woff       [39m[1m[2m   17.38 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-500-normal-CHEM4JuE.woff            [39m[1m[2m   17.48 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-700-normal-RGxhsL9r.woff            [39m[1m[2m   17.56 kB[22m[1m[22m
+[2mdist/[22m[32massets/geist-latin-600-normal-BeQEdSAO.woff            [39m[1m[2m   17.56 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Math-BoldItalic-iY-2wyZ7.woff             [39m[1m[2m   18.67 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Math-Italic-DA0__PXp.woff                 [39m[1m[2m   18.75 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-BoldItalic-SpSLRI95.woff             [39m[1m[2m   19.41 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Regular-BNo7hRIc.ttf            [39m[1m[2m   19.44 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Fraktur-Regular-CB_wures.ttf              [39m[1m[2m   19.57 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Fraktur-Bold-BdnERNNW.ttf                 [39m[1m[2m   19.58 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Italic-BMLOBm91.woff                 [39m[1m[2m   19.68 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Italic-YYjJ1zSn.ttf             [39m[1m[2m   22.36 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-400-normal-C38fXH4l.woff2           [39m[1m[2m   23.66 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-500-normal-Cerq10X2.woff2           [39m[1m[2m   24.27 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-700-normal-Yt3aPRUw.woff2           [39m[1m[2m   24.36 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-600-normal-LgqL8muc.woff2           [39m[1m[2m   24.45 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_SansSerif-Bold-CFMepnvq.ttf               [39m[1m[2m   24.50 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Bold-Cx986IdX.woff2                  [39m[1m[2m   25.32 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Regular-B22Nviop.woff2               [39m[1m[2m   26.27 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Typewriter-Regular-D3Ib7_Hf.ttf           [39m[1m[2m   27.56 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_AMS-Regular-BQhdFMY1.woff2                [39m[1m[2m   28.08 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Bold-Jm3AIy58.woff                   [39m[1m[2m   29.91 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-400-normal-CyCys3Eg.woff            [39m[1m[2m   30.70 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Regular-Dr94JaBh.woff                [39m[1m[2m   30.77 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Math-BoldItalic-B3XSjfu4.ttf              [39m[1m[2m   31.20 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-600-normal-CiBQ2DWP.woff            [39m[1m[2m   31.26 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-500-normal-BL9OpVg8.woff            [39m[1m[2m   31.28 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Math-Italic-flOr_0UB.ttf                  [39m[1m[2m   31.31 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-700-normal-BLAVimhd.woff            [39m[1m[2m   31.32 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-BoldItalic-DzxPMmG6.ttf              [39m[1m[2m   32.97 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_AMS-Regular-DMm9YOAa.woff                 [39m[1m[2m   33.52 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Italic-3WenGoN9.ttf                  [39m[1m[2m   33.58 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-ext-400-normal-C1nco2VV.woff2       [39m[1m[2m   35.00 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-ext-500-normal-CV4jyFjo.woff2       [39m[1m[2m   36.02 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-ext-700-normal-Ca8adRJv.woff2       [39m[1m[2m   36.24 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-ext-600-normal-D2bJ5OIk.woff2       [39m[1m[2m   36.26 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-ext-400-normal-77YHD8bZ.woff        [39m[1m[2m   47.56 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-ext-500-normal-BxGbmqWO.woff        [39m[1m[2m   48.49 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-ext-700-normal-TidjK2hL.woff        [39m[1m[2m   48.63 kB[22m[1m[22m
+[2mdist/[22m[32massets/inter-latin-ext-600-normal-CIVaiw4L.woff        [39m[1m[2m   48.67 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Bold-waoOVXN0.ttf                    [39m[1m[2m   51.34 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_Main-Regular-ypZvNtVU.ttf                 [39m[1m[2m   53.58 kB[22m[1m[22m
+[2mdist/[22m[32massets/KaTeX_AMS-Regular-DRggAlZN.ttf                  [39m[1m[2m   63.63 kB[22m[1m[22m
+[2mdist/[22m[32massets/codicon-ngg6Pgfi.ttf                            [39m[1m[2m  121.97 kB[22m[1m[22m
+[2mdist/[22m[32massets/editor.worker-CTQ5p5WZ.js                       [39m[1m[2m  251.06 kB[22m[1m[22m
+[2mdist/[22m[32massets/json.worker-CUJs-dtA.js                         [39m[1m[2m  382.33 kB[22m[1m[22m
+[2mdist/[22m[32massets/html.worker-lU17Tx2m.js                         [39m[1m[2m  688.27 kB[22m[1m[22m
+[2mdist/[22m[32massets/css.worker-GxEd3MMM.js                          [39m[1m[2m1,029.40 kB[22m[1m[22m
+[2mdist/[22m[32massets/ts.worker-Dy9lDQQT.js                           [39m[1m[2m7,010.35 kB[22m[1m[22m
+[2mdist/[22m[35massets/index-Guc_B4Ey.css                              [39m[1m[2m  441.66 kB[22m[1m[22m[2m │ gzip:   127.88 kB[22m
+[2mdist/[22m[36massets/azcli-Y6nb8tq_.js                               [39m[1m[2m    0.75 kB[22m[1m[22m[2m │ gzip:     0.32 kB[22m[2m │ map:      2.34 kB[22m
+[2mdist/[22m[36massets/javascript-0n0vuNDc.js                          [39m[1m[2m    0.85 kB[22m[1m[22m[2m │ gzip:     0.48 kB[22m[2m │ map:      2.18 kB[22m
+[2mdist/[22m[36massets/ini-Kd9XrMLS.js                                 [39m[1m[2m    1.00 kB[22m[1m[22m[2m │ gzip:     0.53 kB[22m[2m │ map:      3.05 kB[22m
+[2mdist/[22m[36massets/csp-D-4FJmMZ.js                                 [39m[1m[2m    1.32 kB[22m[1m[22m[2m │ gzip:     0.52 kB[22m[2m │ map:      2.90 kB[22m
+[2mdist/[22m[36massets/pla-DSh2-awV.js                                 [39m[1m[2m    1.59 kB[22m[1m[22m[2m │ gzip:     0.64 kB[22m[2m │ map:      4.96 kB[22m
+[2mdist/[22m[36massets/scheme-BPhDTwHR.js                              [39m[1m[2m    1.67 kB[22m[1m[22m[2m │ gzip:     0.82 kB[22m[2m │ map:      4.38 kB[22m
+[2mdist/[22m[36massets/flow9-BeJ5waoc.js                               [39m[1m[2m    1.72 kB[22m[1m[22m[2m │ gzip:     0.85 kB[22m[2m │ map:      4.95 kB[22m
+[2mdist/[22m[36massets/sb-BBc9UKZt.js                                  [39m[1m[2m    1.73 kB[22m[1m[22m[2m │ gzip:     0.83 kB[22m[2m │ map:      4.86 kB[22m
+[2mdist/[22m[36massets/bat-BwHxbl9M.js                                 [39m[1m[2m    1.75 kB[22m[1m[22m[2m │ gzip:     0.87 kB[22m[2m │ map:      4.61 kB[22m
+[2mdist/[22m[36massets/dockerfile-BG73LgW2.js                          [39m[1m[2m    1.78 kB[22m[1m[22m[2m │ gzip:     0.67 kB[22m[2m │ map:      5.41 kB[22m
+[2mdist/[22m[36massets/pascaligo-DtZ0uQbO.js                           [39m[1m[2m    1.91 kB[22m[1m[22m[2m │ gzip:     0.91 kB[22m[2m │ map:      5.75 kB[22m
+[2mdist/[22m[36massets/xml-DDGfGLkm.js                                 [39m[1m[2m    1.97 kB[22m[1m[22m[2m │ gzip:     0.77 kB[22m[2m │ map:     10.23 kB[22m
+[2mdist/[22m[36massets/lua-Cyyb5UIc.js                                 [39m[1m[2m    2.03 kB[22m[1m[22m[2m │ gzip:     0.93 kB[22m[2m │ map:      5.94 kB[22m
+[2mdist/[22m[36massets/cameligo-Bf6VGUru.js                            [39m[1m[2m    2.09 kB[22m[1m[22m[2m │ gzip:     0.96 kB[22m[2m │ map:      6.25 kB[22m
+[2mdist/[22m[36massets/graphql-BxJiqAUM.js                             [39m[1m[2m    2.17 kB[22m[1m[22m[2m │ gzip:     1.03 kB[22m[2m │ map:      6.22 kB[22m
+[2mdist/[22m[36massets/objective-c-BDtDVThU.js                         [39m[1m[2m    2.31 kB[22m[1m[22m[2m │ gzip:     1.06 kB[22m[2m │ map:      6.17 kB[22m
+[2mdist/[22m[36massets/lexon-OrD6JF1K.js                               [39m[1m[2m    2.34 kB[22m[1m[22m[2m │ gzip:     0.92 kB[22m[2m │ map:      6.51 kB[22m
+[2mdist/[22m[36massets/bicep-CFznDFnq.js                               [39m[1m[2m    2.44 kB[22m[1m[22m[2m │ gzip:     0.97 kB[22m[2m │ map:      6.42 kB[22m
+[2mdist/[22m[36massets/sparql-CJmd_6j2.js                              [39m[1m[2m    2.46 kB[22m[1m[22m[2m │ gzip:     1.16 kB[22m[2m │ map:      6.64 kB[22m
+[2mdist/[22m[36massets/mips-CiqrrVzr.js                                [39m[1m[2m    2.48 kB[22m[1m[22m[2m │ gzip:     1.07 kB[22m[2m │ map:      6.98 kB[22m
+[2mdist/[22m[36massets/go-acbASCJo.js                                  [39m[1m[2m    2.56 kB[22m[1m[22m[2m │ gzip:     1.15 kB[22m[2m │ map:      7.62 kB[22m
+[2mdist/[22m[36massets/sophia-CnS9iZB_.js                              [39m[1m[2m    2.67 kB[22m[1m[22m[2m │ gzip:     1.21 kB[22m[2m │ map:      7.21 kB[22m
+[2mdist/[22m[36massets/typespec-Btyra-wh.js                            [39m[1m[2m    2.70 kB[22m[1m[22m[2m │ gzip:     1.09 kB[22m[2m │ map:      7.20 kB[22m
+[2mdist/[22m[36massets/m3-B8OfTtLu.js                                  [39m[1m[2m    2.72 kB[22m[1m[22m[2m │ gzip:     1.31 kB[22m[2m │ map:      7.25 kB[22m
+[2mdist/[22m[36massets/fsharp-PahG7c26.js                              [39m[1m[2m    2.89 kB[22m[1m[22m[2m │ gzip:     1.32 kB[22m[2m │ map:      7.62 kB[22m
+[2mdist/[22m[36massets/pascal-vHIfCaH5.js                              [39m[1m[2m    2.90 kB[22m[1m[22m[2m │ gzip:     1.39 kB[22m[2m │ map:      8.01 kB[22m
+[2mdist/[22m[36massets/shell-DiJ1NA_G.js                               [39m[1m[2m    2.98 kB[22m[1m[22m[2m │ gzip:     1.20 kB[22m[2m │ map:      7.85 kB[22m
+[2mdist/[22m[36massets/r-j7ic8hl3.js                                   [39m[1m[2m    3.03 kB[22m[1m[22m[2m │ gzip:     1.27 kB[22m[2m │ map:      8.12 kB[22m
+[2mdist/[22m[36massets/cssMode-BTN1nGN3.js                             [39m[1m[2m    3.06 kB[22m[1m[22m[2m │ gzip:     1.17 kB[22m[2m │ map:     14.76 kB[22m
+[2mdist/[22m[36massets/qsharp-Bw9ernYp.js                              [39m[1m[2m    3.10 kB[22m[1m[22m[2m │ gzip:     1.41 kB[22m[2m │ map:      8.74 kB[22m
+[2mdist/[22m[36massets/java-CXBNlu9o.js                                [39m[1m[2m    3.13 kB[22m[1m[22m[2m │ gzip:     1.40 kB[22m[2m │ map:      8.47 kB[22m
+[2mdist/[22m[36massets/powershell-COWaemsV.js                          [39m[1m[2m    3.18 kB[22m[1m[22m[2m │ gzip:     1.38 kB[22m[2m │ map:      8.84 kB[22m
+[2mdist/[22m[36massets/cypher-cTPe9QuQ.js                              [39m[1m[2m    3.29 kB[22m[1m[22m[2m │ gzip:     1.43 kB[22m[2m │ map:      8.82 kB[22m
+[2mdist/[22m[36massets/kotlin-s7OhZKlX.js                              [39m[1m[2m    3.31 kB[22m[1m[22m[2m │ gzip:     1.47 kB[22m[2m │ map:      8.73 kB[22m
+[2mdist/[22m[36massets/webview-DZ6BIQAo.js                             [39m[1m[2m    3.31 kB[22m[1m[22m[2m │ gzip:     1.14 kB[22m[2m │ map:     25.46 kB[22m
+[2mdist/[22m[36massets/redis-Bu5POkcn.js                               [39m[1m[2m    3.46 kB[22m[1m[22m[2m │ gzip:     1.48 kB[22m[2m │ map:      8.81 kB[22m
+[2mdist/[22m[36massets/tcl-Dm6ycUr_.js                                 [39m[1m[2m    3.47 kB[22m[1m[22m[2m │ gzip:     1.37 kB[22m[2m │ map:      8.80 kB[22m
+[2mdist/[22m[36massets/hcl-DtV1sZF8.js                                 [39m[1m[2m    3.49 kB[22m[1m[22m[2m │ gzip:     1.49 kB[22m[2m │ map:      8.15 kB[22m
+[2mdist/[22m[36massets/coffee-Bd8akH9Z.js                              [39m[1m[2m    3.50 kB[22m[1m[22m[2m │ gzip:     1.30 kB[22m[2m │ map:      9.58 kB[22m
+[2mdist/[22m[36massets/htmlMode-CObu9PeK.js                            [39m[1m[2m    3.52 kB[22m[1m[22m[2m │ gzip:     1.29 kB[22m[2m │ map:     15.99 kB[22m
+[2mdist/[22m[36massets/liquid-Dmqp57Px.js                              [39m[1m[2m    3.52 kB[22m[1m[22m[2m │ gzip:     1.46 kB[22m[2m │ map:     13.98 kB[22m
+[2mdist/[22m[36massets/yaml-B-fFOCfz.js                                [39m[1m[2m    3.58 kB[22m[1m[22m[2m │ gzip:     1.33 kB[22m[2m │ map:     14.65 kB[22m
+[2mdist/[22m[36massets/markdown-BFxVWTOG.js                            [39m[1m[2m    3.70 kB[22m[1m[22m[2m │ gzip:     1.39 kB[22m[2m │ map:     10.48 kB[22m
+[2mdist/[22m[36massets/python-B6yE4JsU.js                              [39m[1m[2m    3.76 kB[22m[1m[22m[2m │ gzip:     1.49 kB[22m[2m │ map:     15.89 kB[22m
+[2mdist/[22m[36massets/less-9HpZscsL.js                                [39m[1m[2m    3.80 kB[22m[1m[22m[2m │ gzip:     1.42 kB[22m[2m │ map:      8.82 kB[22m
+[2mdist/[22m[36massets/restructuredtext-CqXO7rUv.js                    [39m[1m[2m    3.81 kB[22m[1m[22m[2m │ gzip:     1.38 kB[22m[2m │ map:      9.01 kB[22m
+[2mdist/[22m[36massets/apex-DNDY2TF8.js                                [39m[1m[2m    3.86 kB[22m[1m[22m[2m │ gzip:     1.77 kB[22m[2m │ map:     10.60 kB[22m
+[2mdist/[22m[36massets/rust-BzKRNQWT.js                                [39m[1m[2m    4.06 kB[22m[1m[22m[2m │ gzip:     1.83 kB[22m[2m │ map:     10.57 kB[22m
+[2mdist/[22m[36massets/dart-BOtBlQCF.js                                [39m[1m[2m    4.15 kB[22m[1m[22m[2m │ gzip:     1.65 kB[22m[2m │ map:     10.81 kB[22m
+[2mdist/[22m[36massets/mdx-DOf4BlRB.js                                 [39m[1m[2m    4.35 kB[22m[1m[22m[2m │ gzip:     1.25 kB[22m[2m │ map:     15.75 kB[22m
+[2mdist/[22m[36massets/css-DdJfP1eB.js                                 [39m[1m[2m    4.41 kB[22m[1m[22m[2m │ gzip:     1.38 kB[22m[2m │ map:     10.81 kB[22m
+[2mdist/[22m[36massets/csharp-Co3qMtFm.js                              [39m[1m[2m    4.43 kB[22m[1m[22m[2m │ gzip:     1.73 kB[22m[2m │ map:     11.92 kB[22m
+[2mdist/[22m[36massets/html-BYBefhKz.js                                [39m[1m[2m    4.57 kB[22m[1m[22m[2m │ gzip:     1.20 kB[22m[2m │ map:     17.66 kB[22m
+[2mdist/[22m[36massets/pug-8SOpv6rk.js                                 [39m[1m[2m    4.73 kB[22m[1m[22m[2m │ gzip:     1.65 kB[22m[2m │ map:     13.80 kB[22m
+[2mdist/[22m[36massets/msdax-DmeGPVcC.js                               [39m[1m[2m    4.82 kB[22m[1m[22m[2m │ gzip:     1.94 kB[22m[2m │ map:     11.48 kB[22m
+[2mdist/[22m[36massets/typescript-BAzk8L7V.js                          [39m[1m[2m    4.95 kB[22m[1m[22m[2m │ gzip:     1.99 kB[22m[2m │ map:     17.94 kB[22m
+[2mdist/[22m[36massets/swift-Bqt4WxQ4.js                               [39m[1m[2m    5.08 kB[22m[1m[22m[2m │ gzip:     2.10 kB[22m[2m │ map:     11.60 kB[22m
+[2mdist/[22m[36massets/cpp-BbWJElDN.js                                 [39m[1m[2m    5.20 kB[22m[1m[22m[2m │ gzip:     2.09 kB[22m[2m │ map:     13.22 kB[22m
+[2mdist/[22m[36massets/ecl-BEgZUVRK.js                                 [39m[1m[2m    5.25 kB[22m[1m[22m[2m │ gzip:     2.24 kB[22m[2m │ map:     13.17 kB[22m
+[2mdist/[22m[36massets/vb-Db0cS2oM.js                                  [39m[1m[2m    5.69 kB[22m[1m[22m[2m │ gzip:     2.06 kB[22m[2m │ map:     13.74 kB[22m
+[2mdist/[22m[36massets/twig-Csy3S7wG.js                                [39m[1m[2m    5.88 kB[22m[1m[22m[2m │ gzip:     1.53 kB[22m[2m │ map:     16.16 kB[22m
+[2mdist/[22m[36massets/scss-CBJaRo0y.js                                [39m[1m[2m    6.31 kB[22m[1m[22m[2m │ gzip:     1.75 kB[22m[2m │ map:     15.77 kB[22m
+[2mdist/[22m[36massets/handlebars-DSp-ljrk.js                          [39m[1m[2m    6.34 kB[22m[1m[22m[2m │ gzip:     1.41 kB[22m[2m │ map:     21.67 kB[22m
+[2mdist/[22m[36massets/julia-cl7-CwDS.js                               [39m[1m[2m    7.00 kB[22m[1m[22m[2m │ gzip:     2.66 kB[22m[2m │ map:     17.62 kB[22m
+[2mdist/[22m[36massets/scala-D9hQfWCl.js                               [39m[1m[2m    7.22 kB[22m[1m[22m[2m │ gzip:     2.10 kB[22m[2m │ map:     17.70 kB[22m
+[2mdist/[22m[36massets/wgsl-DumH7NcR.js                                [39m[1m[2m    7.24 kB[22m[1m[22m[2m │ gzip:     2.74 kB[22m[2m │ map:     15.18 kB[22m
+[2mdist/[22m[36massets/st-CHwy0fLd.js                                  [39m[1m[2m    7.30 kB[22m[1m[22m[2m │ gzip:     2.24 kB[22m[2m │ map:     17.48 kB[22m
+[2mdist/[22m[36massets/systemverilog-Bs9z6M-
+
+[… truncated 3911 chars …]

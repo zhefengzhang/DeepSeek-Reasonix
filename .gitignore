@@ -44,12 +44,12 @@ node_modules/
 .npm/
 
 # Project-local Reasonix state; keep the checked-in review command.
-/.reasonix/*
-!/.reasonix/commands/
-!/.reasonix/commands/review.md
+# /.reasonix/*
+# !/.reasonix/commands/
+# !/.reasonix/commands/review.md
 
 # CodeGraph per-project index (rebuilt locally; never committed)
-.codegraph/
+# .codegraph/
 
 # Editor / OS
 .DS_Store
