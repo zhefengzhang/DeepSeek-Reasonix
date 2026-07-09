@@ -39,27 +39,28 @@ func SkillNameKey(name string) string {
 
 // Config is Reasonix's runtime configuration.
 type Config struct {
-	ConfigVersion    int                 `toml:"config_version"`
-	DefaultModel     string              `toml:"default_model"`
-	Language         string              `toml:"language"` // ui/model language tag (e.g. "zh"); empty = auto-detect from $LANG / $REASONIX_LANG
-	CredentialsStore string              `toml:"credentials_store"`
-	UI               UIConfig            `toml:"ui"`
-	Desktop          DesktopConfig       `toml:"desktop"`
-	Notifications    NotificationsConfig `toml:"notifications"`
-	Agent            AgentConfig         `toml:"agent"`
-	Providers        []ProviderEntry     `toml:"providers"`
-	Tools            ToolsConfig         `toml:"tools"`
-	Permissions      PermissionsConfig   `toml:"permissions"`
-	Sandbox          SandboxConfig       `toml:"sandbox"`
-	Network          NetworkConfig       `toml:"network"`
-	Environment      EnvironmentConfig   `toml:"environment"`
-	Plugins          []PluginEntry       `toml:"plugins"`
-	Skills           SkillsConfig        `toml:"skills"`
-	Statusline       StatuslineConfig    `toml:"statusline"`
-	LSP              LSPConfig           `toml:"lsp"`
-	Bot              BotConfig           `toml:"bot"`
-	Serve            ServeConfig         `toml:"serve"`
-	Headroom         HeadroomConfig      `toml:"headroom"`
+	ConfigVersion      int                      `toml:"config_version"`
+	DefaultModel       string                   `toml:"default_model"`
+	Language           string                   `toml:"language"` // ui/model language tag (e.g. "zh"); empty = auto-detect from $LANG / $REASONIX_LANG
+	CredentialsStore   string                   `toml:"credentials_store"`
+	UI                 UIConfig                 `toml:"ui"`
+	Desktop            DesktopConfig            `toml:"desktop"`
+	Notifications      NotificationsConfig      `toml:"notifications"`
+	Agent              AgentConfig              `toml:"agent"`
+	Providers          []ProviderEntry          `toml:"providers"`
+	Tools              ToolsConfig              `toml:"tools"`
+	Permissions        PermissionsConfig        `toml:"permissions"`
+	Sandbox            SandboxConfig            `toml:"sandbox"`
+	Network            NetworkConfig            `toml:"network"`
+	Environment        EnvironmentConfig        `toml:"environment"`
+	Plugins            []PluginEntry            `toml:"plugins"`
+	Skills             SkillsConfig             `toml:"skills"`
+	Statusline         StatuslineConfig         `toml:"statusline"`
+	LSP                LSPConfig                `toml:"lsp"`
+	Bot                BotConfig                `toml:"bot"`
+	Serve              ServeConfig              `toml:"serve"`
+	Headroom           HeadroomConfig           `toml:"headroom"`
+	UnderstandAnything UnderstandAnythingConfig `toml:"understand_anything"`
 
 	providerSources          map[string]providerSourceScope
 	shadowedProjectProviders []ProviderEntry
@@ -325,6 +326,7 @@ var defaultDesktopStatusBarItems = []string{
 	"cost",
 	"balance",
 	"headroom",
+	"graph",
 }
 
 var knownDesktopStatusBarItems = desktopStatusBarItemSet(defaultDesktopStatusBarItems)
@@ -1059,7 +1061,7 @@ type HeadroomConfig struct {
 	Preset string `toml:"preset"`
 	// CodeAware enables AST-level code compression via tree-sitter.
 	// Requires headroom-ai[code] extra. Recommended for programming workflows.
-	CodeAware bool `toml:"code_aware"`
+	CodeAware       bool  `toml:"code_aware"`
 	DisableKompress *bool `toml:"disable_kompress"`
 	// RequestTimeout overrides the HTTP request timeout (seconds) when routing
 	// through the headroom proxy. ML compression (Kompress) needs more time.
@@ -1074,6 +1076,63 @@ type HeadroomConfig struct {
 	// KeepAlive keeps the proxy running after Reasonix exits so the next
 	// cold start is faster. Default false (proxy is stopped on exit).
 	KeepAlive bool `toml:"keep_alive"`
+}
+
+// UnderstandAnythingConfig controls the Understand-Anything knowledge graph
+// engine. It generates an interactive knowledge-graph.json from the workspace
+// that the agent can query for structural understanding.
+type UnderstandAnythingConfig struct {
+	// Enabled toggles the understand_search tool and /understand skill.
+	// Default true.
+	Enabled *bool `toml:"enabled"`
+	// PluginPath is the absolute path to the Understand-Anything
+	// understand-anything-plugin directory. Empty = auto-detect
+	// (checks OtherPackage/Understand-Anything/understand-anything-plugin/
+	// relative to the Reasonix repo, then common clone paths).
+	PluginPath string `toml:"plugin_path"`
+	// AutoUpdate enables automatic graph refresh on detected git changes.
+	// Default false — graph stays until the user or agent rebuilds it.
+	AutoUpdate bool `toml:"auto_update"`
+	// Language sets the output language for generated summaries, tags,
+	// descriptions, and tour content. Accepts ISO 639-1 codes (zh, ja, ko,
+	// en, etc.). Default "en".
+	Language string `toml:"language"`
+	// DashboardPort is the port the dashboard dev server listens on.
+	// Default 5173 (Vite default). Zero = auto-select an open port.
+	DashboardPort int `toml:"dashboard_port"`
+}
+
+// UnderstandEnabled reports whether the understand tool is enabled.
+func (u *UnderstandAnythingConfig) UnderstandEnabled() bool {
+	if u == nil || u.Enabled == nil {
+		return true
+	}
+	return *u.Enabled
+}
+
+// UnderstandPluginPath returns the configured plugin path, or empty string
+// to signal auto-detection by the tool.
+func (u *UnderstandAnythingConfig) UnderstandPluginPath() string {
+	if u == nil {
+		return ""
+	}
+	return u.PluginPath
+}
+
+// UnderstandLanguage returns the output language, defaulting to "en".
+func (u *UnderstandAnythingConfig) UnderstandLanguage() string {
+	if u == nil || u.Language == "" {
+		return "en"
+	}
+	return u.Language
+}
+
+// UnderstandDashboardPort returns the dashboard port, defaulting to 5173.
+func (u *UnderstandAnythingConfig) UnderstandDashboardPort() int {
+	if u == nil || u.DashboardPort <= 0 {
+		return 5173
+	}
+	return u.DashboardPort
 }
 
 // HeadroomPort returns the proxy port, defaulting to 8787.
@@ -1112,9 +1171,6 @@ func (h *HeadroomConfig) HeadroomCodeAware() bool {
 	}
 	return h.CodeAware
 }
-
-
-
 
 // HeadroomDisableKompress reports whether the Kompress ML engine is disabled.
 func (h *HeadroomConfig) HeadroomDisableKompress() bool {
@@ -1169,16 +1225,31 @@ func (h *HeadroomConfig) ApplyPreset(preset string) {
 	switch preset {
 	case "writing":
 		h.CodeAware = false
-		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
-		if h.RequestTimeout == 0 { h.RequestTimeout = 300 }
+		if h.DisableKompress == nil {
+			dk := true
+			h.DisableKompress = &dk
+		}
+		if h.RequestTimeout == 0 {
+			h.RequestTimeout = 300
+		}
 	case "max":
 		h.CodeAware = true
-		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
-		if h.RequestTimeout == 0 { h.RequestTimeout = 300 }
+		if h.DisableKompress == nil {
+			dk := true
+			h.DisableKompress = &dk
+		}
+		if h.RequestTimeout == 0 {
+			h.RequestTimeout = 300
+		}
 	default: // "coding"
 		h.CodeAware = true
-		if h.DisableKompress == nil { dk := true; h.DisableKompress = &dk }
-		if h.RequestTimeout == 0 { h.RequestTimeout = 300 }
+		if h.DisableKompress == nil {
+			dk := true
+			h.DisableKompress = &dk
+		}
+		if h.RequestTimeout == 0 {
+			h.RequestTimeout = 300
+		}
 	}
 }
 
@@ -1572,8 +1643,8 @@ func Default() *Config {
 			MaxSteps:            0,
 			PlannerMaxSteps:     0,
 			AutoPlan:            "off",
-			PlanModeDefault:      false,
-			GuidancePrompt:       "You must execute each task step by step with concrete tool calls (read_file, bash, grep, etc.). Do not give summary-only answers — every claim must be backed by tool output. Always verify your work before declaring completion.",
+			PlanModeDefault:     false,
+			GuidancePrompt:      "You must execute each task step by step with concrete tool calls (read_file, bash, grep, etc.). Do not give summary-only answers — every claim must be backed by tool output. Always verify your work before declaring completion.",
 			SoftCompactRatio:    0.5,
 			ToolResultSnipRatio: 0.6,
 			CompactRatio:        0.8,

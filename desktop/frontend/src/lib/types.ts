@@ -1064,6 +1064,13 @@ export interface BotConnectionDiagnostic {
   occurredAt: string;
 }
 
+export interface UnderstandGraphStatusView {
+  available: boolean;
+  stale: boolean;
+  nodeCount: number;
+  edgeCount: number;
+}
+
 export interface SettingsView {
   headroomStatus?: HeadroomStatusView;
   defaultModel: string;
@@ -1104,6 +1111,8 @@ export interface SettingsView {
   headroomShowLogWindow?: boolean;
   headroomGpuBackend?: string;
   planModeDefault?: boolean;
+  understandGraphAvailable?: boolean;
+  understandGraphStatus?: UnderstandGraphStatusView;
 }
 
 export interface DesktopStartupSettingsView {

@@ -239,6 +239,7 @@ func (s *Server) handler() http.Handler {
 	mux.HandleFunc("GET /sessions", s.sessions)
 	mux.HandleFunc("GET /skills", s.skills)
 	mux.HandleFunc("GET /todos", s.todos)
+	mux.HandleFunc("GET /api/understand/graph", s.understandGraph)
 	mux.HandleFunc("POST /delete-session", s.deleteSession)
 	return logMiddleware(s.auth.middleware(csrfGuard(mux)))
 }
@@ -1164,4 +1165,29 @@ func (s *Server) todos(w http.ResponseWriter, _ *http.Request) {
 		out[i] = todoItem{Content: t.Content, Status: t.Status, ActiveForm: t.ActiveForm, Level: t.Level}
 	}
 	writeJSON(w, out)
+}
+
+// understandGraph serves the Understand-Anything knowledge-graph.json from the
+// workspace root. Returns 404 with a clear message when no graph exists.
+func (s *Server) understandGraph(w http.ResponseWriter, r *http.Request) {
+	root := s.ctl().WorkspaceRoot()
+	if root == "" {
+		http.Error(w, `{"error":"no workspace root — cannot locate knowledge graph"}`+"\n", http.StatusBadRequest)
+		return
+	}
+	graphPath := filepath.Join(root, ".understand-anything", "knowledge-graph.json")
+	data, err := os.ReadFile(graphPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			http.Error(w,
+				`{"error":"no knowledge graph found — run /understand first to generate it","path":"`+graphPath+`"}`+"\n",
+				http.StatusNotFound,
+			)
+			return
+		}
+		http.Error(w, `{"error":"failed to read knowledge graph: `+err.Error()+`"}`+"\n", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(data)
 }

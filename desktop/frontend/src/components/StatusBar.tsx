@@ -1,7 +1,8 @@
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Activity, CircleDollarSign, CircleGauge, Database, Folder, GitBranch, Layers, Percent, RefreshCw, Wallet, Zap } from "lucide-react";
 import { Tooltip } from "./Tooltip";
 import { useI18n, type Translator } from "../lib/i18n";
+import { app } from "../lib/bridge";
 import { formatMoneyLocalized } from "../lib/money";
 import { normalizeStatusBarItems, type StatusBarItemId } from "../lib/statusBarItems";
 import { type BalanceInfo, type ContextInfo, type UsageSourceStats, type WireUsage } from "../lib/types";
@@ -183,6 +184,7 @@ export function StatusBar({
   workspacePath,
   workspaceName,
   gitBranch,
+  understandGraphStatus,
 }: {
   context: ContextInfo;
   usage?: WireUsage;
@@ -201,8 +203,15 @@ export function StatusBar({
   workspacePath?: string;
   workspaceName?: string;
   gitBranch?: string;
+  understandGraphStatus?: import("../lib/types").UnderstandGraphStatusView;
 }) {
   const { locale, t } = useI18n();
+  const [graphStatus, setGraphStatus] = useState(understandGraphStatus);
+  useEffect(() => {
+    if (understandGraphStatus === undefined) {
+      app.Settings().then((s) => setGraphStatus(s?.understandGraphStatus)).catch(() => {});
+    }
+  }, [understandGraphStatus]);
   const pct = context.window ? Math.min(100, Math.round((context.used / context.window) * 100)) : null;
   const compactPct = context.compactRatio ? Math.round(context.compactRatio * 100) : null;
   const compactNear = pct !== null && compactPct !== null && pct >= Math.max(0, compactPct - 10);
@@ -332,6 +341,23 @@ export function StatusBar({
         <span className="stat stat--balance statusbar__balance">
           <MetricLabel style={metricLabelStyle} icon={<Wallet size={12} />} label={t("status.balanceLabel")} />
           <b className={balanceLabel === "-" ? "stat__value--empty" : undefined}>{balanceLabel}</b>
+        </span>
+      </Tooltip>
+    ),
+    graph: (
+      <Tooltip
+        label={!graphStatus?.available
+          ? t("status.graphTooltipEmpty")
+          : graphStatus.stale
+          ? t("status.graphStaleTooltip")
+          : t("status.graphTooltip", { nodes: String(graphStatus.nodeCount), edges: String(graphStatus.edgeCount) })}
+        className="statusbar__metric statusbar__metric--graph"
+      >
+        <span className="stat">
+          <MetricLabel style={metricLabelStyle} icon={<span style={{ fontSize: "11px" }}>📊</span>} label={t("status.graphLabel")} />
+          <b className={!graphStatus?.available ? "stat__value--empty" : graphStatus.stale ? "stat__value--warn" : "stat__value--green"}>
+            {!graphStatus?.available ? "—" : graphStatus.stale ? "⚠" : String(graphStatus.nodeCount)}
+          </b>
         </span>
       </Tooltip>
     ),

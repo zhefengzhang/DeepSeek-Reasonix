@@ -35,6 +35,7 @@ var tokenEconomyCoreBuiltins = []string{
 	"multi_edit",
 	"read_file",
 	"todo_write",
+	"understand_search",
 	"wait",
 	"write_file",
 }

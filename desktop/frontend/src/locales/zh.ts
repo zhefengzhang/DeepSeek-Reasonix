@@ -492,6 +492,10 @@ export const zh: Record<DictKey, string> = {
   "status.headroomRunning": "Headroom 代理运行中 ({requests} 请求，暂无压缩)",
   "status.headroomSavings": "Headroom 压缩 {pct}%（节省 {tokens} tokens，共 {requests} 次请求）",
   "status.headroomLifetime": "累计: {tokens} tokens",
+  "status.graphLabel": "图谱",
+  "status.graphTooltip": "知识图谱就绪: {nodes} 节点, {edges} 边",
+  "status.graphStaleTooltip": "图谱可能已过期 — 运行 /understand 刷新",
+  "status.graphTooltipEmpty": "尚无知识图谱 — 运行 /understand 生成",
   "status.spendTitle": "当前会话估算计费费用，包含主模型、子代理和辅助调用",
 
   // ── Heartbeat ──

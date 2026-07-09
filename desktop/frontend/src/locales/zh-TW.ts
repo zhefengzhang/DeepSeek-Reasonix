@@ -341,6 +341,10 @@ export const zhTW: Record<DictKey, string> = {
   "status.headroomRunning": "Headroom 代理執行中 ({requests} 請求，暫無壓縮)",
   "status.headroomSavings": "Headroom 壓縮 {pct}%（節省 {tokens} tokens，共 {requests} 次請求）",
   "status.headroomLifetime": "累計: {tokens} tokens",
+  "status.graphLabel": "圖譜",
+  "status.graphTooltip": "知識圖譜就緒: {nodes} 節點, {edges} 邊",
+  "status.graphStaleTooltip": "圖譜可能已過期 — 運行 /understand 刷新",
+  "status.graphTooltipEmpty": "尚無知識圖譜 — 運行 /understand 生成",
   "status.spendTitle": "本會話估算計費費用，包含主模型、子代理和輔助呼叫",
 
   // ── Heartbeat ──

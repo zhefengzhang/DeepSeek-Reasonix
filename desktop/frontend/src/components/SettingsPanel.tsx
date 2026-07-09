@@ -1005,6 +1005,8 @@ function statusBarItemLabel(id: StatusBarItemId, t: ReturnType<typeof useT>): st
       return t("status.balanceLabel");
     case "headroom":
       return t("status.headroomLabel");
+    case "graph":
+      return t("status.graphLabel");
   }
 }
 

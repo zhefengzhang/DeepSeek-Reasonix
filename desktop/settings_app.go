@@ -53,7 +53,7 @@ type ProviderView struct {
 	SupportedEfforts  []string                    `json:"supportedEfforts"`
 	DefaultEffort     string                      `json:"defaultEffort"`
 	ModelOverrides    []ProviderModelOverrideView `json:"modelOverrides"`
-	HeadroomEnabled   bool   `json:"headroomEnabled"`
+	HeadroomEnabled   bool                        `json:"headroomEnabled"`
 }
 
 type ProviderModelOverrideView struct {
@@ -198,15 +198,17 @@ type SettingsView struct {
 	HeadroomStatus *HeadroomStatusView `json:"headroomStatus,omitempty"`
 	// HeadroomDisableKompress mirrors the config so the settings panel
 	// initialises the toggle from the persisted value, not a hard-coded default.
-	HeadroomDisableKompress bool   `json:"headroomDisableKompress"`
-	HeadroomKeepAlive      bool   `json:"headroomKeepAlive"`
-	HeadroomMode           string `json:"headroomMode"`
-	HeadroomPreset         string `json:"headroomPreset"`
-	HeadroomCodeAware      bool   `json:"headroomCodeAware"`
-	HeadroomRequestTimeout int    `json:"headroomRequestTimeout"`
-	HeadroomShowLogWindow  bool   `json:"headroomShowLogWindow"`
-	HeadroomGpuBackend     string `json:"headroomGpuBackend"`
-	PlanModeDefault        bool   `json:"planModeDefault"`
+	HeadroomDisableKompress  bool                       `json:"headroomDisableKompress"`
+	HeadroomKeepAlive        bool                       `json:"headroomKeepAlive"`
+	HeadroomMode             string                     `json:"headroomMode"`
+	HeadroomPreset           string                     `json:"headroomPreset"`
+	HeadroomCodeAware        bool                       `json:"headroomCodeAware"`
+	HeadroomRequestTimeout   int                        `json:"headroomRequestTimeout"`
+	HeadroomShowLogWindow    bool                       `json:"headroomShowLogWindow"`
+	HeadroomGpuBackend       string                     `json:"headroomGpuBackend"`
+	PlanModeDefault          bool                       `json:"planModeDefault"`
+	UnderstandGraphAvailable bool                       `json:"understandGraphAvailable"`
+	UnderstandGraphStatus    *UnderstandGraphStatusView `json:"understandGraphStatus,omitempty"`
 }
 
 // DesktopStartupSettingsView is the lightweight Settings subset needed during
@@ -546,7 +548,7 @@ func (a *App) Settings() SettingsView {
 	if shell == "" {
 		shell = "auto"
 	}
-		// Get headroom status
+	// Get headroom status
 	var headroomStatus *HeadroomStatusView
 	if a.headroom != nil {
 		hs := a.headroom.status()
@@ -583,36 +585,38 @@ func (a *App) Settings() SettingsView {
 				Password: cfg.Network.Proxy.Password,
 			},
 		},
-		Agent:                   AgentView{Temperature: cfg.Agent.Temperature, MaxSteps: cfg.Agent.MaxSteps, PlannerMaxSteps: cfg.Agent.PlannerMaxSteps, SystemPrompt: cfg.Agent.SystemPrompt, ColdResumePrune: cfg.ColdResumePruneEnabled(), ReasoningLanguage: cfg.ReasoningLanguage()},
-		Bot:                     botSettingsView(cfg.Bot),
-		DesktopLanguage:         cfg.DesktopLanguage(),
-		DesktopLayoutStyle:      cfg.DesktopLayoutStyle(),
-		DesktopTheme:            cfg.DesktopTheme(),
-		DesktopThemeStyle:       cfg.DesktopThemeStyle(),
-		CloseBehavior:           cfg.DesktopCloseBehavior(),
-		DisplayMode:             cfg.DesktopDisplayMode(),
-		StatusBarStyle:          cfg.DesktopStatusBarStyle(),
-		StatusBarItems:          cfg.DesktopStatusBarItems(),
-		DefaultToolApprovalMode: cfg.DesktopDefaultToolApprovalMode(),
-		CheckUpdates:            cfg.DesktopCheckUpdates(),
-		Telemetry:               cfg.DesktopTelemetry(),
-		Metrics:                 cfg.DesktopMetrics(),
-		MemoryCompiler:          cfg.MemoryCompilerEnabled(),
-		ExpandThinking:          cfg.Desktop.ExpandThinking,
-		ConfigPath:              cfgPath,
-		ProviderKinds:           nonNil(provider.Kinds()),
-		AutoApproveTools:        ctrl != nil && ctrl.AutoApproveTools(),
-		Bypass:                  ctrl != nil && ctrl.AutoApproveTools(),
-		HeadroomStatus:          headroomStatus,
-		HeadroomDisableKompress: cfg.Headroom.HeadroomDisableKompress(),
-		HeadroomKeepAlive:       cfg.Headroom.KeepAlive,
-		HeadroomMode:            cfg.Headroom.HeadroomMode(),
-		HeadroomPreset:          cfg.Headroom.HeadroomPreset(),
-		HeadroomCodeAware:       cfg.Headroom.HeadroomCodeAware(),
-		HeadroomRequestTimeout:  cfg.Headroom.HeadroomRequestTimeout(),
-		HeadroomShowLogWindow:   cfg.Headroom.ShowLogWindow,
-		HeadroomGpuBackend:      cfg.Headroom.HeadroomGpuBackend(),
-		PlanModeDefault:         cfg.Agent.PlanModeDefault,
+		Agent:                    AgentView{Temperature: cfg.Agent.Temperature, MaxSteps: cfg.Agent.MaxSteps, PlannerMaxSteps: cfg.Agent.PlannerMaxSteps, SystemPrompt: cfg.Agent.SystemPrompt, ColdResumePrune: cfg.ColdResumePruneEnabled(), ReasoningLanguage: cfg.ReasoningLanguage()},
+		Bot:                      botSettingsView(cfg.Bot),
+		DesktopLanguage:          cfg.DesktopLanguage(),
+		DesktopLayoutStyle:       cfg.DesktopLayoutStyle(),
+		DesktopTheme:             cfg.DesktopTheme(),
+		DesktopThemeStyle:        cfg.DesktopThemeStyle(),
+		CloseBehavior:            cfg.DesktopCloseBehavior(),
+		DisplayMode:              cfg.DesktopDisplayMode(),
+		StatusBarStyle:           cfg.DesktopStatusBarStyle(),
+		StatusBarItems:           cfg.DesktopStatusBarItems(),
+		DefaultToolApprovalMode:  cfg.DesktopDefaultToolApprovalMode(),
+		CheckUpdates:             cfg.DesktopCheckUpdates(),
+		Telemetry:                cfg.DesktopTelemetry(),
+		Metrics:                  cfg.DesktopMetrics(),
+		MemoryCompiler:           cfg.MemoryCompilerEnabled(),
+		ExpandThinking:           cfg.Desktop.ExpandThinking,
+		ConfigPath:               cfgPath,
+		ProviderKinds:            nonNil(provider.Kinds()),
+		AutoApproveTools:         ctrl != nil && ctrl.AutoApproveTools(),
+		Bypass:                   ctrl != nil && ctrl.AutoApproveTools(),
+		HeadroomStatus:           headroomStatus,
+		HeadroomDisableKompress:  cfg.Headroom.HeadroomDisableKompress(),
+		HeadroomKeepAlive:        cfg.Headroom.KeepAlive,
+		HeadroomMode:             cfg.Headroom.HeadroomMode(),
+		HeadroomPreset:           cfg.Headroom.HeadroomPreset(),
+		HeadroomCodeAware:        cfg.Headroom.HeadroomCodeAware(),
+		HeadroomRequestTimeout:   cfg.Headroom.HeadroomRequestTimeout(),
+		HeadroomShowLogWindow:    cfg.Headroom.ShowLogWindow,
+		HeadroomGpuBackend:       cfg.Headroom.HeadroomGpuBackend(),
+		PlanModeDefault:          cfg.Agent.PlanModeDefault,
+		UnderstandGraphAvailable: understandGraphAvailable(a.activeWorkspaceRoot()),
+		UnderstandGraphStatus:    buildGraphStatus(a.activeWorkspaceRoot()),
 	}
 	added := providerAccessSet(cfg.Desktop.ProviderAccess)
 	root := a.activeWorkspaceRoot()

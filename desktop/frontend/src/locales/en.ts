@@ -491,6 +491,10 @@ export const en = {
   "status.headroomRunning": "Headroom proxy running ({requests} requests, no savings yet)",
   "status.headroomSavings": "Headroom compressed {pct}% ({tokens} tokens saved across {requests} requests)",
   "status.headroomLifetime": "Lifetime: {tokens} tokens saved",
+  "status.graphLabel": "Graph",
+  "status.graphTooltip": "Knowledge graph: {nodes} nodes, {edges} edges",
+  "status.graphStaleTooltip": "Graph may be stale — run /understand to refresh",
+  "status.graphTooltipEmpty": "No knowledge graph yet — run /understand to generate",
   "status.spendTitle": "Estimated billable spend in this session, including model, subagent, and helper calls",
 
   // ── Heartbeat ──

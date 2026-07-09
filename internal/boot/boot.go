@@ -48,6 +48,7 @@ import (
 	"reasonix/internal/tool"
 	"reasonix/internal/tool/builtin"
 	"reasonix/internal/tool/sessiontool"
+	"reasonix/internal/understand"
 )
 
 // ErrUnknownModel is returned by Build when the configured model can't be
@@ -260,6 +261,12 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 	mem := memory.Load(memory.Options{CWD: root, UserDir: config.MemoryUserDir()})
 	projectChecks := instruction.ExtractHostChecks(mem.Docs)
 	sysPrompt = memory.Compose(sysPrompt, mem)
+
+	// Knowledge graph: if the user ran /understand, inject a cache-stable
+	// project summary so the agent knows the architecture from turn one.
+	if p := understand.Prefix(root); p != "" {
+		sysPrompt += "\n\n" + p
+	}
 
 	// Skills: discover playbooks (built-in + project/custom/global) and fold their
 	// one-liner index into the same cache-stable prefix — names + descriptions
@@ -1385,18 +1392,18 @@ func NewProviderWithProxy(e *config.ProviderEntry, proxy netclient.ProxySpec) (p
 		// provider-kind-specific knobs. EffectiveEffort applies a configured
 		// default_effort when the user has not explicitly selected /effort.
 		Extra: map[string]any{
-			"api_key_env":        e.APIKeyEnv,
-			"api_key_source":     e.APIKeySourceLabel(),
-			"thinking":           e.Thinking,
-			"effort":             config.EffectiveEffort(e),
-			"reasoning_protocol": config.ReasoningProtocolForEntry(e),
-			"chat_url":           e.ChatURL,
-			"headers":            e.Headers,
-			"proxy_spec":         proxy,
-			"vision":             config.EffectiveVision(e),
-			"vision_detail":      e.VisionDetail,
+			"api_key_env":             e.APIKeyEnv,
+			"api_key_source":          e.APIKeySourceLabel(),
+			"thinking":                e.Thinking,
+			"effort":                  config.EffectiveEffort(e),
+			"reasoning_protocol":      config.ReasoningProtocolForEntry(e),
+			"chat_url":                e.ChatURL,
+			"headers":                 e.Headers,
+			"proxy_spec":              proxy,
+			"vision":                  config.EffectiveVision(e),
+			"vision_detail":           e.VisionDetail,
 			"request_timeout_seconds": timeout,
-			"no_proxy_localhost": addNoProxy,
+			"no_proxy_localhost":      addNoProxy,
 		},
 	})
 }

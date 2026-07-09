@@ -13,6 +13,7 @@ export const STATUS_BAR_ITEM_IDS = [
   "cost",
   "balance",
   "headroom",
+  "graph",
 ] as const;
 
 export type StatusBarItemId = typeof STATUS_BAR_ITEM_IDS[number];

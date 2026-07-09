@@ -1343,6 +1343,7 @@ func defaultFullBootToolNames() []string {
 		"slash_command",
 		"task",
 		"todo_write",
+		"understand_search",
 		"wait",
 		"web_fetch",
 		"write_file",
@@ -1373,6 +1374,7 @@ func economyBootToolNames() []string {
 		"remember",
 		"slash_command",
 		"todo_write",
+		"understand_search",
 		"wait",
 		"write_file",
 	}
