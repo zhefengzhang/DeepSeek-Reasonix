@@ -25,7 +25,18 @@ agent. It is the Reasonix analog of Claude Code's CLAUDE.md.
   facts to the per-project auto-memory store (frontmatter files + `MEMORY.md`
   index), which loads into the prefix on the next session.
 
-## Notes
+## Engineering Skills
+
+A set of composable playbooks lives at `.reasonix/skills/<name>/SKILL.md` and is discovered automatically by the skill store. Two invocation modes:
+
+- **User-invoked** (`disable-model-invocation: true`) — type `/<name>` to activate. The agent cannot fire these on its own. Used for workflow orchestration.
+- **Model-invoked** — the agent can reach for these autonomously when the task fits. Used for reusable engineering disciplines (TDD, code review, debugging).
+
+Core workflow: `/grill-with-docs` (align) → `/to-spec` (spec) → `/to-tickets` (break down) → `/implement` (build with TDD) → `/code-review` (review). See `.reasonix/skills/00-INDEX.md` for the full list.
+
+Skills are **not** system prompts — they are invoked on demand by the agent or the user. Their one-line index (name + description) is pinned in the cache-stable prefix; bodies load via `run_skill`.
+
+**IMPORTANT: Use `run_skill` to invoke skills, NOT `slash_command`.** The `slash_command` tool handles only registered project commands, not skills from the skill store. The `run_skill` tool is the single entry point for all skills — call `run_skill({ name: "<skill-name>", arguments: "<task>" })`. User-invoked skills can also be triggered by the user typing `/<name>` in chat; model-invoked skills fire autonomously when the task fits.
 
 ## Pre-push CI simulation
 

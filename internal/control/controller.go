@@ -2477,6 +2477,14 @@ func (c *Controller) summarizeAt(ctx context.Context, turn int, from bool) error
 // Resume seeds the session from a loaded transcript and pins the active file to
 // its path so auto-save keeps appending there.
 func (c *Controller) Resume(s *agent.Session, path string) {
+	// Inject current skills index into the restored session's system prompt
+	// if it is missing, so old/historical sessions gain access to the skills
+	// ecosystem without manual intervention.
+	if skills := c.skills.list(); len(skills) > 0 && len(s.Messages) > 0 && s.Messages[0].Role == provider.RoleSystem {
+		if !strings.Contains(s.Messages[0].Content, "# Skills") {
+			s.Messages[0].Content += "\n\n" + skill.IndexBlock(skills)
+		}
+	}
 	if c.executor != nil {
 		c.executor.SetSession(s)
 	}

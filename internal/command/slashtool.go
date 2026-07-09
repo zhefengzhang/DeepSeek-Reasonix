@@ -59,7 +59,7 @@ func (*slashCommandTool) ReadOnly() bool { return true }
 
 func (t *slashCommandTool) Description() string {
 	var b strings.Builder
-	b.WriteString("Invoke a project slash command (a reusable prompt template or skill) by name. " +
+	b.WriteString("Invoke a project slash command by name — only registered commands, NOT skills (use run_skill for those). " +
 		"Returns the command's expanded prompt text for you to act on in this turn — it does not run on its own. " +
 		"Call with an empty command (or \"list\") to see what's available. ")
 	if len(t.names) == 0 {
