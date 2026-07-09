@@ -1381,10 +1381,12 @@ func (c *Controller) newInteractiveGate() *permission.Gate {
 	default:
 		policy.Mode = permission.Ask
 	}
-	policy.Ask = append(policy.Ask,
-		permission.Rule{Tool: memoryRememberTool},
-		permission.Rule{Tool: memoryForgetTool},
-	)
+	if mode != ToolApprovalYolo {
+		policy.Ask = append(policy.Ask,
+			permission.Rule{Tool: memoryRememberTool},
+			permission.Rule{Tool: memoryForgetTool},
+		)
+	}
 	gate := permission.NewGate(policy, gateApprover{c})
 	gate.OnRemember = func(rule string) {
 		if c.onRemember != nil {
