@@ -13802,6 +13802,62 @@ body > .mermaid-diagram--fullscreen {
   width: 100%;
 }
 
+/* ── settings range slider (compact threshold) ── */
+
+.set-range-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.set-range {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--bg-elev-2);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.set-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-surface);
+  cursor: pointer;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.set-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-surface);
+  cursor: pointer;
+}
+
+.set-range:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.set-range-val {
+  font-size: var(--font-control-small);
+  font-weight: 600;
+  color: var(--fg-secondary);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ── end range slider ── */
+
 /* 让 label 在 settings-field 网格中靠下对齐 */
 .settings-field:has(.zoom-slider-wrap) {
   align-items: end;

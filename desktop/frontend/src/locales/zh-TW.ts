@@ -738,6 +738,8 @@ export const zhTW: Record<DictKey, string> = {
   "settings.reasoningLanguage.auto": "自動",
   "settings.reasoningLanguage.zh": "中文",
   "settings.reasoningLanguage.en": "English",
+  "settings.compactThreshold": "壓縮閾值",
+  "settings.compactThresholdHint": "當上下文達到 {pct}% 時觸發自動壓縮。較低的值壓縮更早，節省 token 但丟失更早的上下文。",
   "settings.stepLimit.unlimited": "不限",
   "settings.stepLimit.custom": "自訂",
   "settings.keySet": "已設金鑰",

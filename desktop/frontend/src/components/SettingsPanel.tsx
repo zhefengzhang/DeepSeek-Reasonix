@@ -3115,7 +3115,7 @@ function ModelsSection({ s, busy, apply, backgroundApply }: ModelsSectionProps) 
     : !providerIsConfigured(defaultProviderView)
       ? t("settings.modelNeedsKey", { provider: modelProviderLabel(defaultProvider, defaultProviderView, t) })
       : "";
-  const agent = s.agent ?? { temperature: 0, maxSteps: 0, plannerMaxSteps: 0, systemPrompt: "", coldResumePrune: true, reasoningLanguage: "auto" };
+  const agent = s.agent ?? { temperature: 0, maxSteps: 0, plannerMaxSteps: 0, systemPrompt: "", coldResumePrune: true, reasoningLanguage: "auto", compactThreshold: 80 };
   const setAgentSteps = (maxSteps: number, plannerMaxSteps: number) => (
     app.SetAgentParams(agent.temperature, maxSteps, plannerMaxSteps, agent.systemPrompt)
   );
@@ -3272,6 +3272,24 @@ function ModelsSection({ s, busy, apply, backgroundApply }: ModelsSectionProps) 
                     {t(`settings.reasoningLanguage.${lang}`)}
                   </button>
                 ))}
+              </div>
+            </SettingsField>
+            <SettingsField label={t("settings.compactThreshold")} hint={t("settings.compactThresholdHint", { pct: String(agent.compactThreshold ?? 80) })}>
+              <div className="set-range-row">
+                <input
+                  type="range"
+                  className="set-range"
+                  min={50}
+                  max={95}
+                  step={1}
+                  value={agent.compactThreshold ?? 80}
+                  disabled={busy}
+                  onChange={(e) => {
+                    const v = Number(e.target.value);
+                    void apply(() => app.SetCompactThreshold(v));
+                  }}
+                />
+                <span className="set-range-val">{agent.compactThreshold ?? 80}%</span>
               </div>
             </SettingsField>
           </SettingsSection>

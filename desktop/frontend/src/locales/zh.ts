@@ -985,6 +985,8 @@ export const zh: Record<DictKey, string> = {
   "settings.reasoningLanguage.auto": "自动",
   "settings.reasoningLanguage.zh": "中文",
   "settings.reasoningLanguage.en": "English",
+  "settings.compactThreshold": "压缩阈值",
+  "settings.compactThresholdHint": "当上下文达到 {pct}% 时触发自动压缩。较低的值压缩更早，节省 token 但丢失更早的上下文。",
   "settings.stepLimit.unlimited": "不限",
   "settings.stepLimit.custom": "自定义",
   "settings.sound": "声音",

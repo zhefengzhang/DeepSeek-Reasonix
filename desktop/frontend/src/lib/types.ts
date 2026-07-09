@@ -885,6 +885,7 @@ export interface AgentView {
   systemPrompt: string;
   coldResumePrune: boolean;
   reasoningLanguage: string; // "auto" | "zh" | "en"
+  compactThreshold: number; // percent (50-95), maps to compact_ratio
 }
 
 export interface BotAllowlistView {

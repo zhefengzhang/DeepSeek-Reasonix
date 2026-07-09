@@ -323,6 +323,7 @@ export interface AppBindings {
   SetAgentParams(temperature: number, maxSteps: number, plannerMaxSteps: number, systemPrompt: string): Promise<void>;
   SetColdResumePrune(enabled: boolean): Promise<void>;
   SetReasoningLanguage(lang: string): Promise<void>;
+  SetCompactThreshold(pct: number): Promise<void>;
   SetTrayLocale(locale: "en" | "zh" | "zh-TW"): Promise<void>;
   // SetBypass is the legacy Wails name for YOLO/full-access tool auto-approval
   // (ask questions and plan approvals still wait; deny rules still apply).
@@ -896,7 +897,7 @@ function makeMockApp(): AppBindings {
       noProxy: "",
       proxy: { type: "socks5", server: "127.0.0.1", port: 7890, username: "", password: "" },
     },
-    agent: { temperature: 0.2, maxSteps: 0, plannerMaxSteps: 0, systemPrompt: "You are Reasonix, a coding agent.", coldResumePrune: true, reasoningLanguage: "auto" },
+    agent: { temperature: 0.2, maxSteps: 0, plannerMaxSteps: 0, systemPrompt: "You are Reasonix, a coding agent.", coldResumePrune: true, reasoningLanguage: "auto", compactThreshold: 80 },
     bot: {
       enabled: !freshMock,
       model: "",
@@ -2933,6 +2934,9 @@ function makeMockApp(): AppBindings {
     async SetReasoningLanguage(lang: string) {
       const normalized = lang === "zh" || lang === "en" ? lang : "auto";
       settings.agent = { ...settings.agent, reasoningLanguage: normalized };
+    },
+    async SetCompactThreshold(pct: number) {
+      settings.agent = { ...settings.agent, compactThreshold: pct };
     },
     // ── Heartbeat mock ──
     async HeartbeatListTasks() { return []; },

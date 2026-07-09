@@ -983,6 +983,8 @@ export const en = {
   "settings.reasoningLanguage.auto": "Auto",
   "settings.reasoningLanguage.zh": "中文",
   "settings.reasoningLanguage.en": "English",
+  "settings.compactThreshold": "Compact threshold",
+  "settings.compactThresholdHint": "Auto-compaction triggers when context reaches {pct}%. Lower values compact sooner, saving tokens but losing older context.",
   "settings.stepLimit.unlimited": "Unlimited",
   "settings.stepLimit.custom": "Custom",
   "settings.sound": "Sound",

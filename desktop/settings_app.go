@@ -101,6 +101,7 @@ type AgentView struct {
 	SystemPrompt      string  `json:"systemPrompt"`
 	ColdResumePrune   bool    `json:"coldResumePrune"`
 	ReasoningLanguage string  `json:"reasoningLanguage"`
+	CompactThreshold  int     `json:"compactThreshold"` // percent (50-95), maps to CompactRatio
 }
 
 type BotAllowlistView struct {
@@ -521,7 +522,7 @@ func (a *App) Settings() SettingsView {
 				Deny:  []string{},
 			},
 			Sandbox:                 SandboxView{Bash: "enforce", AllowWrite: []string{}, Shell: "auto"},
-			Agent:                   AgentView{PlannerMaxSteps: 0, ColdResumePrune: true, ReasoningLanguage: "auto"},
+			Agent:                   AgentView{PlannerMaxSteps: 0, ColdResumePrune: true, ReasoningLanguage: "auto", CompactThreshold: 80},
 			Bot:                     botSettingsView(config.BotConfig{}),
 			AutoPlan:                "off",
 			DesktopLayoutStyle:      "workbench",
@@ -585,7 +586,7 @@ func (a *App) Settings() SettingsView {
 				Password: cfg.Network.Proxy.Password,
 			},
 		},
-		Agent:                    AgentView{Temperature: cfg.Agent.Temperature, MaxSteps: cfg.Agent.MaxSteps, PlannerMaxSteps: cfg.Agent.PlannerMaxSteps, SystemPrompt: cfg.Agent.SystemPrompt, ColdResumePrune: cfg.ColdResumePruneEnabled(), ReasoningLanguage: cfg.ReasoningLanguage()},
+		Agent:                    AgentView{Temperature: cfg.Agent.Temperature, MaxSteps: cfg.Agent.MaxSteps, PlannerMaxSteps: cfg.Agent.PlannerMaxSteps, SystemPrompt: cfg.Agent.SystemPrompt, ColdResumePrune: cfg.ColdResumePruneEnabled(), ReasoningLanguage: cfg.ReasoningLanguage(), CompactThreshold: compactThresholdPercent(cfg)},
 		Bot:                      botSettingsView(cfg.Bot),
 		DesktopLanguage:          cfg.DesktopLanguage(),
 		DesktopLayoutStyle:       cfg.DesktopLayoutStyle(),
@@ -2121,6 +2122,34 @@ func (a *App) SetAgentParams(temperature float64, maxSteps int, plannerMaxSteps 
 		c.Agent.MaxSteps = maxSteps
 		c.Agent.PlannerMaxSteps = plannerMaxSteps
 		c.Agent.SystemPrompt = systemPrompt
+		return nil
+	})
+}
+
+// compactThresholdPercent converts the configured compact_ratio
+// (0-1) to a user-facing percentage (50-95). Default 0.8 → 80%.
+func compactThresholdPercent(c *config.Config) int {
+	if c == nil {
+		return 80
+	}
+	pct := int(c.Agent.CompactRatio * 100)
+	if pct < 50 {
+		pct = 50
+	}
+	if pct > 95 {
+		pct = 95
+	}
+	return pct
+}
+
+// SetCompactThreshold updates the auto-compaction trigger threshold
+// as a percentage (50-95) of the context window.
+func (a *App) SetCompactThreshold(pct int) error {
+	if pct < 50 || pct > 95 {
+		return fmt.Errorf("compact threshold must be between 50 and 95, got %d", pct)
+	}
+	return a.applyConfigChange(func(c *config.Config) error {
+		c.Agent.CompactRatio = float64(pct) / 100.0
 		return nil
 	})
 }
