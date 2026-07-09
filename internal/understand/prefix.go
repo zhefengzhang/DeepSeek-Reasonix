@@ -158,6 +158,9 @@ func buildPrefix(g *uaGraph) string {
 	}
 	b.WriteString("\n")
 
+	// Usage hint — nudge the agent toward understand_search for structural queries.
+	b.WriteString("\n> 💡 Use `understand_search` for structural exploration — it's faster than grep for finding modules, layers, and relationships.\n")
+
 	result := b.String()
 	if len(result) > prefixMaxChars {
 		result = result[:prefixMaxChars-3] + "..."
