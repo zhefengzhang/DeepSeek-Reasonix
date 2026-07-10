@@ -1,0 +1,7774 @@
+{
+  "scriptCompleted": true,
+  "files": [
+    {
+      "path": ".env.example",
+      "language": "config",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".gitattributes",
+      "language": "unknown",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".githooks/pre-push",
+      "language": "unknown",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".github/CODEOWNERS",
+      "language": "unknown",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "language": "yaml",
+      "sizeLines": 49,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "language": "yaml",
+      "sizeLines": 60,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "language": "yaml",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "language": "yaml",
+      "sizeLines": 29,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/labeler.yml",
+      "language": "yaml",
+      "sizeLines": 51,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "language": "markdown",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/workflows/cache-impact.yml",
+      "language": "yaml",
+      "sizeLines": 37,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "sizeLines": 203,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "language": "yaml",
+      "sizeLines": 40,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/deploy-accounts-worker.yml",
+      "language": "yaml",
+      "sizeLines": 49,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/deploy-crash-worker.yml",
+      "language": "yaml",
+      "sizeLines": 34,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/deploy-forum-worker.yml",
+      "language": "yaml",
+      "sizeLines": 38,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/e2e-bot.yml",
+      "language": "yaml",
+      "sizeLines": 160,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/issue-auto-label.yml",
+      "language": "yaml",
+      "sizeLines": 99,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/issue-version-label.yml",
+      "language": "yaml",
+      "sizeLines": 48,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/pages.yml",
+      "language": "yaml",
+      "sizeLines": 47,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/pr-auto-label.yml",
+      "language": "yaml",
+      "sizeLines": 28,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/pr-version-label.yml",
+      "language": "yaml",
+      "sizeLines": 49,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/release-desktop.yml",
+      "language": "yaml",
+      "sizeLines": 375,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/release-npm.yml",
+      "language": "yaml",
+      "sizeLines": 88,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "language": "yaml",
+      "sizeLines": 50,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".golangci.yml",
+      "language": "yaml",
+      "sizeLines": 48,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".goreleaser.yaml",
+      "language": "yaml",
+      "sizeLines": 61,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".reasonix/commands/review.md",
+      "language": "markdown",
+      "sizeLines": 5,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/desktop-topic-auto-title-meta.json",
+      "language": "json",
+      "sizeLines": 13,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".reasonix/desktop-topic-created-at.json",
+      "language": "json",
+      "sizeLines": 2,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".reasonix/desktop-topic-title-sources.json",
+      "language": "json",
+      "sizeLines": 7,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".reasonix/desktop-topic-titles.json",
+      "language": "json",
+      "sizeLines": 7,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".reasonix/handoffs/20260709-understand-anything.md",
+      "language": "markdown",
+      "sizeLines": 82,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/00-INDEX.md",
+      "language": "markdown",
+      "sizeLines": 68,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/code-review/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 52,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/codebase-design/DEEPENING.md",
+      "language": "markdown",
+      "sizeLines": 34,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/codebase-design/DESIGN-IT-TWICE.md",
+      "language": "markdown",
+      "sizeLines": 32,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/codebase-design/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 77,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/CONTRIBUTING-SKILLS.md",
+      "language": "markdown",
+      "sizeLines": 154,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/diagnosing-bugs/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 58,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/domain-modeling/ADR-FORMAT.md",
+      "language": "markdown",
+      "sizeLines": 40,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/domain-modeling/CONTEXT-FORMAT.md",
+      "language": "markdown",
+      "sizeLines": 40,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/domain-modeling/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 75,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/grill-me/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 29,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/grill-with-docs/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 34,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/handoff/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 30,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/implement/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 47,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/improve-codebase-architecture/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 37,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/prototype/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 30,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/setup-reasonix-skills/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 47,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/tdd/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 40,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/to-spec/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 84,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/skills/to-tickets/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 97,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1780201047393-ab385eb6-web_fetch.txt",
+      "language": "txt",
+      "sizeLines": 551,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1780210115960-64aaf7ec-big.txt",
+      "language": "txt",
+      "sizeLines": 1250,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1780210116833-cae115ed-bloat.txt",
+      "language": "txt",
+      "sizeLines": 0,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1780210271553-a8f76d11-big.txt",
+      "language": "txt",
+      "sizeLines": 1250,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1780210272429-2226c59b-bloat.txt",
+      "language": "txt",
+      "sizeLines": 0,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1780210462371-83797414-big.txt",
+      "language": "txt",
+      "sizeLines": 1250,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1780210463060-100ae457-bloat.txt",
+      "language": "txt",
+      "sizeLines": 0,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1782227485275-bb36ee35-web_fetch.txt",
+      "language": "txt",
+      "sizeLines": 816,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1782227507341-54476d65-web_fetch.txt",
+      "language": "txt",
+      "sizeLines": 816,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1782230110647-74725ad9-run_command.txt",
+      "language": "txt",
+      "sizeLines": 259,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".reasonix/truncated-results/1782283657734-2c1e968e-web_fetch.txt",
+      "language": "txt",
+      "sizeLines": 487,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".signpath/artifact-configurations/windows-installer.xml",
+      "language": "xml",
+      "sizeLines": 13,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/intermediate/batches.json",
+      "language": "json",
+      "sizeLines": 17376,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/intermediate/scan-result.json",
+      "language": "json",
+      "sizeLines": 7365,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/knowledge-graph.json",
+      "language": "json",
+      "sizeLines": 15509,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/meta.json",
+      "language": "json",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-1.json",
+      "language": "json",
+      "sizeLines": 111,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-10.json",
+      "language": "json",
+      "sizeLines": 83,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-11.json",
+      "language": "json",
+      "sizeLines": 48,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-12.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-13.json",
+      "language": "json",
+      "sizeLines": 34,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-14.json",
+      "language": "json",
+      "sizeLines": 48,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-15.json",
+      "language": "json",
+      "sizeLines": 146,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-16.json",
+      "language": "json",
+      "sizeLines": 48,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-17.json",
+      "language": "json",
+      "sizeLines": 34,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-18.json",
+      "language": "json",
+      "sizeLines": 34,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-19.json",
+      "language": "json",
+      "sizeLines": 69,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-2.json",
+      "language": "json",
+      "sizeLines": 20,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-20.json",
+      "language": "json",
+      "sizeLines": 41,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-21.json",
+      "language": "json",
+      "sizeLines": 34,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-22.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-23.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-24.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-25.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-26.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-27.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-28.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-29.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-3.json",
+      "language": "json",
+      "sizeLines": 13,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-30.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-31.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-32.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-33.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-34.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-35.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-36.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-37.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-38.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-39.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-4.json",
+      "language": "json",
+      "sizeLines": 104,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-40.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-41.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-42.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-43.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-44.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-45.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-46.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-47.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-48.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-49.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-5.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-50.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-51.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-52.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-53.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-54.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-55.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-56.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-57.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-58.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-59.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-6.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-60.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-61.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-62.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-63.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-64.json",
+      "language": "json",
+      "sizeLines": 181,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-65.json",
+      "language": "json",
+      "sizeLines": 111,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-7.json",
+      "language": "json",
+      "sizeLines": 34,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-8.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-analyzer-input-9.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/tmp/ua-file-extract-results-1.json",
+      "language": "json",
+      "sizeLines": 596,
+      "fileCategory": "config"
+    },
+    {
+      "path": "benchmarks/context-maintenance-e2e/main.go",
+      "language": "go",
+      "sizeLines": 255,
+      "fileCategory": "code"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/compaction/task.toml",
+      "language": "toml",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/compaction/verify.sh",
+      "language": "shell",
+      "sizeLines": 4,
+      "fileCategory": "script"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/compaction/workdir/story/chapter-1.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/compaction/workdir/story/chapter-2.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/compaction/workdir/story/chapter-3.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/compaction/workdir/story/chapter-4.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/compaction/workdir/story/chapter-5.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/compaction/workdir/story/chapter-6.md",
+      "language": "markdown",
+      "sizeLines": 220,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/fix-add-bug/task.toml",
+      "language": "toml",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/fix-add-bug/verify.sh",
+      "language": "shell",
+      "sizeLines": 7,
+      "fileCategory": "script"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/fix-add-bug/workdir/calc.py",
+      "language": "python",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/fizzbuzz/task.toml",
+      "language": "toml",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/fizzbuzz/verify.sh",
+      "language": "shell",
+      "sizeLines": 8,
+      "fileCategory": "script"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/palindrome/task.toml",
+      "language": "toml",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/palindrome/verify.sh",
+      "language": "shell",
+      "sizeLines": 7,
+      "fileCategory": "script"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/subagent-delegation/task.toml",
+      "language": "toml",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/subagent-delegation/verify.sh",
+      "language": "shell",
+      "sizeLines": 12,
+      "fileCategory": "script"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/subagent-delegation/workdir/data/alpha.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/subagent-delegation/workdir/data/beta.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "benchmarks/e2e/tasks/subagent-delegation/workdir/data/gamma.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "language": "markdown",
+      "sizeLines": 60,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "cmd/e2ebench/diff.go",
+      "language": "go",
+      "sizeLines": 669,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmd/e2ebench/main.go",
+      "language": "go",
+      "sizeLines": 394,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmd/e2ebench/mutation.go",
+      "language": "go",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmd/reasonix-plugin-example/main.go",
+      "language": "go",
+      "sizeLines": 349,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmd/reasonix/main.go",
+      "language": "go",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "CONTEXT.md",
+      "language": "markdown",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "language": "markdown",
+      "sizeLines": 159,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "desktop/app_autosave_test.go",
+      "language": "go",
+      "sizeLines": 437,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/app_platform_test.go",
+      "language": "go",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/app_session_dedup_test.go",
+      "language": "go",
+      "sizeLines": 493,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/app_test.go",
+      "language": "go",
+      "sizeLines": 6100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/app.go",
+      "language": "go",
+      "sizeLines": 7920,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/appicon_asset_test.go",
+      "language": "go",
+      "sizeLines": 183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/attach_dropped_test.go",
+      "language": "go",
+      "sizeLines": 427,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/bot_connection_app_test.go",
+      "language": "go",
+      "sizeLines": 620,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/bot_connection_app.go",
+      "language": "go",
+      "sizeLines": 954,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/bot_event_sink_test.go",
+      "language": "go",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/bot_event_sink.go",
+      "language": "go",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/bot_runtime_app_test.go",
+      "language": "go",
+      "sizeLines": 444,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/bot_runtime_app.go",
+      "language": "go",
+      "sizeLines": 320,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/bound_array_contract_test.go",
+      "language": "go",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/checkpoints_cancode_test.go",
+      "language": "go",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/cmd/sign/main_test.go",
+      "language": "go",
+      "sizeLines": 123,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/cmd/sign/main.go",
+      "language": "go",
+      "sizeLines": 242,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/crash_app_test.go",
+      "language": "go",
+      "sizeLines": 207,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/crash_app.go",
+      "language": "go",
+      "sizeLines": 275,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/crash_pending_test.go",
+      "language": "go",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/crash_pending.go",
+      "language": "go",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/desktop.exe",
+      "language": "exe",
+      "sizeLines": 111069,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/devinfo_darwin.go",
+      "language": "go",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/devinfo_linux.go",
+      "language": "go",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/devinfo_test.go",
+      "language": "go",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/devinfo_windows.go",
+      "language": "go",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/devinfo.go",
+      "language": "go",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/dotenv_test.go",
+      "language": "go",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/dotenv.go",
+      "language": "go",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/.npmrc",
+      "language": "unknown",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/index.html",
+      "language": "html",
+      "sizeLines": 12,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "desktop/frontend/package.json",
+      "language": "json",
+      "sizeLines": 50,
+      "fileCategory": "config"
+    },
+    {
+      "path": "desktop/frontend/pnpm-workspace.yaml",
+      "language": "yaml",
+      "sizeLines": 5,
+      "fileCategory": "config"
+    },
+    {
+      "path": "desktop/frontend/public/sounds/mixkit-correct-answer-tone-2870.wav",
+      "language": "wav",
+      "sizeLines": 901,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/public/sounds/mixkit-positive-notification-951.wav",
+      "language": "wav",
+      "sizeLines": 2662,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/public/sounds/mixkit-software-interface-back-2575.wav",
+      "language": "wav",
+      "sizeLines": 1681,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/public/sounds/mixkit-software-interface-start-2574.wav",
+      "language": "wav",
+      "sizeLines": 1559,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/scripts/check-css-syntax.mjs",
+      "language": "javascript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/scripts/check-z-index-tokens.mjs",
+      "language": "javascript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/scripts/test-todo-visibility.mjs",
+      "language": "javascript",
+      "sizeLines": 177,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/anchored-popover-scroll.test.tsx",
+      "language": "typescript",
+      "sizeLines": 129,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/app-chrome-tabs.test.ts",
+      "language": "typescript",
+      "sizeLines": 381,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/approval-modal-file-reference.test.tsx",
+      "language": "typescript",
+      "sizeLines": 229,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/ask-card-layout.test.ts",
+      "language": "typescript",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/at-matches.test.ts",
+      "language": "typescript",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/attachment-display.test.ts",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/bridge-drag-rejection.test.ts",
+      "language": "typescript",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/bridge-mock-approval-mode.test.ts",
+      "language": "typescript",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/bundle-contract.test.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/capabilities-panel-actions.test.ts",
+      "language": "typescript",
+      "sizeLines": 235,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/code-block-copy-position.test.tsx",
+      "language": "typescript",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/command-palette-css.test.ts",
+      "language": "typescript",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/command-palette-interactions.test.tsx",
+      "language": "typescript",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/composer-goal-toggle.test.tsx",
+      "language": "typescript",
+      "sizeLines": 743,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/composer-history.test.ts",
+      "language": "typescript",
+      "sizeLines": 258,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/composer-image-capability.test.tsx",
+      "language": "typescript",
+      "sizeLines": 259,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/composer-keyboard.test.ts",
+      "language": "typescript",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/composer-profile.test.ts",
+      "language": "typescript",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/composer-session-draft.test.tsx",
+      "language": "typescript",
+      "sizeLines": 311,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/context-panel-breakdown.test.ts",
+      "language": "typescript",
+      "sizeLines": 245,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/crash-reporting.test.ts",
+      "language": "typescript",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/diff-rendering.test.ts",
+      "language": "typescript",
+      "sizeLines": 295,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/edit-replay.test.ts",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/font-availability.test.ts",
+      "language": "typescript",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/heartbeat-next-run.test.ts",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/history-performance-benchmark.tsx",
+      "language": "typescript",
+      "sizeLines": 162,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/history-tool-status.test.ts",
+      "language": "typescript",
+      "sizeLines": 162,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/keyboard-shortcuts.test.ts",
+      "language": "typescript",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/math-golden.test.ts",
+      "language": "typescript",
+      "sizeLines": 675,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/memory-citation-visibility.test.ts",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/memory-compiler-display.test.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/mermaid-rendering.test.tsx",
+      "language": "typescript",
+      "sizeLines": 248,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/message-selection-copy.test.ts",
+      "language": "typescript",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/new-session-load-race.test.tsx",
+      "language": "typescript",
+      "sizeLines": 263,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/open-topic-coalescing.test.tsx",
+      "language": "typescript",
+      "sizeLines": 227,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/project-tree-runtime.test.ts",
+      "language": "typescript",
+      "sizeLines": 223,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/provider-model-refresh.test.ts",
+      "language": "typescript",
+      "sizeLines": 171,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/reasoning-display.test.ts",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/render-optimization.test.ts",
+      "language": "typescript",
+      "sizeLines": 207,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/resize-drag.test.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/send-failed.test.ts",
+      "language": "typescript",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/session-title-contract.test.ts",
+      "language": "typescript",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/settings-refresh-snapshot.test.tsx",
+      "language": "typescript",
+      "sizeLines": 226,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/startup-settings-contract.test.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/statusbar-workspace.test.tsx",
+      "language": "typescript",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/tab-switch-hydration.test.tsx",
+      "language": "typescript",
+      "sizeLines": 419,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/text-size.test.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/theme-auto-background.test.ts",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/tool-approval-mode.test.ts",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/tool-data-archive.test.ts",
+      "language": "typescript",
+      "sizeLines": 340,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/tool-subject.test.ts",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/transcript-grouping.test.ts",
+      "language": "typescript",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/typography-overflow-contract.test.ts",
+      "language": "typescript",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/use-controller-cancel-reconcile.test.tsx",
+      "language": "typescript",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/use-controller-meta.test.ts",
+      "language": "typescript",
+      "sizeLines": 262,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/workspace-changes-errors.test.tsx",
+      "language": "typescript",
+      "sizeLines": 155,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/workspace-layout.test.ts",
+      "language": "typescript",
+      "sizeLines": 156,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/workspace-preview-css.test.ts",
+      "language": "typescript",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/__tests__/workspace-split.test.ts",
+      "language": "typescript",
+      "sizeLines": 257,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/App.tsx",
+      "language": "typescript",
+      "sizeLines": 3751,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/AnchoredPopover.tsx",
+      "language": "typescript",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/AppChrome.tsx",
+      "language": "typescript",
+      "sizeLines": 198,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ApprovalModal.tsx",
+      "language": "typescript",
+      "sizeLines": 327,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ArgMenu.tsx",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/AskCard.tsx",
+      "language": "typescript",
+      "sizeLines": 249,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/CapabilitiesPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 1866,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ClearContextCard.tsx",
+      "language": "typescript",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/CodeViewer.tsx",
+      "language": "typescript",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/CommandPalette.tsx",
+      "language": "typescript",
+      "sizeLines": 320,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/Composer.tsx",
+      "language": "typescript",
+      "sizeLines": 2702,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ComposerContextCard.tsx",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ContextMenu.tsx",
+      "language": "typescript",
+      "sizeLines": 135,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ContextPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 683,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/CopyButton.tsx",
+      "language": "typescript",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/DiffView.tsx",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/editors/HljsCode.tsx",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/editors/HljsDiff.tsx",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/EffortSwitcher.tsx",
+      "language": "typescript",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ErrorBoundary.tsx",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/FileReferenceMenu.tsx",
+      "language": "typescript",
+      "sizeLines": 202,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/FloatingMenu.tsx",
+      "language": "typescript",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/HistoryPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 657,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/InlineConfirmButton.tsx",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/InlineDiff.tsx",
+      "language": "typescript",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/latexNormalize.ts",
+      "language": "typescript",
+      "sizeLines": 399,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/Markdown.tsx",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/MarkdownRenderer.tsx",
+      "language": "typescript",
+      "sizeLines": 156,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/mathClassify.ts",
+      "language": "typescript",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/mathNormalize.ts",
+      "language": "typescript",
+      "sizeLines": 323,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/MemoryPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 1700,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/MermaidDiagram.tsx",
+      "language": "typescript",
+      "sizeLines": 657,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/Message.tsx",
+      "language": "typescript",
+      "sizeLines": 727,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ModalCloseButton.tsx",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ModelSwitcher.tsx",
+      "language": "typescript",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/OnboardingOverlay.tsx",
+      "language": "typescript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ProcessCard.tsx",
+      "language": "typescript",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ProjectTree.tsx",
+      "language": "typescript",
+      "sizeLines": 2080,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/PromptShelf.tsx",
+      "language": "typescript",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ReadOnlyBatch.tsx",
+      "language": "typescript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ResizableDrawer.tsx",
+      "language": "typescript",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/SettingsPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 5934,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ShortcutComboDisplay.tsx",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ShortcutsCheatsheet.tsx",
+      "language": "typescript",
+      "sizeLines": 107,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/SlashMenu.tsx",
+      "language": "typescript",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/SoundSelect.tsx",
+      "language": "typescript",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/StartupSplash.tsx",
+      "language": "typescript",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/StatusBar.tsx",
+      "language": "typescript",
+      "sizeLines": 413,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/TabBar.tsx",
+      "language": "typescript",
+      "sizeLines": 300,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/TodoPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ToolCard.tsx",
+      "language": "typescript",
+      "sizeLines": 218,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/ToolGroup.tsx",
+      "language": "typescript",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/Tooltip.tsx",
+      "language": "typescript",
+      "sizeLines": 185,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/Transcript.tsx",
+      "language": "typescript",
+      "sizeLines": 1287,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/UndoRewindBanner.tsx",
+      "language": "typescript",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/UpdateBanner.tsx",
+      "language": "typescript",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/VirtualMenu.tsx",
+      "language": "typescript",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/Welcome.tsx",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/WorkspacePanel.tsx",
+      "language": "typescript",
+      "sizeLines": 1703,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/components/youngDiagrams.ts",
+      "language": "typescript",
+      "sizeLines": 370,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/custom/features/heartbeat/heartbeat.bridge.ts",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/custom/features/heartbeat/heartbeat.css",
+      "language": "css",
+      "sizeLines": 1231,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "desktop/frontend/src/custom/features/heartbeat/heartbeat.types.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/custom/features/heartbeat/HeartbeatPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 1179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/array.ts",
+      "language": "typescript",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/atMatches.ts",
+      "language": "typescript",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/attachDedup.ts",
+      "language": "typescript",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/attachmentDisplay.ts",
+      "language": "typescript",
+      "sizeLines": 155,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/breadcrumbs.ts",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/bridge.ts",
+      "language": "typescript",
+      "sizeLines": 3351,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/composerDraftKey.ts",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/composerHistory.ts",
+      "language": "typescript",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/composerKeyboard.ts",
+      "language": "typescript",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/composerProfile.ts",
+      "language": "typescript",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/crash.ts",
+      "language": "typescript",
+      "sizeLines": 694,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/diff.ts",
+      "language": "typescript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/displayMode.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/dpiScale.ts",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/editReplay.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/fontAvailability.ts",
+      "language": "typescript",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/fontFamily.ts",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/generative-music.ts",
+      "language": "typescript",
+      "sizeLines": 302,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/gsapAnimations.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/guardianEvents.ts",
+      "language": "typescript",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/highlight.ts",
+      "language": "typescript",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/i18n.tsx",
+      "language": "typescript",
+      "sizeLines": 139,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/keyboardShortcuts.ts",
+      "language": "typescript",
+      "sizeLines": 513,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/lang.ts",
+      "language": "typescript",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/layoutPreferences.ts",
+      "language": "typescript",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/mcpServerLifecycle.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/memoryCitationVisibility.ts",
+      "language": "typescript",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/memoryCompilerDisplay.ts",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/messageSelectionCopy.ts",
+      "language": "typescript",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/money.ts",
+      "language": "typescript",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/openTopicCoalescing.ts",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/projectColors.ts",
+      "language": "typescript",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/providerModels.ts",
+      "language": "typescript",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/rafBatch.ts",
+      "language": "typescript",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/reasoningDisplay.ts",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/resizeDrag.ts",
+      "language": "typescript",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/session.ts",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/sessionExport.tsx",
+      "language": "typescript",
+      "sizeLines": 470,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/shellExpand.tsx",
+      "language": "typescript",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/sound.ts",
+      "language": "typescript",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/statusBarItems.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/textSize.ts",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/theme.ts",
+      "language": "typescript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/toast.tsx",
+      "language": "typescript",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/todoVisibility.ts",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/toolApprovalMode.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/tools.ts",
+      "language": "typescript",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/topicShortcuts.ts",
+      "language": "typescript",
+      "sizeLines": 132,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/transcriptGrouping.ts",
+      "language": "typescript",
+      "sizeLines": 196,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/types.ts",
+      "language": "typescript",
+      "sizeLines": 1161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/useController.ts",
+      "language": "typescript",
+      "sizeLines": 1934,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/useEntranceAnimation.ts",
+      "language": "typescript",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/useGSAPCollapse.ts",
+      "language": "typescript",
+      "sizeLines": 102,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/useMountTransition.ts",
+      "language": "typescript",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/useScrollManager.ts",
+      "language": "typescript",
+      "sizeLines": 208,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/useUpdater.ts",
+      "language": "typescript",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/windowState.ts",
+      "language": "typescript",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/workspaceDrag.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/workspaceLayout.ts",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/workspacePreviewTabs.ts",
+      "language": "typescript",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/workspaceSplit.ts",
+      "language": "typescript",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/workspaceTreeReveal.ts",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/lib/workspaceTreeSearch.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/locales/en.ts",
+      "language": "typescript",
+      "sizeLines": 1856,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/locales/zh-TW.ts",
+      "language": "typescript",
+      "sizeLines": 1851,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/locales/zh.ts",
+      "language": "typescript",
+      "sizeLines": 1855,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/main.tsx",
+      "language": "typescript",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/store/layout.ts",
+      "language": "typescript",
+      "sizeLines": 155,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/store/overlays.ts",
+      "language": "typescript",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/store/setState.ts",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/src/styles.css",
+      "language": "css",
+      "sizeLines": 27851,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "desktop/frontend/tsconfig.json",
+      "language": "json",
+      "sizeLines": 24,
+      "fileCategory": "config"
+    },
+    {
+      "path": "desktop/frontend/tsconfig.node.json",
+      "language": "json",
+      "sizeLines": 11,
+      "fileCategory": "config"
+    },
+    {
+      "path": "desktop/frontend/tsconfig.test.json",
+      "language": "json",
+      "sizeLines": 8,
+      "fileCategory": "config"
+    },
+    {
+      "path": "desktop/frontend/vite-env.d.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/frontend/vite.config.ts",
+      "language": "typescript",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/go.mod",
+      "language": "mod",
+      "sizeLines": 62,
+      "fileCategory": "config"
+    },
+    {
+      "path": "desktop/go.sum",
+      "language": "sum",
+      "sizeLines": 152,
+      "fileCategory": "config"
+    },
+    {
+      "path": "desktop/headroom_sidecar_other.go",
+      "language": "go",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/headroom_sidecar_windows.go",
+      "language": "go",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/headroom_sidecar.go",
+      "language": "go",
+      "sizeLines": 817,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/heartbeat_test.go",
+      "language": "go",
+      "sizeLines": 364,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/heartbeat.go",
+      "language": "go",
+      "sizeLines": 858,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/history_perf_test.go",
+      "language": "go",
+      "sizeLines": 109,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/history_test.go",
+      "language": "go",
+      "sizeLines": 1066,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/history_todo_test.go",
+      "language": "go",
+      "sizeLines": 135,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/hooks_settings_app.go",
+      "language": "go",
+      "sizeLines": 185,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/internal/update/manifest.go",
+      "language": "go",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/internal/update/update_test.go",
+      "language": "go",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/internal/update/verify.go",
+      "language": "go",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/main_test.go",
+      "language": "go",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/main.go",
+      "language": "go",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/memory_suggestions_test.go",
+      "language": "go",
+      "sizeLines": 212,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/memory_suggestions.go",
+      "language": "go",
+      "sizeLines": 577,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/menu.go",
+      "language": "go",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/metrics_app_test.go",
+      "language": "go",
+      "sizeLines": 249,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/metrics_app.go",
+      "language": "go",
+      "sizeLines": 547,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/new_session_inherit_test.go",
+      "language": "go",
+      "sizeLines": 130,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/nvidia_wayland_linux.go",
+      "language": "go",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/open_workspace_darwin.go",
+      "language": "go",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/open_workspace_unix.go",
+      "language": "go",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/open_workspace_windows.go",
+      "language": "go",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/README.md",
+      "language": "markdown",
+      "sizeLines": 259,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "desktop/repeat_guard_e2e_test.go",
+      "language": "go",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/session_prompt.go",
+      "language": "go",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/sessions_test.go",
+      "language": "go",
+      "sizeLines": 968,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/sessions.go",
+      "language": "go",
+      "sizeLines": 889,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/settings_app_test.go",
+      "language": "go",
+      "sizeLines": 1111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/settings_app.go",
+      "language": "go",
+      "sizeLines": 2232,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/shared_host_test.go",
+      "language": "go",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/shared_host.go",
+      "language": "go",
+      "sizeLines": 156,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/single_instance_test.go",
+      "language": "go",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/single_instance.go",
+      "language": "go",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/skills_app_test.go",
+      "language": "go",
+      "sizeLines": 394,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/system_quit_darwin.go",
+      "language": "go",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/system_quit_darwin.m",
+      "language": "m",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/system_quit_stub.go",
+      "language": "go",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/system_quit.go",
+      "language": "go",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tab_event_sink_test.go",
+      "language": "go",
+      "sizeLines": 204,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tab_profile_test.go",
+      "language": "go",
+      "sizeLines": 685,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tabs_order_test.go",
+      "language": "go",
+      "sizeLines": 800,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tabs_runtime_status_test.go",
+      "language": "go",
+      "sizeLines": 257,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tabs_sink_context_test.go",
+      "language": "go",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tabs_telemetry_test.go",
+      "language": "go",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tabs_topic_test.go",
+      "language": "go",
+      "sizeLines": 2708,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tabs.go",
+      "language": "go",
+      "sizeLines": 6245,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/telemetry_app_test.go",
+      "language": "go",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/telemetry_app.go",
+      "language": "go",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/temphelper_test.go",
+      "language": "go",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_icon_unix.go",
+      "language": "go",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_icon_windows_test.go",
+      "language": "go",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_icon_windows.go",
+      "language": "go",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_loop_external.go",
+      "language": "go",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_loop_windows_test.go",
+      "language": "go",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_loop_windows.go",
+      "language": "go",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_supported_darwin.go",
+      "language": "go",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_supported_unix.go",
+      "language": "go",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_supported_windows.go",
+      "language": "go",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray_test.go",
+      "language": "go",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/tray.go",
+      "language": "go",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/understand_graph.go",
+      "language": "go",
+      "sizeLines": 193,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/updater_app.go",
+      "language": "go",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/updater_mac_stub.go",
+      "language": "go",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/updater_mac.go",
+      "language": "go",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/updater_other.go",
+      "language": "go",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/updater_test.go",
+      "language": "go",
+      "sizeLines": 410,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/updater_windows_test.go",
+      "language": "go",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/updater_windows.go",
+      "language": "go",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/updater.go",
+      "language": "go",
+      "sizeLines": 599,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/wails.json",
+      "language": "json",
+      "sizeLines": 19,
+      "fileCategory": "config"
+    },
+    {
+      "path": "desktop/window_controls.go",
+      "language": "go",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/window_state.go",
+      "language": "go",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/wire_test.go",
+      "language": "go",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/workspace_changes_test.go",
+      "language": "go",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/workspace_changes.go",
+      "language": "go",
+      "sizeLines": 364,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/workspace_test.go",
+      "language": "go",
+      "sizeLines": 1355,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/workspace_unix_test.go",
+      "language": "go",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/workspace.go",
+      "language": "go",
+      "sizeLines": 186,
+      "fileCategory": "code"
+    },
+    {
+      "path": "desktop/zoom_factor.go",
+      "language": "go",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "dev",
+      "language": "unknown",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/.nojekyll",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs/assets/approval-mock-1.html",
+      "language": "html",
+      "sizeLines": 168,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "docs/BOT_GUIDE.md",
+      "language": "markdown",
+      "sizeLines": 313,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/BOT_GUIDE.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 290,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/CHECKPOINTS.md",
+      "language": "markdown",
+      "sizeLines": 142,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/COLLABORATION_MODES.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 113,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/CONFIG_PATHS.md",
+      "language": "markdown",
+      "sizeLines": 261,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/CONFIG_PATHS.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 214,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/DESKTOP_BUILD.md",
+      "language": "markdown",
+      "sizeLines": 150,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/DESKTOP_HOOKS.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 229,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/GOAL_ENFORCEMENT.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 134,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/GUIDE.md",
+      "language": "markdown",
+      "sizeLines": 641,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/GUIDE.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 541,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/HEADROOM_GPU_ACCEL.md",
+      "language": "markdown",
+      "sizeLines": 59,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/HEADROOM_WINDOWS_COMPAT.md",
+      "language": "markdown",
+      "sizeLines": 132,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/index.html",
+      "language": "html",
+      "sizeLines": 293,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "docs/MIGRATING.md",
+      "language": "markdown",
+      "sizeLines": 145,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/production_checklist.md",
+      "language": "markdown",
+      "sizeLines": 59,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/production_checklist.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 57,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/REASONING_LANGUAGE.md",
+      "language": "markdown",
+      "sizeLines": 112,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/REASONING_LANGUAGE.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 97,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/RELEASING.md",
+      "language": "markdown",
+      "sizeLines": 75,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/SESSION_MEMORY_RETRIEVAL.md",
+      "language": "markdown",
+      "sizeLines": 240,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/SESSION_REFERENCE_ARCHITECTURE.md",
+      "language": "markdown",
+      "sizeLines": 370,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/SPEC.md",
+      "language": "markdown",
+      "sizeLines": 683,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/superpowers/audits/2026-06-30-autoresearch-runtime-verification.md",
+      "language": "markdown",
+      "sizeLines": 90,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-06-29-autoresearch-runtime-implementation.md",
+      "language": "markdown",
+      "sizeLines": 94,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-06-29-autoresearch-runtime-design.md",
+      "language": "markdown",
+      "sizeLines": 477,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/TOOL_APPROVAL_MODES.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 109,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/TOOL_CONTRACT.md",
+      "language": "markdown",
+      "sizeLines": 65,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/TOOL_CONTRACT.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 58,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "go.mod",
+      "language": "mod",
+      "sizeLines": 48,
+      "fileCategory": "config"
+    },
+    {
+      "path": "go.sum",
+      "language": "sum",
+      "sizeLines": 132,
+      "fileCategory": "config"
+    },
+    {
+      "path": "headroom_patch_uvicorn.py",
+      "language": "python",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "headroom_proxy_launcher.py",
+      "language": "python",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/dispatch_partial_test.go",
+      "language": "go",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/dispatch_test.go",
+      "language": "go",
+      "sizeLines": 453,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/dispatch.go",
+      "language": "go",
+      "sizeLines": 404,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/e2e_test.go",
+      "language": "go",
+      "sizeLines": 629,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/live_test.go",
+      "language": "go",
+      "sizeLines": 110,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/protocol_test.go",
+      "language": "go",
+      "sizeLines": 335,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/protocol.go",
+      "language": "go",
+      "sizeLines": 537,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/server_test.go",
+      "language": "go",
+      "sizeLines": 1458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/server.go",
+      "language": "go",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/acp/service.go",
+      "language": "go",
+      "sizeLines": 1582,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/agent.go",
+      "language": "go",
+      "sizeLines": 2464,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/argserror_test.go",
+      "language": "go",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/ask_test.go",
+      "language": "go",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/ask.go",
+      "language": "go",
+      "sizeLines": 166,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/branch_test.go",
+      "language": "go",
+      "sizeLines": 193,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/branch.go",
+      "language": "go",
+      "sizeLines": 357,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/cache_diagnostics_test.go",
+      "language": "go",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/cache_shape_test.go",
+      "language": "go",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/cache_shape.go",
+      "language": "go",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/cachehit_e2e_test.go",
+      "language": "go",
+      "sizeLines": 685,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/cancel_test.go",
+      "language": "go",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/canonical_todo_test.go",
+      "language": "go",
+      "sizeLines": 206,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/compact_loop_e2e_test.go",
+      "language": "go",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/compact_test.go",
+      "language": "go",
+      "sizeLines": 826,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/compact.go",
+      "language": "go",
+      "sizeLines": 753,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/complete_step_e2e_test.go",
+      "language": "go",
+      "sizeLines": 220,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/coordinator_test.go",
+      "language": "go",
+      "sizeLines": 727,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/coordinator.go",
+      "language": "go",
+      "sizeLines": 452,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/dispatch_test.go",
+      "language": "go",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/empty_final_test.go",
+      "language": "go",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/evidence_flow_test.go",
+      "language": "go",
+      "sizeLines": 922,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/final_readiness_test.go",
+      "language": "go",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/gate_test.go",
+      "language": "go",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/goal_display.go",
+      "language": "go",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/guards_test.go",
+      "language": "go",
+      "sizeLines": 348,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/hooks_test.go",
+      "language": "go",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/listsessions_bench_test.go",
+      "language": "go",
+      "sizeLines": 185,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/listsessions_sidecar_test.go",
+      "language": "go",
+      "sizeLines": 170,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/loop_e2e_test.go",
+      "language": "go",
+      "sizeLines": 641,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/main_test.go",
+      "language": "go",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/memory_compiler_context.go",
+      "language": "go",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/memory_compiler_gate_test.go",
+      "language": "go",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/migrate_test.go",
+      "language": "go",
+      "sizeLines": 1029,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/migrate.go",
+      "language": "go",
+      "sizeLines": 954,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/nil_boundary_test.go",
+      "language": "go",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/normalize.go",
+      "language": "go",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/outcome_test.go",
+      "language": "go",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/parallel_tasks_test.go",
+      "language": "go",
+      "sizeLines": 175,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/parallel_tasks.go",
+      "language": "go",
+      "sizeLines": 534,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/planmode_test.go",
+      "language": "go",
+      "sizeLines": 632,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/postllmcall_flow_test.go",
+      "language": "go",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/preview_test.go",
+      "language": "go",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/preview.go",
+      "language": "go",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/prune_test.go",
+      "language": "go",
+      "sizeLines": 428,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/prune.go",
+      "language": "go",
+      "sizeLines": 289,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/reasoning_language_test.go",
+      "language": "go",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/reasoning_language.go",
+      "language": "go",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/repeat_guard_test.go",
+      "language": "go",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/retry_e2e_test.go",
+      "language": "go",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/save_test.go",
+      "language": "go",
+      "sizeLines": 283,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/save.go",
+      "language": "go",
+      "sizeLines": 467,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/session_concurrency_test.go",
+      "language": "go",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/session_test.go",
+      "language": "go",
+      "sizeLines": 404,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/session.go",
+      "language": "go",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/stale_anchor_guard_test.go",
+      "language": "go",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/steer_test.go",
+      "language": "go",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/storm_test.go",
+      "language": "go",
+      "sizeLines": 185,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/subagent_registry_test.go",
+      "language": "go",
+      "sizeLines": 209,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/subagent_store_test.go",
+      "language": "go",
+      "sizeLines": 715,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/subagent_store.go",
+      "language": "go",
+      "sizeLines": 790,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/task_classifier_cache_test.go",
+      "language": "go",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/task_classifier_test.go",
+      "language": "go",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/task_classifier.go",
+      "language": "go",
+      "sizeLines": 337,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/task_test.go",
+      "language": "go",
+      "sizeLines": 757,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/task.go",
+      "language": "go",
+      "sizeLines": 814,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/testutil/mock_provider_test.go",
+      "language": "go",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/testutil/mock_provider.go",
+      "language": "go",
+      "sizeLines": 204,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/textsink_partial_test.go",
+      "language": "go",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/textsink_test.go",
+      "language": "go",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/textsink.go",
+      "language": "go",
+      "sizeLines": 233,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/usage_test.go",
+      "language": "go",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/width_test.go",
+      "language": "go",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/agent/width.go",
+      "language": "go",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/autoresearch/readiness.go",
+      "language": "go",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/autoresearch/schema.go",
+      "language": "go",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/autoresearch/store_test.go",
+      "language": "go",
+      "sizeLines": 545,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/autoresearch/store.go",
+      "language": "go",
+      "sizeLines": 714,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/autoresearch/summary.go",
+      "language": "go",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/autoresearch/task.go",
+      "language": "go",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/billing/balance_extra_test.go",
+      "language": "go",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/billing/balance_test.go",
+      "language": "go",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/billing/balance.go",
+      "language": "go",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/boot/boot_test.go",
+      "language": "go",
+      "sizeLines": 3137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/boot/boot.go",
+      "language": "go",
+      "sizeLines": 1751,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/boot/helper_test.go",
+      "language": "go",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/boot/model_error_test.go",
+      "language": "go",
+      "sizeLines": 144,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/boot/subagent_model_test.go",
+      "language": "go",
+      "sizeLines": 173,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/boot/temphelper_test.go",
+      "language": "go",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/boot/token_profile.go",
+      "language": "go",
+      "sizeLines": 260,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/connloop_test.go",
+      "language": "go",
+      "sizeLines": 132,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/connloop.go",
+      "language": "go",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/feishu/feishu_test.go",
+      "language": "go",
+      "sizeLines": 376,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/feishu/feishu.go",
+      "language": "go",
+      "sizeLines": 725,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/gateway_test.go",
+      "language": "go",
+      "sizeLines": 824,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/gateway.go",
+      "language": "go",
+      "sizeLines": 1174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/hash.go",
+      "language": "go",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/qq/adapter.go",
+      "language": "go",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/qq/gateway_test.go",
+      "language": "go",
+      "sizeLines": 306,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/qq/gateway.go",
+      "language": "go",
+      "sizeLines": 774,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/render_test.go",
+      "language": "go",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/render.go",
+      "language": "go",
+      "sizeLines": 445,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/session_test.go",
+      "language": "go",
+      "sizeLines": 224,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/session.go",
+      "language": "go",
+      "sizeLines": 189,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/turn_dispatch_test.go",
+      "language": "go",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/types.go",
+      "language": "go",
+      "sizeLines": 144,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/weixin/weixin_login.go",
+      "language": "go",
+      "sizeLines": 240,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/weixin/weixin_test.go",
+      "language": "go",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/bot/weixin/weixin.go",
+      "language": "go",
+      "sizeLines": 660,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/botruntime/runtime_test.go",
+      "language": "go",
+      "sizeLines": 364,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/botruntime/runtime.go",
+      "language": "go",
+      "sizeLines": 590,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/checkpoint/checkpoint_test.go",
+      "language": "go",
+      "sizeLines": 349,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/checkpoint/checkpoint.go",
+      "language": "go",
+      "sizeLines": 350,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/acp_test.go",
+      "language": "go",
+      "sizeLines": 291,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/acp.go",
+      "language": "go",
+      "sizeLines": 323,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/autoplan.go",
+      "language": "go",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/bot_test.go",
+      "language": "go",
+      "sizeLines": 338,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/bot.go",
+      "language": "go",
+      "sizeLines": 400,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/box_test.go",
+      "language": "go",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/box.go",
+      "language": "go",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/branch_test.go",
+      "language": "go",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/branch.go",
+      "language": "go",
+      "sizeLines": 129,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/chat_attachment_test.go",
+      "language": "go",
+      "sizeLines": 94,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/chat_ghost_test.go",
+      "language": "go",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/chat_render_test.go",
+      "language": "go",
+      "sizeLines": 444,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/chat_tui_paste.go",
+      "language": "go",
+      "sizeLines": 280,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/chat_tui_test.go",
+      "language": "go",
+      "sizeLines": 2897,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/chat_tui.go",
+      "language": "go",
+      "sizeLines": 4025,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/chooser.go",
+      "language": "go",
+      "sizeLines": 324,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/clear_confirm.go",
+      "language": "go",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/cli_test.go",
+      "language": "go",
+      "sizeLines": 1483,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/cli.go",
+      "language": "go",
+      "sizeLines": 1968,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/compaction_test.go",
+      "language": "go",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/complete_test.go",
+      "language": "go",
+      "sizeLines": 681,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/complete.go",
+      "language": "go",
+      "sizeLines": 670,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/consecutive_tool_markers_test.go",
+      "language": "go",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/copy_export_test.go",
+      "language": "go",
+      "sizeLines": 195,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/copy_picker.go",
+      "language": "go",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/diffview_test.go",
+      "language": "go",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/diffview.go",
+      "language": "go",
+      "sizeLines": 264,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/doctor_test.go",
+      "language": "go",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/doctor.go",
+      "language": "go",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/effort.go",
+      "language": "go",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/gitstatus_test.go",
+      "language": "go",
+      "sizeLines": 165,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/gitstatus.go",
+      "language": "go",
+      "sizeLines": 235,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/help_view.go",
+      "language": "go",
+      "sizeLines": 116,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/hide_other.go",
+      "language": "go",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/hide_windows.go",
+      "language": "go",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/hooks_view.go",
+      "language": "go",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/interject_test.go",
+      "language": "go",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/language.go",
+      "language": "go",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/latex_test.go",
+      "language": "go",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/latex.go",
+      "language": "go",
+      "sizeLines": 405,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/math_e2e_test.go",
+      "language": "go",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/mathnode.go",
+      "language": "go",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/mcp_import_picker.go",
+      "language": "go",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/mcp_manager_actions.go",
+      "language": "go",
+      "sizeLines": 537,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/mcp_manager_view.go",
+      "language": "go",
+      "sizeLines": 364,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/mcp_manager.go",
+      "language": "go",
+      "sizeLines": 437,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/mcp_test.go",
+      "language": "go",
+      "sizeLines": 693,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/mcp_view.go",
+      "language": "go",
+      "sizeLines": 227,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/mcp.go",
+      "language": "go",
+      "sizeLines": 290,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/md_cjk_test.go",
+      "language": "go",
+      "sizeLines": 166,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/md_test.go",
+      "language": "go",
+      "sizeLines": 116,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/md.go",
+      "language": "go",
+      "sizeLines": 518,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/memory_v5.go",
+      "language": "go",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/memory_view.go",
+      "language": "go",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/memory.go",
+      "language": "go",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/model_test.go",
+      "language": "go",
+      "sizeLines": 102,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/model_view.go",
+      "language": "go",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/model.go",
+      "language": "go",
+      "sizeLines": 160,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/output_style_view.go",
+      "language": "go",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/provider.go",
+      "language": "go",
+      "sizeLines": 135,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/reasoning_language.go",
+      "language": "go",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/rename_test.go",
+      "language": "go",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/rename.go",
+      "language": "go",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/render_edge_test.go",
+      "language": "go",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/resume_picker.go",
+      "language": "go",
+      "sizeLines": 126,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/resume_test.go",
+      "language": "go",
+      "sizeLines": 318,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/resume.go",
+      "language": "go",
+      "sizeLines": 129,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/retry_indicator_test.go",
+      "language": "go",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/review_test.go",
+      "language": "go",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/review.go",
+      "language": "go",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/rewind_test.go",
+      "language": "go",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/rewind.go",
+      "language": "go",
+      "sizeLines": 212,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/run_metrics_test.go",
+      "language": "go",
+      "sizeLines": 197,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/run_metrics.go",
+      "language": "go",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/select_test.go",
+      "language": "go",
+      "sizeLines": 126,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/select.go",
+      "language": "go",
+      "sizeLines": 512,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/skill_hooks.go",
+      "language": "go",
+      "sizeLines": 273,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/skill_picker_test.go",
+      "language": "go",
+      "sizeLines": 963,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/skill_picker_view.go",
+      "language": "go",
+      "sizeLines": 437,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/skill_picker.go",
+      "language": "go",
+      "sizeLines": 690,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/skill_view.go",
+      "language": "go",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/skillslash_test.go",
+      "language": "go",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/slash_test.go",
+      "language": "go",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/statusline_test.go",
+      "language": "go",
+      "sizeLines": 346,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/style.go",
+      "language": "go",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/theme_osc_other.go",
+      "language": "go",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/theme_osc_unix.go",
+      "language": "go",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/theme_test.go",
+      "language": "go",
+      "sizeLines": 271,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/theme.go",
+      "language": "go",
+      "sizeLines": 552,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/todopanel_test.go",
+      "language": "go",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/toolcard_test.go",
+      "language": "go",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/toolcard.go",
+      "language": "go",
+      "sizeLines": 172,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/transcript_test.go",
+      "language": "go",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/transcript.go",
+      "language": "go",
+      "sizeLines": 270,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/upgrade_test.go",
+      "language": "go",
+      "sizeLines": 237,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/upgrade.go",
+      "language": "go",
+      "sizeLines": 421,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/view_helpers_test.go",
+      "language": "go",
+      "sizeLines": 183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/view_helpers.go",
+      "language": "go",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/cli/width_test.go",
+      "language": "go",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/command/command_extra_test.go",
+      "language": "go",
+      "sizeLines": 177,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/command/command_test.go",
+      "language": "go",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/command/command.go",
+      "language": "go",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/command/slashtool_test.go",
+      "language": "go",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/command/slashtool.go",
+      "language": "go",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/command/symlink_test.go",
+      "language": "go",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/backfill_test.go",
+      "language": "go",
+      "sizeLines": 748,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/ccswitch_test.go",
+      "language": "go",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/ccswitch.go",
+      "language": "go",
+      "sizeLines": 267,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/chat_model_test.go",
+      "language": "go",
+      "sizeLines": 166,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/commanddirs_test.go",
+      "language": "go",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/config.go",
+      "language": "go",
+      "sizeLines": 1926,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/configured_test.go",
+      "language": "go",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/credentials_keyring_default.go",
+      "language": "go",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/credentials_keyring_unix.go",
+      "language": "go",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/credentials.go",
+      "language": "go",
+      "sizeLines": 666,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/default_test.go",
+      "language": "go",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/dotenv_test.go",
+      "language": "go",
+      "sizeLines": 686,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/dotenv.go",
+      "language": "go",
+      "sizeLines": 181,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/edit_test.go",
+      "language": "go",
+      "sizeLines": 1744,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/edit.go",
+      "language": "go",
+      "sizeLines": 1324,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/effort_test.go",
+      "language": "go",
+      "sizeLines": 177,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/effort.go",
+      "language": "go",
+      "sizeLines": 393,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/expand_test.go",
+      "language": "go",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/expand.go",
+      "language": "go",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/fetch_test.go",
+      "language": "go",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/fetch.go",
+      "language": "go",
+      "sizeLines": 126,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/load.go",
+      "language": "go",
+      "sizeLines": 1101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/loadedit_test.go",
+      "language": "go",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/mcp_command.go",
+      "language": "go",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/mcpjson_test.go",
+      "language": "go",
+      "sizeLines": 655,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/mcpjson.go",
+      "language": "go",
+      "sizeLines": 526,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/migrate_test.go",
+      "language": "go",
+      "sizeLines": 952,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/migrate.go",
+      "language": "go",
+      "sizeLines": 708,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/model_fallback_test.go",
+      "language": "go",
+      "sizeLines": 201,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/paths.go",
+      "language": "go",
+      "sizeLines": 437,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/pricing.go",
+      "language": "go",
+      "sizeLines": 209,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/proxy_test.go",
+      "language": "go",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/render_test.go",
+      "language": "go",
+      "sizeLines": 1000,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/render.go",
+      "language": "go",
+      "sizeLines": 1399,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/subagent_model_test.go",
+      "language": "go",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/system_prompt_test.go",
+      "language": "go",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/tools_test.go",
+      "language": "go",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/config/vision.go",
+      "language": "go",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/approval_e2e_test.go",
+      "language": "go",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/approval.go",
+      "language": "go",
+      "sizeLines": 323,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/attachments_test.go",
+      "language": "go",
+      "sizeLines": 251,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/attachments.go",
+      "language": "go",
+      "sizeLines": 506,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/auto_plan_classifier_test.go",
+      "language": "go",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/auto_plan_classifier.go",
+      "language": "go",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/auto_plan_e2e_test.go",
+      "language": "go",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/auto_plan_test.go",
+      "language": "go",
+      "sizeLines": 147,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/auto_plan.go",
+      "language": "go",
+      "sizeLines": 308,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/branches_test.go",
+      "language": "go",
+      "sizeLines": 353,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/branches.go",
+      "language": "go",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/checkpoint.go",
+      "language": "go",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/controller_test.go",
+      "language": "go",
+      "sizeLines": 2324,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/controller.go",
+      "language": "go",
+      "sizeLines": 4145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/errmsg_test.go",
+      "language": "go",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/errmsg.go",
+      "language": "go",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/goal_concurrency_test.go",
+      "language": "go",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/goal_test.go",
+      "language": "go",
+      "sizeLines": 1082,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/goal.go",
+      "language": "go",
+      "sizeLines": 531,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/imagecompress_test.go",
+      "language": "go",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/imagecompress.go",
+      "language": "go",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/input_test.go",
+      "language": "go",
+      "sizeLines": 1042,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/input.go",
+      "language": "go",
+      "sizeLines": 594,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/inputimages_test.go",
+      "language": "go",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/main_test.go",
+      "language": "go",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/mcp.go",
+      "language": "go",
+      "sizeLines": 171,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/memory_test.go",
+      "language": "go",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/memory.go",
+      "language": "go",
+      "sizeLines": 175,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/plan_seed_test.go",
+      "language": "go",
+      "sizeLines": 191,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/port.go",
+      "language": "go",
+      "sizeLines": 240,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/refs_test.go",
+      "language": "go",
+      "sizeLines": 835,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/refs.go",
+      "language": "go",
+      "sizeLines": 1219,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/replay_pending_test.go",
+      "language": "go",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/resume_prune_test.go",
+      "language": "go",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/rewind_e2e_test.go",
+      "language": "go",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/runtime_status_test.go",
+      "language": "go",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/sessionpath.go",
+      "language": "go",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/shell_kill_other_test.go",
+      "language": "go",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/shell_kill_other.go",
+      "language": "go",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/shell_kill_windows.go",
+      "language": "go",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/shell_test.go",
+      "language": "go",
+      "sizeLines": 186,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/skill.go",
+      "language": "go",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/slash_test.go",
+      "language": "go",
+      "sizeLines": 324,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/slash.go",
+      "language": "go",
+      "sizeLines": 734,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/synthetic_contract_test.go",
+      "language": "go",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/turn_orchestrator_test.go",
+      "language": "go",
+      "sizeLines": 658,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/turn_orchestrator.go",
+      "language": "go",
+      "sizeLines": 314,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/control/yolo_test.go",
+      "language": "go",
+      "sizeLines": 961,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/diff/diff_extra_test.go",
+      "language": "go",
+      "sizeLines": 236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/diff/diff_test.go",
+      "language": "go",
+      "sizeLines": 174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/diff/diff.go",
+      "language": "go",
+      "sizeLines": 430,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/diff/largediff_test.go",
+      "language": "go",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/doctor/report_test.go",
+      "language": "go",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/doctor/report.go",
+      "language": "go",
+      "sizeLines": 335,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/environment/probe_test.go",
+      "language": "go",
+      "sizeLines": 261,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/environment/probe_windows_test.go",
+      "language": "go",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/environment/probe.go",
+      "language": "go",
+      "sizeLines": 434,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/event/event_test.go",
+      "language": "go",
+      "sizeLines": 257,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/event/event.go",
+      "language": "go",
+      "sizeLines": 325,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/event/fanout.go",
+      "language": "go",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/event/sync.go",
+      "language": "go",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/eventwire/wire_test.go",
+      "language": "go",
+      "sizeLines": 262,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/eventwire/wire.go",
+      "language": "go",
+      "sizeLines": 344,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/evidence/commandmatch_test.go",
+      "language": "go",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/evidence/commandmatch.go",
+      "language": "go",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/evidence/evidence_test.go",
+      "language": "go",
+      "sizeLines": 505,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/evidence/evidence.go",
+      "language": "go",
+      "sizeLines": 1016,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/evidence/readiness_audit.go",
+      "language": "go",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/evidence/readiness_test.go",
+      "language": "go",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/fileref/search_test.go",
+      "language": "go",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/fileref/search.go",
+      "language": "go",
+      "sizeLines": 162,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/fileutil/atomicwrite_test.go",
+      "language": "go",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/fileutil/atomicwrite.go",
+      "language": "go",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/fileutil/encoding/encoding_test.go",
+      "language": "go",
+      "sizeLines": 303,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/fileutil/encoding/encoding.go",
+      "language": "go",
+      "sizeLines": 251,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/frontmatter/frontmatter_test.go",
+      "language": "go",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/frontmatter/frontmatter.go",
+      "language": "go",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/frontmatter/list_test.go",
+      "language": "go",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/guardian/guardian_policy.md",
+      "language": "markdown",
+      "sizeLines": 34,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "internal/guardian/guardian_test.go",
+      "language": "go",
+      "sizeLines": 203,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/guardian/guardian.go",
+      "language": "go",
+      "sizeLines": 465,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/guardian/policy.go",
+      "language": "go",
+      "sizeLines": 154,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/guardian/transcript.go",
+      "language": "go",
+      "sizeLines": 252,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/history/search_test.go",
+      "language": "go",
+      "sizeLines": 292,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/history/search.go",
+      "language": "go",
+      "sizeLines": 587,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/history/strip.go",
+      "language": "go",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/history/tool_test.go",
+      "language": "go",
+      "sizeLines": 149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/history/tool.go",
+      "language": "go",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/hook/hook_test.go",
+      "language": "go",
+      "sizeLines": 316,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/hook/hook.go",
+      "language": "go",
+      "sizeLines": 521,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/hook/runner_test.go",
+      "language": "go",
+      "sizeLines": 385,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/hook/runner.go",
+      "language": "go",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/hook/trust.go",
+      "language": "go",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/i18n/i18n_test.go",
+      "language": "go",
+      "sizeLines": 123,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/i18n/i18n.go",
+      "language": "go",
+      "sizeLines": 512,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/i18n/messages_en.go",
+      "language": "go",
+      "sizeLines": 417,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/i18n/messages_zh_tw.go",
+      "language": "go",
+      "sizeLines": 413,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/i18n/messages_zh.go",
+      "language": "go",
+      "sizeLines": 418,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/apply.go",
+      "language": "go",
+      "sizeLines": 326,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/doc.go",
+      "language": "go",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/errors.go",
+      "language": "go",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/http.go",
+      "language": "go",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/install_source_test.go",
+      "language": "go",
+      "sizeLines": 1555,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/install_source.go",
+      "language": "go",
+      "sizeLines": 679,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/mcp.go",
+      "language": "go",
+      "sizeLines": 271,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/names.go",
+      "language": "go",
+      "sizeLines": 285,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/plan.go",
+      "language": "go",
+      "sizeLines": 440,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/skill.go",
+      "language": "go",
+      "sizeLines": 357,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/ssrf.go",
+      "language": "go",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/installsource/types.go",
+      "language": "go",
+      "sizeLines": 153,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/instruction/instruction_test.go",
+      "language": "go",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/instruction/instruction.go",
+      "language": "go",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/jobs/artifacts_test.go",
+      "language": "go",
+      "sizeLines": 374,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/jobs/artifacts.go",
+      "language": "go",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/jobs/concurrency_stress_test.go",
+      "language": "go",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/jobs/jobs_extra_test.go",
+      "language": "go",
+      "sizeLines": 240,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/jobs/jobs_test.go",
+      "language": "go",
+      "sizeLines": 566,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/jobs/jobs.go",
+      "language": "go",
+      "sizeLines": 1501,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/jobs/main_test.go",
+      "language": "go",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/jobs/output_result_test.go",
+      "language": "go",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/client.go",
+      "language": "go",
+      "sizeLines": 274,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/jsonrpc_framecap_test.go",
+      "language": "go",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/jsonrpc.go",
+      "language": "go",
+      "sizeLines": 205,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/lsp_test.go",
+      "language": "go",
+      "sizeLines": 183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/main_test.go",
+      "language": "go",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/manager.go",
+      "language": "go",
+      "sizeLines": 290,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/manual_test.go",
+      "language": "go",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/position.go",
+      "language": "go",
+      "sizeLines": 78,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/results.go",
+      "language": "go",
+      "sizeLines": 115,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/testdata/lsp/bash/script.sh",
+      "language": "shell",
+      "sizeLines": 6,
+      "fileCategory": "script"
+    },
+    {
+      "path": "internal/lsp/testdata/lsp/golang/go.mod",
+      "language": "mod",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "internal/lsp/testdata/lsp/golang/main.go",
+      "language": "go",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/testdata/lsp/python/main.py",
+      "language": "python",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/testdata/lsp/rust/Cargo.toml",
+      "language": "toml",
+      "sizeLines": 8,
+      "fileCategory": "config"
+    },
+    {
+      "path": "internal/lsp/testdata/lsp/rust/src/main.rs",
+      "language": "rust",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/testdata/lsp/typescript/index.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/lsp/testdata/lsp/typescript/tsconfig.json",
+      "language": "json",
+      "sizeLines": 7,
+      "fileCategory": "config"
+    },
+    {
+      "path": "internal/lsp/tool.go",
+      "language": "go",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/mcpdiag/auth_test.go",
+      "language": "go",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/mcpdiag/auth.go",
+      "language": "go",
+      "sizeLines": 184,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/convention_test.go",
+      "language": "go",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/doc.go",
+      "language": "go",
+      "sizeLines": 294,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/forget_test.go",
+      "language": "go",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/forget.go",
+      "language": "go",
+      "sizeLines": 60,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/memory_test.go",
+      "language": "go",
+      "sizeLines": 221,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/memory.go",
+      "language": "go",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/queue.go",
+      "language": "go",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/quickadd_test.go",
+      "language": "go",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/quickadd.go",
+      "language": "go",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/recall_test.go",
+      "language": "go",
+      "sizeLines": 193,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/recall.go",
+      "language": "go",
+      "sizeLines": 284,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/remember_test.go",
+      "language": "go",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/remember.go",
+      "language": "go",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/store_extra_test.go",
+      "language": "go",
+      "sizeLines": 286,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/store_test.go",
+      "language": "go",
+      "sizeLines": 747,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/store.go",
+      "language": "go",
+      "sizeLines": 639,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memory/writedoc_test.go",
+      "language": "go",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memorycompiler/compression_test.go",
+      "language": "go",
+      "sizeLines": 651,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memorycompiler/compression.go",
+      "language": "go",
+      "sizeLines": 1638,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memorycompiler/hardening_regression_test.go",
+      "language": "go",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memorycompiler/review_fixes_test.go",
+      "language": "go",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memorycompiler/runtime_test.go",
+      "language": "go",
+      "sizeLines": 1076,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/memorycompiler/runtime.go",
+      "language": "go",
+      "sizeLines": 2945,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/migration/migration_test.go",
+      "language": "go",
+      "sizeLines": 239,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/migration/migration.go",
+      "language": "go",
+      "sizeLines": 576,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/netclient/netclient_test.go",
+      "language": "go",
+      "sizeLines": 589,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/netclient/netclient.go",
+      "language": "go",
+      "sizeLines": 288,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/nilutil/nil_test.go",
+      "language": "go",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/nilutil/nil.go",
+      "language": "go",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/notify/sender_darwin.go",
+      "language": "go",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/notify/sender_linux.go",
+      "language": "go",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/notify/sender_other.go",
+      "language": "go",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/notify/sender_windows.go",
+      "language": "go",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/notify/sink_test.go",
+      "language": "go",
+      "sizeLines": 126,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/notify/sink.go",
+      "language": "go",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/outputstyle/outputstyle_test.go",
+      "language": "go",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/outputstyle/outputstyle.go",
+      "language": "go",
+      "sizeLines": 197,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/permission/bash_readonly_test.go",
+      "language": "go",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/permission/bash_readonly.go",
+      "language": "go",
+      "sizeLines": 118,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/permission/permission_extra_test.go",
+      "language": "go",
+      "sizeLines": 362,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/permission/permission_test.go",
+      "language": "go",
+      "sizeLines": 264,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/permission/permission.go",
+      "language": "go",
+      "sizeLines": 590,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/planmode/marker_test.go",
+      "language": "go",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/planmode/policy_test.go",
+      "language": "go",
+      "sizeLines": 263,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/planmode/policy.go",
+      "language": "go",
+      "sizeLines": 463,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/planmode/reconcile_test.go",
+      "language": "go",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/cache_test.go",
+      "language": "go",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/cache.go",
+      "language": "go",
+      "sizeLines": 244,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/canonicalize_test.go",
+      "language": "go",
+      "sizeLines": 146,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/canonicalize.go",
+      "language": "go",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/codegraph_limit_test.go",
+      "language": "go",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/codegraph_limit.go",
+      "language": "go",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/example_test.go",
+      "language": "go",
+      "sizeLines": 146,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/host_concurrency_test.go",
+      "language": "go",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/hotadd_test.go",
+      "language": "go",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/known_overrides.go",
+      "language": "go",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/lazy_test.go",
+      "language": "go",
+      "sizeLines": 726,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/lazy.go",
+      "language": "go",
+      "sizeLines": 395,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/main_test.go",
+      "language": "go",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/planmode_untrusted_test.go",
+      "language": "go",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/plugin_test.go",
+      "language": "go",
+      "sizeLines": 1081,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/plugin.go",
+      "language": "go",
+      "sizeLines": 1318,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/prompts.go",
+      "language": "go",
+      "sizeLines": 96,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/resources.go",
+      "language": "go",
+      "sizeLines": 81,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/stats_test.go",
+      "language": "go",
+      "sizeLines": 222,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/stats.go",
+      "language": "go",
+      "sizeLines": 235,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/stdio_cancel_test.go",
+      "language": "go",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/transport_http_test.go",
+      "language": "go",
+      "sizeLines": 283,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/transport_http.go",
+      "language": "go",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/transport_stdio_cache_test.go",
+      "language": "go",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/transport_stdio_other_test.go",
+      "language": "go",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/transport_stdio_windows_test.go",
+      "language": "go",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/plugin/transport_stdio.go",
+      "language": "go",
+      "sizeLines": 587,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/hide_other_test.go",
+      "language": "go",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/hide_other.go",
+      "language": "go",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/hide_windows_test.go",
+      "language": "go",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/hide_windows.go",
+      "language": "go",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/kill_other_test.go",
+      "language": "go",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/kill_other.go",
+      "language": "go",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/kill_windows_test.go",
+      "language": "go",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/kill_windows.go",
+      "language": "go",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/priority_other.go",
+      "language": "go",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/priority_windows_test.go",
+      "language": "go",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/priority_windows.go",
+      "language": "go",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/shell_path_probe_other.go",
+      "language": "go",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/proc/shell_path_probe_windows.go",
+      "language": "go",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/anthropic/anthropic_test.go",
+      "language": "go",
+      "sizeLines": 407,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/anthropic/anthropic.go",
+      "language": "go",
+      "sizeLines": 625,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/anthropic/image_test.go",
+      "language": "go",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/anthropic/stall_test.go",
+      "language": "go",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/image_test.go",
+      "language": "go",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/effort_test.go",
+      "language": "go",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/fetch_models_test.go",
+      "language": "go",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/fetch_models.go",
+      "language": "go",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/host_test.go",
+      "language": "go",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/host.go",
+      "language": "go",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/image_test.go",
+      "language": "go",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/openai_test.go",
+      "language": "go",
+      "sizeLines": 807,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/openai.go",
+      "language": "go",
+      "sizeLines": 744,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/realcache_test.go",
+      "language": "go",
+      "sizeLines": 183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/reconnect_test.go",
+      "language": "go",
+      "sizeLines": 286,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/stall_test.go",
+      "language": "go",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/think_test.go",
+      "language": "go",
+      "sizeLines": 84,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/openai/think.go",
+      "language": "go",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/pairing_probe_test.go",
+      "language": "go",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/provider_test.go",
+      "language": "go",
+      "sizeLines": 508,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/provider.go",
+      "language": "go",
+      "sizeLines": 678,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/retry_test.go",
+      "language": "go",
+      "sizeLines": 185,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/retry.go",
+      "language": "go",
+      "sizeLines": 212,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/schema_canonicalize_test.go",
+      "language": "go",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/provider/schema_canonicalize.go",
+      "language": "go",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/retrieval/bm25_test.go",
+      "language": "go",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/retrieval/bm25.go",
+      "language": "go",
+      "sizeLines": 207,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sandbox/sandbox_test.go",
+      "language": "go",
+      "sizeLines": 309,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sandbox/sandbox.go",
+      "language": "go",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sandbox/seatbelt_darwin_test.go",
+      "language": "go",
+      "sizeLines": 268,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sandbox/seatbelt_darwin.go",
+      "language": "go",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sandbox/seatbelt_other_test.go",
+      "language": "go",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sandbox/seatbelt_other.go",
+      "language": "go",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sandbox/shell_nul_test.go",
+      "language": "go",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sandbox/shell.go",
+      "language": "go",
+      "sizeLines": 266,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/auth_test.go",
+      "language": "go",
+      "sizeLines": 728,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/auth.go",
+      "language": "go",
+      "sizeLines": 597,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/broadcaster_test.go",
+      "language": "go",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/broadcaster.go",
+      "language": "go",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/csrf_test.go",
+      "language": "go",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/effort_test.go",
+      "language": "go",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/index.html",
+      "language": "html",
+      "sizeLines": 1375,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "internal/serve/login.html",
+      "language": "html",
+      "sizeLines": 96,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "internal/serve/modelswitch_test.go",
+      "language": "go",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/serve_test.go",
+      "language": "go",
+      "sizeLines": 614,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/serve.go",
+      "language": "go",
+      "sizeLines": 1193,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/titlecache_test.go",
+      "language": "go",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/titlecache.go",
+      "language": "go",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/serve/understand_graph_test.go",
+      "language": "go",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/shellsafe/shellsafe_test.go",
+      "language": "go",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/shellsafe/shellsafe.go",
+      "language": "go",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/skill/builtins_test.go",
+      "language": "go",
+      "sizeLines": 132,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/skill/builtins.go",
+      "language": "go",
+      "sizeLines": 443,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/skill/index.go",
+      "language": "go",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/skill/skill_extra_test.go",
+      "language": "go",
+      "sizeLines": 296,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/skill/skill_test.go",
+      "language": "go",
+      "sizeLines": 792,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/skill/skill.go",
+      "language": "go",
+      "sizeLines": 780,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/skill/tools_test.go",
+      "language": "go",
+      "sizeLines": 435,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/skill/tools.go",
+      "language": "go",
+      "sizeLines": 599,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/store/session_test.go",
+      "language": "go",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/store/session.go",
+      "language": "go",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sysproxy/sysproxy_test.go",
+      "language": "go",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sysproxy/sysproxy.go",
+      "language": "go",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sysproxy/system_other.go",
+      "language": "go",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/sysproxy/system_windows.go",
+      "language": "go",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash_cancel_test.go",
+      "language": "go",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash_cancel_windows_test.go",
+      "language": "go",
+      "sizeLines": 124,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash_env_test.go",
+      "language": "go",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash_kill_other.go",
+      "language": "go",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash_kill_windows.go",
+      "language": "go",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash_powershell_test.go",
+      "language": "go",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash_reap_test.go",
+      "language": "go",
+      "sizeLines": 183,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash_timeout_test.go",
+      "language": "go",
+      "sizeLines": 204,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bash.go",
+      "language": "go",
+      "sizeLines": 751,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bgjobs_test.go",
+      "language": "go",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/bgjobs.go",
+      "language": "go",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/builtin_test.go",
+      "language": "go",
+      "sizeLines": 477,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/codeindex_test.go",
+      "language": "go",
+      "sizeLines": 230,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/codeindex.go",
+      "language": "go",
+      "sizeLines": 441,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/completestep_test.go",
+      "language": "go",
+      "sizeLines": 576,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/completestep.go",
+      "language": "go",
+      "sizeLines": 442,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/confine_test.go",
+      "language": "go",
+      "sizeLines": 291,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/confine.go",
+      "language": "go",
+      "sizeLines": 159,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/crlf_edit_test.go",
+      "language": "go",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/delete_range_samedge_test.go",
+      "language": "go",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/delete_range_test.go",
+      "language": "go",
+      "sizeLines": 310,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/delete_range.go",
+      "language": "go",
+      "sizeLines": 320,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/delete_symbol_doc_test.go",
+      "language": "go",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/delete_symbol_test.go",
+      "language": "go",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/delete_symbol.go",
+      "language": "go",
+      "sizeLines": 323,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/e2e_encoding_test.go",
+      "language": "go",
+      "sizeLines": 166,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/editfile.go",
+      "language": "go",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/encoding_helpers.go",
+      "language": "go",
+      "sizeLines": 380,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/fuzzy_edit_test.go",
+      "language": "go",
+      "sizeLines": 170,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/gitignore_e2e_test.go",
+      "language": "go",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/gitignore_test.go",
+      "language": "go",
+      "sizeLines": 164,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/gitignore.go",
+      "language": "go",
+      "sizeLines": 346,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/glob.go",
+      "language": "go",
+      "sizeLines": 238,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/grep_engine_test.go",
+      "language": "go",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/grep.go",
+      "language": "go",
+      "sizeLines": 399,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/ls.go",
+      "language": "go",
+      "sizeLines": 144,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/movefile.go",
+      "language": "go",
+      "sizeLines": 182,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/multiedit.go",
+      "language": "go",
+      "sizeLines": 117,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/notebookedit_test.go",
+      "language": "go",
+      "sizeLines": 253,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/notebookedit.go",
+      "language": "go",
+      "sizeLines": 337,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/preview_test.go",
+      "language": "go",
+      "sizeLines": 169,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/preview.go",
+      "language": "go",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/protected_dirs_darwin_test.go",
+      "language": "go",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/protected_dirs_darwin.go",
+      "language": "go",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/protected_dirs_other.go",
+      "language": "go",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/readfile_stream_test.go",
+      "language": "go",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/readfile_utf16_test.go",
+      "language": "go",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/readfile_window_test.go",
+      "language": "go",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/readfile.go",
+      "language": "go",
+      "sizeLines": 241,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/recursive_search_test.go",
+      "language": "go",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/todo_test.go",
+      "language": "go",
+      "sizeLines": 188,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/todo.go",
+      "language": "go",
+      "sizeLines": 123,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/tool_extra_test.go",
+      "language": "go",
+      "sizeLines": 229,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/understand_search_test.go",
+      "language": "go",
+      "sizeLines": 392,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/understand_search.go",
+      "language": "go",
+      "sizeLines": 641,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/vendorskip_test.go",
+      "language": "go",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/walk_cancel_test.go",
+      "language": "go",
+      "sizeLines": 43,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/web_fetch_proxy_test.go",
+      "language": "go",
+      "sizeLines": 349,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/webfetch_ssrf_test.go",
+      "language": "go",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/webfetch.go",
+      "language": "go",
+      "sizeLines": 345,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/workspace_test.go",
+      "language": "go",
+      "sizeLines": 289,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/workspace.go",
+      "language": "go",
+      "sizeLines": 271,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/write_tool_test.go",
+      "language": "go",
+      "sizeLines": 507,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/builtin/writefile.go",
+      "language": "go",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/contract_test.go",
+      "language": "go",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/contract.go",
+      "language": "go",
+      "sizeLines": 102,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/preview_test.go",
+      "language": "go",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/progress.go",
+      "language": "go",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/registry_canon_test.go",
+      "language": "go",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/registry_test.go",
+      "language": "go",
+      "sizeLines": 168,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/sessiontool/sessiontool_test.go",
+      "language": "go",
+      "sizeLines": 374,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/sessiontool/sessiontool.go",
+      "language": "go",
+      "sizeLines": 228,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/tool/tool.go",
+      "language": "go",
+      "sizeLines": 315,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/understand/prefix_test.go",
+      "language": "go",
+      "sizeLines": 192,
+      "fileCategory": "code"
+    },
+    {
+      "path": "internal/understand/prefix.go",
+      "language": "go",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "launch_headroom.py",
+      "language": "python",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "Makefile",
+      "language": "makefile",
+      "sizeLines": 33,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "MyReasonixRelease/1.15.10/reasonix-desktop.exe",
+      "language": "exe",
+      "sizeLines": 128822,
+      "fileCategory": "code"
+    },
+    {
+      "path": "MyReasonixRelease/1.15.11/reasonix-desktop.exe",
+      "language": "exe",
+      "sizeLines": 128984,
+      "fileCategory": "code"
+    },
+    {
+      "path": "MyReasonixRelease/1.15.12/reasonix-desktop.exe",
+      "language": "exe",
+      "sizeLines": 125236,
+      "fileCategory": "code"
+    },
+    {
+      "path": "MyReasonixRelease/1.15.13/reasonix-desktop.exe",
+      "language": "exe",
+      "sizeLines": 128989,
+      "fileCategory": "code"
+    },
+    {
+      "path": "MyReasonixRelease/1.15.14/reasonix-desktop.exe",
+      "language": "exe",
+      "sizeLines": 125673,
+      "fileCategory": "code"
+    },
+    {
+      "path": "MyReasonixRelease/1.15.8/reasonix-desktop.exe",
+      "language": "exe",
+      "sizeLines": 159326,
+      "fileCategory": "code"
+    },
+    {
+      "path": "MyReasonixRelease/1.15.9/reasonix-desktop.exe",
+      "language": "exe",
+      "sizeLines": 128369,
+      "fileCategory": "code"
+    },
+    {
+      "path": "npm/build.mjs",
+      "language": "javascript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "npm/reasonix/bin/reasonix.js",
+      "language": "javascript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "npm/reasonix/package.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "prod_test",
+      "language": "unknown",
+      "sizeLines": 217,
+      "fileCategory": "code"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 209,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "language": "markdown",
+      "sizeLines": 195,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "reasonix.example.toml",
+      "language": "toml",
+      "sizeLines": 216,
+      "fileCategory": "config"
+    },
+    {
+      "path": "REASONIX.md",
+      "language": "markdown",
+      "sizeLines": 84,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "run_headroom_proxy.py",
+      "language": "python",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/backfill-issue-labels.mjs",
+      "language": "javascript",
+      "sizeLines": 111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/cache-guard.sh",
+      "language": "shell",
+      "sizeLines": 30,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/check-cache-impact.sh",
+      "language": "shell",
+      "sizeLines": 184,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/desktop-build.sh",
+      "language": "shell",
+      "sizeLines": 159,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/resolve-desktop-release.sh",
+      "language": "shell",
+      "sizeLines": 41,
+      "fileCategory": "script"
+    },
+    {
+      "path": "SECURITY.md",
+      "language": "markdown",
+      "sizeLines": 137,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "site/astro.config.mjs",
+      "language": "javascript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/package.json",
+      "language": "json",
+      "sizeLines": 20,
+      "fileCategory": "config"
+    },
+    {
+      "path": "site/public/robots.txt",
+      "language": "txt",
+      "sizeLines": 4,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "site/scripts/fetch-community.mjs",
+      "language": "javascript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/data/community.json",
+      "language": "json",
+      "sizeLines": 271,
+      "fileCategory": "config"
+    },
+    {
+      "path": "site/src/data/contributors.json",
+      "language": "json",
+      "sizeLines": 48,
+      "fileCategory": "config"
+    },
+    {
+      "path": "site/src/layouts/Account.astro",
+      "language": "astro",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/layouts/Base.astro",
+      "language": "astro",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/layouts/Community.astro",
+      "language": "astro",
+      "sizeLines": 59,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/404.astro",
+      "language": "astro",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/account.astro",
+      "language": "astro",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/community/guidelines.astro",
+      "language": "astro",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/community/index.astro",
+      "language": "astro",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/community/new.astro",
+      "language": "astro",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/community/topic.astro",
+      "language": "astro",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/device.astro",
+      "language": "astro",
+      "sizeLines": 34,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/docs.astro",
+      "language": "astro",
+      "sizeLines": 368,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/forgot.astro",
+      "language": "astro",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/index.astro",
+      "language": "astro",
+      "sizeLines": 350,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/login.astro",
+      "language": "astro",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/register.astro",
+      "language": "astro",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/reset.astro",
+      "language": "astro",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/pages/skills.astro",
+      "language": "astro",
+      "sizeLines": 548,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/scripts/auth.js",
+      "language": "javascript",
+      "sizeLines": 312,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/scripts/community.js",
+      "language": "javascript",
+      "sizeLines": 314,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/scripts/fx.js",
+      "language": "javascript",
+      "sizeLines": 213,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/scripts/site.js",
+      "language": "javascript",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "site/src/styles/community.css",
+      "language": "css",
+      "sizeLines": 201,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "site/src/styles/global.css",
+      "language": "css",
+      "sizeLines": 906,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "site/tsconfig.json",
+      "language": "json",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "test_headroom.py",
+      "language": "python",
+      "sizeLines": 49,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tools/write_heartbeat/heartbeat-tasks.json",
+      "language": "json",
+      "sizeLines": 20,
+      "fileCategory": "config"
+    },
+    {
+      "path": "tools/write_heartbeat/main.go",
+      "language": "go",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/migrations/0001_initial.sql",
+      "language": "sql",
+      "sizeLines": 43,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/accounts/migrations/0002_device_grants.sql",
+      "language": "sql",
+      "sizeLines": 17,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/accounts/package.json",
+      "language": "json",
+      "sizeLines": 24,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/accounts/README.md",
+      "language": "markdown",
+      "sizeLines": 113,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "workers/accounts/src/app.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/auth/cookies.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/auth/crypto.ts",
+      "language": "typescript",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/config.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/db/deviceGrants.ts",
+      "language": "typescript",
+      "sizeLines": 157,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/db/emailTokens.ts",
+      "language": "typescript",
+      "sizeLines": 46,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/db/index.ts",
+      "language": "typescript",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/db/sessions.ts",
+      "language": "typescript",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/db/users.ts",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/email/index.ts",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/email/resend.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/email/types.ts",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/env.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/http/auth.ts",
+      "language": "typescript",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/http/cors.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/http/errors.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/http/ratelimit.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/lib/handle.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/lib/validation.ts",
+      "language": "typescript",
+      "sizeLines": 77,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/routes/auth.ts",
+      "language": "typescript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/routes/device.ts",
+      "language": "typescript",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/routes/health.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/routes/me.ts",
+      "language": "typescript",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/routes/users.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/src/types.ts",
+      "language": "typescript",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/accounts/tsconfig.json",
+      "language": "json",
+      "sizeLines": 16,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/accounts/wrangler.toml",
+      "language": "toml",
+      "sizeLines": 42,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/crash-report/migrate-access.sql",
+      "language": "sql",
+      "sizeLines": 17,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/crash-report/migrate-metric-users.sql",
+      "language": "sql",
+      "sizeLines": 12,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/crash-report/migrate-structured-reports.sql",
+      "language": "sql",
+      "sizeLines": 35,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/crash-report/migrate-title.sql",
+      "language": "sql",
+      "sizeLines": 5,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/crash-report/migrate.sql",
+      "language": "sql",
+      "sizeLines": 34,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/crash-report/package.json",
+      "language": "json",
+      "sizeLines": 21,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/crash-report/schema.sql",
+      "language": "sql",
+      "sizeLines": 130,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/crash-report/src/admin.ts",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/crash-report/src/auth_pages.ts",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/crash-report/src/auth.ts",
+      "language": "typescript",
+      "sizeLines": 145,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/crash-report/src/env.ts",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/crash-report/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 931,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/crash-report/src/shell.ts",
+      "language": "typescript",
+      "sizeLines": 306,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/crash-report/src/stats.ts",
+      "language": "typescript",
+      "sizeLines": 833,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/crash-report/tsconfig.json",
+      "language": "json",
+      "sizeLines": 12,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/crash-report/wrangler.toml",
+      "language": "toml",
+      "sizeLines": 41,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/forum/package.json",
+      "language": "json",
+      "sizeLines": 24,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/forum/schema.sql",
+      "language": "sql",
+      "sizeLines": 89,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/forum/seed.sql",
+      "language": "sql",
+      "sizeLines": 8,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/forum/src/antispam.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/forum/src/env.ts",
+      "language": "typescript",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/forum/src/identity.ts",
+      "language": "typescript",
+      "sizeLines": 94,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/forum/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 178,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/forum/tsconfig.json",
+      "language": "json",
+      "sizeLines": 16,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/forum/wrangler.toml",
+      "language": "toml",
+      "sizeLines": 32,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/registry/migrations/0001_initial.sql",
+      "language": "sql",
+      "sizeLines": 68,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/registry/package.json",
+      "language": "json",
+      "sizeLines": 24,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/registry/seed.sql",
+      "language": "sql",
+      "sizeLines": 38,
+      "fileCategory": "data"
+    },
+    {
+      "path": "workers/registry/src/app.ts",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/db/events.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/db/index.ts",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/db/packages.ts",
+      "language": "typescript",
+      "sizeLines": 237,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/env.ts",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/http/auth.ts",
+      "language": "typescript",
+      "sizeLines": 53,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/http/cors.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/http/errors.ts",
+      "language": "typescript",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/http/ratelimit.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/index.ts",
+      "language": "typescript",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/lib/validation.ts",
+      "language": "typescript",
+      "sizeLines": 69,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/routes/activity.ts",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/routes/admin.ts",
+      "language": "typescript",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/routes/health.ts",
+      "language": "typescript",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/routes/packages.ts",
+      "language": "typescript",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/src/types.ts",
+      "language": "typescript",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "workers/registry/tsconfig.json",
+      "language": "json",
+      "sizeLines": 16,
+      "fileCategory": "config"
+    },
+    {
+      "path": "workers/registry/wrangler.toml",
+      "language": "toml",
+      "sizeLines": 33,
+      "fileCategory": "config"
+    }
+  ],
+  "totalFiles": 1288,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "very-large",
+  "stats": {
+    "filesScanned": 1288,
+    "byCategory": {
+      "config": 120,
+      "code": 1039,
+      "docs": 82,
+      "infra": 16,
+      "script": 10,
+      "markup": 9,
+      "data": 12
+    },
+    "byLanguage": {
+      "config": 1,
+      "unknown": 7,
+      "yaml": 23,
+      "markdown": 67,
+      "json": 94,
+      "txt": 15,
+      "xml": 1,
+      "go": 734,
+      "toml": 11,
+      "shell": 10,
+      "python": 7,
+      "exe": 8,
+      "html": 5,
+      "wav": 4,
+      "javascript": 12,
+      "typescript": 248,
+      "css": 4,
+      "mod": 3,
+      "sum": 2,
+      "m": 1,
+      "rust": 1,
+      "makefile": 1,
+      "astro": 17,
+      "sql": 12
+    }
+  }
+}
