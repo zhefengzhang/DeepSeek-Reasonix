@@ -485,6 +485,7 @@ func TestBuildRequestDeepSeekThinking(t *testing.T) {
 		wantThinking  string
 		wantReasoning string
 	}{
+		{name: "disabled", effort: "disabled", wantThinking: "disabled", wantReasoning: ""},
 		{name: "high", effort: "high", wantThinking: "enabled", wantReasoning: "high"},
 		{name: "max", effort: "max", wantThinking: "enabled", wantReasoning: "max"},
 	} {
@@ -608,6 +609,14 @@ func TestNewDeepSeekThinkingDefaultsAndValidation(t *testing.T) {
 	}
 	if got := p.(*client).effort; got != "max" {
 		t.Fatalf("effort = %q, want max", got)
+	}
+
+	p, err = New(provider.Config{Name: "deepseek", BaseURL: "https://api.deepseek.com", Model: "deepseek-v4", Extra: map[string]any{"effort": "disabled"}})
+	if err != nil {
+		t.Fatalf("New disabled: %v", err)
+	}
+	if got := p.(*client).effort; got != "disabled" {
+		t.Fatalf("effort = %q, want disabled", got)
 	}
 
 	if _, err := New(provider.Config{Name: "deepseek", BaseURL: "https://api.deepseek.com", Model: "deepseek-v4", Extra: map[string]any{"effort": "medium"}}); err == nil {

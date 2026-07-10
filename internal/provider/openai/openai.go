@@ -78,11 +78,11 @@ func New(cfg provider.Config) (provider.Provider, error) {
 		effort = ""
 	case deepseek:
 		switch effort {
-		case "", "off": // "off" is a retired level (disabled thinking); fall back to the default depth
+		case "", "off": // "off" is a retired level; fall back to the default depth
 			effort = "high"
-		case "high", "max":
+		case "disabled", "high", "max":
 		default:
-			return nil, fmt.Errorf("openai: provider %q uses DeepSeek thinking; effort must be high or max", name)
+			return nil, fmt.Errorf("openai: provider %q uses DeepSeek thinking; effort must be disabled, high or max", name)
 		}
 	case minimax:
 		// M3's knob is binary. The config effort layer normalises user input
@@ -390,9 +390,14 @@ func (c *client) buildRequest(req provider.Request) chatRequest {
 	}
 	switch {
 	case c.deepseek:
-		// DeepSeek's CoT is controlled by `thinking` (always on) plus
-		// `reasoning_effort` for depth. We never disable thinking for DeepSeek.
-		out.Thinking = &thinkingMode{Type: "enabled"}
+		// DeepSeek's CoT is controlled by `thinking` plus `reasoning_effort`
+		// for depth. "disabled" turns thinking off for fast responses.
+		if c.effort == "disabled" {
+			out.Thinking = &thinkingMode{Type: "disabled"}
+			out.ReasoningEffort = ""
+		} else {
+			out.Thinking = &thinkingMode{Type: "enabled"}
+		}
 	case c.minimax:
 		// M3 uses a single `thinking.type` field with two valid values:
 		// "adaptive" (default, thinking on) and "disabled" (off). Reasoning

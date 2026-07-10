@@ -119,3 +119,59 @@ func TestEffectiveEffortMiniMax(t *testing.T) {
 		t.Errorf("explicit EffectiveEffort = %q, want disabled", got)
 	}
 }
+
+func TestNormalizeEffortDeepSeekDisabled(t *testing.T) {
+	e := &ProviderEntry{Kind: "openai", BaseURL: "https://api.deepseek.com", Model: "deepseek-v4-flash"}
+	cases := []struct {
+		in, want string
+	}{
+		{"auto", ""}, // auto == "leave to provider default" == empty
+		{"disabled", "disabled"},
+		{"high", "high"},
+		{"max", "max"},
+		{"off", "disabled"}, // retired "off" maps to "disabled"
+		{"low", "high"},     // stale → nearest valid
+		{"medium", "high"},
+		{"xhigh", "max"},
+	}
+	for _, tc := range cases {
+		got, err := NormalizeEffort(e, tc.in)
+		if err != nil {
+			t.Errorf("NormalizeEffort(%q) returned error: %v", tc.in, err)
+			continue
+		}
+		if got != tc.want {
+			t.Errorf("NormalizeEffort(%q) = %q, want %q", tc.in, got, tc.want)
+		}
+	}
+}
+
+func TestNormalizeEffortDeepSeekRejectsGarbage(t *testing.T) {
+	e := &ProviderEntry{Kind: "openai", BaseURL: "https://api.deepseek.com", Model: "deepseek-v4-flash"}
+	for _, in := range []string{"turbo", ""} {
+		_, err := NormalizeEffort(e, in)
+		if err == nil {
+			t.Errorf("NormalizeEffort(%q) should be rejected", in)
+		}
+	}
+}
+
+func TestEffortCapabilityDeepSeek(t *testing.T) {
+	e := &ProviderEntry{Kind: "openai", BaseURL: "https://api.deepseek.com", Model: "deepseek-v4-flash"}
+	cap := EffortCapabilityForEntry(e)
+	if !cap.Supported {
+		t.Fatalf("DeepSeek entry should expose /effort, got %+v", cap)
+	}
+	wantLevels := []string{"auto", "disabled", "high", "max"}
+	if len(cap.Levels) != len(wantLevels) {
+		t.Fatalf("levels = %v, want %v", cap.Levels, wantLevels)
+	}
+	for i, l := range wantLevels {
+		if cap.Levels[i] != l {
+			t.Errorf("levels[%d] = %q, want %q", i, cap.Levels[i], l)
+		}
+	}
+	if cap.Default != "high" {
+		t.Errorf("default = %q, want high", cap.Default)
+	}
+}
