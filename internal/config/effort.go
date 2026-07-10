@@ -40,6 +40,20 @@ func EffortCapabilityForEntry(e *ProviderEntry) EffortCapability {
 	if explicitReasoningProtocol(e) == ReasoningProtocolNone {
 		return EffortCapability{}
 	}
+	// Explicit reasoning_protocol is the user's intentional override —
+	// honour it above the model registry.
+	switch explicitReasoningProtocol(e) {
+	case ReasoningProtocolDeepSeek:
+		return deepSeekEffortCapability()
+	case ReasoningProtocolOpenAI:
+		return openAIEffortCapability()
+	}
+	// Model capability registry is the authoritative default for known
+	// models — it reflects the latest levels, even when the provider's
+	// persisted supported_efforts is a stale subset from an older version.
+	if cap, ok := resolvedModelReasoningCapability(e); ok {
+		return effortCapabilityFromModel(cap)
+	}
 	supported := normalizedSupportedEfforts(e)
 	if len(supported) > 0 {
 		levels := make([]string, 0, len(supported)+1)
@@ -50,15 +64,6 @@ func EffortCapabilityForEntry(e *ProviderEntry) EffortCapability {
 			def = supported[0]
 		}
 		return EffortCapability{Supported: true, Levels: levels, Default: def}
-	}
-	switch explicitReasoningProtocol(e) {
-	case ReasoningProtocolDeepSeek:
-		return deepSeekEffortCapability()
-	case ReasoningProtocolOpenAI:
-		return openAIEffortCapability()
-	}
-	if cap, ok := resolvedModelReasoningCapability(e); ok {
-		return effortCapabilityFromModel(cap)
 	}
 	switch ReasoningProtocolForEntry(e) {
 	case ReasoningProtocolDeepSeek:

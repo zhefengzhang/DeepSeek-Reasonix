@@ -190,6 +190,82 @@ Rules:
 - Don't fabricate conventions the code doesn't demonstrate.
 - After writing, summarize in one or two lines what you captured and tell the user to review and edit it.`
 
+const builtinUnderstandBody = `Analyze the current project to produce a knowledge-graph.json in .understand-anything/. This powers structural search (understand_search tool) and a status-bar indicator.
+
+## Options
+$ARGUMENTS may contain:
+- --full — Force full rebuild, ignoring any existing graph
+- --language <lang> — Generate summaries in the specified language (ISO 639-1, e.g. zh, ja, en). Default en.
+- A directory path — Analyze that directory instead of the current workspace
+
+## Prerequisites
+- Node.js >= 22 and pnpm >= 10 must be on PATH.
+- The Understand-Anything plugin is at OtherPackage/Understand-Anything/understand-anything-plugin/ relative to the Reasonix repo root.
+- SKILL_DIR is OtherPackage/Understand-Anything/understand-anything-plugin/skills/understand/
+
+## Phase 0 — Pre-flight
+1. Set PROJECT_ROOT from $ARGUMENTS (directory path) or current workspace root.
+2. Set PLUGIN_ROOT to OtherPackage/Understand-Anything/understand-anything-plugin/ (relative to repo root). Verify it exists.
+3. Ensure core is built: cd "$PLUGIN_ROOT" && pnpm --filter @understand-anything/core build
+4. Get git commit: git -C "$PROJECT_ROOT" rev-parse HEAD → store as $GIT_COMMIT.
+5. Create dirs: mkdir -p "$PROJECT_ROOT/.understand-anything/intermediate" and tmp/
+6. If --full or no existing knowledge-graph.json → full analysis. If existing + same commit → ask user whether to rebuild. If existing + changed files → incremental.
+
+## Phase 1 — SCAN
+Run: node "$SKILL_DIR/scan-project.mjs" "$PROJECT_ROOT" "$PROJECT_ROOT/.understand-anything/intermediate/scan-result.json"
+Read the scan result to get file list, languages, categories, complexity.
+
+## Phase 1.5 — BATCH
+Run: node "$SKILL_DIR/compute-batches.mjs" "$PROJECT_ROOT"
+Reads scan-result.json, writes batches.json.
+
+## Phase 2 — ANALYZE
+Load batches.json. For each batch, use the task tool to dispatch a sub-agent that reads files and produces GraphNode/GraphEdge objects following the UA schema (see Reference below). Run up to 4 batches concurrently.
+After all batches: python "$SKILL_DIR/merge-batch-graphs.py" "$PROJECT_ROOT" → produces assembled-graph.json.
+
+## Phase 3 — ARCHITECTURE
+Use task to dispatch a sub-agent that groups nodes into architectural layers. Write to layers.json. Format: [{"id":"...", "name":"...", "description":"...", "nodeIds":[...]}]
+
+## Phase 4 — TOUR
+Use task to dispatch a sub-agent that generates a guided tour (5-10 steps). Write to tour.json. Format: [{"order":1, "title":"...", "description":"...", "nodeIds":[...]}]
+
+## Phase 5 — REVIEW & ASSEMBLE
+Read assembled-graph.json, layers.json, tour.json. Construct the final KnowledgeGraph JSON:
+{
+  "version": "1.0.0",
+  "project": {"name":"...", "languages":[...], "frameworks":[...], "description":"...", "analyzedAt":"<ISO>", "gitCommitHash":"<hash>"},
+  "nodes":[...], "edges":[...], "layers":[...], "tour":[...]
+}
+Apply automated fixes: remove dangling edges, fill missing tags with ["untagged"], fill missing summary with "No summary available".
+
+## Phase 6 — SAVE
+1. Write to $PROJECT_ROOT/.understand-anything/knowledge-graph.json
+2. Write meta.json: {"lastAnalyzedAt":"<ISO>", "gitCommitHash":"<hash>", "version":"1.0.0", "analyzedFiles":<count>}
+3. Report summary: nodes by type, edges by type, layers, tour steps.
+
+## Error Handling
+- If any task sub-agent fails, retry once. Skip phase on second failure.
+- ALWAYS save partial results — a partial graph is better than no graph.
+- Report all warnings in the final summary.
+
+## Reference: Node Types
+file, function, class, module, concept, config, document, service, table, endpoint, pipeline, schema, resource — ID convention: <type>:<relative-path>[:<name>]
+
+## Reference: Edge Types
+Structural: imports, exports, contains, inherits, implements
+Behavioral: calls, subscribes, publishes, middleware
+Data flow: reads_from, writes_to, transforms, validates
+Dependencies: depends_on, tested_by, configures
+Semantic: related, similar_to
+Infrastructure: deploys, serves, provisions, triggers
+Schema/Data: migrates, documents, routes, defines_schema
+
+## Node fields (required)
+id (string), type (string), name (string), summary (string), tags (string[]), complexity ("simple"|"moderate"|"complex")
+
+## Edge fields (required)
+source (string), target (string), type (string), direction ("forward"|"backward"|"bidirectional"), weight (number 0-1)`
+
 // CodeGraphReadTools returns read-only tool names that look like an installed
 // codegraph MCP surface. Writable or untrusted tools stay out of subagents.
 func CodeGraphReadTools(reg *tool.Registry) []string {
@@ -340,6 +416,14 @@ func builtinSkills() []Skill {
 			Name:        "test",
 			Description: "Run the project's test suite, diagnose failures, propose+apply fixes, re-run until green (or stop after 2 attempts on the same failure). Inlined — runs in the parent loop. Detects go/npm/pnpm/yarn/pytest/cargo.",
 			Body:        builtinTestBody,
+			Scope:       ScopeBuiltin,
+			Path:        "(builtin)",
+			RunAs:       RunInline,
+		},
+		{
+			Name:        "understand",
+			Description: "Analyze the project codebase to produce an interactive knowledge graph for understanding architecture, components, and relationships. Run before exploring unfamiliar code. Inlined — runs in the parent loop.",
+			Body:        builtinUnderstandBody,
 			Scope:       ScopeBuiltin,
 			Path:        "(builtin)",
 			RunAs:       RunInline,

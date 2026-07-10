@@ -1551,6 +1551,18 @@ func TestEffortCapabilityUsesKnownModelRegistry(t *testing.T) {
 	if got, err := NormalizeEffort(e, "max"); err != nil || got != "max" {
 		t.Fatalf("NormalizeEffort(max) = %q/%v, want max/nil", got, err)
 	}
+	// Stale supported_efforts must not shadow the registry — otherwise
+	// the EffortSwitcher never picks up newly added levels (e.g. "disabled").
+	e.SupportedEfforts = []string{"high", "max"}
+	cap2 := EffortCapabilityForEntry(e)
+	if len(cap2.Levels) != len(wantLevels) {
+		t.Fatalf("registry should ignore stale supported_efforts: levels = %v, want %v", cap2.Levels, wantLevels)
+	}
+	for i, want := range wantLevels {
+		if cap2.Levels[i] != want {
+			t.Fatalf("stale supported_efforts: levels[%d] = %q, want %q", i, cap2.Levels[i], want)
+		}
+	}
 }
 
 func TestReasoningProtocolOverrideControlsEffortCapability(t *testing.T) {
