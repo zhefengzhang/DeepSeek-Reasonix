@@ -159,6 +159,7 @@ export interface AppBindings {
   ClearGoalForTab(tabID: string): Promise<void>;
   GetGuidancePrompt(): Promise<string>;
   SetGuidancePrompt(text: string): Promise<void>;
+  GetUnderstandGraphStatus(): Promise<any>;
   Compact(): Promise<void>;
   NewSession(): Promise<void>;
   ClearSession(): Promise<void>;
@@ -3347,5 +3348,6 @@ function makeMockApp(): AppBindings {
     StartHeadroom: async () => {},
     StopHeadroom: async () => {},
     SaveHeadroomConfig: async () => {},
+    GetUnderstandGraphStatus: async () => ({ available: false, stale: false, nodeCount: 0, edgeCount: 0 }),
   };
 }

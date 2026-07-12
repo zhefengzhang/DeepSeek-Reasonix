@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
   "algorithm": "louvain",
-  "totalFiles": 1288,
-  "totalBatches": 69,
+  "totalFiles": 1224,
+  "totalBatches": 65,
   "exportsByPath": {
     ".gitattributes": [],
     ".githooks/pre-push": [],
     ".github/CODEOWNERS": [],
+    ".understand-anything/intermediate/merge_batches.py": [],
     "benchmarks/context-maintenance-e2e/main.go": [],
     "benchmarks/e2e/tasks/fix-add-bug/workdir/calc.py": [
       "add",
@@ -8810,500 +8811,6 @@
       "batchIndex": 11,
       "files": [
         {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-1.json",
-          "language": "json",
-          "sizeLines": 111,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-10.json",
-          "language": "json",
-          "sizeLines": 83,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-11.json",
-          "language": "json",
-          "sizeLines": 48,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-12.json",
-          "language": "json",
-          "sizeLines": 27,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-13.json",
-          "language": "json",
-          "sizeLines": 34,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-14.json",
-          "language": "json",
-          "sizeLines": 48,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-15.json",
-          "language": "json",
-          "sizeLines": 146,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-16.json",
-          "language": "json",
-          "sizeLines": 48,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-17.json",
-          "language": "json",
-          "sizeLines": 34,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-18.json",
-          "language": "json",
-          "sizeLines": 34,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-19.json",
-          "language": "json",
-          "sizeLines": 69,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-2.json",
-          "language": "json",
-          "sizeLines": 20,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-20.json",
-          "language": "json",
-          "sizeLines": 41,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-21.json",
-          "language": "json",
-          "sizeLines": 34,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-22.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-23.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-24.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-25.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-26.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-27.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        }
-      ],
-      "batchImportData": {
-        ".understand-anything/tmp/ua-file-analyzer-input-1.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-10.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-11.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-12.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-13.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-14.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-15.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-16.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-17.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-18.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-19.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-2.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-20.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-21.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-22.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-23.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-24.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-25.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-26.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-27.json": []
-      },
-      "neighborMap": {}
-    },
-    {
-      "batchIndex": 12,
-      "files": [
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-28.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-29.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-3.json",
-          "language": "json",
-          "sizeLines": 13,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-30.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-31.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-32.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-33.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-34.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-35.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-36.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-37.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-38.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-39.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-4.json",
-          "language": "json",
-          "sizeLines": 104,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-40.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-41.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-42.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-43.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-44.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-45.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        }
-      ],
-      "batchImportData": {
-        ".understand-anything/tmp/ua-file-analyzer-input-28.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-29.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-3.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-30.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-31.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-32.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-33.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-34.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-35.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-36.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-37.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-38.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-39.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-4.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-40.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-41.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-42.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-43.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-44.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-45.json": []
-      },
-      "neighborMap": {}
-    },
-    {
-      "batchIndex": 13,
-      "files": [
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-46.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-47.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-48.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-49.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-5.json",
-          "language": "json",
-          "sizeLines": 27,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-50.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-51.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-52.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-53.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-54.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-55.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-56.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-57.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-58.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-59.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-6.json",
-          "language": "json",
-          "sizeLines": 27,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-60.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-61.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-62.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-63.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        }
-      ],
-      "batchImportData": {
-        ".understand-anything/tmp/ua-file-analyzer-input-46.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-47.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-48.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-49.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-5.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-50.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-51.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-52.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-53.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-54.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-55.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-56.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-57.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-58.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-59.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-6.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-60.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-61.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-62.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-63.json": []
-      },
-      "neighborMap": {}
-    },
-    {
-      "batchIndex": 14,
-      "files": [
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-64.json",
-          "language": "json",
-          "sizeLines": 181,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-65.json",
-          "language": "json",
-          "sizeLines": 111,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-7.json",
-          "language": "json",
-          "sizeLines": 34,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-8.json",
-          "language": "json",
-          "sizeLines": 27,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-analyzer-input-9.json",
-          "language": "json",
-          "sizeLines": 27,
-          "fileCategory": "config"
-        },
-        {
-          "path": ".understand-anything/tmp/ua-file-extract-results-1.json",
-          "language": "json",
-          "sizeLines": 596,
-          "fileCategory": "config"
-        }
-      ],
-      "batchImportData": {
-        ".understand-anything/tmp/ua-file-analyzer-input-64.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-65.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-7.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-8.json": [],
-        ".understand-anything/tmp/ua-file-analyzer-input-9.json": [],
-        ".understand-anything/tmp/ua-file-extract-results-1.json": []
-      },
-      "neighborMap": {}
-    },
-    {
-      "batchIndex": 15,
-      "files": [
-        {
           "path": "benchmarks/e2e/tasks/compaction/workdir/story/chapter-1.md",
           "language": "markdown",
           "sizeLines": 220,
@@ -9351,7 +8858,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 16,
+      "batchIndex": 12,
       "files": [
         {
           "path": "benchmarks/e2e/tasks/subagent-delegation/workdir/data/alpha.txt",
@@ -9380,7 +8887,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 17,
+      "batchIndex": 13,
       "files": [
         {
           "path": "desktop/README.md",
@@ -9416,7 +8923,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 18,
+      "batchIndex": 14,
       "files": [
         {
           "path": "desktop/frontend/index.html",
@@ -9466,7 +8973,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 19,
+      "batchIndex": 15,
       "files": [
         {
           "path": "docs/BOT_GUIDE.md",
@@ -9614,7 +9121,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 20,
+      "batchIndex": 16,
       "files": [
         {
           "path": "docs/TOOL_APPROVAL_MODES.zh-CN.md",
@@ -9664,7 +9171,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 21,
+      "batchIndex": 17,
       "files": [
         {
           "path": "scripts/cache-guard.sh",
@@ -9700,7 +9207,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 22,
+      "batchIndex": 18,
       "files": [
         {
           "path": "workers/accounts/README.md",
@@ -9736,7 +9243,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 23,
+      "batchIndex": 19,
       "files": [
         {
           "path": "workers/crash-report/migrate-access.sql",
@@ -9807,7 +9314,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 24,
+      "batchIndex": 20,
       "files": [
         {
           "path": "workers/forum/package.json",
@@ -9850,7 +9357,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 25,
+      "batchIndex": 21,
       "files": [
         {
           "path": "workers/registry/package.json",
@@ -9886,7 +9393,7 @@
       "neighborMap": {}
     },
     {
-      "batchIndex": 26,
+      "batchIndex": 22,
       "files": [
         {
           "path": ".gitattributes",
@@ -10011,19 +9518,25 @@
         {
           "path": ".understand-anything/intermediate/batches.json",
           "language": "json",
-          "sizeLines": 17376,
+          "sizeLines": 17884,
           "fileCategory": "config"
+        },
+        {
+          "path": ".understand-anything/intermediate/merge_batches.py",
+          "language": "python",
+          "sizeLines": 143,
+          "fileCategory": "code"
         },
         {
           "path": ".understand-anything/intermediate/scan-result.json",
           "language": "json",
-          "sizeLines": 7365,
+          "sizeLines": 7773,
           "fileCategory": "config"
         },
         {
           "path": ".understand-anything/knowledge-graph.json",
           "language": "json",
-          "sizeLines": 15509,
+          "sizeLines": 16670,
           "fileCategory": "config"
         },
         {
@@ -10031,12 +9544,6 @@
           "language": "json",
           "sizeLines": 5,
           "fileCategory": "config"
-        },
-        {
-          "path": "benchmarks/context-maintenance-e2e/main.go",
-          "language": "go",
-          "sizeLines": 255,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
@@ -10061,16 +9568,28 @@
         ".reasonix/skills/to-tickets/SKILL.md": [],
         ".signpath/artifact-configurations/windows-installer.xml": [],
         ".understand-anything/intermediate/batches.json": [],
+        ".understand-anything/intermediate/merge_batches.py": [],
         ".understand-anything/intermediate/scan-result.json": [],
         ".understand-anything/knowledge-graph.json": [],
-        ".understand-anything/meta.json": [],
-        "benchmarks/context-maintenance-e2e/main.go": []
+        ".understand-anything/meta.json": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 27,
+      "batchIndex": 23,
       "files": [
+        {
+          "path": "管理/需求收集与开发进度.md",
+          "language": "markdown",
+          "sizeLines": 28,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "benchmarks/context-maintenance-e2e/main.go",
+          "language": "go",
+          "sizeLines": 255,
+          "fileCategory": "code"
+        },
         {
           "path": "benchmarks/e2e/tasks/compaction/task.toml",
           "language": "toml",
@@ -10208,21 +9727,11 @@
           "language": "go",
           "sizeLines": 427,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/bot_connection_app_test.go",
-          "language": "go",
-          "sizeLines": 620,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/bot_connection_app.go",
-          "language": "go",
-          "sizeLines": 954,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "管理/需求收集与开发进度.md": [],
+        "benchmarks/context-maintenance-e2e/main.go": [],
         "benchmarks/e2e/tasks/compaction/task.toml": [],
         "benchmarks/e2e/tasks/compaction/verify.sh": [],
         "benchmarks/e2e/tasks/fix-add-bug/task.toml": [],
@@ -10245,15 +9754,25 @@
         "desktop/app_test.go": [],
         "desktop/app.go": [],
         "desktop/appicon_asset_test.go": [],
-        "desktop/attach_dropped_test.go": [],
-        "desktop/bot_connection_app_test.go": [],
-        "desktop/bot_connection_app.go": []
+        "desktop/attach_dropped_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 28,
+      "batchIndex": 24,
       "files": [
+        {
+          "path": "desktop/bot_connection_app_test.go",
+          "language": "go",
+          "sizeLines": 620,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/bot_connection_app.go",
+          "language": "go",
+          "sizeLines": 954,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/bot_event_sink_test.go",
           "language": "go",
@@ -10391,21 +9910,11 @@
           "language": "wav",
           "sizeLines": 2662,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/public/sounds/mixkit-software-interface-back-2575.wav",
-          "language": "wav",
-          "sizeLines": 1681,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/public/sounds/mixkit-software-interface-start-2574.wav",
-          "language": "wav",
-          "sizeLines": 1559,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/bot_connection_app_test.go": [],
+        "desktop/bot_connection_app.go": [],
         "desktop/bot_event_sink_test.go": [],
         "desktop/bot_event_sink.go": [],
         "desktop/bot_runtime_app_test.go": [],
@@ -10428,15 +9937,25 @@
         "desktop/dotenv.go": [],
         "desktop/frontend/.npmrc": [],
         "desktop/frontend/public/sounds/mixkit-correct-answer-tone-2870.wav": [],
-        "desktop/frontend/public/sounds/mixkit-positive-notification-951.wav": [],
-        "desktop/frontend/public/sounds/mixkit-software-interface-back-2575.wav": [],
-        "desktop/frontend/public/sounds/mixkit-software-interface-start-2574.wav": []
+        "desktop/frontend/public/sounds/mixkit-positive-notification-951.wav": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 29,
+      "batchIndex": 25,
       "files": [
+        {
+          "path": "desktop/frontend/public/sounds/mixkit-software-interface-back-2575.wav",
+          "language": "wav",
+          "sizeLines": 1681,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/frontend/public/sounds/mixkit-software-interface-start-2574.wav",
+          "language": "wav",
+          "sizeLines": 1559,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/frontend/scripts/check-css-syntax.mjs",
           "language": "javascript",
@@ -10574,21 +10093,11 @@
           "language": "typescript",
           "sizeLines": 245,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/__tests__/crash-reporting.test.ts",
-          "language": "typescript",
-          "sizeLines": 161,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/__tests__/diff-rendering.test.ts",
-          "language": "typescript",
-          "sizeLines": 295,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/public/sounds/mixkit-software-interface-back-2575.wav": [],
+        "desktop/frontend/public/sounds/mixkit-software-interface-start-2574.wav": [],
         "desktop/frontend/scripts/check-css-syntax.mjs": [],
         "desktop/frontend/scripts/check-z-index-tokens.mjs": [],
         "desktop/frontend/scripts/test-todo-visibility.mjs": [],
@@ -10611,15 +10120,25 @@
         "desktop/frontend/src/__tests__/composer-keyboard.test.ts": [],
         "desktop/frontend/src/__tests__/composer-profile.test.ts": [],
         "desktop/frontend/src/__tests__/composer-session-draft.test.tsx": [],
-        "desktop/frontend/src/__tests__/context-panel-breakdown.test.ts": [],
-        "desktop/frontend/src/__tests__/crash-reporting.test.ts": [],
-        "desktop/frontend/src/__tests__/diff-rendering.test.ts": []
+        "desktop/frontend/src/__tests__/context-panel-breakdown.test.ts": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 30,
+      "batchIndex": 26,
       "files": [
+        {
+          "path": "desktop/frontend/src/__tests__/crash-reporting.test.ts",
+          "language": "typescript",
+          "sizeLines": 161,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/frontend/src/__tests__/diff-rendering.test.ts",
+          "language": "typescript",
+          "sizeLines": 295,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/frontend/src/__tests__/edit-replay.test.ts",
           "language": "typescript",
@@ -10757,21 +10276,11 @@
           "language": "typescript",
           "sizeLines": 93,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/__tests__/tab-switch-hydration.test.tsx",
-          "language": "typescript",
-          "sizeLines": 419,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/__tests__/text-size.test.ts",
-          "language": "typescript",
-          "sizeLines": 31,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/src/__tests__/crash-reporting.test.ts": [],
+        "desktop/frontend/src/__tests__/diff-rendering.test.ts": [],
         "desktop/frontend/src/__tests__/edit-replay.test.ts": [],
         "desktop/frontend/src/__tests__/font-availability.test.ts": [],
         "desktop/frontend/src/__tests__/heartbeat-next-run.test.ts": [],
@@ -10794,15 +10303,25 @@
         "desktop/frontend/src/__tests__/session-title-contract.test.ts": [],
         "desktop/frontend/src/__tests__/settings-refresh-snapshot.test.tsx": [],
         "desktop/frontend/src/__tests__/startup-settings-contract.test.ts": [],
-        "desktop/frontend/src/__tests__/statusbar-workspace.test.tsx": [],
-        "desktop/frontend/src/__tests__/tab-switch-hydration.test.tsx": [],
-        "desktop/frontend/src/__tests__/text-size.test.ts": []
+        "desktop/frontend/src/__tests__/statusbar-workspace.test.tsx": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 31,
+      "batchIndex": 27,
       "files": [
+        {
+          "path": "desktop/frontend/src/__tests__/tab-switch-hydration.test.tsx",
+          "language": "typescript",
+          "sizeLines": 419,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/frontend/src/__tests__/text-size.test.ts",
+          "language": "typescript",
+          "sizeLines": 31,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/frontend/src/__tests__/theme-auto-background.test.ts",
           "language": "typescript",
@@ -10878,7 +10397,7 @@
         {
           "path": "desktop/frontend/src/App.tsx",
           "language": "typescript",
-          "sizeLines": 3751,
+          "sizeLines": 3757,
           "fileCategory": "code"
         },
         {
@@ -10940,21 +10459,11 @@
           "language": "typescript",
           "sizeLines": 2702,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/components/ComposerContextCard.tsx",
-          "language": "typescript",
-          "sizeLines": 77,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/components/ContextMenu.tsx",
-          "language": "typescript",
-          "sizeLines": 135,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/src/__tests__/tab-switch-hydration.test.tsx": [],
+        "desktop/frontend/src/__tests__/text-size.test.ts": [],
         "desktop/frontend/src/__tests__/theme-auto-background.test.ts": [],
         "desktop/frontend/src/__tests__/tool-approval-mode.test.ts": [],
         "desktop/frontend/src/__tests__/tool-data-archive.test.ts": [],
@@ -10977,15 +10486,25 @@
         "desktop/frontend/src/components/ClearContextCard.tsx": [],
         "desktop/frontend/src/components/CodeViewer.tsx": [],
         "desktop/frontend/src/components/CommandPalette.tsx": [],
-        "desktop/frontend/src/components/Composer.tsx": [],
-        "desktop/frontend/src/components/ComposerContextCard.tsx": [],
-        "desktop/frontend/src/components/ContextMenu.tsx": []
+        "desktop/frontend/src/components/Composer.tsx": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 32,
+      "batchIndex": 28,
       "files": [
+        {
+          "path": "desktop/frontend/src/components/ComposerContextCard.tsx",
+          "language": "typescript",
+          "sizeLines": 77,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/frontend/src/components/ContextMenu.tsx",
+          "language": "typescript",
+          "sizeLines": 135,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/frontend/src/components/ContextPanel.tsx",
           "language": "typescript",
@@ -11123,21 +10642,11 @@
           "language": "typescript",
           "sizeLines": 119,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/components/ProcessCard.tsx",
-          "language": "typescript",
-          "sizeLines": 168,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/components/ProjectTree.tsx",
-          "language": "typescript",
-          "sizeLines": 2080,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/src/components/ComposerContextCard.tsx": [],
+        "desktop/frontend/src/components/ContextMenu.tsx": [],
         "desktop/frontend/src/components/ContextPanel.tsx": [],
         "desktop/frontend/src/components/CopyButton.tsx": [],
         "desktop/frontend/src/components/DiffView.tsx": [],
@@ -11160,15 +10669,25 @@
         "desktop/frontend/src/components/Message.tsx": [],
         "desktop/frontend/src/components/ModalCloseButton.tsx": [],
         "desktop/frontend/src/components/ModelSwitcher.tsx": [],
-        "desktop/frontend/src/components/OnboardingOverlay.tsx": [],
-        "desktop/frontend/src/components/ProcessCard.tsx": [],
-        "desktop/frontend/src/components/ProjectTree.tsx": []
+        "desktop/frontend/src/components/OnboardingOverlay.tsx": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 33,
+      "batchIndex": 29,
       "files": [
+        {
+          "path": "desktop/frontend/src/components/ProcessCard.tsx",
+          "language": "typescript",
+          "sizeLines": 168,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/frontend/src/components/ProjectTree.tsx",
+          "language": "typescript",
+          "sizeLines": 2080,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/frontend/src/components/PromptShelf.tsx",
           "language": "typescript",
@@ -11306,21 +10825,11 @@
           "language": "typescript",
           "sizeLines": 22,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/custom/features/heartbeat/heartbeat.css",
-          "language": "css",
-          "sizeLines": 1231,
-          "fileCategory": "markup"
-        },
-        {
-          "path": "desktop/frontend/src/custom/features/heartbeat/heartbeat.types.ts",
-          "language": "typescript",
-          "sizeLines": 19,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/src/components/ProcessCard.tsx": [],
+        "desktop/frontend/src/components/ProjectTree.tsx": [],
         "desktop/frontend/src/components/PromptShelf.tsx": [],
         "desktop/frontend/src/components/ReadOnlyBatch.tsx": [],
         "desktop/frontend/src/components/ResizableDrawer.tsx": [],
@@ -11343,15 +10852,25 @@
         "desktop/frontend/src/components/Welcome.tsx": [],
         "desktop/frontend/src/components/WorkspacePanel.tsx": [],
         "desktop/frontend/src/components/youngDiagrams.ts": [],
-        "desktop/frontend/src/custom/features/heartbeat/heartbeat.bridge.ts": [],
-        "desktop/frontend/src/custom/features/heartbeat/heartbeat.css": [],
-        "desktop/frontend/src/custom/features/heartbeat/heartbeat.types.ts": []
+        "desktop/frontend/src/custom/features/heartbeat/heartbeat.bridge.ts": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 34,
+      "batchIndex": 30,
       "files": [
+        {
+          "path": "desktop/frontend/src/custom/features/heartbeat/heartbeat.css",
+          "language": "css",
+          "sizeLines": 1231,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "desktop/frontend/src/custom/features/heartbeat/heartbeat.types.ts",
+          "language": "typescript",
+          "sizeLines": 19,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/frontend/src/custom/features/heartbeat/HeartbeatPanel.tsx",
           "language": "typescript",
@@ -11489,21 +11008,11 @@
           "language": "typescript",
           "sizeLines": 139,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/lib/keyboardShortcuts.ts",
-          "language": "typescript",
-          "sizeLines": 513,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/lib/lang.ts",
-          "language": "typescript",
-          "sizeLines": 50,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/src/custom/features/heartbeat/heartbeat.css": [],
+        "desktop/frontend/src/custom/features/heartbeat/heartbeat.types.ts": [],
         "desktop/frontend/src/custom/features/heartbeat/HeartbeatPanel.tsx": [],
         "desktop/frontend/src/lib/array.ts": [],
         "desktop/frontend/src/lib/atMatches.ts": [],
@@ -11526,15 +11035,25 @@
         "desktop/frontend/src/lib/gsapAnimations.ts": [],
         "desktop/frontend/src/lib/guardianEvents.ts": [],
         "desktop/frontend/src/lib/highlight.ts": [],
-        "desktop/frontend/src/lib/i18n.tsx": [],
-        "desktop/frontend/src/lib/keyboardShortcuts.ts": [],
-        "desktop/frontend/src/lib/lang.ts": []
+        "desktop/frontend/src/lib/i18n.tsx": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 35,
+      "batchIndex": 31,
       "files": [
+        {
+          "path": "desktop/frontend/src/lib/keyboardShortcuts.ts",
+          "language": "typescript",
+          "sizeLines": 513,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/frontend/src/lib/lang.ts",
+          "language": "typescript",
+          "sizeLines": 50,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/frontend/src/lib/layoutPreferences.ts",
           "language": "typescript",
@@ -11672,21 +11191,11 @@
           "language": "typescript",
           "sizeLines": 233,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/lib/topicShortcuts.ts",
-          "language": "typescript",
-          "sizeLines": 132,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/src/lib/transcriptGrouping.ts",
-          "language": "typescript",
-          "sizeLines": 196,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/src/lib/keyboardShortcuts.ts": [],
+        "desktop/frontend/src/lib/lang.ts": [],
         "desktop/frontend/src/lib/layoutPreferences.ts": [],
         "desktop/frontend/src/lib/mcpServerLifecycle.ts": [],
         "desktop/frontend/src/lib/memoryCitationVisibility.ts": [],
@@ -11709,15 +11218,25 @@
         "desktop/frontend/src/lib/toast.tsx": [],
         "desktop/frontend/src/lib/todoVisibility.ts": [],
         "desktop/frontend/src/lib/toolApprovalMode.ts": [],
-        "desktop/frontend/src/lib/tools.ts": [],
-        "desktop/frontend/src/lib/topicShortcuts.ts": [],
-        "desktop/frontend/src/lib/transcriptGrouping.ts": []
+        "desktop/frontend/src/lib/tools.ts": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 36,
+      "batchIndex": 32,
       "files": [
+        {
+          "path": "desktop/frontend/src/lib/topicShortcuts.ts",
+          "language": "typescript",
+          "sizeLines": 132,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/frontend/src/lib/transcriptGrouping.ts",
+          "language": "typescript",
+          "sizeLines": 196,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/frontend/src/lib/types.ts",
           "language": "typescript",
@@ -11855,21 +11374,11 @@
           "language": "typescript",
           "sizeLines": 1,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/frontend/vite.config.ts",
-          "language": "typescript",
-          "sizeLines": 154,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/headroom_sidecar_other.go",
-          "language": "go",
-          "sizeLines": 9,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/src/lib/topicShortcuts.ts": [],
+        "desktop/frontend/src/lib/transcriptGrouping.ts": [],
         "desktop/frontend/src/lib/types.ts": [],
         "desktop/frontend/src/lib/useController.ts": [],
         "desktop/frontend/src/lib/useEntranceAnimation.ts": [],
@@ -11892,15 +11401,25 @@
         "desktop/frontend/src/store/overlays.ts": [],
         "desktop/frontend/src/store/setState.ts": [],
         "desktop/frontend/src/styles.css": [],
-        "desktop/frontend/vite-env.d.ts": [],
-        "desktop/frontend/vite.config.ts": [],
-        "desktop/headroom_sidecar_other.go": []
+        "desktop/frontend/vite-env.d.ts": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 37,
+      "batchIndex": 33,
       "files": [
+        {
+          "path": "desktop/frontend/vite.config.ts",
+          "language": "typescript",
+          "sizeLines": 154,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/headroom_sidecar_other.go",
+          "language": "go",
+          "sizeLines": 9,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/headroom_sidecar_windows.go",
           "language": "go",
@@ -12038,21 +11557,11 @@
           "language": "go",
           "sizeLines": 17,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/repeat_guard_e2e_test.go",
-          "language": "go",
-          "sizeLines": 84,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/session_prompt.go",
-          "language": "go",
-          "sizeLines": 64,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/frontend/vite.config.ts": [],
+        "desktop/headroom_sidecar_other.go": [],
         "desktop/headroom_sidecar_windows.go": [],
         "desktop/headroom_sidecar.go": [],
         "desktop/heartbeat_test.go": [],
@@ -12075,15 +11584,25 @@
         "desktop/nvidia_wayland_linux.go": [],
         "desktop/open_workspace_darwin.go": [],
         "desktop/open_workspace_unix.go": [],
-        "desktop/open_workspace_windows.go": [],
-        "desktop/repeat_guard_e2e_test.go": [],
-        "desktop/session_prompt.go": []
+        "desktop/open_workspace_windows.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 38,
+      "batchIndex": 34,
       "files": [
+        {
+          "path": "desktop/repeat_guard_e2e_test.go",
+          "language": "go",
+          "sizeLines": 84,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/session_prompt.go",
+          "language": "go",
+          "sizeLines": 64,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/sessions_test.go",
           "language": "go",
@@ -12105,7 +11624,7 @@
         {
           "path": "desktop/settings_app.go",
           "language": "go",
-          "sizeLines": 2232,
+          "sizeLines": 2233,
           "fileCategory": "code"
         },
         {
@@ -12221,21 +11740,11 @@
           "language": "go",
           "sizeLines": 96,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/temphelper_test.go",
-          "language": "go",
-          "sizeLines": 35,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/tray_icon_unix.go",
-          "language": "go",
-          "sizeLines": 8,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/repeat_guard_e2e_test.go": [],
+        "desktop/session_prompt.go": [],
         "desktop/sessions_test.go": [],
         "desktop/sessions.go": [],
         "desktop/settings_app_test.go": [],
@@ -12258,15 +11767,25 @@
         "desktop/tabs_topic_test.go": [],
         "desktop/tabs.go": [],
         "desktop/telemetry_app_test.go": [],
-        "desktop/telemetry_app.go": [],
-        "desktop/temphelper_test.go": [],
-        "desktop/tray_icon_unix.go": []
+        "desktop/telemetry_app.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 39,
+      "batchIndex": 35,
       "files": [
+        {
+          "path": "desktop/temphelper_test.go",
+          "language": "go",
+          "sizeLines": 35,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/tray_icon_unix.go",
+          "language": "go",
+          "sizeLines": 8,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/tray_icon_windows_test.go",
           "language": "go",
@@ -12404,21 +11923,11 @@
           "language": "go",
           "sizeLines": 86,
           "fileCategory": "code"
-        },
-        {
-          "path": "desktop/workspace_changes.go",
-          "language": "go",
-          "sizeLines": 364,
-          "fileCategory": "code"
-        },
-        {
-          "path": "desktop/workspace_test.go",
-          "language": "go",
-          "sizeLines": 1355,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/temphelper_test.go": [],
+        "desktop/tray_icon_unix.go": [],
         "desktop/tray_icon_windows_test.go": [],
         "desktop/tray_icon_windows.go": [],
         "desktop/tray_loop_external.go": [],
@@ -12441,15 +11950,25 @@
         "desktop/window_controls.go": [],
         "desktop/window_state.go": [],
         "desktop/wire_test.go": [],
-        "desktop/workspace_changes_test.go": [],
-        "desktop/workspace_changes.go": [],
-        "desktop/workspace_test.go": []
+        "desktop/workspace_changes_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 40,
+      "batchIndex": 36,
       "files": [
+        {
+          "path": "desktop/workspace_changes.go",
+          "language": "go",
+          "sizeLines": 364,
+          "fileCategory": "code"
+        },
+        {
+          "path": "desktop/workspace_test.go",
+          "language": "go",
+          "sizeLines": 1355,
+          "fileCategory": "code"
+        },
         {
           "path": "desktop/workspace_unix_test.go",
           "language": "go",
@@ -12587,21 +12106,11 @@
           "language": "go",
           "sizeLines": 54,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/agent/ask_test.go",
-          "language": "go",
-          "sizeLines": 176,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/agent/ask.go",
-          "language": "go",
-          "sizeLines": 166,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "desktop/workspace_changes.go": [],
+        "desktop/workspace_test.go": [],
         "desktop/workspace_unix_test.go": [],
         "desktop/workspace.go": [],
         "desktop/zoom_factor.go": [],
@@ -12624,15 +12133,25 @@
         "internal/acp/server.go": [],
         "internal/acp/service.go": [],
         "internal/agent/agent.go": [],
-        "internal/agent/argserror_test.go": [],
-        "internal/agent/ask_test.go": [],
-        "internal/agent/ask.go": []
+        "internal/agent/argserror_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 41,
+      "batchIndex": 37,
       "files": [
+        {
+          "path": "internal/agent/ask_test.go",
+          "language": "go",
+          "sizeLines": 176,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/agent/ask.go",
+          "language": "go",
+          "sizeLines": 166,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/agent/branch_test.go",
           "language": "go",
@@ -12770,21 +12289,11 @@
           "language": "go",
           "sizeLines": 185,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/agent/listsessions_sidecar_test.go",
-          "language": "go",
-          "sizeLines": 170,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/agent/loop_e2e_test.go",
-          "language": "go",
-          "sizeLines": 641,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/agent/ask_test.go": [],
+        "internal/agent/ask.go": [],
         "internal/agent/branch_test.go": [],
         "internal/agent/branch.go": [],
         "internal/agent/cache_diagnostics_test.go": [],
@@ -12807,15 +12316,25 @@
         "internal/agent/goal_display.go": [],
         "internal/agent/guards_test.go": [],
         "internal/agent/hooks_test.go": [],
-        "internal/agent/listsessions_bench_test.go": [],
-        "internal/agent/listsessions_sidecar_test.go": [],
-        "internal/agent/loop_e2e_test.go": []
+        "internal/agent/listsessions_bench_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 42,
+      "batchIndex": 38,
       "files": [
+        {
+          "path": "internal/agent/listsessions_sidecar_test.go",
+          "language": "go",
+          "sizeLines": 170,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/agent/loop_e2e_test.go",
+          "language": "go",
+          "sizeLines": 641,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/agent/main_test.go",
           "language": "go",
@@ -12953,21 +12472,11 @@
           "language": "go",
           "sizeLines": 45,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/agent/session_test.go",
-          "language": "go",
-          "sizeLines": 404,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/agent/session.go",
-          "language": "go",
-          "sizeLines": 89,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/agent/listsessions_sidecar_test.go": [],
+        "internal/agent/loop_e2e_test.go": [],
         "internal/agent/main_test.go": [],
         "internal/agent/memory_compiler_context.go": [],
         "internal/agent/memory_compiler_gate_test.go": [],
@@ -12990,15 +12499,25 @@
         "internal/agent/retry_e2e_test.go": [],
         "internal/agent/save_test.go": [],
         "internal/agent/save.go": [],
-        "internal/agent/session_concurrency_test.go": [],
-        "internal/agent/session_test.go": [],
-        "internal/agent/session.go": []
+        "internal/agent/session_concurrency_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 43,
+      "batchIndex": 39,
       "files": [
+        {
+          "path": "internal/agent/session_test.go",
+          "language": "go",
+          "sizeLines": 404,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/agent/session.go",
+          "language": "go",
+          "sizeLines": 89,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/agent/stale_anchor_guard_test.go",
           "language": "go",
@@ -13136,21 +12655,11 @@
           "language": "go",
           "sizeLines": 714,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/autoresearch/summary.go",
-          "language": "go",
-          "sizeLines": 75,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/autoresearch/task.go",
-          "language": "go",
-          "sizeLines": 159,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/agent/session_test.go": [],
+        "internal/agent/session.go": [],
         "internal/agent/stale_anchor_guard_test.go": [],
         "internal/agent/steer_test.go": [],
         "internal/agent/storm_test.go": [],
@@ -13173,15 +12682,25 @@
         "internal/autoresearch/readiness.go": [],
         "internal/autoresearch/schema.go": [],
         "internal/autoresearch/store_test.go": [],
-        "internal/autoresearch/store.go": [],
-        "internal/autoresearch/summary.go": [],
-        "internal/autoresearch/task.go": []
+        "internal/autoresearch/store.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 44,
+      "batchIndex": 40,
       "files": [
+        {
+          "path": "internal/autoresearch/summary.go",
+          "language": "go",
+          "sizeLines": 75,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/autoresearch/task.go",
+          "language": "go",
+          "sizeLines": 159,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/billing/balance_extra_test.go",
           "language": "go",
@@ -13203,7 +12722,7 @@
         {
           "path": "internal/boot/boot_test.go",
           "language": "go",
-          "sizeLines": 3137,
+          "sizeLines": 3138,
           "fileCategory": "code"
         },
         {
@@ -13319,21 +12838,11 @@
           "language": "go",
           "sizeLines": 224,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/bot/session.go",
-          "language": "go",
-          "sizeLines": 189,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/bot/turn_dispatch_test.go",
-          "language": "go",
-          "sizeLines": 127,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/autoresearch/summary.go": [],
+        "internal/autoresearch/task.go": [],
         "internal/billing/balance_extra_test.go": [],
         "internal/billing/balance_test.go": [],
         "internal/billing/balance.go": [],
@@ -13356,15 +12865,25 @@
         "internal/bot/qq/gateway.go": [],
         "internal/bot/render_test.go": [],
         "internal/bot/render.go": [],
-        "internal/bot/session_test.go": [],
-        "internal/bot/session.go": [],
-        "internal/bot/turn_dispatch_test.go": []
+        "internal/bot/session_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 45,
+      "batchIndex": 41,
       "files": [
+        {
+          "path": "internal/bot/session.go",
+          "language": "go",
+          "sizeLines": 189,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/bot/turn_dispatch_test.go",
+          "language": "go",
+          "sizeLines": 127,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/bot/types.go",
           "language": "go",
@@ -13502,21 +13021,11 @@
           "language": "go",
           "sizeLines": 4025,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/cli/chooser.go",
-          "language": "go",
-          "sizeLines": 324,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/cli/clear_confirm.go",
-          "language": "go",
-          "sizeLines": 79,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/bot/session.go": [],
+        "internal/bot/turn_dispatch_test.go": [],
         "internal/bot/types.go": [],
         "internal/bot/weixin/weixin_login.go": [],
         "internal/bot/weixin/weixin_test.go": [],
@@ -13539,15 +13048,25 @@
         "internal/cli/chat_render_test.go": [],
         "internal/cli/chat_tui_paste.go": [],
         "internal/cli/chat_tui_test.go": [],
-        "internal/cli/chat_tui.go": [],
-        "internal/cli/chooser.go": [],
-        "internal/cli/clear_confirm.go": []
+        "internal/cli/chat_tui.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 46,
+      "batchIndex": 42,
       "files": [
+        {
+          "path": "internal/cli/chooser.go",
+          "language": "go",
+          "sizeLines": 324,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/cli/clear_confirm.go",
+          "language": "go",
+          "sizeLines": 79,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/cli/cli_test.go",
           "language": "go",
@@ -13685,21 +13204,11 @@
           "language": "go",
           "sizeLines": 405,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/cli/math_e2e_test.go",
-          "language": "go",
-          "sizeLines": 69,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/cli/mathnode.go",
-          "language": "go",
-          "sizeLines": 66,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/cli/chooser.go": [],
+        "internal/cli/clear_confirm.go": [],
         "internal/cli/cli_test.go": [],
         "internal/cli/cli.go": [],
         "internal/cli/compaction_test.go": [],
@@ -13722,15 +13231,25 @@
         "internal/cli/interject_test.go": [],
         "internal/cli/language.go": [],
         "internal/cli/latex_test.go": [],
-        "internal/cli/latex.go": [],
-        "internal/cli/math_e2e_test.go": [],
-        "internal/cli/mathnode.go": []
+        "internal/cli/latex.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 47,
+      "batchIndex": 43,
       "files": [
+        {
+          "path": "internal/cli/math_e2e_test.go",
+          "language": "go",
+          "sizeLines": 69,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/cli/mathnode.go",
+          "language": "go",
+          "sizeLines": 66,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/cli/mcp_import_picker.go",
           "language": "go",
@@ -13868,21 +13387,11 @@
           "language": "go",
           "sizeLines": 126,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/cli/resume_test.go",
-          "language": "go",
-          "sizeLines": 318,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/cli/resume.go",
-          "language": "go",
-          "sizeLines": 129,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/cli/math_e2e_test.go": [],
+        "internal/cli/mathnode.go": [],
         "internal/cli/mcp_import_picker.go": [],
         "internal/cli/mcp_manager_actions.go": [],
         "internal/cli/mcp_manager_view.go": [],
@@ -13905,15 +13414,25 @@
         "internal/cli/rename_test.go": [],
         "internal/cli/rename.go": [],
         "internal/cli/render_edge_test.go": [],
-        "internal/cli/resume_picker.go": [],
-        "internal/cli/resume_test.go": [],
-        "internal/cli/resume.go": []
+        "internal/cli/resume_picker.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 48,
+      "batchIndex": 44,
       "files": [
+        {
+          "path": "internal/cli/resume_test.go",
+          "language": "go",
+          "sizeLines": 318,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/cli/resume.go",
+          "language": "go",
+          "sizeLines": 129,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/cli/retry_indicator_test.go",
           "language": "go",
@@ -14051,21 +13570,11 @@
           "language": "go",
           "sizeLines": 50,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/cli/toolcard_test.go",
-          "language": "go",
-          "sizeLines": 40,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/cli/toolcard.go",
-          "language": "go",
-          "sizeLines": 172,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/cli/resume_test.go": [],
+        "internal/cli/resume.go": [],
         "internal/cli/retry_indicator_test.go": [],
         "internal/cli/review_test.go": [],
         "internal/cli/review.go": [],
@@ -14088,15 +13597,25 @@
         "internal/cli/theme_osc_unix.go": [],
         "internal/cli/theme_test.go": [],
         "internal/cli/theme.go": [],
-        "internal/cli/todopanel_test.go": [],
-        "internal/cli/toolcard_test.go": [],
-        "internal/cli/toolcard.go": []
+        "internal/cli/todopanel_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 49,
+      "batchIndex": 45,
       "files": [
+        {
+          "path": "internal/cli/toolcard_test.go",
+          "language": "go",
+          "sizeLines": 40,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/cli/toolcard.go",
+          "language": "go",
+          "sizeLines": 172,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/cli/transcript_test.go",
           "language": "go",
@@ -14234,21 +13753,11 @@
           "language": "go",
           "sizeLines": 666,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/config/default_test.go",
-          "language": "go",
-          "sizeLines": 47,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/config/dotenv_test.go",
-          "language": "go",
-          "sizeLines": 686,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/cli/toolcard_test.go": [],
+        "internal/cli/toolcard.go": [],
         "internal/cli/transcript_test.go": [],
         "internal/cli/transcript.go": [],
         "internal/cli/upgrade_test.go": [],
@@ -14271,15 +13780,25 @@
         "internal/config/configured_test.go": [],
         "internal/config/credentials_keyring_default.go": [],
         "internal/config/credentials_keyring_unix.go": [],
-        "internal/config/credentials.go": [],
-        "internal/config/default_test.go": [],
-        "internal/config/dotenv_test.go": []
+        "internal/config/credentials.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 50,
+      "batchIndex": 46,
       "files": [
+        {
+          "path": "internal/config/default_test.go",
+          "language": "go",
+          "sizeLines": 47,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/config/dotenv_test.go",
+          "language": "go",
+          "sizeLines": 686,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/config/dotenv.go",
           "language": "go",
@@ -14417,21 +13936,11 @@
           "language": "go",
           "sizeLines": 55,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/config/system_prompt_test.go",
-          "language": "go",
-          "sizeLines": 49,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/config/tools_test.go",
-          "language": "go",
-          "sizeLines": 124,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/config/default_test.go": [],
+        "internal/config/dotenv_test.go": [],
         "internal/config/dotenv.go": [],
         "internal/config/edit_test.go": [],
         "internal/config/edit.go": [],
@@ -14454,15 +13963,25 @@
         "internal/config/proxy_test.go": [],
         "internal/config/render_test.go": [],
         "internal/config/render.go": [],
-        "internal/config/subagent_model_test.go": [],
-        "internal/config/system_prompt_test.go": [],
-        "internal/config/tools_test.go": []
+        "internal/config/subagent_model_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 51,
+      "batchIndex": 47,
       "files": [
+        {
+          "path": "internal/config/system_prompt_test.go",
+          "language": "go",
+          "sizeLines": 49,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/config/tools_test.go",
+          "language": "go",
+          "sizeLines": 124,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/config/vision.go",
           "language": "go",
@@ -14600,21 +14119,11 @@
           "language": "go",
           "sizeLines": 1042,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/control/input.go",
-          "language": "go",
-          "sizeLines": 594,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/control/inputimages_test.go",
-          "language": "go",
-          "sizeLines": 140,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/config/system_prompt_test.go": [],
+        "internal/config/tools_test.go": [],
         "internal/config/vision.go": [],
         "internal/control/approval_e2e_test.go": [],
         "internal/control/approval.go": [],
@@ -14637,15 +14146,25 @@
         "internal/control/goal.go": [],
         "internal/control/imagecompress_test.go": [],
         "internal/control/imagecompress.go": [],
-        "internal/control/input_test.go": [],
-        "internal/control/input.go": [],
-        "internal/control/inputimages_test.go": []
+        "internal/control/input_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 52,
+      "batchIndex": 48,
       "files": [
+        {
+          "path": "internal/control/input.go",
+          "language": "go",
+          "sizeLines": 594,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/control/inputimages_test.go",
+          "language": "go",
+          "sizeLines": 140,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/control/main_test.go",
           "language": "go",
@@ -14783,21 +14302,11 @@
           "language": "go",
           "sizeLines": 314,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/control/yolo_test.go",
-          "language": "go",
-          "sizeLines": 961,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/diff/diff_extra_test.go",
-          "language": "go",
-          "sizeLines": 236,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/control/input.go": [],
+        "internal/control/inputimages_test.go": [],
         "internal/control/main_test.go": [],
         "internal/control/mcp.go": [],
         "internal/control/memory_test.go": [],
@@ -14820,15 +14329,25 @@
         "internal/control/slash.go": [],
         "internal/control/synthetic_contract_test.go": [],
         "internal/control/turn_orchestrator_test.go": [],
-        "internal/control/turn_orchestrator.go": [],
-        "internal/control/yolo_test.go": [],
-        "internal/diff/diff_extra_test.go": []
+        "internal/control/turn_orchestrator.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 53,
+      "batchIndex": 49,
       "files": [
+        {
+          "path": "internal/control/yolo_test.go",
+          "language": "go",
+          "sizeLines": 961,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/diff/diff_extra_test.go",
+          "language": "go",
+          "sizeLines": 236,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/diff/diff_test.go",
           "language": "go",
@@ -14966,21 +14485,11 @@
           "language": "go",
           "sizeLines": 133,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/fileutil/atomicwrite.go",
-          "language": "go",
-          "sizeLines": 105,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/fileutil/encoding/encoding_test.go",
-          "language": "go",
-          "sizeLines": 303,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/control/yolo_test.go": [],
+        "internal/diff/diff_extra_test.go": [],
         "internal/diff/diff_test.go": [],
         "internal/diff/diff.go": [],
         "internal/diff/largediff_test.go": [],
@@ -15003,15 +14512,25 @@
         "internal/evidence/readiness_test.go": [],
         "internal/fileref/search_test.go": [],
         "internal/fileref/search.go": [],
-        "internal/fileutil/atomicwrite_test.go": [],
-        "internal/fileutil/atomicwrite.go": [],
-        "internal/fileutil/encoding/encoding_test.go": []
+        "internal/fileutil/atomicwrite_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 54,
+      "batchIndex": 50,
       "files": [
+        {
+          "path": "internal/fileutil/atomicwrite.go",
+          "language": "go",
+          "sizeLines": 105,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/fileutil/encoding/encoding_test.go",
+          "language": "go",
+          "sizeLines": 303,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/fileutil/encoding/encoding.go",
           "language": "go",
@@ -15149,21 +14668,11 @@
           "language": "go",
           "sizeLines": 413,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/i18n/messages_zh.go",
-          "language": "go",
-          "sizeLines": 418,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/installsource/apply.go",
-          "language": "go",
-          "sizeLines": 326,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/fileutil/atomicwrite.go": [],
+        "internal/fileutil/encoding/encoding_test.go": [],
         "internal/fileutil/encoding/encoding.go": [],
         "internal/frontmatter/frontmatter_test.go": [],
         "internal/frontmatter/frontmatter.go": [],
@@ -15186,15 +14695,25 @@
         "internal/i18n/i18n_test.go": [],
         "internal/i18n/i18n.go": [],
         "internal/i18n/messages_en.go": [],
-        "internal/i18n/messages_zh_tw.go": [],
-        "internal/i18n/messages_zh.go": [],
-        "internal/installsource/apply.go": []
+        "internal/i18n/messages_zh_tw.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 55,
+      "batchIndex": 51,
       "files": [
+        {
+          "path": "internal/i18n/messages_zh.go",
+          "language": "go",
+          "sizeLines": 418,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/installsource/apply.go",
+          "language": "go",
+          "sizeLines": 326,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/installsource/doc.go",
           "language": "go",
@@ -15332,21 +14851,11 @@
           "language": "go",
           "sizeLines": 20,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/lsp/jsonrpc.go",
-          "language": "go",
-          "sizeLines": 205,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/lsp/lsp_test.go",
-          "language": "go",
-          "sizeLines": 183,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/i18n/messages_zh.go": [],
+        "internal/installsource/apply.go": [],
         "internal/installsource/doc.go": [],
         "internal/installsource/errors.go": [],
         "internal/installsource/http.go": [],
@@ -15369,15 +14878,25 @@
         "internal/jobs/main_test.go": [],
         "internal/jobs/output_result_test.go": [],
         "internal/lsp/client.go": [],
-        "internal/lsp/jsonrpc_framecap_test.go": [],
-        "internal/lsp/jsonrpc.go": [],
-        "internal/lsp/lsp_test.go": []
+        "internal/lsp/jsonrpc_framecap_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 56,
+      "batchIndex": 52,
       "files": [
+        {
+          "path": "internal/lsp/jsonrpc.go",
+          "language": "go",
+          "sizeLines": 205,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/lsp/lsp_test.go",
+          "language": "go",
+          "sizeLines": 183,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/lsp/main_test.go",
           "language": "go",
@@ -15515,21 +15034,11 @@
           "language": "go",
           "sizeLines": 23,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/memory/quickadd_test.go",
-          "language": "go",
-          "sizeLines": 74,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/memory/quickadd.go",
-          "language": "go",
-          "sizeLines": 91,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/lsp/jsonrpc.go": [],
+        "internal/lsp/lsp_test.go": [],
         "internal/lsp/main_test.go": [],
         "internal/lsp/manager.go": [],
         "internal/lsp/manual_test.go": [],
@@ -15552,15 +15061,25 @@
         "internal/memory/forget.go": [],
         "internal/memory/memory_test.go": [],
         "internal/memory/memory.go": [],
-        "internal/memory/queue.go": [],
-        "internal/memory/quickadd_test.go": [],
-        "internal/memory/quickadd.go": []
+        "internal/memory/queue.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 57,
+      "batchIndex": 53,
       "files": [
+        {
+          "path": "internal/memory/quickadd_test.go",
+          "language": "go",
+          "sizeLines": 74,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/memory/quickadd.go",
+          "language": "go",
+          "sizeLines": 91,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/memory/recall_test.go",
           "language": "go",
@@ -15698,21 +15217,11 @@
           "language": "go",
           "sizeLines": 11,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/notify/sender_windows.go",
-          "language": "go",
-          "sizeLines": 26,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/notify/sink_test.go",
-          "language": "go",
-          "sizeLines": 126,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/memory/quickadd_test.go": [],
+        "internal/memory/quickadd.go": [],
         "internal/memory/recall_test.go": [],
         "internal/memory/recall.go": [],
         "internal/memory/remember_test.go": [],
@@ -15735,15 +15244,25 @@
         "internal/nilutil/nil.go": [],
         "internal/notify/sender_darwin.go": [],
         "internal/notify/sender_linux.go": [],
-        "internal/notify/sender_other.go": [],
-        "internal/notify/sender_windows.go": [],
-        "internal/notify/sink_test.go": []
+        "internal/notify/sender_other.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 58,
+      "batchIndex": 54,
       "files": [
+        {
+          "path": "internal/notify/sender_windows.go",
+          "language": "go",
+          "sizeLines": 26,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/notify/sink_test.go",
+          "language": "go",
+          "sizeLines": 126,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/notify/sink.go",
           "language": "go",
@@ -15881,21 +15400,11 @@
           "language": "go",
           "sizeLines": 726,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/plugin/lazy.go",
-          "language": "go",
-          "sizeLines": 395,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/plugin/main_test.go",
-          "language": "go",
-          "sizeLines": 11,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/notify/sender_windows.go": [],
+        "internal/notify/sink_test.go": [],
         "internal/notify/sink.go": [],
         "internal/outputstyle/outputstyle_test.go": [],
         "internal/outputstyle/outputstyle.go": [],
@@ -15918,15 +15427,25 @@
         "internal/plugin/host_concurrency_test.go": [],
         "internal/plugin/hotadd_test.go": [],
         "internal/plugin/known_overrides.go": [],
-        "internal/plugin/lazy_test.go": [],
-        "internal/plugin/lazy.go": [],
-        "internal/plugin/main_test.go": []
+        "internal/plugin/lazy_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 59,
+      "batchIndex": 55,
       "files": [
+        {
+          "path": "internal/plugin/lazy.go",
+          "language": "go",
+          "sizeLines": 395,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/plugin/main_test.go",
+          "language": "go",
+          "sizeLines": 11,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/plugin/planmode_untrusted_test.go",
           "language": "go",
@@ -16064,21 +15583,11 @@
           "language": "go",
           "sizeLines": 20,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/proc/priority_windows_test.go",
-          "language": "go",
-          "sizeLines": 20,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/proc/priority_windows.go",
-          "language": "go",
-          "sizeLines": 22,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/plugin/lazy.go": [],
+        "internal/plugin/main_test.go": [],
         "internal/plugin/planmode_untrusted_test.go": [],
         "internal/plugin/plugin_test.go": [],
         "internal/plugin/plugin.go": [],
@@ -16101,15 +15610,25 @@
         "internal/proc/kill_other.go": [],
         "internal/proc/kill_windows_test.go": [],
         "internal/proc/kill_windows.go": [],
-        "internal/proc/priority_other.go": [],
-        "internal/proc/priority_windows_test.go": [],
-        "internal/proc/priority_windows.go": []
+        "internal/proc/priority_other.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 60,
+      "batchIndex": 56,
       "files": [
+        {
+          "path": "internal/proc/priority_windows_test.go",
+          "language": "go",
+          "sizeLines": 20,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/proc/priority_windows.go",
+          "language": "go",
+          "sizeLines": 22,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/proc/shell_path_probe_other.go",
           "language": "go",
@@ -16247,21 +15766,11 @@
           "language": "go",
           "sizeLines": 678,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/provider/retry_test.go",
-          "language": "go",
-          "sizeLines": 185,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/provider/retry.go",
-          "language": "go",
-          "sizeLines": 212,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/proc/priority_windows_test.go": [],
+        "internal/proc/priority_windows.go": [],
         "internal/proc/shell_path_probe_other.go": [],
         "internal/proc/shell_path_probe_windows.go": [],
         "internal/provider/anthropic/anthropic_test.go": [],
@@ -16284,15 +15793,25 @@
         "internal/provider/openai/think.go": [],
         "internal/provider/pairing_probe_test.go": [],
         "internal/provider/provider_test.go": [],
-        "internal/provider/provider.go": [],
-        "internal/provider/retry_test.go": [],
-        "internal/provider/retry.go": []
+        "internal/provider/provider.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 61,
+      "batchIndex": 57,
       "files": [
+        {
+          "path": "internal/provider/retry_test.go",
+          "language": "go",
+          "sizeLines": 185,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/provider/retry.go",
+          "language": "go",
+          "sizeLines": 212,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/provider/schema_canonicalize_test.go",
           "language": "go",
@@ -16430,21 +15949,11 @@
           "language": "go",
           "sizeLines": 1193,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/serve/titlecache_test.go",
-          "language": "go",
-          "sizeLines": 36,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/serve/titlecache.go",
-          "language": "go",
-          "sizeLines": 58,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/provider/retry_test.go": [],
+        "internal/provider/retry.go": [],
         "internal/provider/schema_canonicalize_test.go": [],
         "internal/provider/schema_canonicalize.go": [],
         "internal/retrieval/bm25_test.go": [],
@@ -16467,15 +15976,25 @@
         "internal/serve/login.html": [],
         "internal/serve/modelswitch_test.go": [],
         "internal/serve/serve_test.go": [],
-        "internal/serve/serve.go": [],
-        "internal/serve/titlecache_test.go": [],
-        "internal/serve/titlecache.go": []
+        "internal/serve/serve.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 62,
+      "batchIndex": 58,
       "files": [
+        {
+          "path": "internal/serve/titlecache_test.go",
+          "language": "go",
+          "sizeLines": 36,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/serve/titlecache.go",
+          "language": "go",
+          "sizeLines": 58,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/serve/understand_graph_test.go",
           "language": "go",
@@ -16613,21 +16132,11 @@
           "language": "go",
           "sizeLines": 128,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/tool/builtin/bash_reap_test.go",
-          "language": "go",
-          "sizeLines": 183,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/tool/builtin/bash_timeout_test.go",
-          "language": "go",
-          "sizeLines": 204,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/serve/titlecache_test.go": [],
+        "internal/serve/titlecache.go": [],
         "internal/serve/understand_graph_test.go": [],
         "internal/shellsafe/shellsafe_test.go": [],
         "internal/shellsafe/shellsafe.go": [],
@@ -16650,15 +16159,25 @@
         "internal/tool/builtin/bash_env_test.go": [],
         "internal/tool/builtin/bash_kill_other.go": [],
         "internal/tool/builtin/bash_kill_windows.go": [],
-        "internal/tool/builtin/bash_powershell_test.go": [],
-        "internal/tool/builtin/bash_reap_test.go": [],
-        "internal/tool/builtin/bash_timeout_test.go": []
+        "internal/tool/builtin/bash_powershell_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 63,
+      "batchIndex": 59,
       "files": [
+        {
+          "path": "internal/tool/builtin/bash_reap_test.go",
+          "language": "go",
+          "sizeLines": 183,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/tool/builtin/bash_timeout_test.go",
+          "language": "go",
+          "sizeLines": 204,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/tool/builtin/bash.go",
           "language": "go",
@@ -16796,21 +16315,11 @@
           "language": "go",
           "sizeLines": 164,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/tool/builtin/gitignore.go",
-          "language": "go",
-          "sizeLines": 346,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/tool/builtin/glob.go",
-          "language": "go",
-          "sizeLines": 238,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/tool/builtin/bash_reap_test.go": [],
+        "internal/tool/builtin/bash_timeout_test.go": [],
         "internal/tool/builtin/bash.go": [],
         "internal/tool/builtin/bgjobs_test.go": [],
         "internal/tool/builtin/bgjobs.go": [],
@@ -16833,15 +16342,25 @@
         "internal/tool/builtin/encoding_helpers.go": [],
         "internal/tool/builtin/fuzzy_edit_test.go": [],
         "internal/tool/builtin/gitignore_e2e_test.go": [],
-        "internal/tool/builtin/gitignore_test.go": [],
-        "internal/tool/builtin/gitignore.go": [],
-        "internal/tool/builtin/glob.go": []
+        "internal/tool/builtin/gitignore_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 64,
+      "batchIndex": 60,
       "files": [
+        {
+          "path": "internal/tool/builtin/gitignore.go",
+          "language": "go",
+          "sizeLines": 346,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/tool/builtin/glob.go",
+          "language": "go",
+          "sizeLines": 238,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/tool/builtin/grep_engine_test.go",
           "language": "go",
@@ -16979,21 +16498,11 @@
           "language": "go",
           "sizeLines": 47,
           "fileCategory": "code"
-        },
-        {
-          "path": "internal/tool/builtin/walk_cancel_test.go",
-          "language": "go",
-          "sizeLines": 43,
-          "fileCategory": "code"
-        },
-        {
-          "path": "internal/tool/builtin/web_fetch_proxy_test.go",
-          "language": "go",
-          "sizeLines": 349,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/tool/builtin/gitignore.go": [],
+        "internal/tool/builtin/glob.go": [],
         "internal/tool/builtin/grep_engine_test.go": [],
         "internal/tool/builtin/grep.go": [],
         "internal/tool/builtin/ls.go": [],
@@ -17016,15 +16525,25 @@
         "internal/tool/builtin/tool_extra_test.go": [],
         "internal/tool/builtin/understand_search_test.go": [],
         "internal/tool/builtin/understand_search.go": [],
-        "internal/tool/builtin/vendorskip_test.go": [],
-        "internal/tool/builtin/walk_cancel_test.go": [],
-        "internal/tool/builtin/web_fetch_proxy_test.go": []
+        "internal/tool/builtin/vendorskip_test.go": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 65,
+      "batchIndex": 61,
       "files": [
+        {
+          "path": "internal/tool/builtin/walk_cancel_test.go",
+          "language": "go",
+          "sizeLines": 43,
+          "fileCategory": "code"
+        },
+        {
+          "path": "internal/tool/builtin/web_fetch_proxy_test.go",
+          "language": "go",
+          "sizeLines": 349,
+          "fileCategory": "code"
+        },
         {
           "path": "internal/tool/builtin/webfetch_ssrf_test.go",
           "language": "go",
@@ -17162,21 +16681,11 @@
           "language": "exe",
           "sizeLines": 125673,
           "fileCategory": "code"
-        },
-        {
-          "path": "MyReasonixRelease/1.15.8/reasonix-desktop.exe",
-          "language": "exe",
-          "sizeLines": 159326,
-          "fileCategory": "code"
-        },
-        {
-          "path": "MyReasonixRelease/1.15.9/reasonix-desktop.exe",
-          "language": "exe",
-          "sizeLines": 128369,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "internal/tool/builtin/walk_cancel_test.go": [],
+        "internal/tool/builtin/web_fetch_proxy_test.go": [],
         "internal/tool/builtin/webfetch_ssrf_test.go": [],
         "internal/tool/builtin/webfetch.go": [],
         "internal/tool/builtin/workspace_test.go": [],
@@ -17199,15 +16708,25 @@
         "MyReasonixRelease/1.15.11/reasonix-desktop.exe": [],
         "MyReasonixRelease/1.15.12/reasonix-desktop.exe": [],
         "MyReasonixRelease/1.15.13/reasonix-desktop.exe": [],
-        "MyReasonixRelease/1.15.14/reasonix-desktop.exe": [],
-        "MyReasonixRelease/1.15.8/reasonix-desktop.exe": [],
-        "MyReasonixRelease/1.15.9/reasonix-desktop.exe": []
+        "MyReasonixRelease/1.15.14/reasonix-desktop.exe": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 66,
+      "batchIndex": 62,
       "files": [
+        {
+          "path": "MyReasonixRelease/1.15.8/reasonix-desktop.exe",
+          "language": "exe",
+          "sizeLines": 159326,
+          "fileCategory": "code"
+        },
+        {
+          "path": "MyReasonixRelease/1.15.9/reasonix-desktop.exe",
+          "language": "exe",
+          "sizeLines": 128369,
+          "fileCategory": "code"
+        },
         {
           "path": "npm/build.mjs",
           "language": "javascript",
@@ -17345,21 +16864,11 @@
           "language": "astro",
           "sizeLines": 368,
           "fileCategory": "code"
-        },
-        {
-          "path": "site/src/pages/forgot.astro",
-          "language": "astro",
-          "sizeLines": 28,
-          "fileCategory": "code"
-        },
-        {
-          "path": "site/src/pages/index.astro",
-          "language": "astro",
-          "sizeLines": 350,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "MyReasonixRelease/1.15.8/reasonix-desktop.exe": [],
+        "MyReasonixRelease/1.15.9/reasonix-desktop.exe": [],
         "npm/build.mjs": [],
         "npm/reasonix/bin/reasonix.js": [],
         "npm/reasonix/package.json": [],
@@ -17382,15 +16891,25 @@
         "site/src/pages/community/new.astro": [],
         "site/src/pages/community/topic.astro": [],
         "site/src/pages/device.astro": [],
-        "site/src/pages/docs.astro": [],
-        "site/src/pages/forgot.astro": [],
-        "site/src/pages/index.astro": []
+        "site/src/pages/docs.astro": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 67,
+      "batchIndex": 63,
       "files": [
+        {
+          "path": "site/src/pages/forgot.astro",
+          "language": "astro",
+          "sizeLines": 28,
+          "fileCategory": "code"
+        },
+        {
+          "path": "site/src/pages/index.astro",
+          "language": "astro",
+          "sizeLines": 350,
+          "fileCategory": "code"
+        },
         {
           "path": "site/src/pages/login.astro",
           "language": "astro",
@@ -17528,21 +17047,11 @@
           "language": "typescript",
           "sizeLines": 91,
           "fileCategory": "code"
-        },
-        {
-          "path": "workers/accounts/src/email/index.ts",
-          "language": "typescript",
-          "sizeLines": 75,
-          "fileCategory": "code"
-        },
-        {
-          "path": "workers/accounts/src/email/resend.ts",
-          "language": "typescript",
-          "sizeLines": 31,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "site/src/pages/forgot.astro": [],
+        "site/src/pages/index.astro": [],
         "site/src/pages/login.astro": [],
         "site/src/pages/register.astro": [],
         "site/src/pages/reset.astro": [],
@@ -17565,15 +17074,25 @@
         "workers/accounts/src/db/emailTokens.ts": [],
         "workers/accounts/src/db/index.ts": [],
         "workers/accounts/src/db/sessions.ts": [],
-        "workers/accounts/src/db/users.ts": [],
-        "workers/accounts/src/email/index.ts": [],
-        "workers/accounts/src/email/resend.ts": []
+        "workers/accounts/src/db/users.ts": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 68,
+      "batchIndex": 64,
       "files": [
+        {
+          "path": "workers/accounts/src/email/index.ts",
+          "language": "typescript",
+          "sizeLines": 75,
+          "fileCategory": "code"
+        },
+        {
+          "path": "workers/accounts/src/email/resend.ts",
+          "language": "typescript",
+          "sizeLines": 31,
+          "fileCategory": "code"
+        },
         {
           "path": "workers/accounts/src/email/types.ts",
           "language": "typescript",
@@ -17711,21 +17230,11 @@
           "language": "typescript",
           "sizeLines": 55,
           "fileCategory": "code"
-        },
-        {
-          "path": "workers/forum/src/env.ts",
-          "language": "typescript",
-          "sizeLines": 24,
-          "fileCategory": "code"
-        },
-        {
-          "path": "workers/forum/src/identity.ts",
-          "language": "typescript",
-          "sizeLines": 94,
-          "fileCategory": "code"
         }
       ],
       "batchImportData": {
+        "workers/accounts/src/email/index.ts": [],
+        "workers/accounts/src/email/resend.ts": [],
         "workers/accounts/src/email/types.ts": [],
         "workers/accounts/src/env.ts": [],
         "workers/accounts/src/http/auth.ts": [],
@@ -17748,15 +17257,25 @@
         "workers/crash-report/src/index.ts": [],
         "workers/crash-report/src/shell.ts": [],
         "workers/crash-report/src/stats.ts": [],
-        "workers/forum/src/antispam.ts": [],
-        "workers/forum/src/env.ts": [],
-        "workers/forum/src/identity.ts": []
+        "workers/forum/src/antispam.ts": []
       },
       "neighborMap": {}
     },
     {
-      "batchIndex": 69,
+      "batchIndex": 65,
       "files": [
+        {
+          "path": "workers/forum/src/env.ts",
+          "language": "typescript",
+          "sizeLines": 24,
+          "fileCategory": "code"
+        },
+        {
+          "path": "workers/forum/src/identity.ts",
+          "language": "typescript",
+          "sizeLines": 94,
+          "fileCategory": "code"
+        },
         {
           "path": "workers/forum/src/index.ts",
           "language": "typescript",
@@ -17861,6 +17380,8 @@
         }
       ],
       "batchImportData": {
+        "workers/forum/src/env.ts": [],
+        "workers/forum/src/identity.ts": [],
         "workers/forum/src/index.ts": [],
         "workers/registry/src/app.ts": [],
         "workers/registry/src/db/events.ts": [],

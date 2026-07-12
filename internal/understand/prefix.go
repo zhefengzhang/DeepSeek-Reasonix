@@ -3,12 +3,15 @@
 package understand
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 )
 
 // --- graph types (subset of the UA schema) ---
@@ -71,6 +74,52 @@ func Prefix(workspaceRoot string) string {
 		return ""
 	}
 	return buildPrefix(&g)
+}
+
+// TurnHint returns a compact one-liner for per-turn injection (turn tail).
+// It tells the model that a knowledge graph is available and suggests using
+// understand_search. Returns "" when no graph exists. Unlike Prefix(), this
+// is NOT cache-stable — it's designed to be injected every turn via
+// control.Compose(), so staleness is checked fresh each time.
+func TurnHint(workspaceRoot string) string {
+	if workspaceRoot == "" {
+		return ""
+	}
+	path := filepath.Join(workspaceRoot, ".understand-anything", "knowledge-graph.json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return ""
+	}
+	var g uaGraph
+	if err := json.Unmarshal(data, &g); err != nil {
+		return ""
+	}
+
+	staleNote := ""
+	metaPath := filepath.Join(workspaceRoot, ".understand-anything", "meta.json")
+	if metaData, err := os.ReadFile(metaPath); err == nil {
+		var m struct {
+			GitCommitHash string `json:"gitCommitHash"`
+		}
+		if json.Unmarshal(metaData, &m) == nil && m.GitCommitHash != "" {
+			if cur := currentGitHash(workspaceRoot); cur != "" && cur != m.GitCommitHash {
+				staleNote = " ⚠️ STALE — run /understand to refresh."
+			}
+		}
+	}
+	return fmt.Sprintf("💡 Knowledge graph: %d nodes, %d edges.%s Use `understand_search` for structural queries (modules, files, layers, relationships). Prefer it over grep for codebase exploration.", len(g.Nodes), len(g.Edges), staleNote)
+}
+
+// currentGitHash runs git rev-parse with a 1s timeout.
+func currentGitHash(workDir string) string {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+	cmd := exec.CommandContext(ctx, "git", "-C", workDir, "rev-parse", "HEAD")
+	out, err := cmd.Output()
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(string(out))
 }
 
 const (

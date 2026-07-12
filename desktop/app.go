@@ -4963,6 +4963,13 @@ func (a *App) ClearGoalForTab(tabID string) {
 	a.SetGoalForTab(tabID, "")
 }
 
+// GetUnderstandGraphStatus returns the current knowledge graph status for the
+// active workspace — available, stale, node/edge counts. Returns nil when no
+// graph exists. Lightweight: reads graph file + meta.json only.
+func (a *App) GetUnderstandGraphStatus() *UnderstandGraphStatusView {
+	return buildGraphStatus(a.activeWorkspaceRoot())
+}
+
 // GetGuidancePrompt returns the current session's guidance prompt.
 func (a *App) GetGuidancePrompt() string {
 	tab := a.activeTab()

@@ -12,8 +12,8 @@
    "wails"
   ],
   "description": "AI coding agent with memory, skills, multi-model support, and desktop UI.",
-  "analyzedAt": "2026-07-10T06:54:32.000Z",
-  "gitCommitHash": "859394039649a43924b78e6d657c7de365972cfb"
+  "analyzedAt": "2026-07-12T08:12:16.000Z",
+  "gitCommitHash": "b8613260e62eec30cca4af81efbcb17f6ff5684c"
  },
  "nodes": [
   {
@@ -2295,18 +2295,6 @@
     "code"
    ],
    "complexity": "moderate"
-  },
-  {
-   "id": "file:desktop/frontend/src/App.tsx",
-   "type": "file",
-   "name": "App.tsx",
-   "filePath": "desktop/frontend/src/App.tsx",
-   "summary": "typescript code file (3751 lines)",
-   "tags": [
-    "typescript",
-    "code"
-   ],
-   "complexity": "complex"
   },
   {
    "id": "file:desktop/frontend/src/components/AnchoredPopover.tsx",
@@ -14475,18 +14463,6 @@
    "complexity": "complex"
   },
   {
-   "id": "file:internal/boot/boot_test.go",
-   "type": "file",
-   "name": "boot_test.go",
-   "filePath": "internal/boot/boot_test.go",
-   "summary": "go code file (3137 lines)",
-   "tags": [
-    "go",
-    "code"
-   ],
-   "complexity": "complex"
-  },
-  {
    "id": "file:internal/boot/token_profile.go",
    "type": "file",
    "name": "token_profile.go",
@@ -14765,21 +14741,6 @@
     "chinese-simplified"
    ],
    "complexity": "moderate"
-  },
-  {
-   "id": "file:desktop/settings_app.go",
-   "type": "file",
-   "name": "settings_app.go",
-   "summary": "Desktop Settings panel command surface in Go. Reads resolved config, applies edits through internal/config/edit.go mutation API, and rebuilds controllers for live effect.",
-   "tags": [
-    "go",
-    "settings",
-    "desktop",
-    "config",
-    "panel",
-    "app"
-   ],
-   "complexity": "complex"
   },
   {
    "id": "type:desktop/settings_app.go:SettingsView",
@@ -15543,6 +15504,836 @@
     "buffering"
    ],
    "complexity": "simple"
+  },
+  {
+   "id": "file:desktop/frontend/src/App.tsx",
+   "type": "file",
+   "name": "App.tsx",
+   "summary": "Main React App component for the Reasonix desktop frontend. Manages layout (classic/workbench/creation), sidebar, workspace dock, topic bar, session/tab orchestration, composer, transcript, settings panels, history, bot sidebar IM connections, keyboard shortcuts, and onboarding.",
+   "tags": [
+    "react",
+    "desktop",
+    "frontend",
+    "component"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:App",
+   "type": "function",
+   "name": "App",
+   "summary": "Default exported React functional component that serves as the root desktop UI component.",
+   "tags": [
+    "react-component",
+    "root",
+    "react",
+    "frontend"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:WindowsWindowControls",
+   "type": "function",
+   "name": "WindowsWindowControls",
+   "summary": "Renders native-looking Windows window control buttons using Lucide icons and IPC bridge calls.",
+   "tags": [
+    "react-component",
+    "windows",
+    "window-controls"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:loadDismissedTodoKeys",
+   "type": "function",
+   "name": "loadDismissedTodoKeys",
+   "summary": "Loads dismissed TODO panel keys from localStorage.",
+   "tags": [
+    "utility",
+    "localStorage"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:saveDismissedTodoKeys",
+   "type": "function",
+   "name": "saveDismissedTodoKeys",
+   "summary": "Saves a set of dismissed TODO keys to localStorage, capped at MAX_DISMISSED_TODO_KEYS.",
+   "tags": [
+    "utility",
+    "localStorage"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:stripGoalResearchFlags",
+   "type": "function",
+   "name": "stripGoalResearchFlags",
+   "summary": "Strips research-mode flags from a goal command string.",
+   "tags": [
+    "utility",
+    "goal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:hasGoalResearchFlag",
+   "type": "function",
+   "name": "hasGoalResearchFlag",
+   "summary": "Checks if a command string starts with a research-mode flag identifier.",
+   "tags": [
+    "utility",
+    "goal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:compactRemoteId",
+   "type": "function",
+   "name": "compactRemoteId",
+   "summary": "Truncates a remote ID string for display.",
+   "tags": [
+    "utility",
+    "display"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:botMappingIdentityLabel",
+   "type": "function",
+   "name": "botMappingIdentityLabel",
+   "summary": "Returns a compact display label for a bot connection session mapping.",
+   "tags": [
+    "utility",
+    "bot"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:sidebarImStatus",
+   "type": "function",
+   "name": "sidebarImStatus",
+   "summary": "Determines sidebar IM connection status label from connection state.",
+   "tags": [
+    "utility",
+    "bot",
+    "sidebar"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/frontend/src/App.tsx:sidebarImSessionTarget",
+   "type": "function",
+   "name": "sidebarImSessionTarget",
+   "summary": "Resolves a sidebar IM connection session target.",
+   "tags": [
+    "utility",
+    "bot",
+    "session"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "concept:desktop/frontend/src/App.tsx:DesktopLayoutStyle",
+   "type": "concept",
+   "name": "DesktopLayoutStyle",
+   "summary": "Union type of classic/workbench/creation layout modes for the desktop UI.",
+   "tags": [
+    "type",
+    "layout"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:desktop/settings_app.go",
+   "type": "file",
+   "name": "settings_app.go",
+   "summary": "Go desktop settings panel command surface. Reads resolved config and applies edits through internal/config/edit.go mutation API, then rebuilds the controller for live effect.",
+   "tags": [
+    "go",
+    "desktop",
+    "settings",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:desktop/settings_app.go:ProviderView",
+   "type": "function",
+   "name": "ProviderView",
+   "summary": "JSON-serializable struct representing a provider configuration view for the settings panel.",
+   "tags": [
+    "struct",
+    "settings",
+    "provider"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:desktop/settings_app.go:ProviderModelOverrideView",
+   "type": "function",
+   "name": "ProviderModelOverrideView",
+   "summary": "JSON view struct for per-model provider overrides.",
+   "tags": [
+    "struct",
+    "provider",
+    "model"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:PermissionsView",
+   "type": "function",
+   "name": "PermissionsView",
+   "summary": "JSON view struct for tool permission mode and rule lists.",
+   "tags": [
+    "struct",
+    "permissions"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SandboxView",
+   "type": "function",
+   "name": "SandboxView",
+   "summary": "JSON view struct for sandbox configuration.",
+   "tags": [
+    "struct",
+    "sandbox"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:NetworkView",
+   "type": "function",
+   "name": "NetworkView",
+   "summary": "JSON view struct for proxy/network settings.",
+   "tags": [
+    "struct",
+    "network",
+    "proxy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:AgentView",
+   "type": "function",
+   "name": "AgentView",
+   "summary": "JSON view struct for agent settings.",
+   "tags": [
+    "struct",
+    "agent",
+    "settings"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:BotSettingsView",
+   "type": "function",
+   "name": "BotSettingsView",
+   "summary": "JSON view struct for bot settings including enabled state, model, tool approval mode.",
+   "tags": [
+    "struct",
+    "bot",
+    "settings"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SettingsView",
+   "type": "function",
+   "name": "SettingsView",
+   "summary": "Full JSON settings panel payload aggregating all setting categories.",
+   "tags": [
+    "struct",
+    "settings",
+    "aggregate"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:desktop/settings_app.go:DesktopStartupSettingsView",
+   "type": "function",
+   "name": "DesktopStartupSettingsView",
+   "summary": "Lightweight settings subset for first-render startup, excluding providers and credentials to avoid slow resolution.",
+   "tags": [
+    "struct",
+    "settings",
+    "startup"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetProviderKey",
+   "type": "function",
+   "name": "SetProviderKey",
+   "summary": "Writes a provider secret to Reasonix global .env and rebuilds the controller.",
+   "tags": [
+    "method",
+    "provider",
+    "credentials",
+    "env"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:desktop/settings_app.go:ClearProviderKey",
+   "type": "function",
+   "name": "ClearProviderKey",
+   "summary": "Removes a provider secret from Reasonix global .env and rebuilds the controller.",
+   "tags": [
+    "method",
+    "provider",
+    "credentials",
+    "env"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetSandbox",
+   "type": "function",
+   "name": "SetSandbox",
+   "summary": "Updates sandbox bash mode, network egress, workspace root.",
+   "tags": [
+    "method",
+    "sandbox",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetNetwork",
+   "type": "function",
+   "name": "SetNetwork",
+   "summary": "Updates outbound proxy settings via config.SetNetwork.",
+   "tags": [
+    "method",
+    "network",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetBotSettings",
+   "type": "function",
+   "name": "SetBotSettings",
+   "summary": "Persists full bot settings and refreshes the bot runtime asynchronously.",
+   "tags": [
+    "method",
+    "bot",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetBotConnectionToolApprovalMode",
+   "type": "function",
+   "name": "SetBotConnectionToolApprovalMode",
+   "summary": "Updates a single bot connection tool approval mode without restarting the bot gateway.",
+   "tags": [
+    "method",
+    "bot",
+    "permissions"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDesktopAppearance",
+   "type": "function",
+   "name": "SetDesktopAppearance",
+   "summary": "Updates desktop theme and style preferences without rebuilding the active controller.",
+   "tags": [
+    "method",
+    "desktop",
+    "theme",
+    "ui"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDesktopLayoutStyle",
+   "type": "function",
+   "name": "SetDesktopLayoutStyle",
+   "summary": "Updates desktop layout style without rebuilding the active controller.",
+   "tags": [
+    "method",
+    "layout",
+    "ui"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetPermissionMode",
+   "type": "function",
+   "name": "SetPermissionMode",
+   "summary": "Sets the writer-fallback permission mode via config mutation.",
+   "tags": [
+    "method",
+    "permissions",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:deleteProviderAndRetargetTabs",
+   "type": "function",
+   "name": "deleteProviderAndRetargetTabs",
+   "summary": "Removes a provider from config, retargets affected tabs, snapshots sessions, rebuilds affected tabs asynchronously.",
+   "tags": [
+    "method",
+    "provider",
+    "tab-management"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:desktop/settings_app.go:removeBuiltInProviderAccessAndRetargetTabs",
+   "type": "function",
+   "name": "removeBuiltInProviderAccessAndRetargetTabs",
+   "summary": "Removes built-in provider access from config and retargets affected tabs.",
+   "tags": [
+    "method",
+    "provider",
+    "tab-management"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "file:internal/boot/boot_test.go",
+   "type": "file",
+   "name": "boot_test.go",
+   "summary": "Test suite for the boot package covering Build function behavior: agent keep policy, project memory folding, cleanup reconciler, history/memory retrieval tools, token economy plan mode, legacy config migration, plugin tier partitioning, permission rule scoping, and MCP tool trust configuration.",
+   "tags": [
+    "go",
+    "test",
+    "boot",
+    "integration"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestAgentKeepPolicyFromConfig",
+   "type": "function",
+   "name": "TestAgentKeepPolicyFromConfig",
+   "summary": "Tests agentKeepPolicy maps config strings to agent.KeepErrors bitmask.",
+   "tags": [
+    "test",
+    "agent",
+    "keep-policy"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildFoldsProjectMemoryIntoSystemPrompt",
+   "type": "function",
+   "name": "TestBuildFoldsProjectMemoryIntoSystemPrompt",
+   "summary": "E2E test proving project REASONIX.md discovered at boot and folded into system message.",
+   "tags": [
+    "test",
+    "build",
+    "memory",
+    "system-prompt"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildRunsCleanupPendingReconciler",
+   "type": "function",
+   "name": "TestBuildRunsCleanupPendingReconciler",
+   "summary": "Tests Build passes SessionDir to CleanupPendingReconciler callback.",
+   "tags": [
+    "test",
+    "build",
+    "reconciler"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildRegistersUsableHistoryAndMemoryRetrievalTools",
+   "type": "function",
+   "name": "TestBuildRegistersUsableHistoryAndMemoryRetrievalTools",
+   "summary": "Tests Build registers history/memory tools, verifies retrieval tools behind on-demand sources.",
+   "tags": [
+    "test",
+    "build",
+    "tools",
+    "history",
+    "memory"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildTokenEconomyPlanModeCanConnectReadOnlySubagent",
+   "type": "function",
+   "name": "TestBuildTokenEconomyPlanModeCanConnectReadOnlySubagent",
+   "summary": "Tests plan mode connect_tool_source with read_only_task is allowed.",
+   "tags": [
+    "test",
+    "token-economy",
+    "plan-mode",
+    "subagent"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildTokenEconomyPlanModeCanConnectReadOnlySkill",
+   "type": "function",
+   "name": "TestBuildTokenEconomyPlanModeCanConnectReadOnlySkill",
+   "summary": "Tests plan mode read_only_skill can be connected.",
+   "tags": [
+    "test",
+    "token-economy",
+    "plan-mode",
+    "skill"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildTokenEconomyPlanModeCanConnectAllowedMCPSource",
+   "type": "function",
+   "name": "TestBuildTokenEconomyPlanModeCanConnectAllowedMCPSource",
+   "summary": "Tests plan mode connect_tool_source with allowed MCP server exposes its tools.",
+   "tags": [
+    "test",
+    "token-economy",
+    "plan-mode",
+    "mcp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildTokenEconomyPlanModeBlocksSourcesWithPolicy",
+   "type": "function",
+   "name": "TestBuildTokenEconomyPlanModeBlocksSourcesWithPolicy",
+   "summary": "Tests plan mode connect_tool_source blocks task/install_source/skills/MCP sources.",
+   "tags": [
+    "test",
+    "token-economy",
+    "plan-mode",
+    "policy"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildMigratesLegacyConfigEndToEnd",
+   "type": "function",
+   "name": "TestBuildMigratesLegacyConfigEndToEnd",
+   "summary": "E2E test of legacy v0.x config migration during Build.",
+   "tags": [
+    "test",
+    "migration",
+    "legacy",
+    "config"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildMigratesLegacySessionsFromConfigSessionDir",
+   "type": "function",
+   "name": "TestBuildMigratesLegacySessionsFromConfigSessionDir",
+   "summary": "Tests legacy sessions from config-root sessions dir imported during Build.",
+   "tags": [
+    "test",
+    "migration",
+    "sessions"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestPlanModeAllowsMCPServerRequiresConcreteToolName",
+   "type": "function",
+   "name": "TestPlanModeAllowsMCPServerRequiresConcreteToolName",
+   "summary": "Tests planModeAllowsMCPServer requires concrete tool name to allow server in plan mode.",
+   "tags": [
+    "test",
+    "plan-mode",
+    "mcp"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildOmitsDisabledSkillsFromPromptAndRuntimeList",
+   "type": "function",
+   "name": "TestBuildOmitsDisabledSkillsFromPromptAndRuntimeList",
+   "summary": "Tests disabled skills omitted from executable list and system prompt.",
+   "tags": [
+    "test",
+    "skills",
+    "disabled",
+    "system-prompt"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildOmitsExcludedSkillRootsFromPromptAndRuntimeList",
+   "type": "function",
+   "name": "TestBuildOmitsExcludedSkillRootsFromPromptAndRuntimeList",
+   "summary": "Tests skills from excluded_paths dirs omitted from executable list and system prompt.",
+   "tags": [
+    "test",
+    "skills",
+    "excluded",
+    "system-prompt"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildWithoutMemoryLeavesPromptUnchanged",
+   "type": "function",
+   "name": "TestBuildWithoutMemoryLeavesPromptUnchanged",
+   "summary": "Tests without memory files, system prompt is exactly configured base plus fixed boot policies.",
+   "tags": [
+    "test",
+    "build",
+    "memory",
+    "system-prompt"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestRememberPermissionRuleUsesWorkspaceRoot",
+   "type": "function",
+   "name": "TestRememberPermissionRuleUsesWorkspaceRoot",
+   "summary": "Tests rememberPermissionRule writes rule to workspace config not cwd config.",
+   "tags": [
+    "test",
+    "permissions",
+    "workspace"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestRememberPermissionRuleCreatesWorkspaceConfigOverUserConfig",
+   "type": "function",
+   "name": "TestRememberPermissionRuleCreatesWorkspaceConfigOverUserConfig",
+   "summary": "Tests rememberPermissionRule creates workspace config instead of writing to user config.",
+   "tags": [
+    "test",
+    "permissions",
+    "workspace"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestRememberPermissionRuleSkipsRuleCoveredByExistingAllow",
+   "type": "function",
+   "name": "TestRememberPermissionRuleSkipsRuleCoveredByExistingAllow",
+   "summary": "Tests rememberPermissionRule skips rule already covered by existing broader allow prefix.",
+   "tags": [
+    "test",
+    "permissions",
+    "coverage"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestRememberPermissionRulePrunesNarrowRulesWhenSavingBroaderRule",
+   "type": "function",
+   "name": "TestRememberPermissionRulePrunesNarrowRulesWhenSavingBroaderRule",
+   "summary": "Tests saving broader permission rule prunes narrower rules it covers.",
+   "tags": [
+    "test",
+    "permissions",
+    "pruning"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestPluginSpecsTrustKnownCodeGraphReadTools",
+   "type": "function",
+   "name": "TestPluginSpecsTrustKnownCodeGraphReadTools",
+   "summary": "Tests PluginSpecs marks known codegraph tools as read-only in trust map.",
+   "tags": [
+    "test",
+    "plugin",
+    "codegraph",
+    "trust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestPluginSpecsTrustConfiguredReadOnlyTools",
+   "type": "function",
+   "name": "TestPluginSpecsTrustConfiguredReadOnlyTools",
+   "summary": "Tests PluginSpecs honors configured TrustedReadOnlyTools.",
+   "tags": [
+    "test",
+    "plugin",
+    "trust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestPluginSpecsMapConfiguredCallTimeouts",
+   "type": "function",
+   "name": "TestPluginSpecsMapConfiguredCallTimeouts",
+   "summary": "Tests PluginSpecs maps configured call timeouts and tool-specific timeouts.",
+   "tags": [
+    "test",
+    "plugin",
+    "timeouts"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestPluginSpecsTrustPlanModeAllowedMCPTools",
+   "type": "function",
+   "name": "TestPluginSpecsTrustPlanModeAllowedMCPTools",
+   "summary": "Tests PluginSpecs marks concrete MCP tool names from allowed list as read-only.",
+   "tags": [
+    "test",
+    "plugin",
+    "plan-mode",
+    "mcp"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestPluginSpecsDoNotTrustCodeGraphToolsForOtherServers",
+   "type": "function",
+   "name": "TestPluginSpecsDoNotTrustCodeGraphToolsForOtherServers",
+   "summary": "Tests non-codegraph servers do not get codegraph tools trusted as read-only.",
+   "tags": [
+    "test",
+    "plugin",
+    "codegraph",
+    "trust"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestPartitionByTier",
+   "type": "function",
+   "name": "TestPartitionByTier",
+   "summary": "Tests partitionByTier splits plugin entries into eager and background slices.",
+   "tags": [
+    "test",
+    "plugin",
+    "tier"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildDefaultsToNearestGitRoot",
+   "type": "function",
+   "name": "TestBuildDefaultsToNearestGitRoot",
+   "summary": "Tests Build loads config from nearest git root when cwd is a subdirectory.",
+   "tags": [
+    "test",
+    "build",
+    "git",
+    "config"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildMigratesLegacyEagerTierToBackground",
+   "type": "function",
+   "name": "TestBuildMigratesLegacyEagerTierToBackground",
+   "summary": "Tests legacy eager tier plugins migrated to background tier during Build.",
+   "tags": [
+    "test",
+    "migration",
+    "plugin",
+    "tier"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildMigratesLegacyLazyTierToBackground",
+   "type": "function",
+   "name": "TestBuildMigratesLegacyLazyTierToBackground",
+   "summary": "Tests legacy lazy tier plugins migrated to background tier during Build.",
+   "tags": [
+    "test",
+    "migration",
+    "plugin",
+    "tier"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestBuildMigratesLegacyEagerBeforeStatsDemotion",
+   "type": "function",
+   "name": "TestBuildMigratesLegacyEagerBeforeStatsDemotion",
+   "summary": "Tests legacy eager tier migration happens before stats-based demotion.",
+   "tags": [
+    "test",
+    "migration",
+    "plugin",
+    "stats"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:TestHelperProcess",
+   "type": "function",
+   "name": "TestHelperProcess",
+   "summary": "Minimal MCP stdio server test helper reading JSON-RPC from stdin.",
+   "tags": [
+    "test-helper",
+    "mcp",
+    "subprocess"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:isolateConfigHome",
+   "type": "function",
+   "name": "isolateConfigHome",
+   "summary": "Helper redirecting os.UserConfigDir to per-test temp dir to prevent state bleed.",
+   "tags": [
+    "test-helper",
+    "config",
+    "isolation"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:registerBootRetrievalToolTestProvider",
+   "type": "function",
+   "name": "registerBootRetrievalToolTestProvider",
+   "summary": "Registers a boot-retrieval-tool-test provider kind once for retrieval tool tests.",
+   "tags": [
+    "test-helper",
+    "provider",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot_test.go:registerBootTokenProfileTestProvider",
+   "type": "function",
+   "name": "registerBootTokenProfileTestProvider",
+   "summary": "Registers a boot-token-profile-test provider kind once for token profile tests.",
+   "tags": [
+    "test-helper",
+    "provider",
+    "registration"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "concept:internal/boot/boot_test.go:bootRetrievalToolTestProviderKind",
+   "type": "concept",
+   "name": "bootRetrievalToolTestProviderKind",
+   "summary": "Constant string boot-retrieval-tool-test used as provider kind name.",
+   "tags": [
+    "constant",
+    "provider-kind"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "concept:internal/boot/boot_test.go:bootTokenProfileTestProviderKind",
+   "type": "concept",
+   "name": "bootTokenProfileTestProviderKind",
+   "summary": "Constant string boot-token-profile-test used as provider kind name.",
+   "tags": [
+    "constant",
+    "provider-kind"
+   ],
+   "complexity": "simple"
   }
  ],
  "edges": [
@@ -15752,9 +16543,9 @@
  ],
  "layers": [
   {
-   "id": "layer-desktop",
+   "id": "desktop",
    "name": "Desktop",
-   "description": "109 files",
+   "description": "Desktop layer",
    "nodeIds": [
     "file:desktop/app_autosave_test.go",
     "file:desktop/app_platform_test.go",
@@ -15777,7 +16568,6 @@
     "file:desktop/crash_app.go",
     "file:desktop/crash_pending_test.go",
     "file:desktop/crash_pending.go",
-    "file:desktop/desktop.exe",
     "file:desktop/devinfo_darwin.go",
     "file:desktop/devinfo_linux.go",
     "file:desktop/devinfo_test.go",
@@ -15855,16 +16645,136 @@
     "file:desktop/frontend/src/__tests__/workspace-layout.test.ts",
     "file:desktop/frontend/src/__tests__/workspace-preview-css.test.ts",
     "file:desktop/frontend/src/__tests__/workspace-split.test.ts",
-    "file:desktop/frontend/src/App.tsx",
-    "file:desktop/frontend/src/components/SettingsPanel.tsx",
-    "file:desktop/frontend/src/components/StatusBar.tsx",
-    "file:desktop/frontend/src/lib/statusBarItems.ts",
-    "file:desktop/frontend/src/lib/types.ts",
-    "file:desktop/frontend/src/locales/en.ts",
-    "file:desktop/frontend/src/locales/zh-TW.ts",
-    "file:desktop/frontend/src/locales/zh.ts",
-    "file:desktop/settings_app.go",
-    "file:desktop/understand_graph.go",
+    "file:desktop/frontend/src/components/AnchoredPopover.tsx",
+    "file:desktop/frontend/src/components/AppChrome.tsx",
+    "file:desktop/frontend/src/components/ApprovalModal.tsx",
+    "file:desktop/frontend/src/components/ArgMenu.tsx",
+    "file:desktop/frontend/src/components/AskCard.tsx",
+    "file:desktop/frontend/src/components/CapabilitiesPanel.tsx",
+    "file:desktop/frontend/src/components/ClearContextCard.tsx",
+    "file:desktop/frontend/src/components/CodeViewer.tsx",
+    "file:desktop/frontend/src/components/CommandPalette.tsx",
+    "file:desktop/frontend/src/components/Composer.tsx",
+    "file:desktop/frontend/src/components/ComposerContextCard.tsx",
+    "file:desktop/frontend/src/components/ContextMenu.tsx",
+    "file:desktop/frontend/src/components/ContextPanel.tsx",
+    "file:desktop/frontend/src/components/CopyButton.tsx",
+    "file:desktop/frontend/src/components/DiffView.tsx",
+    "file:desktop/frontend/src/components/editors/HljsCode.tsx",
+    "file:desktop/frontend/src/components/editors/HljsDiff.tsx",
+    "file:desktop/frontend/src/components/EffortSwitcher.tsx",
+    "file:desktop/frontend/src/components/ErrorBoundary.tsx",
+    "file:desktop/frontend/src/components/FileReferenceMenu.tsx",
+    "file:desktop/frontend/src/components/FloatingMenu.tsx",
+    "file:desktop/frontend/src/components/HistoryPanel.tsx",
+    "file:desktop/frontend/src/components/InlineConfirmButton.tsx",
+    "file:desktop/frontend/src/components/InlineDiff.tsx",
+    "file:desktop/frontend/src/components/latexNormalize.ts",
+    "file:desktop/frontend/src/components/Markdown.tsx",
+    "file:desktop/frontend/src/components/MarkdownRenderer.tsx",
+    "file:desktop/frontend/src/components/mathClassify.ts",
+    "file:desktop/frontend/src/components/mathNormalize.ts",
+    "file:desktop/frontend/src/components/MemoryPanel.tsx",
+    "file:desktop/frontend/src/components/MermaidDiagram.tsx",
+    "file:desktop/frontend/src/components/Message.tsx",
+    "file:desktop/frontend/src/components/ModalCloseButton.tsx",
+    "file:desktop/frontend/src/components/ModelSwitcher.tsx",
+    "file:desktop/frontend/src/components/OnboardingOverlay.tsx",
+    "file:desktop/frontend/src/components/ProcessCard.tsx",
+    "file:desktop/frontend/src/components/ProjectTree.tsx",
+    "file:desktop/frontend/src/components/PromptShelf.tsx",
+    "file:desktop/frontend/src/components/ReadOnlyBatch.tsx",
+    "file:desktop/frontend/src/components/ResizableDrawer.tsx",
+    "file:desktop/frontend/src/components/ShortcutComboDisplay.tsx",
+    "file:desktop/frontend/src/components/ShortcutsCheatsheet.tsx",
+    "file:desktop/frontend/src/components/SlashMenu.tsx",
+    "file:desktop/frontend/src/components/SoundSelect.tsx",
+    "file:desktop/frontend/src/components/StartupSplash.tsx",
+    "file:desktop/frontend/src/components/TabBar.tsx",
+    "file:desktop/frontend/src/components/TodoPanel.tsx",
+    "file:desktop/frontend/src/components/ToolCard.tsx",
+    "file:desktop/frontend/src/components/ToolGroup.tsx",
+    "file:desktop/frontend/src/components/Tooltip.tsx",
+    "file:desktop/frontend/src/components/Transcript.tsx",
+    "file:desktop/frontend/src/components/UndoRewindBanner.tsx",
+    "file:desktop/frontend/src/components/UpdateBanner.tsx",
+    "file:desktop/frontend/src/components/VirtualMenu.tsx",
+    "file:desktop/frontend/src/components/Welcome.tsx",
+    "file:desktop/frontend/src/components/WorkspacePanel.tsx",
+    "file:desktop/frontend/src/components/youngDiagrams.ts",
+    "file:desktop/frontend/src/custom/features/heartbeat/heartbeat.bridge.ts",
+    "file:desktop/frontend/src/custom/features/heartbeat/heartbeat.css",
+    "file:desktop/frontend/src/custom/features/heartbeat/heartbeat.types.ts",
+    "file:desktop/frontend/src/custom/features/heartbeat/HeartbeatPanel.tsx",
+    "file:desktop/frontend/src/lib/array.ts",
+    "file:desktop/frontend/src/lib/atMatches.ts",
+    "file:desktop/frontend/src/lib/attachDedup.ts",
+    "file:desktop/frontend/src/lib/attachmentDisplay.ts",
+    "file:desktop/frontend/src/lib/breadcrumbs.ts",
+    "file:desktop/frontend/src/lib/composerDraftKey.ts",
+    "file:desktop/frontend/src/lib/composerHistory.ts",
+    "file:desktop/frontend/src/lib/composerKeyboard.ts",
+    "file:desktop/frontend/src/lib/composerProfile.ts",
+    "file:desktop/frontend/src/lib/crash.ts",
+    "file:desktop/frontend/src/lib/diff.ts",
+    "file:desktop/frontend/src/lib/displayMode.ts",
+    "file:desktop/frontend/src/lib/dpiScale.ts",
+    "file:desktop/frontend/src/lib/editReplay.ts",
+    "file:desktop/frontend/src/lib/fontAvailability.ts",
+    "file:desktop/frontend/src/lib/fontFamily.ts",
+    "file:desktop/frontend/src/lib/generative-music.ts",
+    "file:desktop/frontend/src/lib/gsapAnimations.ts",
+    "file:desktop/frontend/src/lib/guardianEvents.ts",
+    "file:desktop/frontend/src/lib/highlight.ts",
+    "file:desktop/frontend/src/lib/i18n.tsx",
+    "file:desktop/frontend/src/lib/keyboardShortcuts.ts",
+    "file:desktop/frontend/src/lib/lang.ts",
+    "file:desktop/frontend/src/lib/layoutPreferences.ts",
+    "file:desktop/frontend/src/lib/mcpServerLifecycle.ts",
+    "file:desktop/frontend/src/lib/memoryCitationVisibility.ts",
+    "file:desktop/frontend/src/lib/memoryCompilerDisplay.ts",
+    "file:desktop/frontend/src/lib/messageSelectionCopy.ts",
+    "file:desktop/frontend/src/lib/money.ts",
+    "file:desktop/frontend/src/lib/openTopicCoalescing.ts",
+    "file:desktop/frontend/src/lib/projectColors.ts",
+    "file:desktop/frontend/src/lib/providerModels.ts",
+    "file:desktop/frontend/src/lib/rafBatch.ts",
+    "file:desktop/frontend/src/lib/reasoningDisplay.ts",
+    "file:desktop/frontend/src/lib/resizeDrag.ts",
+    "file:desktop/frontend/src/lib/session.ts",
+    "file:desktop/frontend/src/lib/sessionExport.tsx",
+    "file:desktop/frontend/src/lib/shellExpand.tsx",
+    "file:desktop/frontend/src/lib/sound.ts",
+    "file:desktop/frontend/src/lib/textSize.ts",
+    "file:desktop/frontend/src/lib/theme.ts",
+    "file:desktop/frontend/src/lib/toast.tsx",
+    "file:desktop/frontend/src/lib/todoVisibility.ts",
+    "file:desktop/frontend/src/lib/toolApprovalMode.ts",
+    "file:desktop/frontend/src/lib/tools.ts",
+    "file:desktop/frontend/src/lib/topicShortcuts.ts",
+    "file:desktop/frontend/src/lib/transcriptGrouping.ts",
+    "file:desktop/frontend/src/lib/useController.ts",
+    "file:desktop/frontend/src/lib/useEntranceAnimation.ts",
+    "file:desktop/frontend/src/lib/useGSAPCollapse.ts",
+    "file:desktop/frontend/src/lib/useMountTransition.ts",
+    "file:desktop/frontend/src/lib/useScrollManager.ts",
+    "file:desktop/frontend/src/lib/useUpdater.ts",
+    "file:desktop/frontend/src/lib/windowState.ts",
+    "file:desktop/frontend/src/lib/workspaceDrag.ts",
+    "file:desktop/frontend/src/lib/workspaceLayout.ts",
+    "file:desktop/frontend/src/lib/workspacePreviewTabs.ts",
+    "file:desktop/frontend/src/lib/workspaceSplit.ts",
+    "file:desktop/frontend/src/lib/workspaceTreeReveal.ts",
+    "file:desktop/frontend/src/lib/workspaceTreeSearch.ts",
+    "file:desktop/frontend/src/main.tsx",
+    "file:desktop/frontend/src/store/layout.ts",
+    "file:desktop/frontend/src/store/overlays.ts",
+    "file:desktop/frontend/src/store/setState.ts",
+    "file:desktop/frontend/tsconfig.json",
+    "file:desktop/frontend/tsconfig.node.json",
+    "file:desktop/frontend/tsconfig.test.json",
+    "file:desktop/frontend/vite-env.d.ts",
+    "file:desktop/frontend/vite.config.ts",
     "file:desktop/go.mod",
     "file:desktop/go.sum",
     "file:desktop/headroom_sidecar_other.go",
@@ -15946,17 +16856,67 @@
     "file:desktop/workspace_unix_test.go",
     "file:desktop/workspace.go",
     "file:desktop/zoom_factor.go",
+    "file:desktop/desktop.exe",
+    "file:desktop/frontend/src/components/StatusBar.tsx",
+    "file:desktop/frontend/src/lib/statusBarItems.ts",
+    "file:desktop/understand_graph.go",
+    "file:desktop/frontend/src/components/SettingsPanel.tsx",
+    "file:desktop/frontend/src/lib/bridge.ts",
+    "file:desktop/frontend/src/lib/types.ts",
+    "file:desktop/frontend/src/styles.css",
+    "function:desktop/frontend/src/components/SettingsPanel.tsx:SettingsPanel",
+    "function:desktop/frontend/src/lib/bridge.ts:AppBindings",
+    "function:desktop/frontend/src/lib/bridge.ts:stripGoalResearchFlags",
+    "function:desktop/frontend/src/lib/bridge.ts:NativeConfirmRequest",
+    "function:desktop/frontend/src/lib/bridge.ts:DesktopWindowState",
+    "concept:desktop/frontend/src/lib/bridge.ts:DevMockApp",
+    "file:desktop/frontend/src/locales/en.ts",
+    "file:desktop/frontend/src/locales/zh-TW.ts",
+    "file:desktop/frontend/src/locales/zh.ts",
     "type:desktop/settings_app.go:SettingsView",
     "type:desktop/settings_app.go:App",
     "type:desktop/settings_app.go:ProviderView",
     "type:desktop/settings_app.go:BotSettingsView",
-    "type:desktop/settings_app.go:DesktopStartupSettingsView"
+    "type:desktop/settings_app.go:DesktopStartupSettingsView",
+    "file:desktop/frontend/src/App.tsx",
+    "function:desktop/frontend/src/App.tsx:App",
+    "function:desktop/frontend/src/App.tsx:WindowsWindowControls",
+    "function:desktop/frontend/src/App.tsx:loadDismissedTodoKeys",
+    "function:desktop/frontend/src/App.tsx:saveDismissedTodoKeys",
+    "function:desktop/frontend/src/App.tsx:stripGoalResearchFlags",
+    "function:desktop/frontend/src/App.tsx:hasGoalResearchFlag",
+    "function:desktop/frontend/src/App.tsx:compactRemoteId",
+    "function:desktop/frontend/src/App.tsx:botMappingIdentityLabel",
+    "function:desktop/frontend/src/App.tsx:sidebarImStatus",
+    "function:desktop/frontend/src/App.tsx:sidebarImSessionTarget",
+    "concept:desktop/frontend/src/App.tsx:DesktopLayoutStyle",
+    "file:desktop/settings_app.go",
+    "function:desktop/settings_app.go:ProviderView",
+    "function:desktop/settings_app.go:ProviderModelOverrideView",
+    "function:desktop/settings_app.go:PermissionsView",
+    "function:desktop/settings_app.go:SandboxView",
+    "function:desktop/settings_app.go:NetworkView",
+    "function:desktop/settings_app.go:AgentView",
+    "function:desktop/settings_app.go:BotSettingsView",
+    "function:desktop/settings_app.go:SettingsView",
+    "function:desktop/settings_app.go:DesktopStartupSettingsView",
+    "function:desktop/settings_app.go:SetProviderKey",
+    "function:desktop/settings_app.go:ClearProviderKey",
+    "function:desktop/settings_app.go:SetSandbox",
+    "function:desktop/settings_app.go:SetNetwork",
+    "function:desktop/settings_app.go:SetBotSettings",
+    "function:desktop/settings_app.go:SetBotConnectionToolApprovalMode",
+    "function:desktop/settings_app.go:SetDesktopAppearance",
+    "function:desktop/settings_app.go:SetDesktopLayoutStyle",
+    "function:desktop/settings_app.go:SetPermissionMode",
+    "function:desktop/settings_app.go:deleteProviderAndRetargetTabs",
+    "function:desktop/settings_app.go:removeBuiltInProviderAccessAndRetargetTabs"
    ]
   },
   {
-   "id": "layer-internal/cli",
+   "id": "internal-cli",
    "name": "Internal/cli",
-   "description": "99 files",
+   "description": "Internal/cli layer",
    "nodeIds": [
     "file:internal/cli/acp_test.go",
     "file:internal/cli/acp.go",
@@ -16060,9 +17020,9 @@
    ]
   },
   {
-   "id": "layer-internal/agent",
+   "id": "internal-agent",
    "name": "Internal/agent",
-   "description": "73 files",
+   "description": "Internal/agent layer",
    "nodeIds": [
     "file:internal/agent/agent.go",
     "file:internal/agent/argserror_test.go",
@@ -16140,9 +17100,9 @@
    ]
   },
   {
-   "id": "layer-internal/tool/builtin",
+   "id": "internal-tool-builtin",
    "name": "Internal/tool/builtin",
-   "description": "64 files",
+   "description": "Internal/tool/builtin layer",
    "nodeIds": [
     "file:internal/tool/builtin/bash_cancel_test.go",
     "file:internal/tool/builtin/bash_cancel_windows_test.go",
@@ -16155,7 +17115,6 @@
     "file:internal/tool/builtin/bash.go",
     "file:internal/tool/builtin/bgjobs_test.go",
     "file:internal/tool/builtin/bgjobs.go",
-    "file:internal/tool/builtin/builtin_test.go",
     "file:internal/tool/builtin/codeindex_test.go",
     "file:internal/tool/builtin/codeindex.go",
     "file:internal/tool/builtin/completestep_test.go",
@@ -16197,30 +17156,30 @@
     "file:internal/tool/builtin/todo_test.go",
     "file:internal/tool/builtin/todo.go",
     "file:internal/tool/builtin/tool_extra_test.go",
-    "file:internal/tool/builtin/understand_search_test.go",
-    "file:internal/tool/builtin/understand_search.go",
     "file:internal/tool/builtin/vendorskip_test.go",
     "file:internal/tool/builtin/walk_cancel_test.go",
     "file:internal/tool/builtin/web_fetch_proxy_test.go",
     "file:internal/tool/builtin/webfetch_ssrf_test.go",
     "file:internal/tool/builtin/webfetch.go",
     "file:internal/tool/builtin/workspace_test.go",
-    "file:internal/tool/builtin/workspace.go",
     "file:internal/tool/builtin/write_tool_test.go",
-    "file:internal/tool/builtin/writefile.go"
+    "file:internal/tool/builtin/writefile.go",
+    "file:internal/tool/builtin/builtin_test.go",
+    "file:internal/tool/builtin/understand_search.go",
+    "file:internal/tool/builtin/understand_search_test.go",
+    "file:internal/tool/builtin/workspace.go"
    ]
   },
   {
-   "id": "layer-desktop/frontend/src/lib",
+   "id": "desktop-frontend-src-lib",
    "name": "Desktop/frontend/src/lib",
-   "description": "63 files",
+   "description": "Desktop/frontend/src/lib layer",
    "nodeIds": [
     "file:desktop/frontend/src/lib/array.ts",
     "file:desktop/frontend/src/lib/atMatches.ts",
     "file:desktop/frontend/src/lib/attachDedup.ts",
     "file:desktop/frontend/src/lib/attachmentDisplay.ts",
     "file:desktop/frontend/src/lib/breadcrumbs.ts",
-    "file:desktop/frontend/src/lib/bridge.ts",
     "file:desktop/frontend/src/lib/composerDraftKey.ts",
     "file:desktop/frontend/src/lib/composerHistory.ts",
     "file:desktop/frontend/src/lib/composerKeyboard.ts",
@@ -16255,7 +17214,6 @@
     "file:desktop/frontend/src/lib/sessionExport.tsx",
     "file:desktop/frontend/src/lib/shellExpand.tsx",
     "file:desktop/frontend/src/lib/sound.ts",
-    "file:desktop/frontend/src/lib/statusBarItems.ts",
     "file:desktop/frontend/src/lib/textSize.ts",
     "file:desktop/frontend/src/lib/theme.ts",
     "file:desktop/frontend/src/lib/toast.tsx",
@@ -16264,7 +17222,6 @@
     "file:desktop/frontend/src/lib/tools.ts",
     "file:desktop/frontend/src/lib/topicShortcuts.ts",
     "file:desktop/frontend/src/lib/transcriptGrouping.ts",
-    "file:desktop/frontend/src/lib/types.ts",
     "file:desktop/frontend/src/lib/useController.ts",
     "file:desktop/frontend/src/lib/useEntranceAnimation.ts",
     "file:desktop/frontend/src/lib/useGSAPCollapse.ts",
@@ -16278,46 +17235,20 @@
     "file:desktop/frontend/src/lib/workspaceSplit.ts",
     "file:desktop/frontend/src/lib/workspaceTreeReveal.ts",
     "file:desktop/frontend/src/lib/workspaceTreeSearch.ts",
-    "file:desktop/frontend/.npmrc",
-    "file:desktop/frontend/index.html",
-    "file:desktop/frontend/package.json",
-    "file:desktop/frontend/pnpm-workspace.yaml",
-    "file:desktop/frontend/public/sounds/mixkit-correct-answer-tone-2870.wav",
-    "file:desktop/frontend/public/sounds/mixkit-positive-notification-951.wav",
-    "file:desktop/frontend/public/sounds/mixkit-software-interface-back-2575.wav",
-    "file:desktop/frontend/public/sounds/mixkit-software-interface-start-2574.wav",
-    "file:desktop/frontend/scripts/check-css-syntax.mjs",
-    "file:desktop/frontend/scripts/check-z-index-tokens.mjs",
-    "file:desktop/frontend/scripts/test-todo-visibility.mjs",
-    "file:desktop/frontend/src/App.tsx",
-    "file:desktop/frontend/src/custom/features/heartbeat/heartbeat.bridge.ts",
-    "file:desktop/frontend/src/custom/features/heartbeat/heartbeat.css",
-    "file:desktop/frontend/src/custom/features/heartbeat/heartbeat.types.ts",
-    "file:desktop/frontend/src/custom/features/heartbeat/HeartbeatPanel.tsx",
-    "file:desktop/frontend/src/main.tsx",
-    "file:desktop/frontend/src/store/layout.ts",
-    "file:desktop/frontend/src/store/overlays.ts",
-    "file:desktop/frontend/src/store/setState.ts",
-    "file:desktop/frontend/tsconfig.json",
-    "file:desktop/frontend/tsconfig.node.json",
-    "file:desktop/frontend/tsconfig.test.json",
-    "file:desktop/frontend/vite-env.d.ts",
-    "file:desktop/frontend/vite.config.ts",
-    "file:desktop/frontend/src/styles.css",
+    "file:desktop/frontend/src/lib/statusBarItems.ts",
+    "file:desktop/frontend/src/lib/bridge.ts",
+    "file:desktop/frontend/src/lib/types.ts",
     "function:desktop/frontend/src/lib/bridge.ts:AppBindings",
     "function:desktop/frontend/src/lib/bridge.ts:stripGoalResearchFlags",
     "function:desktop/frontend/src/lib/bridge.ts:NativeConfirmRequest",
     "function:desktop/frontend/src/lib/bridge.ts:DesktopWindowState",
-    "concept:desktop/frontend/src/lib/bridge.ts:DevMockApp",
-    "file:desktop/frontend/src/locales/en.ts",
-    "file:desktop/frontend/src/locales/zh-TW.ts",
-    "file:desktop/frontend/src/locales/zh.ts"
+    "concept:desktop/frontend/src/lib/bridge.ts:DevMockApp"
    ]
   },
   {
-   "id": "layer-desktop/frontend/src/__tests__",
+   "id": "desktop-frontend-src-__tests__",
    "name": "Desktop/frontend/src/__tests__",
-   "description": "59 files",
+   "description": "Desktop/frontend/src/__tests__ layer",
    "nodeIds": [
     "file:desktop/frontend/src/__tests__/anchored-popover-scroll.test.tsx",
     "file:desktop/frontend/src/__tests__/app-chrome-tabs.test.ts",
@@ -16381,9 +17312,9 @@
    ]
   },
   {
-   "id": "layer-desktop/frontend/src/components",
+   "id": "desktop-frontend-src-components",
    "name": "Desktop/frontend/src/components",
-   "description": "59 files",
+   "description": "Desktop/frontend/src/components layer",
    "nodeIds": [
     "file:desktop/frontend/src/components/AnchoredPopover.tsx",
     "file:desktop/frontend/src/components/AppChrome.tsx",
@@ -16425,13 +17356,11 @@
     "file:desktop/frontend/src/components/PromptShelf.tsx",
     "file:desktop/frontend/src/components/ReadOnlyBatch.tsx",
     "file:desktop/frontend/src/components/ResizableDrawer.tsx",
-    "file:desktop/frontend/src/components/SettingsPanel.tsx",
     "file:desktop/frontend/src/components/ShortcutComboDisplay.tsx",
     "file:desktop/frontend/src/components/ShortcutsCheatsheet.tsx",
     "file:desktop/frontend/src/components/SlashMenu.tsx",
     "file:desktop/frontend/src/components/SoundSelect.tsx",
     "file:desktop/frontend/src/components/StartupSplash.tsx",
-    "file:desktop/frontend/src/components/StatusBar.tsx",
     "file:desktop/frontend/src/components/TabBar.tsx",
     "file:desktop/frontend/src/components/TodoPanel.tsx",
     "file:desktop/frontend/src/components/ToolCard.tsx",
@@ -16444,13 +17373,15 @@
     "file:desktop/frontend/src/components/Welcome.tsx",
     "file:desktop/frontend/src/components/WorkspacePanel.tsx",
     "file:desktop/frontend/src/components/youngDiagrams.ts",
+    "file:desktop/frontend/src/components/StatusBar.tsx",
+    "file:desktop/frontend/src/components/SettingsPanel.tsx",
     "function:desktop/frontend/src/components/SettingsPanel.tsx:SettingsPanel"
    ]
   },
   {
-   "id": "layer-internal/control",
+   "id": "internal-control",
    "name": "Internal/control",
-   "description": "48 files",
+   "description": "Internal/control layer",
    "nodeIds": [
     "file:internal/control/approval_e2e_test.go",
     "file:internal/control/approval.go",
@@ -16503,16 +17434,15 @@
    ]
   },
   {
-   "id": "layer-internal/config",
+   "id": "internal-config",
    "name": "Internal/config",
-   "description": "38 files",
+   "description": "Internal/config layer",
    "nodeIds": [
     "file:internal/config/backfill_test.go",
     "file:internal/config/ccswitch_test.go",
     "file:internal/config/ccswitch.go",
     "file:internal/config/chat_model_test.go",
     "file:internal/config/commanddirs_test.go",
-    "file:internal/config/config.go",
     "file:internal/config/configured_test.go",
     "file:internal/config/credentials_keyring_default.go",
     "file:internal/config/credentials_keyring_unix.go",
@@ -16520,10 +17450,7 @@
     "file:internal/config/default_test.go",
     "file:internal/config/dotenv_test.go",
     "file:internal/config/dotenv.go",
-    "file:internal/config/edit_test.go",
     "file:internal/config/edit.go",
-    "file:internal/config/effort_test.go",
-    "file:internal/config/effort.go",
     "file:internal/config/expand_test.go",
     "file:internal/config/expand.go",
     "file:internal/config/fetch_test.go",
@@ -16575,7 +17502,11 @@
     "file:internal/skill/skill.go",
     "file:internal/skill/tools_test.go",
     "file:internal/skill/tools.go",
+    "file:internal/config/config.go",
     "file:internal/understand/prefix_test.go",
+    "file:internal/config/effort.go",
+    "file:internal/config/edit_test.go",
+    "file:internal/config/effort_test.go",
     "function:internal/config/effort.go:EffortCapabilityForEntry",
     "function:internal/config/effort.go:NormalizeEffort",
     "function:internal/config/effort.go:EffortDisplay",
@@ -16629,9 +17560,9 @@
    ]
   },
   {
-   "id": "layer-docs",
+   "id": "docs",
    "name": "Docs",
-   "description": "31 files",
+   "description": "Docs layer",
    "nodeIds": [
     "file:docs/.nojekyll",
     "file:docs/assets/approval-mock-1.html",
@@ -16662,8 +17593,8 @@
     "file:docs/superpowers/plans/2026-06-29-autoresearch-runtime-implementation.md",
     "file:docs/superpowers/specs/2026-06-29-autoresearch-runtime-design.md",
     "file:docs/TOOL_APPROVAL_MODES.zh-CN.md",
-    "file:docs/TOOL_CONTRACT.md",
-    "file:docs/TOOL_CONTRACT.zh-CN.md"
+    "file:docs/TOOL_CONTRACT.zh-CN.md",
+    "file:docs/TOOL_CONTRACT.md"
    ]
   }
  ],

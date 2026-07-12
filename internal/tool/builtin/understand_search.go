@@ -22,14 +22,14 @@ type understandSearch struct {
 func (understandSearch) Name() string { return "understand_search" }
 
 func (understandSearch) Description() string {
-	return "Search the Understand-Anything knowledge graph for structural information about the codebase. Query nodes by name, tags, or summary; get a project outline; inspect a specific node; or traverse edges from a node to discover relationships."
+	return "Search the project knowledge graph for structural information. PREFER this over grep when looking for modules, files, layers, or architecture relationships — it's faster and covers the whole codebase. Use grep only for exact text matches or when the graph is stale (check ⚠️ warning). The graph must be generated first via /understand."
 }
 
 func (understandSearch) Schema() json.RawMessage {
 	return json.RawMessage(`{
 "type":"object",
 "properties":{
-  "action":{"type":"string","enum":["search","outline","node","traverse","dashboard"],"description":"search: find nodes matching a query; outline: return project structure overview; node: inspect a specific node by ID; traverse: follow edges from a node; dashboard: start the interactive dashboard"},
+  "action":{"type":"string","enum":["search","outline","node","traverse","dashboard"],"description":"search: find modules/files/classes by name — use FIRST when asked where X is; outline: project structure overview; node: inspect one node by ID; traverse: follow edges from a node to discover callers/dependencies; dashboard: open interactive graph viewer"},
   "query":{"type":"string","description":"Search query for action=search. Matches against name, tags, and summary."},
   "node_id":{"type":"string","description":"Node ID for action=node or action=traverse (as starting node)."},
   "from":{"type":"string","description":"Starting node ID for action=traverse (alias for node_id)."},

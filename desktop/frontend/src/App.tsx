@@ -1015,6 +1015,9 @@ export default function App() {
     const unsub = onEvent((e) => {
       if (e.kind === "turn_done") {
         setDockRefreshKey((v) => v + 1);
+        if (statusBarItemsRef.current.includes("graph" as StatusBarItemId)) {
+          void app.GetUnderstandGraphStatus().then(setUnderstandGraphStatus).catch(() => {});
+        }
       }
       if (e.kind === "turn_done") {
         if (!e.err) playSuccessChime();
@@ -1040,6 +1043,8 @@ export default function App() {
   const [desktopPlatform, setDesktopPlatform] = useState<DesktopPlatform>(detectBrowserPlatform);
   const [statusBarStyle, setStatusBarStyle] = useState<"icon" | "text">("text");
   const [statusBarItems, setStatusBarItems] = useState<StatusBarItemId[]>(() => [...DEFAULT_STATUS_BAR_ITEMS]);
+  const statusBarItemsRef = useRef(statusBarItems);
+  statusBarItemsRef.current = statusBarItems;
   const [headroomStats, setHeadroomStats] = useState<import("./lib/types").HeadroomStatusView | undefined>(undefined);
   const [understandGraphStatus, setUnderstandGraphStatus] = useState<import("./lib/types").UnderstandGraphStatusView | undefined>(undefined);
   const [renamingTopicId, setRenamingTopicId] = useState<string | null>(null);

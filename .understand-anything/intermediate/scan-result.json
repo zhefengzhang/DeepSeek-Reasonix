@@ -394,19 +394,25 @@
     {
       "path": ".understand-anything/intermediate/batches.json",
       "language": "json",
-      "sizeLines": 17376,
+      "sizeLines": 17884,
       "fileCategory": "config"
+    },
+    {
+      "path": ".understand-anything/intermediate/merge_batches.py",
+      "language": "python",
+      "sizeLines": 143,
+      "fileCategory": "code"
     },
     {
       "path": ".understand-anything/intermediate/scan-result.json",
       "language": "json",
-      "sizeLines": 7365,
+      "sizeLines": 7773,
       "fileCategory": "config"
     },
     {
       "path": ".understand-anything/knowledge-graph.json",
       "language": "json",
-      "sizeLines": 15509,
+      "sizeLines": 16670,
       "fileCategory": "config"
     },
     {
@@ -416,400 +422,10 @@
       "fileCategory": "config"
     },
     {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-1.json",
-      "language": "json",
-      "sizeLines": 111,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-10.json",
-      "language": "json",
-      "sizeLines": 83,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-11.json",
-      "language": "json",
-      "sizeLines": 48,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-12.json",
-      "language": "json",
-      "sizeLines": 27,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-13.json",
-      "language": "json",
-      "sizeLines": 34,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-14.json",
-      "language": "json",
-      "sizeLines": 48,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-15.json",
-      "language": "json",
-      "sizeLines": 146,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-16.json",
-      "language": "json",
-      "sizeLines": 48,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-17.json",
-      "language": "json",
-      "sizeLines": 34,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-18.json",
-      "language": "json",
-      "sizeLines": 34,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-19.json",
-      "language": "json",
-      "sizeLines": 69,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-2.json",
-      "language": "json",
-      "sizeLines": 20,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-20.json",
-      "language": "json",
-      "sizeLines": 41,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-21.json",
-      "language": "json",
-      "sizeLines": 34,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-22.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-23.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-24.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-25.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-26.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-27.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-28.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-29.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-3.json",
-      "language": "json",
-      "sizeLines": 13,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-30.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-31.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-32.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-33.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-34.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-35.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-36.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-37.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-38.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-39.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-4.json",
-      "language": "json",
-      "sizeLines": 104,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-40.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-41.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-42.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-43.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-44.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-45.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-46.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-47.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-48.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-49.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-5.json",
-      "language": "json",
-      "sizeLines": 27,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-50.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-51.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-52.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-53.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-54.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-55.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-56.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-57.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-58.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-59.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-6.json",
-      "language": "json",
-      "sizeLines": 27,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-60.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-61.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-62.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-63.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-64.json",
-      "language": "json",
-      "sizeLines": 181,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-65.json",
-      "language": "json",
-      "sizeLines": 111,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-7.json",
-      "language": "json",
-      "sizeLines": 34,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-8.json",
-      "language": "json",
-      "sizeLines": 27,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-analyzer-input-9.json",
-      "language": "json",
-      "sizeLines": 27,
-      "fileCategory": "config"
-    },
-    {
-      "path": ".understand-anything/tmp/ua-file-extract-results-1.json",
-      "language": "json",
-      "sizeLines": 596,
-      "fileCategory": "config"
+      "path": "管理/需求收集与开发进度.md",
+      "language": "markdown",
+      "sizeLines": 28,
+      "fileCategory": "docs"
     },
     {
       "path": "benchmarks/context-maintenance-e2e/main.go",
@@ -1582,7 +1198,7 @@
     {
       "path": "desktop/frontend/src/App.tsx",
       "language": "typescript",
-      "sizeLines": 3751,
+      "sizeLines": 3757,
       "fileCategory": "code"
     },
     {
@@ -2614,7 +2230,7 @@
     {
       "path": "desktop/settings_app.go",
       "language": "go",
-      "sizeLines": 2232,
+      "sizeLines": 2233,
       "fileCategory": "code"
     },
     {
@@ -3688,7 +3304,7 @@
     {
       "path": "internal/boot/boot_test.go",
       "language": "go",
-      "sizeLines": 3137,
+      "sizeLines": 3138,
       "fileCategory": "code"
     },
     {
@@ -7730,15 +7346,15 @@
       "fileCategory": "config"
     }
   ],
-  "totalFiles": 1288,
+  "totalFiles": 1224,
   "filteredByIgnore": 0,
   "estimatedComplexity": "very-large",
   "stats": {
-    "filesScanned": 1288,
+    "filesScanned": 1224,
     "byCategory": {
-      "config": 120,
-      "code": 1039,
-      "docs": 82,
+      "config": 54,
+      "code": 1040,
+      "docs": 83,
       "infra": 16,
       "script": 10,
       "markup": 9,
@@ -7748,14 +7364,14 @@
       "config": 1,
       "unknown": 7,
       "yaml": 23,
-      "markdown": 67,
-      "json": 94,
+      "markdown": 68,
+      "json": 28,
       "txt": 15,
       "xml": 1,
+      "python": 8,
       "go": 734,
       "toml": 11,
       "shell": 10,
-      "python": 7,
       "exe": 8,
       "html": 5,
       "wav": 4,
