@@ -1041,6 +1041,7 @@ export default function App() {
   const [statusBarStyle, setStatusBarStyle] = useState<"icon" | "text">("text");
   const [statusBarItems, setStatusBarItems] = useState<StatusBarItemId[]>(() => [...DEFAULT_STATUS_BAR_ITEMS]);
   const [headroomStats, setHeadroomStats] = useState<import("./lib/types").HeadroomStatusView | undefined>(undefined);
+  const [understandGraphStatus, setUnderstandGraphStatus] = useState<import("./lib/types").UnderstandGraphStatusView | undefined>(undefined);
   const [renamingTopicId, setRenamingTopicId] = useState<string | null>(null);
   const [topicTitleDraft, setTopicTitleDraft] = useState("");
   const topicExportOpen = useOverlayStore((s) => s.topicExportOpen);
@@ -1197,6 +1198,7 @@ export default function App() {
       ]);
       if (cancelled) return;
       applyDesktopPreferences(settings);
+      setUnderstandGraphStatus(settings.understandGraphStatus);
       hydrateDisplayMode(settings.displayMode);
       setSidebarImConnections(sidebarImConnectionsFromBot(settings.bot, t, runtimeStatus));
       setImTopicSources(sidebarImTopicSourcesFromBot(settings.bot, t));
@@ -3555,6 +3557,7 @@ export default function App() {
               usage={state.usage}
               balance={state.balance}
               headroomStats={headroomStats}
+              understandGraphStatus={understandGraphStatus}
               running={state.running || rewindCommitting}
               sessionTurns={sessionTurns}
               sessionTokens={state.sessionTokens}
@@ -3708,6 +3711,7 @@ export default function App() {
               void refreshMeta();
               if (settings) {
                 applyDesktopPreferences(settings);
+                setUnderstandGraphStatus(settings.understandGraphStatus);
                 void refreshSidebarImConnectionsFromSettings(settings).catch((e) => console.warn("bot sidebar refresh failed", e));
                 return;
               }

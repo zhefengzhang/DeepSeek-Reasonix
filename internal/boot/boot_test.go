@@ -1441,6 +1441,7 @@ command = "reasonix-missing-mockmcp"
 		"remember",
 		"slash_command",
 		"todo_write",
+		"understand_search",
 		"wait",
 		"write_file",
 	}

@@ -216,15 +216,16 @@ type SettingsView struct {
 // frontend startup. It deliberately excludes providers and credential state so
 // slow keychain/env resolution stays off the first-render path.
 type DesktopStartupSettingsView struct {
-	Bot                BotSettingsView `json:"bot"`
-	DesktopLanguage    string          `json:"desktopLanguage"`
-	DesktopLayoutStyle string          `json:"desktopLayoutStyle"`
-	DesktopTheme       string          `json:"desktopTheme"`
-	DesktopThemeStyle  string          `json:"desktopThemeStyle"`
-	DisplayMode        string          `json:"displayMode"`
-	StatusBarStyle     string          `json:"statusBarStyle"`
-	StatusBarItems     []string        `json:"statusBarItems"`
-	CheckUpdates       bool            `json:"checkUpdates"`
+	Bot                   BotSettingsView            `json:"bot"`
+	DesktopLanguage       string                     `json:"desktopLanguage"`
+	DesktopLayoutStyle    string                     `json:"desktopLayoutStyle"`
+	DesktopTheme          string                     `json:"desktopTheme"`
+	DesktopThemeStyle     string                     `json:"desktopThemeStyle"`
+	DisplayMode           string                     `json:"displayMode"`
+	StatusBarStyle        string                     `json:"statusBarStyle"`
+	StatusBarItems        []string                   `json:"statusBarItems"`
+	CheckUpdates          bool                       `json:"checkUpdates"`
+	UnderstandGraphStatus *UnderstandGraphStatusView `json:"understandGraphStatus,omitempty"`
 }
 
 func nonNil(s []string) []string {
@@ -504,7 +505,9 @@ func (a *App) DesktopStartupSettings() DesktopStartupSettingsView {
 	if err != nil {
 		return desktopStartupSettingsFromConfig(nil)
 	}
-	return desktopStartupSettingsFromConfig(cfg)
+	v := desktopStartupSettingsFromConfig(cfg)
+	v.UnderstandGraphStatus = buildGraphStatus(a.activeWorkspaceRoot())
+	return v
 }
 
 // Settings returns the current configuration for the Settings panel.
