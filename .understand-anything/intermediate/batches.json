@@ -307,6 +307,7 @@
       "SetGoalForTab",
       "ClearGoal",
       "ClearGoalForTab",
+      "GetUnderstandGraphStatus",
       "GetGuidancePrompt",
       "SetGuidancePrompt",
       "SetAutoApproveTools",
@@ -8068,7 +8069,8 @@
       "TestPrefixMaxLength"
     ],
     "internal/understand/prefix.go": [
-      "Prefix"
+      "Prefix",
+      "TurnHint"
     ],
     "launch_headroom.py": [],
     "MyReasonixRelease/1.15.10/reasonix-desktop.exe": [],
@@ -8646,13 +8648,13 @@
         {
           "path": ".reasonix/desktop-topic-title-sources.json",
           "language": "json",
-          "sizeLines": 7,
+          "sizeLines": 8,
           "fileCategory": "config"
         },
         {
           "path": ".reasonix/desktop-topic-titles.json",
           "language": "json",
-          "sizeLines": 7,
+          "sizeLines": 8,
           "fileCategory": "config"
         }
       ],
@@ -9518,7 +9520,7 @@
         {
           "path": ".understand-anything/intermediate/batches.json",
           "language": "json",
-          "sizeLines": 17884,
+          "sizeLines": 17405,
           "fileCategory": "config"
         },
         {
@@ -9530,13 +9532,13 @@
         {
           "path": ".understand-anything/intermediate/scan-result.json",
           "language": "json",
-          "sizeLines": 7773,
+          "sizeLines": 7389,
           "fileCategory": "config"
         },
         {
           "path": ".understand-anything/knowledge-graph.json",
           "language": "json",
-          "sizeLines": 16670,
+          "sizeLines": 17601,
           "fileCategory": "config"
         },
         {
@@ -9713,7 +9715,7 @@
         {
           "path": "desktop/app.go",
           "language": "go",
-          "sizeLines": 7920,
+          "sizeLines": 7927,
           "fileCategory": "code"
         },
         {
@@ -10397,7 +10399,7 @@
         {
           "path": "desktop/frontend/src/App.tsx",
           "language": "typescript",
-          "sizeLines": 3757,
+          "sizeLines": 3762,
           "fileCategory": "code"
         },
         {
@@ -10910,7 +10912,7 @@
         {
           "path": "desktop/frontend/src/lib/bridge.ts",
           "language": "typescript",
-          "sizeLines": 3351,
+          "sizeLines": 3353,
           "fileCategory": "code"
         },
         {
@@ -16643,7 +16645,7 @@
         {
           "path": "internal/understand/prefix.go",
           "language": "go",
-          "sizeLines": 178,
+          "sizeLines": 227,
           "fileCategory": "code"
         },
         {
