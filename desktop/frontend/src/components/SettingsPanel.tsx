@@ -5895,7 +5895,7 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
         </div>
       </SettingsField>
       <SettingsField label={t("settings.headroomRequestTimeout")} hint={t("settings.headroomRequestTimeoutHint")}>
-        <input className="mem-input" type="number" min={10} max={600}
+        <input className="mem-input" type="number" min={10}
           value={timeoutVal} disabled={busy}
           onChange={(e) => setTimeoutVal(e.target.value)}
           onBlur={async () => {
