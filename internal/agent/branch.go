@@ -29,6 +29,7 @@ type BranchMeta struct {
 	TopicID          string    `json:"topic_id,omitempty"`
 	TopicTitle       string    `json:"topic_title,omitempty"`
 	Model            string    `json:"model,omitempty"`
+	Effort           string    `json:"effort,omitempty"`
 	TokenMode        string    `json:"token_mode,omitempty"`
 	Mode             string    `json:"mode,omitempty"`
 	ToolApprovalMode string    `json:"tool_approval_mode,omitempty"`

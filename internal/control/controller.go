@@ -157,14 +157,14 @@ type Controller struct {
 
 	// mu guards the run state; every critical section under it is short and
 	// non-blocking.
-	mu          sync.Mutex
-	cancel      context.CancelFunc
-	running     bool
-	canceling   bool
-	autosaveWG  sync.WaitGroup
-	planMode      bool
+	mu             sync.Mutex
+	cancel         context.CancelFunc
+	running        bool
+	canceling      bool
+	autosaveWG     sync.WaitGroup
+	planMode       bool
 	guidancePrompt string
-	sessionPath   string
+	sessionPath    string
 	// turn counts model turns this session, passed to hooks in their payload.
 	turn int
 
@@ -259,26 +259,26 @@ type externalFolderToolRefs interface {
 // lets the controller mint and rotate session files; Host/Commands are surfaced
 // to frontends that resolve MCP prompts and slash commands.
 type Options struct {
-	Runner        agent.Runner
-	Executor      *agent.Agent
-	Guardian      *guardian.Session
-	Sink          event.Sink
-	Policy        permission.Policy
-	Label         string
-	ModelRef      string
-	SystemPrompt    string
-	GuidancePrompt  string
-	SessionDir      string
-	SessionPath   string
-	Host          *plugin.Host
-	Commands      []command.Command
-	Skills        []skill.Skill
-	AllSkills     []skill.Skill
-	SkillStore    *skill.Store
-	AllSkillStore *skill.Store
-	Hooks         *hook.Runner
-	Memory        *memory.Set
-	Cleanup       func()
+	Runner         agent.Runner
+	Executor       *agent.Agent
+	Guardian       *guardian.Session
+	Sink           event.Sink
+	Policy         permission.Policy
+	Label          string
+	ModelRef       string
+	SystemPrompt   string
+	GuidancePrompt string
+	SessionDir     string
+	SessionPath    string
+	Host           *plugin.Host
+	Commands       []command.Command
+	Skills         []skill.Skill
+	AllSkills      []skill.Skill
+	SkillStore     *skill.Store
+	AllSkillStore  *skill.Store
+	Hooks          *hook.Runner
+	Memory         *memory.Set
+	Cleanup        func()
 	// BalanceURL/BalanceKey wire the active provider's optional wallet-balance
 	// endpoint and bearer key; empty when the provider declares no balance_url.
 	BalanceURL    string

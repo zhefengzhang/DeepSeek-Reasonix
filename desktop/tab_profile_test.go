@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"reasonix/internal/agent"
 	"reasonix/internal/boot"
 	"reasonix/internal/control"
 )
@@ -682,4 +683,89 @@ func userConfigPathForTest() string {
 		return dir + "/reasonix/reasonix.toml"
 	}
 	return ""
+}
+
+func TestEffortPersistedAndRestoredViaBranchMeta(t *testing.T) {
+	isolateDesktopUserDirs(t)
+
+	dir := t.TempDir()
+	sessionPath := filepath.Join(dir, "test.jsonl")
+
+	// Create an empty session file so EnsureBranchMeta can succeed.
+	if err := os.WriteFile(sessionPath, nil, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	// --- Write: save effort to BranchMeta ---
+	tab := testTab("effort-test", t.TempDir())
+	eff := "max"
+	tab.effort = &eff
+
+	if err := saveTabSessionMeta(tab, sessionPath); err != nil {
+		t.Fatalf("saveTabSessionMeta: %v", err)
+	}
+
+	// --- Read back: verify effort in BranchMeta ---
+	meta, ok, err := agent.LoadBranchMeta(sessionPath)
+	if err != nil || !ok {
+		t.Fatalf("LoadBranchMeta: err=%v ok=%v", err, ok)
+	}
+	if meta.Effort != "max" {
+		t.Fatalf("BranchMeta.Effort = %q, want max", meta.Effort)
+	}
+
+	// --- Restore: load session profile and apply to a fresh tab ---
+	profile := loadTabSessionProfile(sessionPath)
+	if profile.effort != "max" {
+		t.Fatalf("tabSessionProfile.effort = %q, want max", profile.effort)
+	}
+
+	restored := testTab("restored", t.TempDir())
+	applyTabSessionProfile(restored, profile)
+	if restored.effort == nil {
+		t.Fatal("restored tab effort is nil, want max")
+	}
+	if *restored.effort != "max" {
+		t.Fatalf("restored tab effort = %q, want max", *restored.effort)
+	}
+}
+
+func TestEffortNotOverwrittenWhenEmptyInMeta(t *testing.T) {
+	isolateDesktopUserDirs(t)
+
+	dir := t.TempDir()
+	sessionPath := filepath.Join(dir, "empty-effort.jsonl")
+
+	if err := os.WriteFile(sessionPath, nil, 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	// Save meta without setting effort (legacy session scenario).
+	tab := testTab("no-effort", t.TempDir())
+	// tab.effort is nil — mimics a tab that never set effort.
+	if err := saveTabSessionMeta(tab, sessionPath); err != nil {
+		t.Fatalf("saveTabSessionMeta: %v", err)
+	}
+
+	// Verify BranchMeta.Effort is empty.
+	meta, ok, err := agent.LoadBranchMeta(sessionPath)
+	if err != nil || !ok {
+		t.Fatalf("LoadBranchMeta: err=%v ok=%v", err, ok)
+	}
+	if meta.Effort != "" {
+		t.Fatalf("BranchMeta.Effort = %q, want empty", meta.Effort)
+	}
+
+	// Restore: tab with pre-existing effort should NOT be overwritten.
+	restored := testTab("restored", t.TempDir())
+	existing := "high"
+	restored.effort = &existing
+	profile := loadTabSessionProfile(sessionPath)
+	applyTabSessionProfile(restored, profile)
+	if restored.effort == nil {
+		t.Fatal("restored tab effort is nil, want high")
+	}
+	if *restored.effort != "high" {
+		t.Fatalf("restored tab effort = %q, want high (should not be overwritten by empty meta)", *restored.effort)
+	}
 }

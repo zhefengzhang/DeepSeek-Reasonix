@@ -5727,6 +5727,9 @@ func saveTabSessionMeta(tab *WorkspaceTab, path string) error {
 	m.Mode = persistedTabMode(currentTabMode(tab))
 	m.ToolApprovalMode = persistedToolApprovalMode(currentTabToolApprovalMode(tab))
 	m.Goal = persistedTabGoal(tab)
+	if tab.effort != nil {
+		m.Effort = *tab.effort
+	}
 	if err := agent.SaveBranchMetaPreserveUpdated(path, m); err != nil {
 		return err
 	}
@@ -5773,6 +5776,7 @@ type tabSessionProfile struct {
 	mode             string
 	toolApprovalMode string
 	goal             string
+	effort           string
 }
 
 func defaultTabSessionProfile() tabSessionProfile {
@@ -5792,6 +5796,7 @@ func tabSessionProfileFromMeta(sessionPath string, meta agent.BranchMeta) tabSes
 		profile.toolApprovalMode = control.ToolApprovalYolo
 	}
 	profile.goal = runningTabSessionGoal(sessionPath, meta.Goal)
+	profile.effort = meta.Effort
 	return profile
 }
 
@@ -5815,6 +5820,10 @@ func applyTabSessionProfile(tab *WorkspaceTab, profile tabSessionProfile) {
 	}
 	tab.mode = tabModeFromAxes(tabModeHasPlan(tab.mode), tab.toolApprovalMode == control.ToolApprovalYolo)
 	tab.goal = strings.TrimSpace(profile.goal)
+	if profile.effort != "" {
+		eff := profile.effort
+		tab.effort = &eff
+	}
 }
 
 func persistedTabGoal(tab *WorkspaceTab) string {

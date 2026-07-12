@@ -15,8 +15,8 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -30,40 +30,40 @@ var hrmHTTPClient = &http.Client{Timeout: 3 * time.Second}
 
 // HeadroomStatusView is returned to the frontend.
 type HeadroomStatusView struct {
-	Running      bool    `json:"running"`
-	Version      string  `json:"version,omitempty"`
-	Installed    bool    `json:"installed"`
-	Port         int     `json:"port"`
-	Requests     int     `json:"requests,omitempty"`
-	TokensSaved  int     `json:"tokensSaved,omitempty"`
-	SavingsPct   float64 `json:"savingsPct,omitempty"`
-	CostSaved    float64 `json:"costSaved,omitempty"`
-	CostCurrency string  `json:"costCurrency,omitempty"`
-	LifetimeTokens int     `json:"lifetimeTokens,omitempty"`
-	LifetimePct    float64 `json:"lifetimePct,omitempty"`
-	LifetimeCost   float64 `json:"lifetimeCost,omitempty"`
-	DisableKompress bool  `json:"disableKompress,omitempty"` // true when Kompress ML is disabled
-	ErrorMessage string  `json:"errorMessage,omitempty"`
-	Warming      bool    `json:"warming,omitempty"` // true when Kompress enabled but not yet used
+	Running         bool    `json:"running"`
+	Version         string  `json:"version,omitempty"`
+	Installed       bool    `json:"installed"`
+	Port            int     `json:"port"`
+	Requests        int     `json:"requests,omitempty"`
+	TokensSaved     int     `json:"tokensSaved,omitempty"`
+	SavingsPct      float64 `json:"savingsPct,omitempty"`
+	CostSaved       float64 `json:"costSaved,omitempty"`
+	CostCurrency    string  `json:"costCurrency,omitempty"`
+	LifetimeTokens  int     `json:"lifetimeTokens,omitempty"`
+	LifetimePct     float64 `json:"lifetimePct,omitempty"`
+	LifetimeCost    float64 `json:"lifetimeCost,omitempty"`
+	DisableKompress bool    `json:"disableKompress,omitempty"` // true when Kompress ML is disabled
+	ErrorMessage    string  `json:"errorMessage,omitempty"`
+	Warming         bool    `json:"warming,omitempty"` // true when Kompress enabled but not yet used
 }
 
 // headroomSidecar wraps the headroom proxy subprocess.
 type headroomSidecar struct {
-	mu              sync.Mutex
-	cmd             *exec.Cmd
-	port            int
-	mode            string
-	cancel          context.CancelFunc
-	stopped         chan struct{}
-	installedAt     time.Time  // zero until first probe
-	installedVal    bool       // cached result of installed()
-	versionVal      string     // cached result of version()
-	wasEverReady    bool       // true once the proxy has been healthy at least once
-	inputPricePer1M float64    // input cost per 1M tokens in user currency
-	priceCurrency   string     // e.g. "¥"
-	startErr        string     // last auto-start error; consumed by emitHeadroomStats
-	startRetried    bool       // true after one retry attempt from poll loop
-	kompressDisabled bool     // true when Kompress ML is disabled by config
+	mu               sync.Mutex
+	cmd              *exec.Cmd
+	port             int
+	mode             string
+	cancel           context.CancelFunc
+	stopped          chan struct{}
+	installedAt      time.Time // zero until first probe
+	installedVal     bool      // cached result of installed()
+	versionVal       string    // cached result of version()
+	wasEverReady     bool      // true once the proxy has been healthy at least once
+	inputPricePer1M  float64   // input cost per 1M tokens in user currency
+	priceCurrency    string    // e.g. "¥"
+	startErr         string    // last auto-start error; consumed by emitHeadroomStats
+	startRetried     bool      // true after one retry attempt from poll loop
+	kompressDisabled bool      // true when Kompress ML is disabled by config
 }
 
 func newHeadroomSidecar() *headroomSidecar {
@@ -326,12 +326,12 @@ func (h *headroomSidecar) healthCheck() bool {
 
 // proxyStats is the subset of /stats we care about.
 type proxyStats struct {
-	Requests        int
-	TokensSaved     int
-	SavingsPct      float64
-	LifetimeTokens  int     // persistent lifetime tokens saved
-	LifetimeUSD     float64 // persistent lifetime USD saved
-	LifetimeInput   int     // lifetime total input tokens
+	Requests       int
+	TokensSaved    int
+	SavingsPct     float64
+	LifetimeTokens int     // persistent lifetime tokens saved
+	LifetimeUSD    float64 // persistent lifetime USD saved
+	LifetimeInput  int     // lifetime total input tokens
 }
 
 func (h *headroomSidecar) fetchStats(port int) (*proxyStats, error) {
@@ -469,6 +469,7 @@ proxy.invoke(ctx)
 `
 	return os.WriteFile(path, []byte(content), 0644)
 }
+
 // autoStartHeadroom starts the headroom proxy when the app launches.
 func (a *App) autoStartHeadroom() {
 	if a.headroom == nil {
@@ -528,11 +529,11 @@ func patchHeadroomServer() error {
 		return fmt.Errorf("read server.py: %w", err)
 	}
 	s := string(data)
-	old := string([]byte{117,118,105,99,111,114,110,95,107,119,97,114,103,115,91,34,108,111,111,112,34,93,32,61,32,34,97,115,121,110,99,105,111,58,83,101,108,101,99,116,111,114,69,118,101,110,116,76,111,111,112,34})
+	old := string([]byte{117, 118, 105, 99, 111, 114, 110, 95, 107, 119, 97, 114, 103, 115, 91, 34, 108, 111, 111, 112, 34, 93, 32, 61, 32, 34, 97, 115, 121, 110, 99, 105, 111, 58, 83, 101, 108, 101, 99, 116, 111, 114, 69, 118, 101, 110, 116, 76, 111, 111, 112, 34})
 	if !strings.Contains(s, old) {
 		return nil
 	}
-	repl := string([]byte{117,118,105,99,111,114,110,95,107,119,97,114,103,115,91,34,108,111,111,112,34,93,32,61,32,34,97,115,121,110,99,105,111,34})
+	repl := string([]byte{117, 118, 105, 99, 111, 114, 110, 95, 107, 119, 97, 114, 103, 115, 91, 34, 108, 111, 111, 112, 34, 93, 32, 61, 32, 34, 97, 115, 121, 110, 99, 105, 111, 34})
 	s = strings.Replace(s, old, repl, 1)
 	if err := os.WriteFile(spath, []byte(s), 0644); err != nil {
 		return fmt.Errorf("write server.py: %w", err)
@@ -657,13 +658,13 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 // HeadroomConfigView carries headroom proxy settings from the frontend.
 type HeadroomConfigView struct {
 	Preset          string `json:"preset,omitempty"`
-	Mode            string `json:"mode,omitempty"`       // "token" | "cache"
+	Mode            string `json:"mode,omitempty"` // "token" | "cache"
 	CodeAware       *bool  `json:"codeAware,omitempty"`
 	DisableKompress *bool  `json:"disableKompress,omitempty"`
 	RequestTimeout  int    `json:"requestTimeout,omitempty"`
 	ShowLogWindow   *bool  `json:"showLogWindow,omitempty"`
 	GpuBackend      string `json:"gpuBackend,omitempty"` // "auto" | "cpu" | "dml" | "cuda"
-	KeepAlive       *bool  `json:"keepAlive,omitempty"`   // keep proxy running after exit
+	KeepAlive       *bool  `json:"keepAlive,omitempty"`  // keep proxy running after exit
 }
 
 // StopHeadroom stops the headroom proxy (Wails binding).
