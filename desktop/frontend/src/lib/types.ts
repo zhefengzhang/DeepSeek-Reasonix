@@ -1126,7 +1126,6 @@ export interface DesktopStartupSettingsView {
   statusBarStyle: string; // "icon" | "text"
   statusBarItems: string[]; // ordered visible status bar item ids
   checkUpdates: boolean; // check for new versions on startup
-  understandGraphStatus?: UnderstandGraphStatusView;
 }
 
 // Auto-updater payloads (desktop/updater.go). UpdateInfo drives the update banner;

@@ -505,9 +505,7 @@ func (a *App) DesktopStartupSettings() DesktopStartupSettingsView {
 	if err != nil {
 		return desktopStartupSettingsFromConfig(nil)
 	}
-	v := desktopStartupSettingsFromConfig(cfg)
-	v.UnderstandGraphStatus = buildGraphStatus(a.activeWorkspaceRoot())
-	return v
+	return desktopStartupSettingsFromConfig(cfg)
 }
 
 // Settings returns the current configuration for the Settings panel.

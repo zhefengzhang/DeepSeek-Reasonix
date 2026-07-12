@@ -1198,7 +1198,9 @@ export default function App() {
       ]);
       if (cancelled) return;
       applyDesktopPreferences(settings);
-      setUnderstandGraphStatus(settings.understandGraphStatus);
+      // Understand graph status needs the full Settings() call (not DesktopStartupSettings)
+      // because activeWorkspaceRoot() is only available after workspace init.
+      void app.Settings().then((full) => setUnderstandGraphStatus(full?.understandGraphStatus)).catch(() => {});
       hydrateDisplayMode(settings.displayMode);
       setSidebarImConnections(sidebarImConnectionsFromBot(settings.bot, t, runtimeStatus));
       setImTopicSources(sidebarImTopicSourcesFromBot(settings.bot, t));
