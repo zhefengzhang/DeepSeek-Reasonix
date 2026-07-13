@@ -168,6 +168,7 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 	env := append(os.Environ(),
 		"OPENAI_TARGET_API_URL="+upstreamBaseURL,
 		"ANTHROPIC_TARGET_API_URL="+upstreamBaseURL,
+		"HEADROOM_PORT="+strconv.Itoa(port),
 	)
 	// Compression engine flags — driven by config fields, not hardcoded
 	disableKompress := cfg.Headroom.HeadroomDisableKompress()
