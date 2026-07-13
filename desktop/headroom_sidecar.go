@@ -203,6 +203,13 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 	if rt := cfg.Headroom.RequestTimeout; rt > 0 {
 		env = append(env, "HEADROOM_REQUEST_TIMEOUT="+strconv.Itoa(rt))
 	}
+	// Protect Reasonix's file and navigation tools from headroom compression.
+	// headroom's DEFAULT_EXCLUDE_TOOLS covers Read/Edit/Write/Glob/Grep
+	// (Claude Code PascalCase) but Reasonix uses snake_case names that don't
+	// match. Lossy compression of read_file breaks old_string anchors for
+	// edit_file; compressing understand_search / code_index / ls destroys
+	// node IDs and paths the LLM uses for subsequent tool calls.
+	env = append(env, "HEADROOM_PROTECT_TOOL_RESULTS=read_file,edit_file,write_file,multi_edit,move_file,ls,code_index,understand_search,memory")
 	cmd.Env = env
 
 	// Capture stdout/stderr for logging

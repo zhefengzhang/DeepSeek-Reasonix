@@ -1,0 +1,132 @@
+{
+ "projectRoot": "D:\\Work\\Git\\my\\DeepSeek-Reasonix",
+ "batchFiles": [
+  {
+   "path": "desktop/favorites_app.go",
+   "language": "go",
+   "sizeLines": 0,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/favorites_app_test.go",
+   "language": "go",
+   "sizeLines": 0,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/App.tsx",
+   "language": "typescript",
+   "sizeLines": 3762,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/components/ApprovalModal.tsx",
+   "language": "typescript",
+   "sizeLines": 327,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/components/Composer.tsx",
+   "language": "typescript",
+   "sizeLines": 2702,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/components/FavoritesPanel.tsx",
+   "language": "tsx",
+   "sizeLines": 0,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/components/Message.tsx",
+   "language": "typescript",
+   "sizeLines": 727,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/components/Transcript.tsx",
+   "language": "typescript",
+   "sizeLines": 1287,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/lib/bridge.ts",
+   "language": "typescript",
+   "sizeLines": 3353,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/lib/favoritesStore.ts",
+   "language": "typescript",
+   "sizeLines": 0,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/lib/types.ts",
+   "language": "typescript",
+   "sizeLines": 1161,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/locales/en.ts",
+   "language": "typescript",
+   "sizeLines": 1856,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/locales/zh-TW.ts",
+   "language": "typescript",
+   "sizeLines": 1851,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/locales/zh.ts",
+   "language": "typescript",
+   "sizeLines": 1855,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/store/layout.ts",
+   "language": "typescript",
+   "sizeLines": 155,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/styles.css",
+   "language": "css",
+   "sizeLines": 27851,
+   "fileCategory": "markup"
+  },
+  {
+   "path": "desktop/headroom_sidecar.go",
+   "language": "go",
+   "sizeLines": 818,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/tab_profile_test.go",
+   "language": "go",
+   "sizeLines": 771,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/tabs.go",
+   "language": "go",
+   "sizeLines": 6254,
+   "fileCategory": "code"
+  },
+  {
+   "path": "internal/agent/branch.go",
+   "language": "go",
+   "sizeLines": 358,
+   "fileCategory": "code"
+  },
+  {
+   "path": "internal/control/controller.go",
+   "language": "go",
+   "sizeLines": 4145,
+   "fileCategory": "code"
+  }
+ ],
+ "batchImportData": {}
+}
