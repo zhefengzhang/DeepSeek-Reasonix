@@ -80,6 +80,7 @@ export function Transcript({
   items,
   live,
   tabId,
+  workspaceRoot,
   footerHeight = 0,
   onPrompt,
   onEditPrompt,
@@ -103,6 +104,7 @@ export function Transcript({
   items: Item[];
   live?: LiveStream;
   tabId?: string;
+  workspaceRoot?: string;
   footerHeight?: number;
   onPrompt: (text: string) => void;
   onEditPrompt?: (turn: number, displayText: string, submitText?: string) => boolean | void | Promise<boolean | void>;
@@ -373,6 +375,7 @@ export function Transcript({
   const hotZoneNodes = useMemo<ReactNode[]>(() => {
     const out: ReactNode[] = [];
     let actionText = "";
+    let actionMessageId = "";
     let actionReady = false;
     let activeTurn: number | undefined;
     const pushTurnActions = () => {
@@ -384,6 +387,8 @@ export function Transcript({
           key={`ta-${turn}`}
           text={actionText}
           turn={turn}
+          workspaceRoot={workspaceRoot}
+          messageId={actionMessageId}
           openMenu={openMenu}
           onOpenMenu={(menu) => setOpenAction(menu ? { turn, menu } : null)}
           checkpoint={checkpointsByTurn.get(turn)}
@@ -397,6 +402,7 @@ export function Transcript({
         />,
       );
       actionText = "";
+      actionMessageId = "";
       actionReady = false;
     };
 
@@ -501,6 +507,7 @@ export function Transcript({
           );
           if (!it.streaming && it.text.trim() !== "") {
             actionText = it.text;
+            actionMessageId = it.id;
             actionReady = true;
           }
         }
@@ -574,6 +581,7 @@ export function Transcript({
             out.push(<LiveAssistantMessage key={it.id} item={it as AssistantItem} defaultExpanded={false} creationMode={creationMode} />);
             if (!it.streaming && it.text.trim() !== "") {
               actionText = it.text;
+              actionMessageId = it.id;
               actionReady = true;
             }
             break;
@@ -694,6 +702,7 @@ const WarmZone = memo(function WarmZone({
   warmSetOpenAction,
   warmOnEdit,
   tabId,
+  workspaceRoot,
   creationMode,
   onToggleColdPage,
   onToggleWarmTurn,
@@ -716,6 +725,7 @@ const WarmZone = memo(function WarmZone({
   warmSetOpenAction: (action: OpenTurnAction | null) => void;
   warmOnEdit?: (turn: number, displayText: string, submitText?: string) => boolean | void | Promise<boolean | void>;
   tabId?: string;
+  workspaceRoot?: string;
   creationMode?: boolean;
   onToggleColdPage: () => void;
   onToggleWarmTurn: (g: number, expand: boolean) => void;
@@ -772,6 +782,7 @@ const WarmZone = memo(function WarmZone({
               setOpenAction={warmSetOpenAction}
               onEdit={warmOnEdit}
               tabId={tabId}
+              workspaceRoot={workspaceRoot}
               creationMode={creationMode}
             />
           </WarmTurnCard>,
@@ -819,6 +830,7 @@ function WarmTurnItems({
   setOpenAction,
   onEdit,
   tabId,
+  workspaceRoot,
   creationMode = false,
 }: {
   startIdx: number;
@@ -835,10 +847,12 @@ function WarmTurnItems({
   setOpenAction: (action: OpenTurnAction | null) => void;
   onEdit?: (turn: number, displayText: string, submitText?: string) => boolean | void | Promise<boolean | void>;
   tabId?: string;
+  workspaceRoot?: string;
   creationMode?: boolean;
 }) {
   const nodes: React.ReactNode[] = [];
   let actionText = "";
+  let actionMessageId = "";
   let actionReady = false;
   let activeTurn: number | undefined;
   const pushTurnActions = () => {
@@ -850,6 +864,8 @@ function WarmTurnItems({
         key={`ta-${turn}`}
         text={actionText}
         turn={turn}
+        workspaceRoot={workspaceRoot}
+        messageId={actionMessageId}
         openMenu={openMenu}
         onOpenMenu={(menu) => setOpenAction(menu ? { turn, menu } : null)}
         checkpoint={checkpoints.get(turn)}
@@ -863,6 +879,7 @@ function WarmTurnItems({
       />,
     );
     actionText = "";
+    actionMessageId = "";
     actionReady = false;
   };
 
@@ -927,6 +944,7 @@ function WarmTurnItems({
         nodes.push(<AssistantMessage key={it.id} item={it} defaultExpanded={false} creationMode={creationMode} />);
         if (!it.streaming && it.text.trim() !== "") {
           actionText = it.text;
+          actionMessageId = it.id;
           actionReady = true;
         }
         break;

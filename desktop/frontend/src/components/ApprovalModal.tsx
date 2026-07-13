@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import gsap from "gsap";
 import { useT } from "../lib/i18n";
+import { useFavoritesStore } from "../lib/favoritesStore";
 import type { ComposerInsertRequest, DirEntry, WireApproval } from "../lib/types";
 import { PromptAction, PromptBadge, PromptHeaderAction, PromptShelf } from "./PromptShelf";
 import { playAttentionChime } from "../lib/sound";
@@ -55,6 +56,12 @@ export function ApprovalModal({
   const showToolDetailsByDefault = !isPlanApproval && hasToolDetails;
   const [revisionOpen, setRevisionOpen] = useState(false);
   const [revisionText, setRevisionText] = useState("");
+  // Sync plan revision text to favorites store for "add current input" feature.
+  useEffect(() => {
+    useFavoritesStore.getState().setComposerText(revisionText);
+  }, [revisionText]);
+
+
   const [detailsOpen, setDetailsOpen] = useState(() => showToolDetailsByDefault);
   const [selectedIndex, setSelectedIndex] = useState(() => (isPlanApproval ? 1 : 0));
   const cardRef = useRef<HTMLDivElement | null>(null);

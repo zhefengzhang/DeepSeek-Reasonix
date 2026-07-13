@@ -29,6 +29,7 @@ import {
   Pencil,
   Trash2,
   AlarmClock,
+  Bookmark,
   Brain,
   Cpu,
   Palette,
@@ -53,6 +54,8 @@ import { CommandPalette, type PaletteItem } from "./components/CommandPalette";
 import { UpdateBanner } from "./components/UpdateBanner";
 import { ContextPanel } from "./components/ContextPanel";
 import { WorkspacePanel } from "./components/WorkspacePanel";
+import { FavoritesPanel } from "./components/FavoritesPanel";
+import { useFavoritesStore } from "./lib/favoritesStore";
 import { Tooltip } from "./components/Tooltip";
 import { StartupSplash } from "./components/StartupSplash";
 import { OnboardingOverlay } from "./components/OnboardingOverlay";
@@ -1819,6 +1822,13 @@ export default function App() {
     return { scope, workspaceRoot: activeWorkspaceRoot };
   }, [activeTab?.scope, activeTab?.workspaceRoot]);
 
+  // Eager-load favorites so bookmark icons show correct state before the
+  // favorites panel is first opened.
+  useEffect(() => {
+    const root = activeTab?.workspaceRoot || state.meta?.cwd || "";
+    if (root) void useFavoritesStore.getState().load(root);
+  }, [activeTab?.workspaceRoot, state.meta?.cwd]);
+
   useEffect(() => {
     void refreshTabMetas();
     const id = window.setInterval(() => void refreshTabMetas(), 2000);
@@ -3432,6 +3442,7 @@ export default function App() {
                 items={displayItems}
                 live={state.live}
                 tabId={activeTabId}
+                workspaceRoot={activeTab?.workspaceRoot || state.meta?.cwd || ""}
                 footerHeight={footerHeight}
                 onPrompt={handleTranscriptPrompt}
                 onEditPrompt={handleEditPrompt}
@@ -3642,6 +3653,16 @@ export default function App() {
                   <GitBranch size={13} />
                   <span className="workbench-dock__tab-label">{t("workspace.changedTab")}</span>
                 </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={rightDockMode === "favorites"}
+                  className={`workbench-dock__tab${rightDockMode === "favorites" ? " workbench-dock__tab--active" : ""}`}
+                  onClick={() => openRightDockMode("favorites")}
+                >
+                  <Bookmark size={13} />
+                  <span className="workbench-dock__tab-label">{t("workspace.favoritesTab")}</span>
+                </button>
               </div>
             </div>
             <div className="workbench-dock__body">
@@ -3659,6 +3680,10 @@ export default function App() {
                   balance={state.balance}
                   sessionGen={state.sessionGen}
                   refreshKey={dockRefreshKey}
+                />
+              ) : rightDockMode === "favorites" ? (
+                <FavoritesPanel
+                  workspaceRoot={activeTab?.workspaceRoot || state.meta?.cwd || ""}
                 />
               ) : (
                 <WorkspacePanel

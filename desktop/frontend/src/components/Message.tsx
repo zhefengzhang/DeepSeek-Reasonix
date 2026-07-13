@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from "react";
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from "react";
-import { BrainCircuit, ChevronDown, ChevronRight, FileText, Folder, GitBranch, Image, MessageSquare, Pencil, RotateCcw, ScrollText } from "lucide-react";
+import { Bookmark, BrainCircuit, ChevronDown, ChevronRight, FileText, Folder, GitBranch, Image, MessageSquare, Pencil, RotateCcw, ScrollText } from "lucide-react";
 import { Markdown } from "./Markdown";
 import { CopyButton } from "./CopyButton";
 import { ProcessBrainIcon } from "./ProcessCard";
@@ -10,6 +10,7 @@ import type { DisplayAttachment } from "../lib/attachmentDisplay";
 import { app } from "../lib/bridge";
 import { replaySubmitText } from "../lib/editReplay";
 import { useT } from "../lib/i18n";
+import { useFavoritesStore } from "../lib/favoritesStore";
 import { Tooltip } from "./Tooltip";
 import { useGSAPCollapse } from "../lib/useGSAPCollapse";
 import { displayReasoningText } from "../lib/reasoningDisplay";
@@ -155,6 +156,8 @@ export function UserMessage({
   createdAt,
   onEdit,
   editDisabled = false,
+  workspaceRoot,
+  messageId,
 }: {
   text: string;
   submitText?: string;
@@ -165,6 +168,8 @@ export function UserMessage({
   createdAt?: number;
   onEdit?: (turn: number, displayText: string, submitText?: string) => boolean | void | Promise<boolean | void>;
   editDisabled?: boolean;
+  workspaceRoot?: string;
+  messageId?: string;
 }) {
   const t = useT();
   const imSource = parseImSourceMessage(text);
@@ -175,6 +180,18 @@ export function UserMessage({
   const sourceLabel = imSource ? imSourceLabel(imSource, t) : "";
   const sentAt = createdAt === undefined ? null : messageDate(createdAt);
   const canEdit = turn !== undefined && onEdit !== undefined && !editDisabled;
+  const favItems = useFavoritesStore((s) => s.items);
+  const favMatchId = id || messageId;
+  const bookmarkedItem = favMatchId ? favItems.find((item) => item.originalMessageId === favMatchId) : undefined;
+  const isBookmarked = bookmarkedItem != null;
+  const toggleBookmark = async () => {
+    if (!workspaceRoot) return;
+    if (isBookmarked && bookmarkedItem) {
+      useFavoritesStore.getState().remove(bookmarkedItem.id);
+    } else {
+      await useFavoritesStore.getState().add(actionText, "user", favMatchId || "");
+    }
+  };
   const [editing, setEditing] = useState(false);
   const [draftText, setDraftText] = useState(displayText);
   const [draftAttachments, setDraftAttachments] = useState<DisplayAttachment[]>(attachments);
@@ -391,6 +408,17 @@ export function UserMessage({
             </span>
           )}
           <CopyButton text={actionText} label={t("msg.copy")} showInlineLabel={false} className="msg-meta__btn msg-meta__copy" />
+          {workspaceRoot && (
+            <button
+              className={`msg-meta__btn msg-meta__bookmark${isBookmarked ? " msg-meta__bookmark--active" : ""}`}
+              type="button"
+              aria-label={isBookmarked ? t("favorites.unbookmark") : t("favorites.bookmark")}
+              title={isBookmarked ? t("favorites.unbookmark") : t("favorites.bookmark")}
+              onClick={toggleBookmark}
+            >
+              <Bookmark size={14} fill={isBookmarked ? "currentColor" : "none"} />
+            </button>
+          )}
           {onEdit && (
             <button
               className="msg-meta__btn"
@@ -419,6 +447,8 @@ export function TurnActions({
   actionPending = false,
   rewindDisabled = false,
   hoverMenus = false,
+  workspaceRoot,
+  messageId,
 }: {
   text: string;
   turn?: number;
@@ -429,8 +459,21 @@ export function TurnActions({
   actionPending?: boolean;
   rewindDisabled?: boolean;
   hoverMenus?: boolean;
+  workspaceRoot?: string;
+  messageId?: string;
 }) {
   const t = useT();
+  const favItems = useFavoritesStore((s) => s.items);
+  const bookmarkedItem = messageId ? favItems.find((fav) => fav.originalMessageId === messageId) : undefined;
+  const isBookmarked = bookmarkedItem != null;
+  const toggleBookmark = async () => {
+    if (!workspaceRoot) return;
+    if (isBookmarked && bookmarkedItem) {
+      useFavoritesStore.getState().remove(bookmarkedItem.id);
+    } else {
+      await useFavoritesStore.getState().add(text, "assistant", messageId || "");
+    }
+  };
   const [confirmScope, setConfirmScope] = useState<MessageActionScope | null>(null);
   const canAct = onRewind != null && turn != null;
   const actionDisabledReason = (scope: string): string => {
@@ -559,6 +602,17 @@ export function TurnActions({
   return (
     <div className={`turn-actions${openMenu ? " turn-actions--open" : ""}${hoverMenus ? " turn-actions--hover-menu" : ""}`}>
       <CopyButton text={text} label={t("msg.copy")} />
+      {workspaceRoot && (
+        <button
+          className={`turn-actions__btn msg-meta__bookmark${isBookmarked ? " msg-meta__bookmark--active" : ""}`}
+          type="button"
+          aria-label={isBookmarked ? t("favorites.unbookmark") : t("favorites.bookmark")}
+          title={isBookmarked ? t("favorites.unbookmark") : t("favorites.bookmark")}
+          onClick={toggleBookmark}
+        >
+          <Bookmark size={13} fill={isBookmarked ? "currentColor" : "none"} />
+        </button>
+      )}
       {canAct && (
         <>
           <button

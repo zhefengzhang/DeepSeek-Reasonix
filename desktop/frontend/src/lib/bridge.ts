@@ -73,6 +73,7 @@ import type {
   GitCommitDetailView,
   HeadroomStatusView,
   WorkspaceView,
+  FavoritesView,
 } from "./types";
 
 const GLOBAL_PROJECT_ORDER_KEY = "__global__";
@@ -236,6 +237,9 @@ export interface AppBindings {
   GitCheckout(branch: string): Promise<void>;
   WorkspaceGitHistory(tabID: string, path: string): Promise<GitCommitView[]>;
   WorkspaceGitCommitDetail(tabID: string, hash: string, path: string): Promise<GitCommitDetailView>;
+  GetFavorites(workspaceRoot: string): Promise<FavoritesView>;
+  SaveFavorites(workspaceRoot: string, view: FavoritesView): Promise<void>;
+  GenerateFavoriteID(): Promise<string>;
   OpenWorkspacePath(rel: string): Promise<void>;
   RevealWorkspacePath(rel: string): Promise<void>;
   RevealPath(path: string): Promise<void>;
@@ -2461,6 +2465,15 @@ function makeMockApp(): AppBindings {
         return { diff: "--- a/mock\n+++ b/mock\n@@ -1,1 +1,1 @@\n-mock\n+mock diff" };
       }
       return { files: ["mock_file_1.ts", "mock_file_2.ts"] };
+    },
+    async GetFavorites(_workspaceRoot: string): Promise<FavoritesView> {
+      return { items: [] };
+    },
+    async SaveFavorites(_workspaceRoot: string, _view: FavoritesView): Promise<void> {
+      // no-op in mock
+    },
+    async GenerateFavoriteID(): Promise<string> {
+      return "fav_mock_" + Date.now().toString(36);
     },
     async OpenWorkspacePath(rel: string) {
       console.info("mock OpenWorkspacePath", rel);

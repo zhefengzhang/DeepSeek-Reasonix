@@ -142,6 +142,7 @@ export const en = {
   "rightDock.workbench": "Workspace panel",
   "rightDock.views": "Workspace views",
   "rightDock.overview": "Overview",
+  "rightDock.favorites": "Favorites",
 
   // topic bar
   "topicBar.renameSession": "Rename session",
@@ -199,6 +200,26 @@ export const en = {
   "workspace.sourceGit": "Git",
   "workspace.deleted": "Deleted",
   "workspace.revealInFileManager": "Show in file manager",
+  "workspace.favoritesTab": "Favorites",
+
+  // favorites panel
+  "favorites.bookmark": "Bookmark",
+  "favorites.unbookmark": "Unbookmark",
+  "favorites.addCurrent": "Add current input",
+  "favorites.edit": "Edit",
+  "favorites.delete": "Delete",
+  "favorites.copy": "Copy",
+  "favorites.empty": "No favorites yet. Click the bookmark icon on a message to add it here.",
+  "favorites.confirmDelete": "Delete this item?",
+  "favorites.dragHint": "Drag to reorder",
+  "favorites.sourceUser": "You",
+  "favorites.sourceAssistant": "AI",
+  "favorites.prevPage": "Previous",
+  "favorites.nextPage": "Next",
+  "favorites.pageOf": "Page {current} of {total}",
+  "favorites.search": "Search favorites",
+  "favorites.searchResult": "{n} found",
+  "favorites.pin": "Pin to top",
 
   // mcp & skills drawer
   "caps.title": "MCP & Skills",

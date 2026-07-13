@@ -143,6 +143,7 @@ export const zh: Record<DictKey, string> = {
   "rightDock.workbench": "工作区面板",
   "rightDock.views": "工作区视图",
   "rightDock.overview": "概览",
+  "rightDock.favorites": "收藏",
 
   // 话题栏
   "topicBar.renameSession": "重命名会话",
@@ -200,6 +201,26 @@ export const zh: Record<DictKey, string> = {
   "workspace.sourceGit": "Git",
   "workspace.deleted": "已删除",
   "workspace.revealInFileManager": "在文件管理器中显示",
+  "workspace.favoritesTab": "收藏",
+
+  // favorites panel
+  "favorites.bookmark": "收藏",
+  "favorites.unbookmark": "取消收藏",
+  "favorites.addCurrent": "添加当前输入",
+  "favorites.edit": "编辑",
+  "favorites.delete": "删除",
+  "favorites.copy": "复制",
+  "favorites.empty": "暂无收藏内容，在会话中点击书签图标添加。",
+  "favorites.confirmDelete": "确认删除此内容？",
+  "favorites.dragHint": "拖拽排序",
+  "favorites.sourceUser": "你",
+  "favorites.sourceAssistant": "AI",
+  "favorites.prevPage": "上一页",
+  "favorites.nextPage": "下一页",
+  "favorites.pageOf": "第 {current} / {total} 页",
+  "favorites.search": "搜索收藏",
+  "favorites.searchResult": "找到 {n} 条",
+  "favorites.pin": "置顶",
 
   // MCP 与技能抽屉
   "caps.title": "MCP 与技能",

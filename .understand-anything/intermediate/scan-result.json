@@ -178,7 +178,7 @@
     {
       "path": ".reasonix/desktop-topic-created-at.json",
       "language": "json",
-      "sizeLines": 2,
+      "sizeLines": 3,
       "fileCategory": "config"
     },
     {
@@ -394,7 +394,7 @@
     {
       "path": ".understand-anything/intermediate/batches.json",
       "language": "json",
-      "sizeLines": 17405,
+      "sizeLines": 17407,
       "fileCategory": "config"
     },
     {
@@ -412,7 +412,7 @@
     {
       "path": ".understand-anything/knowledge-graph.json",
       "language": "json",
-      "sizeLines": 17601,
+      "sizeLines": 17701,
       "fileCategory": "config"
     },
     {
@@ -2062,7 +2062,7 @@
     {
       "path": "desktop/headroom_sidecar.go",
       "language": "go",
-      "sizeLines": 817,
+      "sizeLines": 818,
       "fileCategory": "code"
     },
     {
@@ -2296,7 +2296,7 @@
     {
       "path": "desktop/tab_profile_test.go",
       "language": "go",
-      "sizeLines": 685,
+      "sizeLines": 771,
       "fileCategory": "code"
     },
     {
@@ -2332,7 +2332,7 @@
     {
       "path": "desktop/tabs.go",
       "language": "go",
-      "sizeLines": 6245,
+      "sizeLines": 6254,
       "fileCategory": "code"
     },
     {
@@ -2842,7 +2842,7 @@
     {
       "path": "internal/agent/branch.go",
       "language": "go",
-      "sizeLines": 357,
+      "sizeLines": 358,
       "fileCategory": "code"
     },
     {

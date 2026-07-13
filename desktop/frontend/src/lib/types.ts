@@ -617,6 +617,19 @@ export interface GitCommitDetailView {
   files?: string[];
 }
 
+export interface FavoriteItem {
+  id: string;
+  text: string;
+  source: "user" | "assistant";
+  originalMessageId: string;
+  createdAt: number;
+  order: number;
+}
+
+export interface FavoritesView {
+  items: FavoriteItem[];
+}
+
 export interface ComposerInsertRequest {
   id: number;
   text: string;
