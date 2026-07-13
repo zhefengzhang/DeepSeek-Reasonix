@@ -28080,3 +28080,48 @@ body > .mermaid-diagram--fullscreen {
   color: var(--fg-faint);
   white-space: nowrap;
 }
+
+/* ── Favorites reading mode ─────────────────────────────────────────── */
+.favorites-panel__reading-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.favorites-panel__reading-source {
+  font-size: 12px;
+  color: var(--fg-faint);
+}
+
+.favorites-panel__reading-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.favorites-panel__reading-textarea {
+  flex: 1 1 0;
+  width: 100%;
+  min-height: 0;
+  padding: 12px;
+  border: none;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 14px;
+  line-height: 1.7;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+
+.favorites-panel__reading-hint {
+  padding: 6px 12px;
+  font-size: 11px;
+  color: var(--fg-faint);
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}

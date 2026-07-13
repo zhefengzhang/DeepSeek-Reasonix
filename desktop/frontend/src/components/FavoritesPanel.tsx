@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState, type DragEvent as ReactDragEvent } from "react";
-import { Bookmark, GripVertical, Pencil, Pin, Plus, Search, Trash2, X } from "lucide-react";
+import { Bookmark, GripVertical, Pin, Plus, Search, Trash2, X } from "lucide-react";
 import { useFavoritesStore } from "../lib/favoritesStore";
 import { useT } from "../lib/i18n";
 import { useToast } from "../lib/toast";
 import { CopyButton } from "./CopyButton";
+import { ModalCloseButton } from "./ModalCloseButton";
 import type { FavoriteItem } from "../lib/types";
 
 interface FavoritesPanelProps {
@@ -51,34 +52,42 @@ export function FavoritesPanel({ workspaceRoot }: FavoritesPanelProps) {
   const totalPages = Math.max(1, Math.ceil(filteredItems.length / 20));
   const pageItems = filteredItems.slice((currentPage - 1) * 20, currentPage * 20);
 
-  // ── editing state ──
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editText, setEditText] = useState("");
+  // ── read + edit mode (double-click on item) ──
+  const [readingId, setReadingId] = useState<string | null>(null);
+  const [readingText, setReadingText] = useState("");
+  const readingTextareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const startEdit = (item: FavoriteItem) => {
-    setEditingId(item.id);
-    setEditText(item.text);
+  const readingItem = readingId ? items.find((it) => it.id === readingId) : undefined;
+
+  const openReading = (item: FavoriteItem) => {
+    setReadingId(item.id);
+    setReadingText(item.text);
+    // Focus the textarea after render.
+    requestAnimationFrame(() => readingTextareaRef.current?.focus());
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditText("");
+  const closeReading = () => {
+    setReadingId(null);
+    setReadingText("");
   };
 
-  const saveEdit = (id: string) => {
-    const trimmed = editText.trim();
+  const saveReading = () => {
+    if (!readingId) return;
+    const trimmed = readingText.trim();
     if (trimmed) {
-      update(id, trimmed);
+      update(readingId, trimmed);
+    } else {
+      remove(readingId);
     }
-    setEditingId(null);
+    closeReading();
   };
 
-  const onEditKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>, id: string) => {
+  const onReadingKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Escape") {
-      cancelEdit();
-    } else if (e.key === "Enter" && !e.shiftKey) {
+      closeReading();
+    } else if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
-      saveEdit(id);
+      saveReading();
     }
   };
 
@@ -107,7 +116,6 @@ export function FavoritesPanel({ workspaceRoot }: FavoritesPanelProps) {
     const from = dragItem.current;
     const to = dragOverItem.current;
     if (from >= 0 && to >= 0 && from !== to) {
-      // Convert page-local indices to global indices.
       const globalFrom = (currentPage - 1) * 20 + from;
       const globalTo = (currentPage - 1) * 20 + to;
       reorder(globalFrom, globalTo);
@@ -121,7 +129,6 @@ export function FavoritesPanel({ workspaceRoot }: FavoritesPanelProps) {
     const text = composerText.trim();
     if (!text) return;
     await add(text, "user", "");
-    // Jump to the last page so the user sees the newly added item.
     const tp = Math.max(1, Math.ceil((items.length + 1) / 20));
     setPage(tp);
   }, [composerText, add, items.length, setPage]);
@@ -159,6 +166,42 @@ export function FavoritesPanel({ workspaceRoot }: FavoritesPanelProps) {
     );
   }
 
+  // ── reading mode ──
+  if (readingItem) {
+    const sourceLabel = readingItem.source === "user" ? t("favorites.sourceUser") : t("favorites.sourceAssistant");
+    return (
+      <div className="favorites-panel">
+        <div className="favorites-panel__reading-toolbar">
+          <ModalCloseButton label={t("common.close")} onClick={closeReading} />
+          <span className="favorites-panel__reading-source">{sourceLabel}</span>
+          <div className="favorites-panel__reading-actions">
+            <CopyButton text={readingText} label={t("favorites.copy")} />
+            <button
+              className="msg-meta__btn"
+              type="button"
+              aria-label={t("common.save")}
+              title={t("common.save")}
+              onClick={saveReading}
+            >
+              <Bookmark size={14} />
+            </button>
+          </div>
+        </div>
+        <textarea
+          ref={readingTextareaRef}
+          className="favorites-panel__reading-textarea"
+          value={readingText}
+          onChange={(e) => setReadingText(e.target.value)}
+          onKeyDown={onReadingKeyDown}
+        />
+        <div className="favorites-panel__reading-hint">
+          {t("favorites.readingHint")}
+        </div>
+      </div>
+    );
+  }
+
+  // ── list mode ──
   return (
     <div className="favorites-panel">
       {items.length > 0 && (
@@ -197,89 +240,56 @@ export function FavoritesPanel({ workspaceRoot }: FavoritesPanelProps) {
       )}
       <div className="favorites-panel__list">
         {pageItems.map((item, index) => {
-          const isEditing = editingId === item.id;
           const isConfirmingDelete = deleteId === item.id;
-          const sourceLabel = item.source === "user" ? t("favorites.sourceUser") : t("favorites.sourceAssistant");
 
           return (
             <div
               key={item.id}
-              className={`favorites-panel__item${isEditing ? " favorites-panel__item--editing" : ""}`}
-              draggable={!isEditing && !searchQuery.trim()}
+              className="favorites-panel__item"
+              draggable={!searchQuery.trim()}
               onDragStart={(e) => onDragStart(e, index)}
               onDragOver={(e) => onDragOver(e, index)}
               onDragEnd={onDragEnd}
+              onDoubleClick={() => openReading(item)}
             >
               {/* Pin to top */}
-              {!isEditing && (
-                <button
-                  className="msg-meta__btn favorites-panel__pin"
-                  type="button"
-                  aria-label={t("favorites.pin")}
-                  title={t("favorites.pin")}
-                  onClick={() => {
-                    const globalIdx = items.indexOf(item);
-                    if (globalIdx >= 0) {
-                      reorder(globalIdx, 0);
-                      setPage(1);
-                    }
-                  }}
-                >
-                  <Pin size={13} />
-                </button>
-              )}
+              <button
+                className="msg-meta__btn favorites-panel__pin"
+                type="button"
+                aria-label={t("favorites.pin")}
+                title={t("favorites.pin")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const globalIdx = items.indexOf(item);
+                  if (globalIdx >= 0) {
+                    reorder(globalIdx, 0);
+                    setPage(1);
+                  }
+                }}
+              >
+                <Pin size={13} />
+              </button>
+
               {/* Drag handle */}
-              {!isEditing && !searchQuery.trim() && (
+              {!searchQuery.trim() && (
                 <span className="favorites-panel__grip" aria-label={t("favorites.dragHint")} title={t("favorites.dragHint")}>
                   <GripVertical size={14} />
                 </span>
               )}
 
               {/* Source badge */}
-              <span className="favorites-panel__source" title={sourceLabel}>
+              <span className="favorites-panel__source">
                 {item.source === "user" ? "👤" : "🤖"}
               </span>
 
-              {/* Text content or edit textarea */}
-              {isEditing ? (
-                <textarea
-                  ref={(el) => { if (el) el.focus(); }}
-                  className="favorites-panel__textarea"
-                  value={editText}
-                  onChange={(e) => setEditText(e.target.value)}
-                  onKeyDown={(e) => onEditKeyDown(e, item.id)}
-                  rows={Math.max(2, Math.min(6, editText.split(/\r?\n/).length))}
-                />
-              ) : (
-                <span className="favorites-panel__text" title={item.text}>
-                  {item.text}
-                </span>
-              )}
+              {/* Text content */}
+              <span className="favorites-panel__text">
+                {item.text}
+              </span>
 
               {/* Actions */}
               <div className="favorites-panel__actions">
-                {isEditing ? (
-                  <>
-                    <button
-                      className="msg-meta__btn"
-                      type="button"
-                      aria-label={t("common.save")}
-                      title={t("common.save")}
-                      onClick={() => saveEdit(item.id)}
-                    >
-                      <Pencil size={14} />
-                    </button>
-                    <button
-                      className="msg-meta__btn"
-                      type="button"
-                      aria-label={t("common.cancel")}
-                      title={t("common.cancel")}
-                      onClick={cancelEdit}
-                    >
-                      <X size={14} />
-                    </button>
-                  </>
-                ) : isConfirmingDelete ? (
+                {isConfirmingDelete ? (
                   <>
                     <span className="favorites-panel__confirm-text">{t("favorites.confirmDelete")}</span>
                     <button
@@ -303,16 +313,6 @@ export function FavoritesPanel({ workspaceRoot }: FavoritesPanelProps) {
                   </>
                 ) : (
                   <>
-                    <CopyButton text={item.text} label={t("favorites.copy")} />
-                    <button
-                      className="msg-meta__btn"
-                      type="button"
-                      aria-label={t("favorites.edit")}
-                      title={t("favorites.edit")}
-                      onClick={() => startEdit(item)}
-                    >
-                      <Pencil size={14} />
-                    </button>
                     <button
                       className="msg-meta__btn"
                       type="button"

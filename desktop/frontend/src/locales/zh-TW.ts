@@ -1320,6 +1320,7 @@ export const zhTW: Record<DictKey, string> = {
   "favorites.pageOf": "第 {current} / {total} 頁",
   "favorites.search": "搜尋收藏",
   "favorites.searchResult": "找到 {n} 條",
+  "favorites.readingHint": "Ctrl+Enter 儲存，Esc 關閉",
   "favorites.pin": "置頂",
   "caps.mcpSummary": "{connected} 個已連線 · {failed} 個異常 · {tools} 個工具",
   "caps.availableServers": "可用 MCP",

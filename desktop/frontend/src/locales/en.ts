@@ -219,6 +219,7 @@ export const en = {
   "favorites.pageOf": "Page {current} of {total}",
   "favorites.search": "Search favorites",
   "favorites.searchResult": "{n} found",
+  "favorites.readingHint": "Ctrl+Enter to save, Esc to close",
   "favorites.pin": "Pin to top",
 
   // mcp & skills drawer

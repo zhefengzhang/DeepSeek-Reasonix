@@ -2,33 +2,15 @@
  "projectRoot": "D:\\Work\\Git\\my\\DeepSeek-Reasonix",
  "batchFiles": [
   {
-   "path": ".gitignore",
-   "language": "unknown",
-   "sizeLines": 0,
+   "path": "desktop/settings_app.go",
+   "language": "go",
+   "sizeLines": 2233,
    "fileCategory": "code"
   },
   {
-   "path": ".reasonix/desktop-topic-created-at.json",
-   "language": "json",
-   "sizeLines": 3,
-   "fileCategory": "config"
-  },
-  {
-   "path": ".reasonix/desktop-topic-title-sources.json",
-   "language": "json",
-   "sizeLines": 8,
-   "fileCategory": "config"
-  },
-  {
-   "path": ".reasonix/desktop-topic-titles.json",
-   "language": "json",
-   "sizeLines": 8,
-   "fileCategory": "config"
-  },
-  {
-   "path": "desktop/headroom_sidecar.go",
+   "path": "internal/boot/boot.go",
    "language": "go",
-   "sizeLines": 818,
+   "sizeLines": 1751,
    "fileCategory": "code"
   }
  ],

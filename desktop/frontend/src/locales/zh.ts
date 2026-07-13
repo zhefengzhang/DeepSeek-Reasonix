@@ -220,6 +220,7 @@ export const zh: Record<DictKey, string> = {
   "favorites.pageOf": "第 {current} / {total} 页",
   "favorites.search": "搜索收藏",
   "favorites.searchResult": "找到 {n} 条",
+  "favorites.readingHint": "Ctrl+Enter 保存，Esc 关闭",
   "favorites.pin": "置顶",
 
   // MCP 与技能抽屉

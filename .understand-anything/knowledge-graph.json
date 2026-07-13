@@ -12,8 +12,8 @@
    "wails"
   ],
   "description": "AI coding agent with memory, skills, multi-model support, and desktop UI.",
-  "analyzedAt": "2026-07-13T05:14:00.000Z",
-  "gitCommitHash": "f255f698228767bac95961982e2e5735851b4db4",
+  "analyzedAt": "2026-07-13T06:07:34.000Z",
+  "gitCommitHash": "371225a849af904f025edf105f2916def7c1c90f",
   "version": "1.0.0"
  },
  "nodes": [
@@ -14284,18 +14284,6 @@
    "complexity": "moderate"
   },
   {
-   "id": "file:internal/boot/boot.go",
-   "type": "file",
-   "name": "boot.go",
-   "filePath": "internal/boot/boot.go",
-   "summary": "go code file (1751 lines)",
-   "tags": [
-    "go",
-    "code"
-   ],
-   "complexity": "complex"
-  },
-  {
    "id": "file:internal/boot/token_profile.go",
    "type": "file",
    "name": "token_profile.go",
@@ -14390,71 +14378,6 @@
     "code"
    ],
    "complexity": "moderate"
-  },
-  {
-   "id": "type:desktop/settings_app.go:SettingsView",
-   "type": "class",
-   "name": "SettingsView",
-   "summary": "Top-level Settings panel payload struct containing all desktop settings views.",
-   "tags": [
-    "go",
-    "struct",
-    "settings",
-    "payload"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "type:desktop/settings_app.go:App",
-   "type": "class",
-   "name": "App",
-   "summary": "Main desktop app struct with methods for reading and writing all settings panels.",
-   "tags": [
-    "go",
-    "struct",
-    "app",
-    "settings"
-   ],
-   "complexity": "complex"
-  },
-  {
-   "id": "type:desktop/settings_app.go:ProviderView",
-   "type": "class",
-   "name": "ProviderView",
-   "summary": "View model for a single provider: name, kind, base URL, models, etc.",
-   "tags": [
-    "go",
-    "struct",
-    "provider",
-    "view"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "type:desktop/settings_app.go:BotSettingsView",
-   "type": "class",
-   "name": "BotSettingsView",
-   "summary": "Aggregate bot settings view containing enabled state, model, tool approval mode, etc.",
-   "tags": [
-    "go",
-    "struct",
-    "bot",
-    "settings"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "type:desktop/settings_app.go:DesktopStartupSettingsView",
-   "type": "class",
-   "name": "DesktopStartupSettingsView",
-   "summary": "Lightweight settings subset for frontend startup, excludes providers to avoid slow keychain resolution.",
-   "tags": [
-    "go",
-    "struct",
-    "settings",
-    "startup"
-   ],
-   "complexity": "simple"
   },
   {
    "id": "file:internal/config/effort.go",
@@ -15116,260 +15039,6 @@
     "buffering"
    ],
    "complexity": "simple"
-  },
-  {
-   "id": "file:desktop/settings_app.go",
-   "type": "file",
-   "name": "settings_app.go",
-   "summary": "Go desktop settings panel command surface. Reads resolved config and applies edits through internal/config/edit.go mutation API, then rebuilds the controller for live effect.",
-   "tags": [
-    "go",
-    "desktop",
-    "settings",
-    "config"
-   ],
-   "complexity": "complex"
-  },
-  {
-   "id": "function:desktop/settings_app.go:ProviderView",
-   "type": "function",
-   "name": "ProviderView",
-   "summary": "JSON-serializable struct representing a provider configuration view for the settings panel.",
-   "tags": [
-    "struct",
-    "settings",
-    "provider"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "function:desktop/settings_app.go:ProviderModelOverrideView",
-   "type": "function",
-   "name": "ProviderModelOverrideView",
-   "summary": "JSON view struct for per-model provider overrides.",
-   "tags": [
-    "struct",
-    "provider",
-    "model"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:PermissionsView",
-   "type": "function",
-   "name": "PermissionsView",
-   "summary": "JSON view struct for tool permission mode and rule lists.",
-   "tags": [
-    "struct",
-    "permissions"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SandboxView",
-   "type": "function",
-   "name": "SandboxView",
-   "summary": "JSON view struct for sandbox configuration.",
-   "tags": [
-    "struct",
-    "sandbox"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:NetworkView",
-   "type": "function",
-   "name": "NetworkView",
-   "summary": "JSON view struct for proxy/network settings.",
-   "tags": [
-    "struct",
-    "network",
-    "proxy"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:AgentView",
-   "type": "function",
-   "name": "AgentView",
-   "summary": "JSON view struct for agent settings.",
-   "tags": [
-    "struct",
-    "agent",
-    "settings"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:BotSettingsView",
-   "type": "function",
-   "name": "BotSettingsView",
-   "summary": "JSON view struct for bot settings including enabled state, model, tool approval mode.",
-   "tags": [
-    "struct",
-    "bot",
-    "settings"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SettingsView",
-   "type": "function",
-   "name": "SettingsView",
-   "summary": "Full JSON settings panel payload aggregating all setting categories.",
-   "tags": [
-    "struct",
-    "settings",
-    "aggregate"
-   ],
-   "complexity": "complex"
-  },
-  {
-   "id": "function:desktop/settings_app.go:DesktopStartupSettingsView",
-   "type": "function",
-   "name": "DesktopStartupSettingsView",
-   "summary": "Lightweight settings subset for first-render startup, excluding providers and credentials to avoid slow resolution.",
-   "tags": [
-    "struct",
-    "settings",
-    "startup"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SetProviderKey",
-   "type": "function",
-   "name": "SetProviderKey",
-   "summary": "Writes a provider secret to Reasonix global .env and rebuilds the controller.",
-   "tags": [
-    "method",
-    "provider",
-    "credentials",
-    "env"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "function:desktop/settings_app.go:ClearProviderKey",
-   "type": "function",
-   "name": "ClearProviderKey",
-   "summary": "Removes a provider secret from Reasonix global .env and rebuilds the controller.",
-   "tags": [
-    "method",
-    "provider",
-    "credentials",
-    "env"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SetSandbox",
-   "type": "function",
-   "name": "SetSandbox",
-   "summary": "Updates sandbox bash mode, network egress, workspace root.",
-   "tags": [
-    "method",
-    "sandbox",
-    "config"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SetNetwork",
-   "type": "function",
-   "name": "SetNetwork",
-   "summary": "Updates outbound proxy settings via config.SetNetwork.",
-   "tags": [
-    "method",
-    "network",
-    "config"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SetBotSettings",
-   "type": "function",
-   "name": "SetBotSettings",
-   "summary": "Persists full bot settings and refreshes the bot runtime asynchronously.",
-   "tags": [
-    "method",
-    "bot",
-    "config"
-   ],
-   "complexity": "complex"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SetBotConnectionToolApprovalMode",
-   "type": "function",
-   "name": "SetBotConnectionToolApprovalMode",
-   "summary": "Updates a single bot connection tool approval mode without restarting the bot gateway.",
-   "tags": [
-    "method",
-    "bot",
-    "permissions"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SetDesktopAppearance",
-   "type": "function",
-   "name": "SetDesktopAppearance",
-   "summary": "Updates desktop theme and style preferences without rebuilding the active controller.",
-   "tags": [
-    "method",
-    "desktop",
-    "theme",
-    "ui"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SetDesktopLayoutStyle",
-   "type": "function",
-   "name": "SetDesktopLayoutStyle",
-   "summary": "Updates desktop layout style without rebuilding the active controller.",
-   "tags": [
-    "method",
-    "layout",
-    "ui"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:SetPermissionMode",
-   "type": "function",
-   "name": "SetPermissionMode",
-   "summary": "Sets the writer-fallback permission mode via config mutation.",
-   "tags": [
-    "method",
-    "permissions",
-    "config"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/settings_app.go:deleteProviderAndRetargetTabs",
-   "type": "function",
-   "name": "deleteProviderAndRetargetTabs",
-   "summary": "Removes a provider from config, retargets affected tabs, snapshots sessions, rebuilds affected tabs asynchronously.",
-   "tags": [
-    "method",
-    "provider",
-    "tab-management"
-   ],
-   "complexity": "complex"
-  },
-  {
-   "id": "function:desktop/settings_app.go:removeBuiltInProviderAccessAndRetargetTabs",
-   "type": "function",
-   "name": "removeBuiltInProviderAccessAndRetargetTabs",
-   "summary": "Removes built-in provider access from config and retargets affected tabs.",
-   "tags": [
-    "method",
-    "provider",
-    "tab-management"
-   ],
-   "complexity": "complex"
   },
   {
    "id": "file:internal/boot/boot_test.go",
@@ -25696,6 +25365,1809 @@
     "go"
    ],
    "complexity": "simple"
+  },
+  {
+   "id": "file:desktop/settings_app.go",
+   "type": "file",
+   "name": "settings_app.go",
+   "summary": "Go Desktop Go module: settings_app.go — 101 function(s), 2270 lines",
+   "tags": [
+    "go",
+    "complex"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:desktop/settings_app.go:nonNil",
+   "type": "function",
+   "name": "nonNil",
+   "summary": "Unexported function nonNil with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:nonNilStringMap",
+   "type": "function",
+   "name": "nonNilStringMap",
+   "summary": "Unexported function nonNilStringMap with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerModelOverridesForView",
+   "type": "function",
+   "name": "providerModelOverridesForView",
+   "summary": "Unexported function providerModelOverridesForView with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerModelOverridesForSave",
+   "type": "function",
+   "name": "providerModelOverridesForSave",
+   "summary": "Unexported function providerModelOverridesForSave with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerRemovalFallbackRef",
+   "type": "function",
+   "name": "providerRemovalFallbackRef",
+   "summary": "Unexported function providerRemovalFallbackRef with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:desktopModelRefsProvider",
+   "type": "function",
+   "name": "desktopModelRefsProvider",
+   "summary": "Unexported function desktopModelRefsProvider with 3 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:officialProviderHost",
+   "type": "function",
+   "name": "officialProviderHost",
+   "summary": "Unexported function officialProviderHost with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:officialProviderKindFromEntry",
+   "type": "function",
+   "name": "officialProviderKindFromEntry",
+   "summary": "Unexported function officialProviderKindFromEntry with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:isOfficialBuiltInProvider",
+   "type": "function",
+   "name": "isOfficialBuiltInProvider",
+   "summary": "Unexported function isOfficialBuiltInProvider with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerAccessSet",
+   "type": "function",
+   "name": "providerAccessSet",
+   "summary": "Unexported function providerAccessSet with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:addProviderAccess",
+   "type": "function",
+   "name": "addProviderAccess",
+   "summary": "Unexported function addProviderAccess with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:removeProviderAccess",
+   "type": "function",
+   "name": "removeProviderAccess",
+   "summary": "Unexported function removeProviderAccess with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerViewFromEntry",
+   "type": "function",
+   "name": "providerViewFromEntry",
+   "summary": "Unexported function providerViewFromEntry with 3 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerViewFromEntryForRoot",
+   "type": "function",
+   "name": "providerViewFromEntryForRoot",
+   "summary": "Unexported function providerViewFromEntryForRoot with 4 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerViewFromEntryForRootWithResolver",
+   "type": "function",
+   "name": "providerViewFromEntryForRootWithResolver",
+   "summary": "Unexported function providerViewFromEntryForRootWithResolver with 5 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:officialProviderViews",
+   "type": "function",
+   "name": "officialProviderViews",
+   "summary": "Unexported function officialProviderViews with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:officialProviderViewsForRoot",
+   "type": "function",
+   "name": "officialProviderViewsForRoot",
+   "summary": "Unexported function officialProviderViewsForRoot with 3 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:officialProviderViewsForRootWithResolver",
+   "type": "function",
+   "name": "officialProviderViewsForRootWithResolver",
+   "summary": "Unexported function officialProviderViewsForRootWithResolver with 4 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:officialProviderAddedSet",
+   "type": "function",
+   "name": "officialProviderAddedSet",
+   "summary": "Unexported function officialProviderAddedSet with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:desktopStartupSettingsFromConfig",
+   "type": "function",
+   "name": "desktopStartupSettingsFromConfig",
+   "summary": "Unexported function desktopStartupSettingsFromConfig with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:DesktopStartupSettings",
+   "type": "function",
+   "name": "DesktopStartupSettings",
+   "summary": "Exported function DesktopStartupSettings with no parameters — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:Settings",
+   "type": "function",
+   "name": "Settings",
+   "summary": "Exported function Settings with no parameters — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:botSettingsView",
+   "type": "function",
+   "name": "botSettingsView",
+   "summary": "Unexported function botSettingsView with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:orDefault",
+   "type": "function",
+   "name": "orDefault",
+   "summary": "Unexported function orDefault with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:botDomainOrDefault",
+   "type": "function",
+   "name": "botDomainOrDefault",
+   "summary": "Unexported function botDomainOrDefault with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:applyConfigChange",
+   "type": "function",
+   "name": "applyConfigChange",
+   "summary": "Unexported function applyConfigChange with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:applyConfigOnly",
+   "type": "function",
+   "name": "applyConfigOnly",
+   "summary": "Unexported function applyConfigOnly with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:ensureActiveTabRebuildAllowed",
+   "type": "function",
+   "name": "ensureActiveTabRebuildAllowed",
+   "summary": "Unexported function ensureActiveTabRebuildAllowed with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:ensureLiveControllersRuntimeMutationAllowed",
+   "type": "function",
+   "name": "ensureLiveControllersRuntimeMutationAllowed",
+   "summary": "Unexported function ensureLiveControllersRuntimeMutationAllowed with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:loadDesktopUserConfigForEdit",
+   "type": "function",
+   "name": "loadDesktopUserConfigForEdit",
+   "summary": "Unexported function loadDesktopUserConfigForEdit with no parameters in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:loadDesktopUserConfigForView",
+   "type": "function",
+   "name": "loadDesktopUserConfigForView",
+   "summary": "Unexported function loadDesktopUserConfigForView with no parameters in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:migrateLegacyBotConfigToUser",
+   "type": "function",
+   "name": "migrateLegacyBotConfigToUser",
+   "summary": "Unexported function migrateLegacyBotConfigToUser with 3 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:desktopBotConfigConfigured",
+   "type": "function",
+   "name": "desktopBotConfigConfigured",
+   "summary": "Unexported function desktopBotConfigConfigured with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:normalizeLegacyDesktopProviderAccessForSettings",
+   "type": "function",
+   "name": "normalizeLegacyDesktopProviderAccessForSettings",
+   "summary": "Unexported function normalizeLegacyDesktopProviderAccessForSettings with 2 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:configDeclaresProviderAccess",
+   "type": "function",
+   "name": "configDeclaresProviderAccess",
+   "summary": "Unexported function configDeclaresProviderAccess with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:activeWorkspaceRoot",
+   "type": "function",
+   "name": "activeWorkspaceRoot",
+   "summary": "Unexported function activeWorkspaceRoot with no parameters in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:saveProviderCredential",
+   "type": "function",
+   "name": "saveProviderCredential",
+   "summary": "Unexported function saveProviderCredential with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerCredentialSourceNotice",
+   "type": "function",
+   "name": "providerCredentialSourceNotice",
+   "summary": "Unexported function providerCredentialSourceNotice with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:projectConfigPathForRoot",
+   "type": "function",
+   "name": "projectConfigPathForRoot",
+   "summary": "Unexported function projectConfigPathForRoot with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:sameConfigPath",
+   "type": "function",
+   "name": "sameConfigPath",
+   "summary": "Unexported function sameConfigPath with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:rebuild",
+   "type": "function",
+   "name": "rebuild",
+   "summary": "Unexported function rebuild with no parameters in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDefaultModel",
+   "type": "function",
+   "name": "SetDefaultModel",
+   "summary": "Exported function SetDefaultModel with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetPlannerModel",
+   "type": "function",
+   "name": "SetPlannerModel",
+   "summary": "Exported function SetPlannerModel with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetSubagentModel",
+   "type": "function",
+   "name": "SetSubagentModel",
+   "summary": "Exported function SetSubagentModel with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:selectableDesktopModelRef",
+   "type": "function",
+   "name": "selectableDesktopModelRef",
+   "summary": "Unexported function selectableDesktopModelRef with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetSubagentEffort",
+   "type": "function",
+   "name": "SetSubagentEffort",
+   "summary": "Exported function SetSubagentEffort with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetAutoPlan",
+   "type": "function",
+   "name": "SetAutoPlan",
+   "summary": "Exported function SetAutoPlan with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetPlanModeDefault",
+   "type": "function",
+   "name": "SetPlanModeDefault",
+   "summary": "Exported function SetPlanModeDefault with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDefaultToolApprovalMode",
+   "type": "function",
+   "name": "SetDefaultToolApprovalMode",
+   "summary": "Exported function SetDefaultToolApprovalMode with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetMemoryCompilerEnabled",
+   "type": "function",
+   "name": "SetMemoryCompilerEnabled",
+   "summary": "Exported function SetMemoryCompilerEnabled with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:applyMemoryCompilerToLiveControllers",
+   "type": "function",
+   "name": "applyMemoryCompilerToLiveControllers",
+   "summary": "Unexported function applyMemoryCompilerToLiveControllers with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:applyMemoryCompilerToControllers",
+   "type": "function",
+   "name": "applyMemoryCompilerToControllers",
+   "summary": "Unexported function applyMemoryCompilerToControllers with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:desktopAutoPlanMode",
+   "type": "function",
+   "name": "desktopAutoPlanMode",
+   "summary": "Unexported function desktopAutoPlanMode with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:applyAutoPlanToLiveControllers",
+   "type": "function",
+   "name": "applyAutoPlanToLiveControllers",
+   "summary": "Unexported function applyAutoPlanToLiveControllers with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:officialProviderTemplate",
+   "type": "function",
+   "name": "officialProviderTemplate",
+   "summary": "Unexported function officialProviderTemplate with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:chatProviderModels",
+   "type": "function",
+   "name": "chatProviderModels",
+   "summary": "Unexported function chatProviderModels with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerVisionModels",
+   "type": "function",
+   "name": "providerVisionModels",
+   "summary": "Unexported function providerVisionModels with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerDefaultForModels",
+   "type": "function",
+   "name": "providerDefaultForModels",
+   "summary": "Unexported function providerDefaultForModels with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SaveProvider",
+   "type": "function",
+   "name": "SaveProvider",
+   "summary": "Exported function SaveProvider with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:AddOfficialProviderAccess",
+   "type": "function",
+   "name": "AddOfficialProviderAccess",
+   "summary": "Exported function AddOfficialProviderAccess with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:FetchProviderModels",
+   "type": "function",
+   "name": "FetchProviderModels",
+   "summary": "Exported function FetchProviderModels with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:DeleteProvider",
+   "type": "function",
+   "name": "DeleteProvider",
+   "summary": "Exported function DeleteProvider with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:RemoveProviderAccess",
+   "type": "function",
+   "name": "RemoveProviderAccess",
+   "summary": "Exported function RemoveProviderAccess with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:providerAccessFallbackRef",
+   "type": "function",
+   "name": "providerAccessFallbackRef",
+   "summary": "Unexported function providerAccessFallbackRef with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:retargetProviderReferences",
+   "type": "function",
+   "name": "retargetProviderReferences",
+   "summary": "Unexported function retargetProviderReferences with 3 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:removeBuiltInProviderAccessAndRetargetTabs",
+   "type": "function",
+   "name": "removeBuiltInProviderAccessAndRetargetTabs",
+   "summary": "Unexported function removeBuiltInProviderAccessAndRetargetTabs with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:deleteProviderAndRetargetTabs",
+   "type": "function",
+   "name": "deleteProviderAndRetargetTabs",
+   "summary": "Unexported function deleteProviderAndRetargetTabs with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetProviderKey",
+   "type": "function",
+   "name": "SetProviderKey",
+   "summary": "Exported function SetProviderKey with 2 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:ensureProviderAccessForKey",
+   "type": "function",
+   "name": "ensureProviderAccessForKey",
+   "summary": "Unexported function ensureProviderAccessForKey with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:ClearProviderKey",
+   "type": "function",
+   "name": "ClearProviderKey",
+   "summary": "Exported function ClearProviderKey with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetPermissionMode",
+   "type": "function",
+   "name": "SetPermissionMode",
+   "summary": "Exported function SetPermissionMode with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:AddPermissionRule",
+   "type": "function",
+   "name": "AddPermissionRule",
+   "summary": "Exported function AddPermissionRule with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:RemovePermissionRule",
+   "type": "function",
+   "name": "RemovePermissionRule",
+   "summary": "Exported function RemovePermissionRule with 2 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetSandbox",
+   "type": "function",
+   "name": "SetSandbox",
+   "summary": "Exported function SetSandbox with 5 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetNetwork",
+   "type": "function",
+   "name": "SetNetwork",
+   "summary": "Exported function SetNetwork with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetBotSettings",
+   "type": "function",
+   "name": "SetBotSettings",
+   "summary": "Exported function SetBotSettings with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetBotConnectionToolApprovalMode",
+   "type": "function",
+   "name": "SetBotConnectionToolApprovalMode",
+   "summary": "Exported function SetBotConnectionToolApprovalMode with 2 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetBotSecret",
+   "type": "function",
+   "name": "SetBotSecret",
+   "summary": "Exported function SetBotSecret with 2 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:ClearBotSecret",
+   "type": "function",
+   "name": "ClearBotSecret",
+   "summary": "Exported function ClearBotSecret with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetCloseBehavior",
+   "type": "function",
+   "name": "SetCloseBehavior",
+   "summary": "Exported function SetCloseBehavior with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDisplayMode",
+   "type": "function",
+   "name": "SetDisplayMode",
+   "summary": "Exported function SetDisplayMode with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetStatusBarStyle",
+   "type": "function",
+   "name": "SetStatusBarStyle",
+   "summary": "Exported function SetStatusBarStyle with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetStatusBarItems",
+   "type": "function",
+   "name": "SetStatusBarItems",
+   "summary": "Exported function SetStatusBarItems with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDesktopLanguage",
+   "type": "function",
+   "name": "SetDesktopLanguage",
+   "summary": "Exported function SetDesktopLanguage with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetTrayLocale",
+   "type": "function",
+   "name": "SetTrayLocale",
+   "summary": "Exported function SetTrayLocale with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDesktopAppearance",
+   "type": "function",
+   "name": "SetDesktopAppearance",
+   "summary": "Exported function SetDesktopAppearance with 2 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDesktopLayoutStyle",
+   "type": "function",
+   "name": "SetDesktopLayoutStyle",
+   "summary": "Exported function SetDesktopLayoutStyle with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDesktopCheckUpdates",
+   "type": "function",
+   "name": "SetDesktopCheckUpdates",
+   "summary": "Exported function SetDesktopCheckUpdates with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDesktopTelemetry",
+   "type": "function",
+   "name": "SetDesktopTelemetry",
+   "summary": "Exported function SetDesktopTelemetry with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetDesktopMetrics",
+   "type": "function",
+   "name": "SetDesktopMetrics",
+   "summary": "Exported function SetDesktopMetrics with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetExpandThinking",
+   "type": "function",
+   "name": "SetExpandThinking",
+   "summary": "Exported function SetExpandThinking with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:MigrateDesktopPreferences",
+   "type": "function",
+   "name": "MigrateDesktopPreferences",
+   "summary": "Exported function MigrateDesktopPreferences with 3 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetAgentParams",
+   "type": "function",
+   "name": "SetAgentParams",
+   "summary": "Exported function SetAgentParams with 4 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:compactThresholdPercent",
+   "type": "function",
+   "name": "compactThresholdPercent",
+   "summary": "Unexported function compactThresholdPercent with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetCompactThreshold",
+   "type": "function",
+   "name": "SetCompactThreshold",
+   "summary": "Exported function SetCompactThreshold with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetColdResumePrune",
+   "type": "function",
+   "name": "SetColdResumePrune",
+   "summary": "Exported function SetColdResumePrune with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:SetReasoningLanguage",
+   "type": "function",
+   "name": "SetReasoningLanguage",
+   "summary": "Exported function SetReasoningLanguage with 1 parameter(s) — write/setter operation",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:applyReasoningLanguageToLiveControllers",
+   "type": "function",
+   "name": "applyReasoningLanguageToLiveControllers",
+   "summary": "Unexported function applyReasoningLanguageToLiveControllers with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:applyResponseLanguageToLiveControllers",
+   "type": "function",
+   "name": "applyResponseLanguageToLiveControllers",
+   "summary": "Unexported function applyResponseLanguageToLiveControllers with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/settings_app.go:trimList",
+   "type": "function",
+   "name": "trimList",
+   "summary": "Unexported function trimList with 1 parameter(s) in settings_app",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:ProviderView",
+   "type": "class",
+   "name": "ProviderView",
+   "summary": "Class with 0 method(s) and 25 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:ProviderModelOverrideView",
+   "type": "class",
+   "name": "ProviderModelOverrideView",
+   "summary": "Class with 0 method(s) and 5 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:PermissionsView",
+   "type": "class",
+   "name": "PermissionsView",
+   "summary": "Class with 0 method(s) and 4 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:SandboxView",
+   "type": "class",
+   "name": "SandboxView",
+   "summary": "Class with 0 method(s) and 5 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:NetworkProxyView",
+   "type": "class",
+   "name": "NetworkProxyView",
+   "summary": "Class with 0 method(s) and 5 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:NetworkView",
+   "type": "class",
+   "name": "NetworkView",
+   "summary": "Class with 0 method(s) and 4 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:AgentView",
+   "type": "class",
+   "name": "AgentView",
+   "summary": "Class with 0 method(s) and 7 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:BotAllowlistView",
+   "type": "class",
+   "name": "BotAllowlistView",
+   "summary": "Class with 0 method(s) and 8 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:QQBotView",
+   "type": "class",
+   "name": "QQBotView",
+   "summary": "Class with 0 method(s) and 5 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:FeishuBotView",
+   "type": "class",
+   "name": "FeishuBotView",
+   "summary": "Class with 0 method(s) and 9 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:WeixinBotView",
+   "type": "class",
+   "name": "WeixinBotView",
+   "summary": "Class with 0 method(s) and 5 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:BotSettingsView",
+   "type": "class",
+   "name": "BotSettingsView",
+   "summary": "Class with 0 method(s) and 10 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:SettingsView",
+   "type": "class",
+   "name": "SettingsView",
+   "summary": "Class with 0 method(s) and 42 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:DesktopStartupSettingsView",
+   "type": "class",
+   "name": "DesktopStartupSettingsView",
+   "summary": "Class with 0 method(s) and 10 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:memoryCompilerTarget",
+   "type": "class",
+   "name": "memoryCompilerTarget",
+   "summary": "Class with 1 method(s) and 0 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/settings_app.go:providerRemovalTab",
+   "type": "class",
+   "name": "providerRemovalTab",
+   "summary": "Class with 0 method(s) and 3 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:internal/boot/boot.go",
+   "type": "file",
+   "name": "boot.go",
+   "summary": "Go Boot/initialization module: boot.go — 40 function(s), 1762 lines",
+   "tags": [
+    "go",
+    "internal",
+    "complex"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:internal/boot/boot.go:agentKeepPolicy",
+   "type": "function",
+   "name": "agentKeepPolicy",
+   "summary": "Unexported function agentKeepPolicy with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:Build",
+   "type": "function",
+   "name": "Build",
+   "summary": "Exported function Build with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:rememberPermissionRule",
+   "type": "function",
+   "name": "rememberPermissionRule",
+   "summary": "Unexported function rememberPermissionRule with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:rememberPermissionConfigPath",
+   "type": "function",
+   "name": "rememberPermissionConfigPath",
+   "summary": "Unexported function rememberPermissionConfigPath with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:rememberMCPReadOnlyTrust",
+   "type": "function",
+   "name": "rememberMCPReadOnlyTrust",
+   "summary": "Unexported function rememberMCPReadOnlyTrust with 3 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:coveredPermissionRule",
+   "type": "function",
+   "name": "coveredPermissionRule",
+   "summary": "Unexported function coveredPermissionRule with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:pruneCoveredPermissionRules",
+   "type": "function",
+   "name": "pruneCoveredPermissionRules",
+   "summary": "Unexported function pruneCoveredPermissionRules with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:firstNonEmpty",
+   "type": "function",
+   "name": "firstNonEmpty",
+   "summary": "Unexported function firstNonEmpty with no parameters in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:subagentModelRef",
+   "type": "function",
+   "name": "subagentModelRef",
+   "summary": "Unexported function subagentModelRef with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:subagentEffortRef",
+   "type": "function",
+   "name": "subagentEffortRef",
+   "summary": "Unexported function subagentEffortRef with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:subagentModelKeys",
+   "type": "function",
+   "name": "subagentModelKeys",
+   "summary": "Unexported function subagentModelKeys with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:resolveWorkspaceRoot",
+   "type": "function",
+   "name": "resolveWorkspaceRoot",
+   "summary": "Unexported function resolveWorkspaceRoot with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:nearestGitRoot",
+   "type": "function",
+   "name": "nearestGitRoot",
+   "summary": "Unexported function nearestGitRoot with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:isGitMarker",
+   "type": "function",
+   "name": "isGitMarker",
+   "summary": "Unexported function isGitMarker with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:newSubagentStore",
+   "type": "function",
+   "name": "newSubagentStore",
+   "summary": "Unexported function newSubagentStore with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:subagentEffectiveIdentity",
+   "type": "function",
+   "name": "subagentEffectiveIdentity",
+   "summary": "Unexported function subagentEffectiveIdentity with 5 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:NewProvider",
+   "type": "function",
+   "name": "NewProvider",
+   "summary": "Exported function NewProvider with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:NewProviderWithProxy",
+   "type": "function",
+   "name": "NewProviderWithProxy",
+   "summary": "Exported function NewProviderWithProxy with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:headroomProxyPort",
+   "type": "function",
+   "name": "headroomProxyPort",
+   "summary": "Unexported function headroomProxyPort with no parameters in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:headroomReachable",
+   "type": "function",
+   "name": "headroomReachable",
+   "summary": "Unexported function headroomReachable with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:addBuiltins",
+   "type": "function",
+   "name": "addBuiltins",
+   "summary": "Unexported function addBuiltins with 11 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:builtinToolEnabled",
+   "type": "function",
+   "name": "builtinToolEnabled",
+   "summary": "Unexported function builtinToolEnabled with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:partitionByTier",
+   "type": "function",
+   "name": "partitionByTier",
+   "summary": "Unexported function partitionByTier with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:PluginSpecs",
+   "type": "function",
+   "name": "PluginSpecs",
+   "summary": "Exported function PluginSpecs with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:PluginSpecsForRoot",
+   "type": "function",
+   "name": "PluginSpecsForRoot",
+   "summary": "Exported function PluginSpecsForRoot with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:PluginSpecsForRootWithPlanModeAllowedTools",
+   "type": "function",
+   "name": "PluginSpecsForRootWithPlanModeAllowedTools",
+   "summary": "Exported function PluginSpecsForRootWithPlanModeAllowedTools with 3 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:PluginSpecsForRootWithOptions",
+   "type": "function",
+   "name": "PluginSpecsForRootWithOptions",
+   "summary": "Exported function PluginSpecsForRootWithOptions with 3 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:pluginSpecFromEntryWithOptions",
+   "type": "function",
+   "name": "pluginSpecFromEntryWithOptions",
+   "summary": "Unexported function pluginSpecFromEntryWithOptions with 3 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:secondsDuration",
+   "type": "function",
+   "name": "secondsDuration",
+   "summary": "Unexported function secondsDuration with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:toolTimeoutDurations",
+   "type": "function",
+   "name": "toolTimeoutDurations",
+   "summary": "Unexported function toolTimeoutDurations with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:applyKnownPluginOverrides",
+   "type": "function",
+   "name": "applyKnownPluginOverrides",
+   "summary": "Unexported function applyKnownPluginOverrides with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:applyDefaultMCPCallTimeout",
+   "type": "function",
+   "name": "applyDefaultMCPCallTimeout",
+   "summary": "Unexported function applyDefaultMCPCallTimeout with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:applyPlanModeAllowedMCPToolTrust",
+   "type": "function",
+   "name": "applyPlanModeAllowedMCPToolTrust",
+   "summary": "Unexported function applyPlanModeAllowedMCPToolTrust with 2 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:trustedRawReadOnlyToolNames",
+   "type": "function",
+   "name": "trustedRawReadOnlyToolNames",
+   "summary": "Unexported function trustedRawReadOnlyToolNames with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:planModeTrustedMCPServers",
+   "type": "function",
+   "name": "planModeTrustedMCPServers",
+   "summary": "Unexported function planModeTrustedMCPServers with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:cloneBoolMap",
+   "type": "function",
+   "name": "cloneBoolMap",
+   "summary": "Unexported function cloneBoolMap with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:autoShellPrefer",
+   "type": "function",
+   "name": "autoShellPrefer",
+   "summary": "Unexported function autoShellPrefer with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:MCPStartupNotice",
+   "type": "function",
+   "name": "MCPStartupNotice",
+   "summary": "Exported function MCPStartupNotice with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:LSPSpecs",
+   "type": "function",
+   "name": "LSPSpecs",
+   "summary": "Exported function LSPSpecs with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:internal/boot/boot.go:providerNames",
+   "type": "function",
+   "name": "providerNames",
+   "summary": "Unexported function providerNames with 1 parameter(s) in boot",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:internal/boot/boot.go:Options",
+   "type": "class",
+   "name": "Options",
+   "summary": "Class with 0 method(s) and 13 propertie(s)",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:internal/boot/boot.go:PluginSpecOptions",
+   "type": "class",
+   "name": "PluginSpecOptions",
+   "summary": "Class with 0 method(s) and 2 propertie(s)",
+   "tags": [
+    "go",
+    "go",
+    "internal"
+   ],
+   "complexity": "simple"
   }
  ],
  "edges": [
@@ -33139,6 +34611,1476 @@
    "type": "exports",
    "direction": "forward",
    "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:nonNil",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:nonNilStringMap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerModelOverridesForView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerModelOverridesForSave",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerRemovalFallbackRef",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:desktopModelRefsProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:officialProviderHost",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:officialProviderKindFromEntry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:isOfficialBuiltInProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerAccessSet",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:addProviderAccess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:removeProviderAccess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerViewFromEntry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerViewFromEntryForRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerViewFromEntryForRootWithResolver",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:officialProviderViews",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:officialProviderViewsForRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:officialProviderViewsForRootWithResolver",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:officialProviderAddedSet",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:desktopStartupSettingsFromConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:DesktopStartupSettings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:Settings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:botSettingsView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:orDefault",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:botDomainOrDefault",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:applyConfigChange",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:applyConfigOnly",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:ensureActiveTabRebuildAllowed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:ensureLiveControllersRuntimeMutationAllowed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:loadDesktopUserConfigForEdit",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:loadDesktopUserConfigForView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:migrateLegacyBotConfigToUser",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:desktopBotConfigConfigured",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:normalizeLegacyDesktopProviderAccessForSettings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:configDeclaresProviderAccess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:activeWorkspaceRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:saveProviderCredential",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerCredentialSourceNotice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:projectConfigPathForRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:sameConfigPath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:rebuild",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDefaultModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetPlannerModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetSubagentModel",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:selectableDesktopModelRef",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetSubagentEffort",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetAutoPlan",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetPlanModeDefault",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDefaultToolApprovalMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetMemoryCompilerEnabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:applyMemoryCompilerToLiveControllers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:applyMemoryCompilerToControllers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:desktopAutoPlanMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:applyAutoPlanToLiveControllers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:officialProviderTemplate",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:chatProviderModels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerVisionModels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerDefaultForModels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SaveProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:AddOfficialProviderAccess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:FetchProviderModels",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:DeleteProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:RemoveProviderAccess",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:providerAccessFallbackRef",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:retargetProviderReferences",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:removeBuiltInProviderAccessAndRetargetTabs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:deleteProviderAndRetargetTabs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetProviderKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:ensureProviderAccessForKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:ClearProviderKey",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetPermissionMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:AddPermissionRule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:RemovePermissionRule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetSandbox",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetNetwork",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetBotSettings",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetBotConnectionToolApprovalMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetBotSecret",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:ClearBotSecret",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetCloseBehavior",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDisplayMode",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetStatusBarStyle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetStatusBarItems",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopLanguage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetTrayLocale",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopAppearance",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopLayoutStyle",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopCheckUpdates",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopTelemetry",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopMetrics",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetExpandThinking",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:MigrateDesktopPreferences",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetAgentParams",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:compactThresholdPercent",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetCompactThreshold",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetColdResumePrune",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetReasoningLanguage",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:applyReasoningLanguageToLiveControllers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:applyResponseLanguageToLiveControllers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:trimList",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:ProviderView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:ProviderModelOverrideView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:PermissionsView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:SandboxView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:NetworkProxyView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:NetworkView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:AgentView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:BotAllowlistView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:QQBotView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:FeishuBotView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:WeixinBotView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:BotSettingsView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:SettingsView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:DesktopStartupSettingsView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:memoryCompilerTarget",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "class:desktop/settings_app.go:providerRemovalTab",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:DesktopStartupSettings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:Settings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDefaultModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetPlannerModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetSubagentModel",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetSubagentEffort",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetAutoPlan",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetPlanModeDefault",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDefaultToolApprovalMode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetMemoryCompilerEnabled",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SaveProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:AddOfficialProviderAccess",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:FetchProviderModels",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:DeleteProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:RemoveProviderAccess",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetProviderKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:ClearProviderKey",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetPermissionMode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:AddPermissionRule",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:RemovePermissionRule",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetSandbox",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetNetwork",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetBotSettings",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetBotConnectionToolApprovalMode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetBotSecret",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:ClearBotSecret",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetCloseBehavior",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDisplayMode",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetStatusBarStyle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetStatusBarItems",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopLanguage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetTrayLocale",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopAppearance",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopLayoutStyle",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopCheckUpdates",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopTelemetry",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetDesktopMetrics",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetExpandThinking",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:MigrateDesktopPreferences",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetAgentParams",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetCompactThreshold",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetColdResumePrune",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/settings_app.go",
+   "target": "function:desktop/settings_app.go:SetReasoningLanguage",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:agentKeepPolicy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:Build",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:rememberPermissionRule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:rememberPermissionConfigPath",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:rememberMCPReadOnlyTrust",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:coveredPermissionRule",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:pruneCoveredPermissionRules",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:firstNonEmpty",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:subagentModelRef",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:subagentEffortRef",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:subagentModelKeys",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:resolveWorkspaceRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:nearestGitRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:isGitMarker",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:newSubagentStore",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:subagentEffectiveIdentity",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:NewProvider",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:NewProviderWithProxy",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:headroomProxyPort",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:headroomReachable",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:addBuiltins",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:builtinToolEnabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:partitionByTier",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:PluginSpecs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:PluginSpecsForRoot",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:PluginSpecsForRootWithPlanModeAllowedTools",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:PluginSpecsForRootWithOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:pluginSpecFromEntryWithOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:secondsDuration",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:toolTimeoutDurations",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:applyKnownPluginOverrides",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:applyDefaultMCPCallTimeout",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:applyPlanModeAllowedMCPToolTrust",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:trustedRawReadOnlyToolNames",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:planModeTrustedMCPServers",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:cloneBoolMap",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:autoShellPrefer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:MCPStartupNotice",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:LSPSpecs",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:providerNames",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "class:internal/boot/boot.go:Options",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "class:internal/boot/boot.go:PluginSpecOptions",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:Build",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:NewProvider",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:NewProviderWithProxy",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:PluginSpecs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:PluginSpecsForRoot",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:PluginSpecsForRootWithPlanModeAllowedTools",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:PluginSpecsForRootWithOptions",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:MCPStartupNotice",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:internal/boot/boot.go",
+   "target": "function:internal/boot/boot.go:LSPSpecs",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
   }
  ],
  "layers": [
@@ -33270,32 +36212,6 @@
     "file:desktop/zoom_factor.go",
     "file:desktop/desktop.exe",
     "file:desktop/understand_graph.go",
-    "type:desktop/settings_app.go:SettingsView",
-    "type:desktop/settings_app.go:App",
-    "type:desktop/settings_app.go:ProviderView",
-    "type:desktop/settings_app.go:BotSettingsView",
-    "type:desktop/settings_app.go:DesktopStartupSettingsView",
-    "file:desktop/settings_app.go",
-    "function:desktop/settings_app.go:ProviderView",
-    "function:desktop/settings_app.go:ProviderModelOverrideView",
-    "function:desktop/settings_app.go:PermissionsView",
-    "function:desktop/settings_app.go:SandboxView",
-    "function:desktop/settings_app.go:NetworkView",
-    "function:desktop/settings_app.go:AgentView",
-    "function:desktop/settings_app.go:BotSettingsView",
-    "function:desktop/settings_app.go:SettingsView",
-    "function:desktop/settings_app.go:DesktopStartupSettingsView",
-    "function:desktop/settings_app.go:SetProviderKey",
-    "function:desktop/settings_app.go:ClearProviderKey",
-    "function:desktop/settings_app.go:SetSandbox",
-    "function:desktop/settings_app.go:SetNetwork",
-    "function:desktop/settings_app.go:SetBotSettings",
-    "function:desktop/settings_app.go:SetBotConnectionToolApprovalMode",
-    "function:desktop/settings_app.go:SetDesktopAppearance",
-    "function:desktop/settings_app.go:SetDesktopLayoutStyle",
-    "function:desktop/settings_app.go:SetPermissionMode",
-    "function:desktop/settings_app.go:deleteProviderAndRetargetTabs",
-    "function:desktop/settings_app.go:removeBuiltInProviderAccessAndRetargetTabs",
     "file:desktop/app.go",
     "function:desktop/app.go:singleInstanceID",
     "function:desktop/app.go:NewApp",
@@ -33677,7 +36593,124 @@
     "class:desktop/headroom_sidecar.go:HeadroomStatusView",
     "class:desktop/headroom_sidecar.go:headroomSidecar",
     "class:desktop/headroom_sidecar.go:proxyStats",
-    "class:desktop/headroom_sidecar.go:HeadroomConfigView"
+    "class:desktop/headroom_sidecar.go:HeadroomConfigView",
+    "file:desktop/settings_app.go",
+    "function:desktop/settings_app.go:nonNil",
+    "function:desktop/settings_app.go:nonNilStringMap",
+    "function:desktop/settings_app.go:providerModelOverridesForView",
+    "function:desktop/settings_app.go:providerModelOverridesForSave",
+    "function:desktop/settings_app.go:providerRemovalFallbackRef",
+    "function:desktop/settings_app.go:desktopModelRefsProvider",
+    "function:desktop/settings_app.go:officialProviderHost",
+    "function:desktop/settings_app.go:officialProviderKindFromEntry",
+    "function:desktop/settings_app.go:isOfficialBuiltInProvider",
+    "function:desktop/settings_app.go:providerAccessSet",
+    "function:desktop/settings_app.go:addProviderAccess",
+    "function:desktop/settings_app.go:removeProviderAccess",
+    "function:desktop/settings_app.go:providerViewFromEntry",
+    "function:desktop/settings_app.go:providerViewFromEntryForRoot",
+    "function:desktop/settings_app.go:providerViewFromEntryForRootWithResolver",
+    "function:desktop/settings_app.go:officialProviderViews",
+    "function:desktop/settings_app.go:officialProviderViewsForRoot",
+    "function:desktop/settings_app.go:officialProviderViewsForRootWithResolver",
+    "function:desktop/settings_app.go:officialProviderAddedSet",
+    "function:desktop/settings_app.go:desktopStartupSettingsFromConfig",
+    "function:desktop/settings_app.go:DesktopStartupSettings",
+    "function:desktop/settings_app.go:Settings",
+    "function:desktop/settings_app.go:botSettingsView",
+    "function:desktop/settings_app.go:orDefault",
+    "function:desktop/settings_app.go:botDomainOrDefault",
+    "function:desktop/settings_app.go:applyConfigChange",
+    "function:desktop/settings_app.go:applyConfigOnly",
+    "function:desktop/settings_app.go:ensureActiveTabRebuildAllowed",
+    "function:desktop/settings_app.go:ensureLiveControllersRuntimeMutationAllowed",
+    "function:desktop/settings_app.go:loadDesktopUserConfigForEdit",
+    "function:desktop/settings_app.go:loadDesktopUserConfigForView",
+    "function:desktop/settings_app.go:migrateLegacyBotConfigToUser",
+    "function:desktop/settings_app.go:desktopBotConfigConfigured",
+    "function:desktop/settings_app.go:normalizeLegacyDesktopProviderAccessForSettings",
+    "function:desktop/settings_app.go:configDeclaresProviderAccess",
+    "function:desktop/settings_app.go:activeWorkspaceRoot",
+    "function:desktop/settings_app.go:saveProviderCredential",
+    "function:desktop/settings_app.go:providerCredentialSourceNotice",
+    "function:desktop/settings_app.go:projectConfigPathForRoot",
+    "function:desktop/settings_app.go:sameConfigPath",
+    "function:desktop/settings_app.go:rebuild",
+    "function:desktop/settings_app.go:SetDefaultModel",
+    "function:desktop/settings_app.go:SetPlannerModel",
+    "function:desktop/settings_app.go:SetSubagentModel",
+    "function:desktop/settings_app.go:selectableDesktopModelRef",
+    "function:desktop/settings_app.go:SetSubagentEffort",
+    "function:desktop/settings_app.go:SetAutoPlan",
+    "function:desktop/settings_app.go:SetPlanModeDefault",
+    "function:desktop/settings_app.go:SetDefaultToolApprovalMode",
+    "function:desktop/settings_app.go:SetMemoryCompilerEnabled",
+    "function:desktop/settings_app.go:applyMemoryCompilerToLiveControllers",
+    "function:desktop/settings_app.go:applyMemoryCompilerToControllers",
+    "function:desktop/settings_app.go:desktopAutoPlanMode",
+    "function:desktop/settings_app.go:applyAutoPlanToLiveControllers",
+    "function:desktop/settings_app.go:officialProviderTemplate",
+    "function:desktop/settings_app.go:chatProviderModels",
+    "function:desktop/settings_app.go:providerVisionModels",
+    "function:desktop/settings_app.go:providerDefaultForModels",
+    "function:desktop/settings_app.go:SaveProvider",
+    "function:desktop/settings_app.go:AddOfficialProviderAccess",
+    "function:desktop/settings_app.go:FetchProviderModels",
+    "function:desktop/settings_app.go:DeleteProvider",
+    "function:desktop/settings_app.go:RemoveProviderAccess",
+    "function:desktop/settings_app.go:providerAccessFallbackRef",
+    "function:desktop/settings_app.go:retargetProviderReferences",
+    "function:desktop/settings_app.go:removeBuiltInProviderAccessAndRetargetTabs",
+    "function:desktop/settings_app.go:deleteProviderAndRetargetTabs",
+    "function:desktop/settings_app.go:SetProviderKey",
+    "function:desktop/settings_app.go:ensureProviderAccessForKey",
+    "function:desktop/settings_app.go:ClearProviderKey",
+    "function:desktop/settings_app.go:SetPermissionMode",
+    "function:desktop/settings_app.go:AddPermissionRule",
+    "function:desktop/settings_app.go:RemovePermissionRule",
+    "function:desktop/settings_app.go:SetSandbox",
+    "function:desktop/settings_app.go:SetNetwork",
+    "function:desktop/settings_app.go:SetBotSettings",
+    "function:desktop/settings_app.go:SetBotConnectionToolApprovalMode",
+    "function:desktop/settings_app.go:SetBotSecret",
+    "function:desktop/settings_app.go:ClearBotSecret",
+    "function:desktop/settings_app.go:SetCloseBehavior",
+    "function:desktop/settings_app.go:SetDisplayMode",
+    "function:desktop/settings_app.go:SetStatusBarStyle",
+    "function:desktop/settings_app.go:SetStatusBarItems",
+    "function:desktop/settings_app.go:SetDesktopLanguage",
+    "function:desktop/settings_app.go:SetTrayLocale",
+    "function:desktop/settings_app.go:SetDesktopAppearance",
+    "function:desktop/settings_app.go:SetDesktopLayoutStyle",
+    "function:desktop/settings_app.go:SetDesktopCheckUpdates",
+    "function:desktop/settings_app.go:SetDesktopTelemetry",
+    "function:desktop/settings_app.go:SetDesktopMetrics",
+    "function:desktop/settings_app.go:SetExpandThinking",
+    "function:desktop/settings_app.go:MigrateDesktopPreferences",
+    "function:desktop/settings_app.go:SetAgentParams",
+    "function:desktop/settings_app.go:compactThresholdPercent",
+    "function:desktop/settings_app.go:SetCompactThreshold",
+    "function:desktop/settings_app.go:SetColdResumePrune",
+    "function:desktop/settings_app.go:SetReasoningLanguage",
+    "function:desktop/settings_app.go:applyReasoningLanguageToLiveControllers",
+    "function:desktop/settings_app.go:applyResponseLanguageToLiveControllers",
+    "function:desktop/settings_app.go:trimList",
+    "class:desktop/settings_app.go:ProviderView",
+    "class:desktop/settings_app.go:ProviderModelOverrideView",
+    "class:desktop/settings_app.go:PermissionsView",
+    "class:desktop/settings_app.go:SandboxView",
+    "class:desktop/settings_app.go:NetworkProxyView",
+    "class:desktop/settings_app.go:NetworkView",
+    "class:desktop/settings_app.go:AgentView",
+    "class:desktop/settings_app.go:BotAllowlistView",
+    "class:desktop/settings_app.go:QQBotView",
+    "class:desktop/settings_app.go:FeishuBotView",
+    "class:desktop/settings_app.go:WeixinBotView",
+    "class:desktop/settings_app.go:BotSettingsView",
+    "class:desktop/settings_app.go:SettingsView",
+    "class:desktop/settings_app.go:DesktopStartupSettingsView",
+    "class:desktop/settings_app.go:memoryCompilerTarget",
+    "class:desktop/settings_app.go:providerRemovalTab"
    ]
   },
   {
@@ -34472,7 +37505,6 @@
     "file:internal/tool/sessiontool/sessiontool_test.go",
     "file:internal/tool/sessiontool/sessiontool.go",
     "file:internal/tool/tool.go",
-    "file:internal/boot/boot.go",
     "file:internal/boot/token_profile.go",
     "file:internal/serve/serve.go",
     "file:internal/serve/understand_graph_test.go",
@@ -34514,7 +37546,50 @@
     "function:internal/boot/boot_test.go:registerBootRetrievalToolTestProvider",
     "function:internal/boot/boot_test.go:registerBootTokenProfileTestProvider",
     "concept:internal/boot/boot_test.go:bootRetrievalToolTestProviderKind",
-    "concept:internal/boot/boot_test.go:bootTokenProfileTestProviderKind"
+    "concept:internal/boot/boot_test.go:bootTokenProfileTestProviderKind",
+    "file:internal/boot/boot.go",
+    "function:internal/boot/boot.go:agentKeepPolicy",
+    "function:internal/boot/boot.go:Build",
+    "function:internal/boot/boot.go:rememberPermissionRule",
+    "function:internal/boot/boot.go:rememberPermissionConfigPath",
+    "function:internal/boot/boot.go:rememberMCPReadOnlyTrust",
+    "function:internal/boot/boot.go:coveredPermissionRule",
+    "function:internal/boot/boot.go:pruneCoveredPermissionRules",
+    "function:internal/boot/boot.go:firstNonEmpty",
+    "function:internal/boot/boot.go:subagentModelRef",
+    "function:internal/boot/boot.go:subagentEffortRef",
+    "function:internal/boot/boot.go:subagentModelKeys",
+    "function:internal/boot/boot.go:resolveWorkspaceRoot",
+    "function:internal/boot/boot.go:nearestGitRoot",
+    "function:internal/boot/boot.go:isGitMarker",
+    "function:internal/boot/boot.go:newSubagentStore",
+    "function:internal/boot/boot.go:subagentEffectiveIdentity",
+    "function:internal/boot/boot.go:NewProvider",
+    "function:internal/boot/boot.go:NewProviderWithProxy",
+    "function:internal/boot/boot.go:headroomProxyPort",
+    "function:internal/boot/boot.go:headroomReachable",
+    "function:internal/boot/boot.go:addBuiltins",
+    "function:internal/boot/boot.go:builtinToolEnabled",
+    "function:internal/boot/boot.go:partitionByTier",
+    "function:internal/boot/boot.go:PluginSpecs",
+    "function:internal/boot/boot.go:PluginSpecsForRoot",
+    "function:internal/boot/boot.go:PluginSpecsForRootWithPlanModeAllowedTools",
+    "function:internal/boot/boot.go:PluginSpecsForRootWithOptions",
+    "function:internal/boot/boot.go:pluginSpecFromEntryWithOptions",
+    "function:internal/boot/boot.go:secondsDuration",
+    "function:internal/boot/boot.go:toolTimeoutDurations",
+    "function:internal/boot/boot.go:applyKnownPluginOverrides",
+    "function:internal/boot/boot.go:applyDefaultMCPCallTimeout",
+    "function:internal/boot/boot.go:applyPlanModeAllowedMCPToolTrust",
+    "function:internal/boot/boot.go:trustedRawReadOnlyToolNames",
+    "function:internal/boot/boot.go:planModeTrustedMCPServers",
+    "function:internal/boot/boot.go:cloneBoolMap",
+    "function:internal/boot/boot.go:autoShellPrefer",
+    "function:internal/boot/boot.go:MCPStartupNotice",
+    "function:internal/boot/boot.go:LSPSpecs",
+    "function:internal/boot/boot.go:providerNames",
+    "class:internal/boot/boot.go:Options",
+    "class:internal/boot/boot.go:PluginSpecOptions"
    ]
   },
   {
