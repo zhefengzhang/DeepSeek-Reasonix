@@ -12,8 +12,8 @@
    "wails"
   ],
   "description": "AI coding agent with memory, skills, multi-model support, and desktop UI.",
-  "analyzedAt": "2026-07-13T03:26:05.000Z",
-  "gitCommitHash": "5697075573fe74ba5f4e05514b858a7831daa711",
+  "analyzedAt": "2026-07-13T05:14:00.000Z",
+  "gitCommitHash": "f255f698228767bac95961982e2e5735851b4db4",
   "version": "1.0.0"
  },
  "nodes": [
@@ -359,18 +359,6 @@
    "name": "desktop-topic-auto-title-meta.json",
    "filePath": ".reasonix/desktop-topic-auto-title-meta.json",
    "summary": "json config file (13 lines)",
-   "tags": [
-    "json",
-    "config"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "file:.reasonix/desktop-topic-created-at.json",
-   "type": "file",
-   "name": "desktop-topic-created-at.json",
-   "filePath": ".reasonix/desktop-topic-created-at.json",
-   "summary": "json config file (2 lines)",
    "tags": [
     "json",
     "config"
@@ -14200,30 +14188,6 @@
    "complexity": "complex"
   },
   {
-   "id": "file:.reasonix/desktop-topic-title-sources.json",
-   "type": "config",
-   "name": "desktop-topic-title-sources.json",
-   "filePath": ".reasonix/desktop-topic-title-sources.json",
-   "summary": "json config file (5 lines)",
-   "tags": [
-    "json",
-    "config"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "file:.reasonix/desktop-topic-titles.json",
-   "type": "config",
-   "name": "desktop-topic-titles.json",
-   "filePath": ".reasonix/desktop-topic-titles.json",
-   "summary": "json config file (5 lines)",
-   "tags": [
-    "json",
-    "config"
-   ],
-   "complexity": "simple"
-  },
-  {
    "id": "file:.reasonix/skills/understand/SKILL.md",
    "type": "document",
    "name": "SKILL.md",
@@ -18529,303 +18493,6 @@
     "simple"
    ],
    "complexity": "complex"
-  },
-  {
-   "id": "file:desktop/headroom_sidecar.go",
-   "type": "file",
-   "name": "headroom_sidecar.go",
-   "summary": "Headroom proxy sidecar lifecycle manager: 22 function(s), 818 lines",
-   "tags": [
-    "go",
-    "complex"
-   ],
-   "complexity": "complex"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:newHeadroomSidecar",
-   "type": "function",
-   "name": "newHeadroomSidecar",
-   "summary": "Unexported function newHeadroomSidecar with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:installed",
-   "type": "function",
-   "name": "installed",
-   "summary": "Unexported function installed with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:version",
-   "type": "function",
-   "name": "version",
-   "summary": "Unexported function version with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:start",
-   "type": "function",
-   "name": "start",
-   "summary": "Unexported function start with 2 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:stop",
-   "type": "function",
-   "name": "stop",
-   "summary": "Unexported function stop with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:status",
-   "type": "function",
-   "name": "status",
-   "summary": "Unexported function status with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:healthCheck",
-   "type": "function",
-   "name": "healthCheck",
-   "summary": "Unexported function healthCheck with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:fetchStats",
-   "type": "function",
-   "name": "fetchStats",
-   "summary": "Unexported function fetchStats with 1 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:waitForReady",
-   "type": "function",
-   "name": "waitForReady",
-   "summary": "Unexported function waitForReady with 2 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:writeWindowsLauncher",
-   "type": "function",
-   "name": "writeWindowsLauncher",
-   "summary": "Unexported function writeWindowsLauncher with 1 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:autoStartHeadroom",
-   "type": "function",
-   "name": "autoStartHeadroom",
-   "summary": "Unexported function autoStartHeadroom with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:patchHeadroomServer",
-   "type": "function",
-   "name": "patchHeadroomServer",
-   "summary": "Unexported function patchHeadroomServer with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:HeadroomHasUpstream",
-   "type": "function",
-   "name": "HeadroomHasUpstream",
-   "summary": "Exported function HeadroomHasUpstream with 1 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:upstreamURLForConfig",
-   "type": "function",
-   "name": "upstreamURLForConfig",
-   "summary": "Unexported function upstreamURLForConfig with 1 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:HeadroomStatus",
-   "type": "function",
-   "name": "HeadroomStatus",
-   "summary": "Exported function HeadroomStatus with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:StartHeadroom",
-   "type": "function",
-   "name": "StartHeadroom",
-   "summary": "Exported function StartHeadroom with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:SaveHeadroomConfig",
-   "type": "function",
-   "name": "SaveHeadroomConfig",
-   "summary": "Exported function SaveHeadroomConfig with 1 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:StopHeadroom",
-   "type": "function",
-   "name": "StopHeadroom",
-   "summary": "Exported function StopHeadroom with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:pollHeadroomStats",
-   "type": "function",
-   "name": "pollHeadroomStats",
-   "summary": "Unexported function pollHeadroomStats with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:emitHeadroomStats",
-   "type": "function",
-   "name": "emitHeadroomStats",
-   "summary": "Unexported function emitHeadroomStats with no parameters in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:isKompressDisabled",
-   "type": "function",
-   "name": "isKompressDisabled",
-   "summary": "Unexported function isKompressDisabled with 1 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "function:desktop/headroom_sidecar.go:kompressRunSeconds",
-   "type": "function",
-   "name": "kompressRunSeconds",
-   "summary": "Unexported function kompressRunSeconds with 1 parameter(s) in headroom_sidecar",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "class:desktop/headroom_sidecar.go:HeadroomStatusView",
-   "type": "class",
-   "name": "HeadroomStatusView",
-   "summary": "Class with 0 method(s) and 15 propertie(s)",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "class:desktop/headroom_sidecar.go:headroomSidecar",
-   "type": "class",
-   "name": "headroomSidecar",
-   "summary": "Class with 8 method(s) and 15 propertie(s)",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "moderate"
-  },
-  {
-   "id": "class:desktop/headroom_sidecar.go:proxyStats",
-   "type": "class",
-   "name": "proxyStats",
-   "summary": "Class with 0 method(s) and 6 propertie(s)",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
-  },
-  {
-   "id": "class:desktop/headroom_sidecar.go:HeadroomConfigView",
-   "type": "class",
-   "name": "HeadroomConfigView",
-   "summary": "Class with 0 method(s) and 8 propertie(s)",
-   "tags": [
-    "go",
-    "go"
-   ],
-   "complexity": "simple"
   },
   {
    "id": "file:desktop/tab_profile_test.go",
@@ -25688,6 +25355,347 @@
     "internal"
    ],
    "complexity": "simple"
+  },
+  {
+   "id": "file:.gitignore",
+   "type": "file",
+   "name": ".gitignore",
+   "summary": "unknown Miscellaneous: .gitignore — 0 function(s), 64 lines",
+   "tags": [
+    "unknown",
+    "simple"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "file:.reasonix/desktop-topic-created-at.json",
+   "type": "file",
+   "name": "desktop-topic-created-at.json",
+   "summary": "json Miscellaneous: desktop-topic-created-at.json — 0 function(s), 4 lines",
+   "tags": [
+    "json",
+    "simple"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:.reasonix/desktop-topic-title-sources.json",
+   "type": "file",
+   "name": "desktop-topic-title-sources.json",
+   "summary": "json Miscellaneous: desktop-topic-title-sources.json — 0 function(s), 10 lines",
+   "tags": [
+    "json",
+    "simple"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:.reasonix/desktop-topic-titles.json",
+   "type": "file",
+   "name": "desktop-topic-titles.json",
+   "summary": "json Miscellaneous: desktop-topic-titles.json — 0 function(s), 10 lines",
+   "tags": [
+    "json",
+    "simple"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "file:desktop/headroom_sidecar.go",
+   "type": "file",
+   "name": "headroom_sidecar.go",
+   "summary": "Headroom proxy sidecar lifecycle manager: 22 function(s), 825 lines",
+   "tags": [
+    "go",
+    "complex"
+   ],
+   "complexity": "complex"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:newHeadroomSidecar",
+   "type": "function",
+   "name": "newHeadroomSidecar",
+   "summary": "Unexported function newHeadroomSidecar with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:installed",
+   "type": "function",
+   "name": "installed",
+   "summary": "Unexported function installed with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:version",
+   "type": "function",
+   "name": "version",
+   "summary": "Unexported function version with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:start",
+   "type": "function",
+   "name": "start",
+   "summary": "Unexported function start with 2 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:stop",
+   "type": "function",
+   "name": "stop",
+   "summary": "Unexported function stop with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:status",
+   "type": "function",
+   "name": "status",
+   "summary": "Unexported function status with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:healthCheck",
+   "type": "function",
+   "name": "healthCheck",
+   "summary": "Unexported function healthCheck with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:fetchStats",
+   "type": "function",
+   "name": "fetchStats",
+   "summary": "Unexported function fetchStats with 1 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:waitForReady",
+   "type": "function",
+   "name": "waitForReady",
+   "summary": "Unexported function waitForReady with 2 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:writeWindowsLauncher",
+   "type": "function",
+   "name": "writeWindowsLauncher",
+   "summary": "Unexported function writeWindowsLauncher with 1 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:autoStartHeadroom",
+   "type": "function",
+   "name": "autoStartHeadroom",
+   "summary": "Unexported function autoStartHeadroom with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:patchHeadroomServer",
+   "type": "function",
+   "name": "patchHeadroomServer",
+   "summary": "Unexported function patchHeadroomServer with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:HeadroomHasUpstream",
+   "type": "function",
+   "name": "HeadroomHasUpstream",
+   "summary": "Exported function HeadroomHasUpstream with 1 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:upstreamURLForConfig",
+   "type": "function",
+   "name": "upstreamURLForConfig",
+   "summary": "Unexported function upstreamURLForConfig with 1 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:HeadroomStatus",
+   "type": "function",
+   "name": "HeadroomStatus",
+   "summary": "Exported function HeadroomStatus with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:StartHeadroom",
+   "type": "function",
+   "name": "StartHeadroom",
+   "summary": "Exported function StartHeadroom with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:SaveHeadroomConfig",
+   "type": "function",
+   "name": "SaveHeadroomConfig",
+   "summary": "Exported function SaveHeadroomConfig with 1 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:StopHeadroom",
+   "type": "function",
+   "name": "StopHeadroom",
+   "summary": "Exported function StopHeadroom with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:pollHeadroomStats",
+   "type": "function",
+   "name": "pollHeadroomStats",
+   "summary": "Unexported function pollHeadroomStats with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:emitHeadroomStats",
+   "type": "function",
+   "name": "emitHeadroomStats",
+   "summary": "Unexported function emitHeadroomStats with no parameters in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:isKompressDisabled",
+   "type": "function",
+   "name": "isKompressDisabled",
+   "summary": "Unexported function isKompressDisabled with 1 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "function:desktop/headroom_sidecar.go:kompressRunSeconds",
+   "type": "function",
+   "name": "kompressRunSeconds",
+   "summary": "Unexported function kompressRunSeconds with 1 parameter(s) in headroom_sidecar",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/headroom_sidecar.go:HeadroomStatusView",
+   "type": "class",
+   "name": "HeadroomStatusView",
+   "summary": "Class with 0 method(s) and 15 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/headroom_sidecar.go:headroomSidecar",
+   "type": "class",
+   "name": "headroomSidecar",
+   "summary": "Class with 8 method(s) and 15 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "moderate"
+  },
+  {
+   "id": "class:desktop/headroom_sidecar.go:proxyStats",
+   "type": "class",
+   "name": "proxyStats",
+   "summary": "Class with 0 method(s) and 6 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
+  },
+  {
+   "id": "class:desktop/headroom_sidecar.go:HeadroomConfigView",
+   "type": "class",
+   "name": "HeadroomConfigView",
+   "summary": "Class with 0 method(s) and 8 propertie(s)",
+   "tags": [
+    "go",
+    "go"
+   ],
+   "complexity": "simple"
   }
  ],
  "edges": [
@@ -27479,223 +27487,6 @@
   {
    "source": "file:desktop/frontend/src/store/layout.ts",
    "target": "function:desktop/frontend/src/store/layout.ts:saveRightDockPreviewWidth",
-   "type": "exports",
-   "direction": "forward",
-   "weight": 0.7
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:newHeadroomSidecar",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:installed",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:version",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:start",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:stop",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:status",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:healthCheck",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:fetchStats",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:waitForReady",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:writeWindowsLauncher",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:autoStartHeadroom",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:patchHeadroomServer",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:HeadroomHasUpstream",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:upstreamURLForConfig",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:HeadroomStatus",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:StartHeadroom",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:SaveHeadroomConfig",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:StopHeadroom",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:pollHeadroomStats",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:emitHeadroomStats",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:isKompressDisabled",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:kompressRunSeconds",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "class:desktop/headroom_sidecar.go:HeadroomStatusView",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "class:desktop/headroom_sidecar.go:headroomSidecar",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "class:desktop/headroom_sidecar.go:proxyStats",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "class:desktop/headroom_sidecar.go:HeadroomConfigView",
-   "type": "contains",
-   "direction": "forward",
-   "weight": 1
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:HeadroomHasUpstream",
-   "type": "exports",
-   "direction": "forward",
-   "weight": 0.7
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:HeadroomStatus",
-   "type": "exports",
-   "direction": "forward",
-   "weight": 0.7
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:StartHeadroom",
-   "type": "exports",
-   "direction": "forward",
-   "weight": 0.7
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:SaveHeadroomConfig",
-   "type": "exports",
-   "direction": "forward",
-   "weight": 0.7
-  },
-  {
-   "source": "file:desktop/headroom_sidecar.go",
-   "target": "function:desktop/headroom_sidecar.go:StopHeadroom",
    "type": "exports",
    "direction": "forward",
    "weight": 0.7
@@ -33131,6 +32922,223 @@
    "type": "exports",
    "direction": "forward",
    "weight": 0.7
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:newHeadroomSidecar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:installed",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:version",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:start",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:stop",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:status",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:healthCheck",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:fetchStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:waitForReady",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:writeWindowsLauncher",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:autoStartHeadroom",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:patchHeadroomServer",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:HeadroomHasUpstream",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:upstreamURLForConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:HeadroomStatus",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:StartHeadroom",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:SaveHeadroomConfig",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:StopHeadroom",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:pollHeadroomStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:emitHeadroomStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:isKompressDisabled",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:kompressRunSeconds",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "class:desktop/headroom_sidecar.go:HeadroomStatusView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "class:desktop/headroom_sidecar.go:headroomSidecar",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "class:desktop/headroom_sidecar.go:proxyStats",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "class:desktop/headroom_sidecar.go:HeadroomConfigView",
+   "type": "contains",
+   "direction": "forward",
+   "weight": 1
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:HeadroomHasUpstream",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:HeadroomStatus",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:StartHeadroom",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:SaveHeadroomConfig",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
+  },
+  {
+   "source": "file:desktop/headroom_sidecar.go",
+   "target": "function:desktop/headroom_sidecar.go:StopHeadroom",
+   "type": "exports",
+   "direction": "forward",
+   "weight": 0.7
   }
  ],
  "layers": [
@@ -33316,33 +33324,6 @@
     "function:desktop/favorites_app_test.go:TestAtomicWritePreservesExistingOnFailure",
     "function:desktop/favorites_app_test.go:TestGetFavoritesCorruptJSON",
     "function:desktop/favorites_app_test.go:TestGenerateFavoriteID",
-    "file:desktop/headroom_sidecar.go",
-    "function:desktop/headroom_sidecar.go:newHeadroomSidecar",
-    "function:desktop/headroom_sidecar.go:installed",
-    "function:desktop/headroom_sidecar.go:version",
-    "function:desktop/headroom_sidecar.go:start",
-    "function:desktop/headroom_sidecar.go:stop",
-    "function:desktop/headroom_sidecar.go:status",
-    "function:desktop/headroom_sidecar.go:healthCheck",
-    "function:desktop/headroom_sidecar.go:fetchStats",
-    "function:desktop/headroom_sidecar.go:waitForReady",
-    "function:desktop/headroom_sidecar.go:writeWindowsLauncher",
-    "function:desktop/headroom_sidecar.go:autoStartHeadroom",
-    "function:desktop/headroom_sidecar.go:patchHeadroomServer",
-    "function:desktop/headroom_sidecar.go:HeadroomHasUpstream",
-    "function:desktop/headroom_sidecar.go:upstreamURLForConfig",
-    "function:desktop/headroom_sidecar.go:HeadroomStatus",
-    "function:desktop/headroom_sidecar.go:StartHeadroom",
-    "function:desktop/headroom_sidecar.go:SaveHeadroomConfig",
-    "function:desktop/headroom_sidecar.go:StopHeadroom",
-    "function:desktop/headroom_sidecar.go:pollHeadroomStats",
-    "function:desktop/headroom_sidecar.go:emitHeadroomStats",
-    "function:desktop/headroom_sidecar.go:isKompressDisabled",
-    "function:desktop/headroom_sidecar.go:kompressRunSeconds",
-    "class:desktop/headroom_sidecar.go:HeadroomStatusView",
-    "class:desktop/headroom_sidecar.go:headroomSidecar",
-    "class:desktop/headroom_sidecar.go:proxyStats",
-    "class:desktop/headroom_sidecar.go:HeadroomConfigView",
     "file:desktop/tab_profile_test.go",
     "function:desktop/tab_profile_test.go:testTab",
     "function:desktop/tab_profile_test.go:TestSetEffortForTabIsTabLocal",
@@ -33669,7 +33650,34 @@
     "class:desktop/tabs.go:topicSessionMatch",
     "class:desktop/tabs.go:topicSessionDirIndex",
     "class:desktop/tabs.go:sessionListCacheEntry",
-    "class:desktop/tabs.go:sessionListCache"
+    "class:desktop/tabs.go:sessionListCache",
+    "file:desktop/headroom_sidecar.go",
+    "function:desktop/headroom_sidecar.go:newHeadroomSidecar",
+    "function:desktop/headroom_sidecar.go:installed",
+    "function:desktop/headroom_sidecar.go:version",
+    "function:desktop/headroom_sidecar.go:start",
+    "function:desktop/headroom_sidecar.go:stop",
+    "function:desktop/headroom_sidecar.go:status",
+    "function:desktop/headroom_sidecar.go:healthCheck",
+    "function:desktop/headroom_sidecar.go:fetchStats",
+    "function:desktop/headroom_sidecar.go:waitForReady",
+    "function:desktop/headroom_sidecar.go:writeWindowsLauncher",
+    "function:desktop/headroom_sidecar.go:autoStartHeadroom",
+    "function:desktop/headroom_sidecar.go:patchHeadroomServer",
+    "function:desktop/headroom_sidecar.go:HeadroomHasUpstream",
+    "function:desktop/headroom_sidecar.go:upstreamURLForConfig",
+    "function:desktop/headroom_sidecar.go:HeadroomStatus",
+    "function:desktop/headroom_sidecar.go:StartHeadroom",
+    "function:desktop/headroom_sidecar.go:SaveHeadroomConfig",
+    "function:desktop/headroom_sidecar.go:StopHeadroom",
+    "function:desktop/headroom_sidecar.go:pollHeadroomStats",
+    "function:desktop/headroom_sidecar.go:emitHeadroomStats",
+    "function:desktop/headroom_sidecar.go:isKompressDisabled",
+    "function:desktop/headroom_sidecar.go:kompressRunSeconds",
+    "class:desktop/headroom_sidecar.go:HeadroomStatusView",
+    "class:desktop/headroom_sidecar.go:headroomSidecar",
+    "class:desktop/headroom_sidecar.go:proxyStats",
+    "class:desktop/headroom_sidecar.go:HeadroomConfigView"
    ]
   },
   {

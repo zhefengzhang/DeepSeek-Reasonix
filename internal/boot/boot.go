@@ -1362,10 +1362,21 @@ func NewProviderWithProxy(e *config.ProviderEntry, proxy netclient.ProxySpec) (p
 	baseURL := e.BaseURL
 	if e.HeadroomEnabled {
 		port := headroomProxyPort()
-		if e.Kind == "openai" || e.Kind == "" {
-			baseURL = fmt.Sprintf("http://127.0.0.1:%d/v1", port)
+		// Only rewrite the base URL when the proxy is actually reachable.
+		// On startup the proxy may still be initialising (Kompress warm-up);
+		// routing through a dead proxy would block every request until the
+		// async pollHeadroomStats path detects readiness and triggers a
+		// controller rebuild.
+		if headroomReachable(port) {
+			if e.Kind == "openai" || e.Kind == "" {
+				baseURL = fmt.Sprintf("http://127.0.0.1:%d/v1", port)
+			} else {
+				baseURL = fmt.Sprintf("http://127.0.0.1:%d", port)
+			}
 		} else {
-			baseURL = fmt.Sprintf("http://127.0.0.1:%d", port)
+			slog.Warn("headroom proxy not reachable, using direct connection",
+				"port", port,
+			)
 		}
 	}
 	// When headroom is enabled, increase request timeout and ensure

@@ -1367,6 +1367,18 @@ func (a *App) SaveProvider(p ProviderView) error {
 		e.ContextWindow = p.ContextWindow
 		e.ReasoningProtocol = p.ReasoningProtocol
 		e.SupportedEfforts = p.SupportedEfforts
+		// When the user disables headroom for this provider, check whether
+		// any *other* provider still has it on. If this was the last one,
+		// stop the sidecar proxy so it doesn't linger as an orphan process.
+		hasOtherHeadroom := false
+		if !p.HeadroomEnabled {
+			for i := range c.Providers {
+				if c.Providers[i].Name != p.Name && c.Providers[i].HeadroomEnabled {
+					hasOtherHeadroom = true
+					break
+				}
+			}
+		}
 		e.HeadroomEnabled = p.HeadroomEnabled
 		// Ensure "headroom" is in the status bar when headroom is enabled
 		if p.HeadroomEnabled {
@@ -1399,6 +1411,28 @@ func (a *App) SaveProvider(p ProviderView) error {
 				if upstreamURL != "" {
 					if err := a.headroom.start(c, upstreamURL); err != nil {
 						slog.Warn("headroom: auto-start on provider save failed", "err", err)
+					} else {
+						// Wait for proxy readiness so the rebuild below
+						// routes through the proxy instead of falling back
+						// to a direct connection. Cap at 5 minutes — if the
+						// proxy still isn't ready by then it's unlikely to
+						// ever work (stuck on model download, port conflict,
+						// or Python environment issue).
+						deadline := time.After(300 * time.Second)
+						tick := time.NewTicker(200 * time.Millisecond)
+						defer tick.Stop()
+					waitLoop:
+						for {
+							select {
+							case <-deadline:
+								slog.Warn("headroom: proxy not ready within 5 min, continuing with direct connection")
+								break waitLoop
+							case <-tick.C:
+								if a.headroom.healthCheck() {
+									break waitLoop
+								}
+							}
+						}
 					}
 				}
 			}
@@ -1410,6 +1444,9 @@ func (a *App) SaveProvider(p ProviderView) error {
 				}
 			}
 			c.Desktop.StatusBarItems = filtered
+			if !hasOtherHeadroom && a.headroom != nil {
+				a.headroom.stop()
+			}
 		}
 		e.DefaultEffort = p.DefaultEffort
 		e.Model = ""
