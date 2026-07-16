@@ -2,15 +2,51 @@
  "projectRoot": "D:\\Work\\Git\\my\\DeepSeek-Reasonix",
  "batchFiles": [
   {
-   "path": "desktop/settings_app.go",
-   "language": "go",
-   "sizeLines": 2233,
+   "path": "desktop/frontend/src/components/FavoritesPanel.tsx",
+   "language": "tsx",
+   "sizeLines": 0,
    "fileCategory": "code"
   },
   {
-   "path": "internal/boot/boot.go",
+   "path": "desktop/frontend/src/locales/en.ts",
+   "language": "typescript",
+   "sizeLines": 1856,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/locales/zh-TW.ts",
+   "language": "typescript",
+   "sizeLines": 1851,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/locales/zh.ts",
+   "language": "typescript",
+   "sizeLines": 1855,
+   "fileCategory": "code"
+  },
+  {
+   "path": "desktop/frontend/src/styles.css",
+   "language": "css",
+   "sizeLines": 27851,
+   "fileCategory": "markup"
+  },
+  {
+   "path": "desktop/headroom_sidecar.go",
    "language": "go",
-   "sizeLines": 1751,
+   "sizeLines": 818,
+   "fileCategory": "code"
+  },
+  {
+   "path": "internal/tool/builtin/builtin_test.go",
+   "language": "go",
+   "sizeLines": 477,
+   "fileCategory": "code"
+  },
+  {
+   "path": "internal/tool/builtin/headroom_retrieve.go",
+   "language": "go",
+   "sizeLines": 0,
    "fileCategory": "code"
   }
  ],

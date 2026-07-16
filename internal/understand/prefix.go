@@ -77,10 +77,11 @@ func Prefix(workspaceRoot string) string {
 }
 
 // TurnHint returns a compact one-liner for per-turn injection (turn tail).
-// It tells the model that a knowledge graph is available and suggests using
-// understand_search. Returns "" when no graph exists. Unlike Prefix(), this
-// is NOT cache-stable — it's designed to be injected every turn via
-// control.Compose(), so staleness is checked fresh each time.
+// It tells the model which code intelligence tools are available and suggests
+// using understand_search + codegraph_explore together. Returns "" when no
+// graph exists. Unlike Prefix(), this is NOT cache-stable — it's designed to
+// be injected every turn via control.Compose(), so staleness is checked fresh
+// each time.
 func TurnHint(workspaceRoot string) string {
 	if workspaceRoot == "" {
 		return ""
@@ -107,7 +108,14 @@ func TurnHint(workspaceRoot string) string {
 			}
 		}
 	}
-	return fmt.Sprintf("💡 Knowledge graph: %d nodes, %d edges.%s Use `understand_search` for structural queries (modules, files, layers, relationships). Prefer it over grep for codebase exploration.", len(g.Nodes), len(g.Edges), staleNote)
+
+	// Detect CodeGraph availability so the hint includes both tools.
+	codeGraphHint := ""
+	if _, err := os.Stat(filepath.Join(workspaceRoot, ".codegraph")); err == nil {
+		codeGraphHint = " + `codegraph_explore` (`mcp__codegraph__codegraph_explore`) for source-level queries (verbatim source, call paths, blast radius)"
+	}
+
+	return fmt.Sprintf("💡 Knowledge graph: %d nodes, %d edges.%s Use `understand_search` for structural exploration (modules, files, layers, relationships)%s. Prefer these over grep for codebase exploration.", len(g.Nodes), len(g.Edges), staleNote, codeGraphHint)
 }
 
 // currentGitHash runs git rev-parse with a 1s timeout.
