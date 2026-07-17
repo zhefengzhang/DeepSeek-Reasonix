@@ -1,0 +1,75 @@
+dev
+go.mod
+go.sum
+LICENSE
+Makefile
+prod_test
+README.zh-CN.md
+secrets.json
+
+# Reasonix 状态 / 元数据
+/.reasonix/autoresearch
+/.reasonix/truncated-results
+/.github
+/.githooks
+/.signpath
+
+/.scratch
+/.signpath
+
+# CodeGraph 自身索引（避免循环扫描）
+/.codegraph/
+/.understand-anything/
+/.scratch/
+
+# 前端构建产物与依赖
+/desktop/frontend/node_modules
+/desktop/frontend/dist
+/desktop/frontend/sourcemaps/
+/desktop/frontend/wailsjs/
+node_modules/
+
+# 第三方工具仓库
+# /OtherPackage/codegraph
+# /OtherPackage/headroom
+/OtherPackage/Understand-Anything/node_modules
+/OtherPackage/Understand-Anything/understand-anything-plugin/node_modules
+/OtherPackage/Understand-Anything/understand-anything-plugin/packages/core/node_modules
+/OtherPackage/Understand-Anything/understand-anything-plugin/packages/core/dist
+
+CHANGELOG.md
+
+# Wails 桌面构建产物
+/desktop/build/
+/desktop/desktop
+/desktop/desktop.exe
+
+# 发布构建产物
+/MyReasonixRelease/
+/bin/
+/dist/
+/stage/
+
+# Go 测试 / 编译临时文件
+*.test
+*.out
+*.coverprofile
+
+# 网站构建产物
+/site/dist/
+/site/.astro/
+
+# npm 打包暂存
+/npm/.stage/
+
+# 文档
+/docs
+
+# 性能测试数据
+/benchmarks
+
+# 管理文件
+/管理
+
+# Workers
+/workers/
