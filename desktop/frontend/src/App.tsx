@@ -3684,6 +3684,9 @@ export default function App() {
               ) : rightDockMode === "favorites" ? (
                 <FavoritesPanel
                   workspaceRoot={activeTab?.workspaceRoot || state.meta?.cwd || ""}
+                  onFillComposer={(text) => setComposerInsertRequest({ id: Date.now(), text, mode: "append" })}
+                  onFillPlanRevision={(text) => setPlanRevisionInsertRequest({ id: Date.now(), text, mode: "append" })}
+                  onSetGuidance={(text) => { app.SetGuidancePrompt(text).catch(() => {}); useFavoritesStore.getState().fillGuidancePrompt(text); showToast(t("favorites.setGuidanceDone"), "info"); }}
                 />
               ) : (
                 <WorkspacePanel

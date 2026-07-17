@@ -176,6 +176,14 @@ export function ApprovalModal({
   useEffect(() => {
     if (!insertRequest || insertRequest.id === consumedInsertIdRef.current) return;
     consumedInsertIdRef.current = insertRequest.id;
+    if (insertRequest.mode === "replace") {
+      setRevisionText(insertRequest.text);
+      return;
+    }
+    if (insertRequest.mode === "append") {
+      setRevisionText(revisionText.trim() ? revisionText + "\n" + insertRequest.text : insertRequest.text);
+      return;
+    }
     insertRevisionText(insertRequest.text);
   }, [insertRequest, insertRevisionText]);
 

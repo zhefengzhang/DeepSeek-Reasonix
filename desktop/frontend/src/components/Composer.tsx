@@ -673,6 +673,18 @@ export function Composer({
     }).catch(() => {});
   }, [draftKey, ready]);
 
+  // Sync guidancePrompt when favorites panel triggers a fill (e.g. "Set as guidance" button).
+  useEffect(() => {
+    const unsub = useFavoritesStore.subscribe((state, prevState) => {
+      const val = state.requestGuidanceFill;
+      if (val && val !== prevState.requestGuidanceFill) {
+        setGuidancePrompt(val);
+        useFavoritesStore.getState().clearRequestGuidanceFill();
+      }
+    });
+    return unsub;
+  }, []);
+
   useEffect(() => {
     if (!running || !guidanceQueuePreviewKey) return;
     setGuidanceExpanded(false);
@@ -1025,6 +1037,10 @@ export function Composer({
     consumedInsertIdRef.current = insertRequest.id;
     if (insertRequest.mode === "replace") {
       replaceComposerText(insertRequest.text);
+      return;
+    }
+    if (insertRequest.mode === "append") {
+      setTextCaretEnd(text.trim() ? text + "\n" + insertRequest.text : insertRequest.text);
       return;
     }
     const ref = parseWorkspaceReference(insertRequest.text);

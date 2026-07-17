@@ -43,6 +43,7 @@ export interface FavoritesState {
   workspaceRoot: string;
   composerText: string;
   lastError: string | null;
+  requestGuidanceFill: string | null;
 }
 
 interface FavoritesActions {
@@ -57,6 +58,8 @@ interface FavoritesActions {
   clearError(): void;
   totalPages(): number;
   pageItems(): FavoriteItem[];
+  fillGuidancePrompt(text: string): void;
+  clearRequestGuidanceFill(): void;
 }
 
 // ── store ──────────────────────────────────────────────────────────────
@@ -87,6 +90,7 @@ export const useFavoritesStore = create<FavoritesState & FavoritesActions>((set,
     workspaceRoot: "",
     composerText: "",
     lastError: null,
+    requestGuidanceFill: null,
 
     async load(workspaceRoot: string) {
       const state = get();
@@ -203,6 +207,14 @@ export const useFavoritesStore = create<FavoritesState & FavoritesActions>((set,
       const state = get();
       const start = (state.currentPage - 1) * PAGE_SIZE;
       return state.items.slice(start, start + PAGE_SIZE);
+    },
+
+    fillGuidancePrompt(text: string) {
+      set({ requestGuidanceFill: text });
+    },
+
+    clearRequestGuidanceFill() {
+      set({ requestGuidanceFill: null });
     },
   };
 });

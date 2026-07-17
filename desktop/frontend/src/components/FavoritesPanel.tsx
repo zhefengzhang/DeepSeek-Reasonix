@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type DragEvent as ReactDragEvent } from "react";
-import { Bookmark, GripVertical, Pin, Plus, Search, Trash2, X } from "lucide-react";
+import { Bookmark, CornerDownLeft, Eye, FileText, GripVertical, Pin, Plus, Search, Trash2, X } from "lucide-react";
 import { useFavoritesStore } from "../lib/favoritesStore";
 import { useT } from "../lib/i18n";
 import { useToast } from "../lib/toast";
@@ -9,9 +9,12 @@ import type { FavoriteItem } from "../lib/types";
 
 interface FavoritesPanelProps {
   workspaceRoot: string;
+  onFillComposer?: (text: string) => void;
+  onFillPlanRevision?: (text: string) => void;
+  onSetGuidance?: (text: string) => void;
 }
 
-export function FavoritesPanel({ workspaceRoot }: FavoritesPanelProps) {
+export function FavoritesPanel({ workspaceRoot, onFillComposer, onFillPlanRevision, onSetGuidance }: FavoritesPanelProps) {
   const t = useT();
   const { showToast } = useToast();
   const store = useFavoritesStore();
@@ -289,6 +292,39 @@ export function FavoritesPanel({ workspaceRoot }: FavoritesPanelProps) {
 
               {/* Actions */}
               <div className="favorites-panel__actions">
+                {onFillComposer && (
+                  <button
+                    className="msg-meta__btn"
+                    type="button"
+                    aria-label={t("favorites.fillComposer")}
+                    title={t("favorites.fillComposer")}
+                    onClick={(e) => { e.stopPropagation(); onFillComposer(item.text); }}
+                  >
+                    <CornerDownLeft size={14} />
+                  </button>
+                )}
+                {onFillPlanRevision && (
+                  <button
+                    className="msg-meta__btn"
+                    type="button"
+                    aria-label={t("favorites.fillPlanRevision")}
+                    title={t("favorites.fillPlanRevision")}
+                    onClick={(e) => { e.stopPropagation(); onFillPlanRevision(item.text); }}
+                  >
+                    <FileText size={14} />
+                  </button>
+                )}
+                {onSetGuidance && (
+                  <button
+                    className="msg-meta__btn"
+                    type="button"
+                    aria-label={t("favorites.setGuidance")}
+                    title={t("favorites.setGuidance")}
+                    onClick={(e) => { e.stopPropagation(); onSetGuidance(item.text); }}
+                  >
+                    <Eye size={14} />
+                  </button>
+                )}
                 {isConfirmingDelete ? (
                   <>
                     <span className="favorites-panel__confirm-text">{t("favorites.confirmDelete")}</span>

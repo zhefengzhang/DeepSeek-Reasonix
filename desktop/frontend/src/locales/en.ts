@@ -221,6 +221,10 @@ export const en = {
   "favorites.searchResult": "{n} found",
   "favorites.readingHint": "Ctrl+Enter to save, Esc to close",
   "favorites.pin": "Pin to top",
+  "favorites.fillComposer": "Fill to chat input",
+  "favorites.fillPlanRevision": "Fill to plan revision",
+  "favorites.setGuidance": "Set as guidance",
+  "favorites.setGuidanceDone": "Guidance set",
 
   // mcp & skills drawer
   "caps.title": "MCP & Skills",

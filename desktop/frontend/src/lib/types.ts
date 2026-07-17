@@ -633,7 +633,7 @@ export interface FavoritesView {
 export interface ComposerInsertRequest {
   id: number;
   text: string;
-  mode?: "insert" | "replace";
+  mode?: "insert" | "replace" | "append";
 }
 
 // MCP & Skills drawer (desktop/app.go Capabilities) — the GUI counterpart to

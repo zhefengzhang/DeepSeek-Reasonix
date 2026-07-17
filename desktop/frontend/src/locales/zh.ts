@@ -222,6 +222,10 @@ export const zh: Record<DictKey, string> = {
   "favorites.searchResult": "找到 {n} 条",
   "favorites.readingHint": "Ctrl+Enter 保存，Esc 关闭",
   "favorites.pin": "置顶",
+  "favorites.fillComposer": "填充到聊天输入框",
+  "favorites.fillPlanRevision": "填充到计划修改框",
+  "favorites.setGuidance": "设为 guidance 强约束",
+  "favorites.setGuidanceDone": "Guidance 已设置",
 
   // MCP 与技能抽屉
   "caps.title": "MCP 与技能",
