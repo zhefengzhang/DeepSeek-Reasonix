@@ -17,6 +17,11 @@ agent. It is the Reasonix analog of Claude Code's CLAUDE.md.
 
 ## Code Intelligence
 
+**⚠️ HARD RULE: Every task MUST begin with `understand_search` FIRST, then
+`codegraph_explore` (`mcp__codegraph__codegraph_explore`) SECOND. grep and
+read_file are LAST RESORT. Violating this workflow multiplies token cost
+by 5-15×. The tools are free to call — skipping them is negligence.**
+
 Two complementary tools serve different granularities. **Using the right one
 first saves dozens of token-heavy tool calls.** Every task MUST start with the
 appropriate code intelligence tool — never grep or read_file to answer a
