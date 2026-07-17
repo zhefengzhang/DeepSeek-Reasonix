@@ -391,14 +391,6 @@ export function StatusBar({
   const renderedItems = visibleItems
     .map((id) => ({ id, node: itemRenderers[id] }))
     .filter(({ node }) => node !== null && node !== undefined && node !== false);
-  // Always show headroom indicator when proxy status is known,
-  // even if "headroom" is not in the user's status_bar_items list.
-  if (headroomStats !== undefined && !renderedItems.some((i) => i.id === "headroom")) {
-    const hr = itemRenderers["headroom"];
-    if (hr !== null && hr !== undefined && hr !== false) {
-      renderedItems.push({ id: "headroom" as StatusBarItemId, node: hr });
-    }
-  }
   return (
     <div className={`statusbar statusbar--${metricLabelStyle}`}>
       <div className="statusbar__group statusbar__group--items">
