@@ -1,5 +1,69 @@
-#!/bin/sh
-# Go-native pre-push gate replacing the retired v1 npm hook (install: make hooks).
-# Full tests run in CI; vet is the fast, cross-platform local check.
+#!/usr/bin/env bash
+# pre-push hook — runs before every git push.
+#
+# 1. go vet ./...         (hard gate: failure blocks push)
+# 2. update-kg.mjs        (soft gate: failure logged but does NOT block push)
+#
+# Installed via `git config core.hooksPath .githooks`.
+
 set -e
+
+# ------------------------------------------------------------------
+# 1) Go vet — fast, cross-platform local check
+# ------------------------------------------------------------------
+echo "🔍 pre-push: go vet ./..."
 go vet ./...
+
+# ------------------------------------------------------------------
+# 2) Knowledge graph update — silent failure, never blocks push
+# ------------------------------------------------------------------
+set +e
+
+KG_SCRIPT="$(git rev-parse --show-toplevel)/.understand-anything/update-kg.mjs"
+
+if [ ! -f "$KG_SCRIPT" ]; then
+  echo "⚠️  pre-push: .understand-anything/update-kg.mjs not found, skipping" >&2
+  exit 0
+fi
+
+if ! command -v node &>/dev/null; then
+  echo "⚠️  pre-push: node not found in PATH, skipping knowledge graph update" >&2
+  exit 0
+fi
+
+# Verify core dependency is built
+PLUGIN_DIR="$(git rev-parse --show-toplevel)/OtherPackage/Understand-Anything/understand-anything-plugin"
+if [ ! -d "$PLUGIN_DIR/node_modules/@understand-anything/core" ]; then
+  echo "⚠️  pre-push: @understand-anything/core not built, skipping knowledge graph update" >&2
+  echo "   Run: cd \"$PLUGIN_DIR\" && pnpm install" >&2
+  exit 0
+fi
+
+echo "📊 pre-push: updating knowledge graph..."
+if node "$KG_SCRIPT" 2>&1; then
+  echo "✅ pre-push: knowledge graph updated"
+else
+  echo "⚠️  pre-push: knowledge graph update failed — check stderr above" >&2
+fi
+
+# ------------------------------------------------------------------
+# 3) CodeGraph index sync — silent failure, never blocks push
+# ------------------------------------------------------------------
+CODEGRAPH_DIR="$(git rev-parse --show-toplevel)/.codegraph"
+
+if [ -d "$CODEGRAPH_DIR" ] && [ -f "$CODEGRAPH_DIR/codegraph.db" ]; then
+  if command -v codegraph &>/dev/null; then
+    echo "🔄 pre-push: syncing CodeGraph index..."
+    if codegraph sync @"$CODEGRAPH_DIR" 2>&1; then
+      echo "✅ pre-push: CodeGraph index synced"
+    else
+      echo "⚠️  pre-push: CodeGraph sync failed — check stderr above" >&2
+    fi
+  else
+    echo "⚠️  pre-push: codegraph not found in PATH, skipping CodeGraph sync" >&2
+  fi
+else
+  echo "ℹ️  pre-push: .codegraph/ not found, skipping CodeGraph sync" >&2
+fi
+
+exit 0

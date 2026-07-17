@@ -19,7 +19,7 @@ test:
 
 hooks:
 	@git config core.hooksPath .githooks
-	@echo "installed: core.hooksPath -> .githooks (pre-push runs go vet)"
+	@echo "installed: core.hooksPath -> .githooks (pre-push: go vet + knowledge-graph + codegraph sync)"
 
 cross:
 	@mkdir -p dist
