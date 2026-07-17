@@ -1185,16 +1185,21 @@ func (a *App) SetPlanModeDefault(v bool) error {
 	if err := cfg.SaveTo(path); err != nil {
 		return err
 	}
-	// Apply to all live sessions immediately so the change takes effect
-	// without creating new tabs or restarting.
-	a.mu.RLock()
+	// Apply to all live sessions immediately and persist so the change
+	// survives restart without requiring a separate saveTabs.
+	var updates []control.SessionAPI
+	a.mu.Lock()
 	for _, tab := range a.tabs {
 		if tab != nil && tab.Ctrl != nil {
 			tab.mode = tabModeFromAxes(v, currentTabToolApprovalMode(tab) == control.ToolApprovalYolo)
-			tab.Ctrl.SetPlanMode(v)
+			updates = append(updates, tab.Ctrl)
 		}
 	}
-	a.mu.RUnlock()
+	a.saveTabsLocked()
+	a.mu.Unlock()
+	for _, ctrl := range updates {
+		ctrl.SetPlanMode(v)
+	}
 	return nil
 }
 

@@ -583,6 +583,12 @@ func (a *App) restoreOrBuildTabs() {
 			tab.effort = cloneStringPtr(entry.Effort)
 			tab.tokenMode = boot.NormalizeTokenMode(entry.TokenMode)
 			tab.mode = persistedTabMode(entry.Mode)
+			// When global PlanModeDefault is on, ensure every restored tab
+			// gets plan mode regardless of what was persisted — the config
+			// takes precedence so the setting survives restarts (#4384).
+			if startupCfg != nil && startupCfg.Agent.PlanModeDefault {
+				tab.mode = tabModeFromAxes(true, tabModeHasAutoApproveTools(tab.mode))
+			}
 			tab.goal = strings.TrimSpace(entry.Goal)
 			tab.toolApprovalMode = normalizeToolApprovalMode(entry.ToolApprovalMode)
 			if tab.toolApprovalMode == control.ToolApprovalAsk && tabModeHasAutoApproveTools(entry.Mode) {
@@ -2497,6 +2503,10 @@ func (a *App) openTransientBlankRuntime(scope, workspaceRoot string) error {
 	}
 
 	model, toolApprovalMode := desktopNewSessionDefaults()
+	planMode := false
+	if cfg := config.LoadForEdit(config.UserConfigPath()); cfg != nil {
+		planMode = cfg.Agent.PlanModeDefault
+	}
 	sessionPath, err := createEmptySessionFile(desktopSessionDir(actualRoot), model)
 	if err != nil {
 		return err
@@ -2508,7 +2518,7 @@ func (a *App) openTransientBlankRuntime(scope, workspaceRoot string) error {
 		SessionPath:      sessionPath,
 		model:            model,
 		tokenMode:        boot.TokenModeFull,
-		mode:             tabModeFromAxes(false, toolApprovalMode == control.ToolApprovalYolo),
+		mode:             tabModeFromAxes(planMode, toolApprovalMode == control.ToolApprovalYolo),
 		toolApprovalMode: toolApprovalMode,
 		disabledMCP:      map[string]ServerView{},
 	}
