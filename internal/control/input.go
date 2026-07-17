@@ -192,6 +192,13 @@ func (c *Controller) Compose(text string) string {
 			text = "<background-jobs>\n" + note + "\n</background-jobs>\n\n" + text
 		}
 	}
+	// Read-file inventory: tell the model which files are already in context
+	// so it can skip unnecessary re-reads. This rides the turn tail, never the
+	// cache-stable prefix.
+	c.readInv.scanDelta(c.History())
+	if inv := c.readInv.build(); inv != "" {
+		text = inv + "\n\n" + text
+	}
 	return text
 }
 

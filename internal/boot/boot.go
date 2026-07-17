@@ -290,6 +290,7 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 	// surface (skills index) stay closer to the base prompt for cache coherence.
 	sysPrompt += "\n\n" + config.UserDecisionPolicy
 	sysPrompt += "\n\n" + config.LanguagePolicy
+	sysPrompt += "\n\n" + config.ContextInventoryPolicy
 	if tokenEconomy {
 		sysPrompt += "\n\n" + tokenEconomyPrompt
 	}

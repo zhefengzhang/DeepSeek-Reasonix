@@ -1621,6 +1621,12 @@ const LanguagePolicy = `Reply in the same language the user is using in their mo
 	`whenever they switch. Let this also guide the language you think in. Always keep code, ` +
 	`identifiers, file paths, shell commands, and technical terms in their original form — never translate them.`
 
+// ContextInventoryPolicy primes the model to use the per-turn
+// <context-inventory> block injected by the controller. The block lists files
+// already in context so the model can skip unnecessary re-reads. This policy
+// is a one-liner (~35 tokens) appended to the cache-stable prefix.
+const ContextInventoryPolicy = `Context re-read rule: when a <context-inventory> block appears in the turn, files listed without ⚠️ are already in context and unchanged — do not re-read them. Files marked ⚠️ stale were edited after read and may need refreshing. Files not listed are not in context.`
+
 // Default returns the built-in default configuration.
 func Default() *Config {
 	return &Config{

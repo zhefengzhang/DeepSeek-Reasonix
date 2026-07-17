@@ -88,6 +88,7 @@ type Controller struct {
 	// and write serialization behind its own locks, off c.mu — so a memory-panel
 	// save never stalls an approval or status poll. See memory.go.
 	memory            memoryManager
+	readInv           readFileTracker // per-session read-file inventory for context-reuse hints
 	cleanup           func()
 	autoPlan          string
 	responseLanguage  string
