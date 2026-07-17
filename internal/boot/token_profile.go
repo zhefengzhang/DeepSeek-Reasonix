@@ -29,6 +29,7 @@ var tokenEconomyCoreBuiltins = []string{
 	"edit_file",
 	"glob",
 	"grep",
+	"headroom_retrieve",
 	"kill_shell",
 	"ls",
 	"move_file",

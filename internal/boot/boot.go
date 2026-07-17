@@ -311,6 +311,13 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 	}
 	readPathResolver := builtin.NewPathResolver()
 	addBuiltins(reg, enabledBuiltins, cfg.WriteRootsForRoot(root), bashSpec, bashTimeout, searchSpec, stderr, root, proxySpec, cfg.ForbidReadRootsForRoot(root), readPathResolver)
+	// Ensure headroom_retrieve is always registered regardless of token economy
+	// mode or custom tools.enabled filter. Headroom compression may be active at
+	// the network layer and emit compressed-content markers; the model must be
+	// able to retrieve original content when it sees those markers.
+	if t, ok := tool.LookupBuiltin("headroom_retrieve"); ok {
+		reg.Add(t)
+	}
 	// Use the caller-supplied shared host when set, so controllers for the same
 	// workspace root reuse running MCP processes (e.g. one CodeGraph daemon
 	// instead of one per tab). Otherwise construct a private host per controller.
