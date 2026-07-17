@@ -1,3867 +1,742 @@
 {
   "scriptCompleted": true,
-  "filesAnalyzed": 8,
+  "filesAnalyzed": 4,
   "filesSkipped": [],
   "results": [
     {
-      "path": "desktop/frontend/src/components/FavoritesPanel.tsx",
-      "language": "tsx",
+      "path": ".cgcignore",
+      "language": "unknown",
       "fileCategory": "code",
-      "totalLines": 369,
-      "nonEmptyLines": 339,
-      "functions": [
-        {
-          "name": "FavoritesPanel",
-          "startLine": 14,
-          "endLine": 369,
-          "params": [
-            "{ workspaceRoot }"
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "name": "FavoritesPanel",
-          "line": 14,
-          "isDefault": false
-        }
-      ],
-      "callGraph": [
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useT",
-          "lineNumber": 15
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useToast",
-          "lineNumber": 16
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useFavoritesStore",
-          "lineNumber": 17
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useEffect",
-          "lineNumber": 34
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "showToast",
-          "lineNumber": 36
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "clearError",
-          "lineNumber": 37
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useEffect",
-          "lineNumber": 42
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "load",
-          "lineNumber": 43
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useState",
-          "lineNumber": 47
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useState",
-          "lineNumber": 48
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "searchQuery.trim",
-          "lineNumber": 49
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "items.filter",
-          "lineNumber": 50
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "item.text.toLowerCase().includes",
-          "lineNumber": 50
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "item.text.toLowerCase",
-          "lineNumber": 50
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "searchQuery.toLowerCase",
-          "lineNumber": 50
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "Math.max",
-          "lineNumber": 52
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "Math.ceil",
-          "lineNumber": 52
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "filteredItems.slice",
-          "lineNumber": 53
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useState",
-          "lineNumber": 56
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useState",
-          "lineNumber": 57
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useRef",
-          "lineNumber": 58
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "items.find",
-          "lineNumber": 60
-        },
-        {
-          "caller": "openReading",
-          "callee": "setReadingId",
-          "lineNumber": 63
-        },
-        {
-          "caller": "openReading",
-          "callee": "setReadingText",
-          "lineNumber": 64
-        },
-        {
-          "caller": "openReading",
-          "callee": "requestAnimationFrame",
-          "lineNumber": 66
-        },
-        {
-          "caller": "openReading",
-          "callee": "readingTextareaRef.current?.focus",
-          "lineNumber": 66
-        },
-        {
-          "caller": "closeReading",
-          "callee": "setReadingId",
-          "lineNumber": 70
-        },
-        {
-          "caller": "closeReading",
-          "callee": "setReadingText",
-          "lineNumber": 71
-        },
-        {
-          "caller": "saveReading",
-          "callee": "readingText.trim",
-          "lineNumber": 76
-        },
-        {
-          "caller": "saveReading",
-          "callee": "update",
-          "lineNumber": 78
-        },
-        {
-          "caller": "saveReading",
-          "callee": "remove",
-          "lineNumber": 80
-        },
-        {
-          "caller": "saveReading",
-          "callee": "closeReading",
-          "lineNumber": 82
-        },
-        {
-          "caller": "onReadingKeyDown",
-          "callee": "closeReading",
-          "lineNumber": 87
-        },
-        {
-          "caller": "onReadingKeyDown",
-          "callee": "e.preventDefault",
-          "lineNumber": 89
-        },
-        {
-          "caller": "onReadingKeyDown",
-          "callee": "saveReading",
-          "lineNumber": 90
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useState",
-          "lineNumber": 95
-        },
-        {
-          "caller": "confirmDelete",
-          "callee": "remove",
-          "lineNumber": 98
-        },
-        {
-          "caller": "confirmDelete",
-          "callee": "setDeleteId",
-          "lineNumber": 99
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useRef",
-          "lineNumber": 103
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useRef",
-          "lineNumber": 104
-        },
-        {
-          "caller": "onDragOver",
-          "callee": "e.preventDefault",
-          "lineNumber": 111
-        },
-        {
-          "caller": "onDragEnd",
-          "callee": "reorder",
-          "lineNumber": 121
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "useCallback",
-          "lineNumber": 128
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "composerText.trim",
-          "lineNumber": 129
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "add",
-          "lineNumber": 131
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "Math.max",
-          "lineNumber": 132
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "Math.ceil",
-          "lineNumber": 132
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setPage",
-          "lineNumber": 133
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 141
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 151
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "composerText.trim",
-          "lineNumber": 153
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 161
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 171
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 171
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 175
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 178
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 182
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 183
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setReadingText",
-          "lineNumber": 194
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 198
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 212
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 213
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setShowSearch",
-          "lineNumber": 214
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setSearchQuery",
-          "lineNumber": 214
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 225
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setSearchQuery",
-          "lineNumber": 227
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setPage",
-          "lineNumber": 227
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "searchQuery.trim",
-          "lineNumber": 229
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setSearchQuery",
-          "lineNumber": 230
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 230
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "searchQuery.trim",
-          "lineNumber": 234
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 236
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "pageItems.map",
-          "lineNumber": 242
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "searchQuery.trim",
-          "lineNumber": 249
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "onDragStart",
-          "lineNumber": 250
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "onDragOver",
-          "lineNumber": 251
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "openReading",
-          "lineNumber": 253
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 259
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 260
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "e.stopPropagation",
-          "lineNumber": 262
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "items.indexOf",
-          "lineNumber": 263
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "reorder",
-          "lineNumber": 265
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setPage",
-          "lineNumber": 266
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "searchQuery.trim",
-          "lineNumber": 274
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 275
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 275
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 294
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 298
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 299
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "confirmDelete",
-          "lineNumber": 300
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 307
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 308
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setDeleteId",
-          "lineNumber": 309
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 319
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 320
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setDeleteId",
-          "lineNumber": 321
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setPage",
-          "lineNumber": 339
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 341
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 343
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "setPage",
-          "lineNumber": 347
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 349
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "composerText.trim",
-          "lineNumber": 355
-        },
-        {
-          "caller": "FavoritesPanel",
-          "callee": "t",
-          "lineNumber": 363
-        }
-      ],
-      "metrics": {
-        "importCount": 6,
-        "exportCount": 1,
-        "functionCount": 1,
-        "classCount": 0
-      }
+      "totalLines": 61,
+      "nonEmptyLines": 48,
+      "metrics": {}
     },
     {
-      "path": "desktop/frontend/src/locales/en.ts",
-      "language": "typescript",
-      "fileCategory": "code",
-      "totalLines": 1878,
-      "nonEmptyLines": 1842,
-      "exports": [
+      "path": "REASONIX.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 158,
+      "nonEmptyLines": 114,
+      "sections": [
         {
-          "name": "en",
-          "line": 6,
-          "isDefault": false
+          "heading": "Reasonix project memory",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Conventions",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "Code Intelligence",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "Decision tree",
+          "level": 3,
+          "line": 25
+        },
+        {
+          "heading": "Mandatory workflow",
+          "level": 3,
+          "line": 34
+        },
+        {
+          "heading": "Anti-patterns (will waste tokens and lead to cache misses)",
+          "level": 3,
+          "line": 40
+        },
+        {
+          "heading": "Memory",
+          "level": 2,
+          "line": 47
+        },
+        {
+          "heading": "Engineering Discipline",
+          "level": 2,
+          "line": 57
+        },
+        {
+          "heading": "Before any task",
+          "level": 3,
+          "line": 59
+        },
+        {
+          "heading": "Before declaring done",
+          "level": 3,
+          "line": 77
+        },
+        {
+          "heading": "Scope discipline",
+          "level": 3,
+          "line": 91
+        },
+        {
+          "heading": "Engineering Skills",
+          "level": 2,
+          "line": 102
+        },
+        {
+          "heading": "Pre-push CI simulation",
+          "level": 2,
+          "line": 115
+        },
+        {
+          "heading": "Import cycle rule",
+          "level": 2,
+          "line": 127
+        },
+        {
+          "heading": "PR hygiene",
+          "level": 2,
+          "line": 137
+        },
+        {
+          "heading": "Cache-impact PR metadata",
+          "level": 2,
+          "line": 143
         }
       ],
       "metrics": {
         "importCount": 0,
-        "exportCount": 1,
+        "exportCount": 0,
         "functionCount": 0,
-        "classCount": 0
+        "classCount": 0,
+        "sectionCount": 16
       }
     },
     {
-      "path": "desktop/frontend/src/locales/zh-TW.ts",
-      "language": "typescript",
-      "fileCategory": "code",
-      "totalLines": 1873,
-      "nonEmptyLines": 1839,
-      "exports": [
+      "path": "docs/CODEGRAPH_INTEGRATION.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 219,
+      "nonEmptyLines": 149,
+      "sections": [
         {
-          "name": "zhTW",
-          "line": 7,
-          "isDefault": false
+          "heading": "CodeGraph 集成工作报告",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. 背景：为什么需要 CodeGraph",
+          "level": 2,
+          "line": 9
+        },
+        {
+          "heading": "现有的 Understand-Anything 能做什么",
+          "level": 3,
+          "line": 11
+        },
+        {
+          "heading": "Understand-Anything 的局限",
+          "level": 3,
+          "line": 17
+        },
+        {
+          "heading": "CodeGraph 补上那一块",
+          "level": 3,
+          "line": 23
+        },
+        {
+          "heading": "2. 双图谱分工",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "标准工作流",
+          "level": 3,
+          "line": 38
+        },
+        {
+          "heading": "涉及的配置文件",
+          "level": 3,
+          "line": 50
+        },
+        {
+          "heading": "3. 安装与配置（小白版）",
+          "level": 2,
+          "line": 61
+        },
+        {
+          "heading": "前提",
+          "level": 3,
+          "line": 63
+        },
+        {
+          "heading": "步骤 1：安装 CodeGraph",
+          "level": 3,
+          "line": 68
+        },
+        {
+          "heading": "步骤 2：在项目根目录建索引",
+          "level": 3,
+          "line": 78
+        },
+        {
+          "heading": "步骤 3：排除不需要索引的目录",
+          "level": 3,
+          "line": 99
+        },
+        {
+          "heading": "步骤 4：注册到 Reasonix",
+          "level": 3,
+          "line": 116
+        },
+        {
+          "heading": "步骤 5：重启 Reasonix",
+          "level": 3,
+          "line": 142
+        },
+        {
+          "heading": "4. 踩过的坑",
+          "level": 2,
+          "line": 148
+        },
+        {
+          "heading": "坑 1：`.mcp.json` 的 tier 字段被静默忽略",
+          "level": 3,
+          "line": 150
+        },
+        {
+          "heading": "坑 2：Windows 下 MCP 连接永远卡在「正在连接」",
+          "level": 3,
+          "line": 158
+        },
+        {
+          "heading": "坑 3：索引太慢",
+          "level": 3,
+          "line": 196
+        },
+        {
+          "heading": "5. 工具名说明",
+          "level": 2,
+          "line": 204
+        },
+        {
+          "heading": "6. 日常维护",
+          "level": 2,
+          "line": 214
         }
       ],
       "metrics": {
-        "importCount": 1,
-        "exportCount": 1,
+        "importCount": 0,
+        "exportCount": 0,
         "functionCount": 0,
-        "classCount": 0
+        "classCount": 0,
+        "sectionCount": 21
       }
     },
     {
-      "path": "desktop/frontend/src/locales/zh.ts",
-      "language": "typescript",
-      "fileCategory": "code",
-      "totalLines": 1877,
-      "nonEmptyLines": 1841,
-      "exports": [
-        {
-          "name": "zh",
-          "line": 7,
-          "isDefault": false
-        }
-      ],
-      "metrics": {
-        "importCount": 1,
-        "exportCount": 1,
-        "functionCount": 0,
-        "classCount": 0
-      }
-    },
-    {
-      "path": "desktop/frontend/src/styles.css",
-      "language": "css",
-      "fileCategory": "markup",
-      "totalLines": 28127,
-      "nonEmptyLines": 26066,
-      "metrics": {}
-    },
-    {
-      "path": "desktop/headroom_sidecar.go",
+      "path": "internal/understand/prefix.go",
       "language": "go",
       "fileCategory": "code",
-      "totalLines": 826,
-      "nonEmptyLines": 770,
+      "totalLines": 235,
+      "nonEmptyLines": 211,
       "functions": [
         {
-          "name": "newHeadroomSidecar",
-          "startLine": 69,
-          "endLine": 71,
-          "params": []
-        },
-        {
-          "name": "installed",
-          "startLine": 75,
-          "endLine": 91,
-          "params": []
-        },
-        {
-          "name": "version",
-          "startLine": 94,
-          "endLine": 115,
-          "params": []
-        },
-        {
-          "name": "start",
-          "startLine": 118,
-          "endLine": 252,
+          "name": "Prefix",
+          "startLine": 63,
+          "endLine": 77,
           "params": [
-            "cfg",
-            "upstreamBaseURL"
+            "workspaceRoot"
           ]
         },
         {
-          "name": "stop",
-          "startLine": 255,
-          "endLine": 275,
-          "params": []
-        },
-        {
-          "name": "status",
-          "startLine": 278,
-          "endLine": 313,
-          "params": []
-        },
-        {
-          "name": "healthCheck",
-          "startLine": 316,
-          "endLine": 333,
-          "params": []
-        },
-        {
-          "name": "fetchStats",
-          "startLine": 345,
-          "endLine": 389,
+          "name": "TurnHint",
+          "startLine": 85,
+          "endLine": 119,
           "params": [
-            "port"
+            "workspaceRoot"
           ]
         },
         {
-          "name": "waitForReady",
-          "startLine": 391,
-          "endLine": 410,
+          "name": "currentGitHash",
+          "startLine": 122,
+          "endLine": 131,
           "params": [
-            "ctx",
-            "port"
+            "workDir"
           ]
         },
         {
-          "name": "writeWindowsLauncher",
-          "startLine": 417,
-          "endLine": 479,
+          "name": "buildPrefix",
+          "startLine": 139,
+          "endLine": 226,
           "params": [
-            "path"
+            "g"
           ]
         },
         {
-          "name": "autoStartHeadroom",
-          "startLine": 482,
-          "endLine": 519,
-          "params": []
-        },
-        {
-          "name": "patchHeadroomServer",
-          "startLine": 525,
-          "endLine": 551,
-          "params": []
-        },
-        {
-          "name": "HeadroomHasUpstream",
-          "startLine": 555,
-          "endLine": 562,
+          "name": "truncateStr",
+          "startLine": 228,
+          "endLine": 235,
           "params": [
-            "cfg"
-          ]
-        },
-        {
-          "name": "upstreamURLForConfig",
-          "startLine": 565,
-          "endLine": 576,
-          "params": [
-            "cfg"
-          ]
-        },
-        {
-          "name": "HeadroomStatus",
-          "startLine": 579,
-          "endLine": 584,
-          "params": []
-        },
-        {
-          "name": "StartHeadroom",
-          "startLine": 587,
-          "endLine": 603,
-          "params": []
-        },
-        {
-          "name": "SaveHeadroomConfig",
-          "startLine": 607,
-          "endLine": 664,
-          "params": [
-            "in"
-          ]
-        },
-        {
-          "name": "StopHeadroom",
-          "startLine": 679,
-          "endLine": 685,
-          "params": []
-        },
-        {
-          "name": "pollHeadroomStats",
-          "startLine": 689,
-          "endLine": 705,
-          "params": []
-        },
-        {
-          "name": "emitHeadroomStats",
-          "startLine": 708,
-          "endLine": 782,
-          "params": []
-        },
-        {
-          "name": "isKompressDisabled",
-          "startLine": 785,
-          "endLine": 803,
-          "params": [
-            "port"
-          ]
-        },
-        {
-          "name": "kompressRunSeconds",
-          "startLine": 806,
-          "endLine": 826,
-          "params": [
-            "port"
+            "s",
+            "maxLen"
           ]
         }
       ],
       "classes": [
         {
-          "name": "HeadroomStatusView",
-          "startLine": 32,
+          "name": "uaProjectMeta",
+          "startLine": 19,
+          "endLine": 25,
+          "methods": [],
+          "properties": [
+            "Name",
+            "Languages",
+            "Frameworks",
+            "Description",
+            "GitCommit"
+          ]
+        },
+        {
+          "name": "uaNode",
+          "startLine": 27,
+          "endLine": 35,
+          "methods": [],
+          "properties": [
+            "ID",
+            "Type",
+            "Name",
+            "FilePath",
+            "Summary",
+            "Tags",
+            "Complexity"
+          ]
+        },
+        {
+          "name": "uaEdge",
+          "startLine": 37,
+          "endLine": 41,
+          "methods": [],
+          "properties": [
+            "Source",
+            "Target",
+            "Type"
+          ]
+        },
+        {
+          "name": "uaLayer",
+          "startLine": 43,
           "endLine": 48,
           "methods": [],
           "properties": [
-            "Running",
+            "ID",
+            "Name",
+            "Description",
+            "NodeIDs"
+          ]
+        },
+        {
+          "name": "uaGraph",
+          "startLine": 50,
+          "endLine": 56,
+          "methods": [],
+          "properties": [
             "Version",
-            "Installed",
-            "Port",
-            "Requests",
-            "TokensSaved",
-            "SavingsPct",
-            "CostSaved",
-            "CostCurrency",
-            "LifetimeTokens",
-            "LifetimePct",
-            "LifetimeCost",
-            "DisableKompress",
-            "ErrorMessage",
-            "Warming"
-          ]
-        },
-        {
-          "name": "headroomSidecar",
-          "startLine": 51,
-          "endLine": 67,
-          "methods": [
-            "installed",
-            "version",
-            "start",
-            "stop",
-            "status",
-            "healthCheck",
-            "fetchStats",
-            "waitForReady"
-          ],
-          "properties": [
-            "mu",
-            "cmd",
-            "port",
-            "mode",
-            "cancel",
-            "stopped",
-            "installedAt",
-            "installedVal",
-            "versionVal",
-            "wasEverReady",
-            "inputPricePer1M",
-            "priceCurrency",
-            "startErr",
-            "startRetried",
-            "kompressDisabled"
-          ]
-        },
-        {
-          "name": "proxyStats",
-          "startLine": 336,
-          "endLine": 343,
-          "methods": [],
-          "properties": [
-            "Requests",
-            "TokensSaved",
-            "SavingsPct",
-            "LifetimeTokens",
-            "LifetimeUSD",
-            "LifetimeInput"
-          ]
-        },
-        {
-          "name": "HeadroomConfigView",
-          "startLine": 667,
-          "endLine": 676,
-          "methods": [],
-          "properties": [
-            "Preset",
-            "Mode",
-            "CodeAware",
-            "DisableKompress",
-            "RequestTimeout",
-            "ShowLogWindow",
-            "GpuBackend",
-            "KeepAlive"
+            "Project",
+            "Nodes",
+            "Edges",
+            "Layers"
           ]
         }
       ],
       "exports": [
         {
-          "name": "HeadroomStatusView",
-          "line": 32,
+          "name": "Prefix",
+          "line": 63,
           "isDefault": false
         },
         {
-          "name": "HeadroomHasUpstream",
-          "line": 555,
-          "isDefault": false
-        },
-        {
-          "name": "HeadroomStatus",
-          "line": 579,
-          "isDefault": false
-        },
-        {
-          "name": "StartHeadroom",
-          "line": 587,
-          "isDefault": false
-        },
-        {
-          "name": "SaveHeadroomConfig",
-          "line": 607,
-          "isDefault": false
-        },
-        {
-          "name": "HeadroomConfigView",
-          "line": 667,
-          "isDefault": false
-        },
-        {
-          "name": "StopHeadroom",
-          "line": 679,
+          "name": "TurnHint",
+          "line": 85,
           "isDefault": false
         }
       ],
       "callGraph": [
         {
-          "caller": "newHeadroomSidecar",
-          "callee": "make",
-          "lineNumber": 70
+          "caller": "Prefix",
+          "callee": "filepath.Join",
+          "lineNumber": 67
         },
         {
-          "caller": "installed",
-          "callee": "h.mu.Lock",
+          "caller": "Prefix",
+          "callee": "os.ReadFile",
+          "lineNumber": 68
+        },
+        {
+          "caller": "Prefix",
+          "callee": "json.Unmarshal",
+          "lineNumber": 73
+        },
+        {
+          "caller": "Prefix",
+          "callee": "buildPrefix",
           "lineNumber": 76
         },
         {
-          "caller": "installed",
-          "callee": "h.mu.Unlock",
-          "lineNumber": 78
-        },
-        {
-          "caller": "installed",
-          "callee": "cached.IsZero",
-          "lineNumber": 79
-        },
-        {
-          "caller": "installed",
-          "callee": "exec.Command",
-          "lineNumber": 83
-        },
-        {
-          "caller": "installed",
-          "callee": "hideConsoleAttr",
-          "lineNumber": 84
-        },
-        {
-          "caller": "installed",
-          "callee": "cmd.Output",
-          "lineNumber": 85
-        },
-        {
-          "caller": "installed",
-          "callee": "h.mu.Lock",
-          "lineNumber": 86
-        },
-        {
-          "caller": "installed",
-          "callee": "h.mu.Unlock",
-          "lineNumber": 87
-        },
-        {
-          "caller": "installed",
-          "callee": "time.Now",
-          "lineNumber": 88
-        },
-        {
-          "caller": "installed",
-          "callee": "strings.HasPrefix",
+          "caller": "TurnHint",
+          "callee": "filepath.Join",
           "lineNumber": 89
         },
         {
-          "caller": "installed",
-          "callee": "string",
-          "lineNumber": 89
+          "caller": "TurnHint",
+          "callee": "os.ReadFile",
+          "lineNumber": 90
         },
         {
-          "caller": "version",
-          "callee": "h.installed",
+          "caller": "TurnHint",
+          "callee": "json.Unmarshal",
           "lineNumber": 95
         },
         {
-          "caller": "version",
-          "callee": "h.mu.Lock",
-          "lineNumber": 98
-        },
-        {
-          "caller": "version",
-          "callee": "h.mu.Unlock",
+          "caller": "TurnHint",
+          "callee": "filepath.Join",
           "lineNumber": 100
         },
         {
-          "caller": "version",
-          "callee": "exec.Command",
-          "lineNumber": 104
+          "caller": "TurnHint",
+          "callee": "os.ReadFile",
+          "lineNumber": 101
         },
         {
-          "caller": "version",
-          "callee": "hideConsoleAttr",
+          "caller": "TurnHint",
+          "callee": "json.Unmarshal",
           "lineNumber": 105
         },
         {
-          "caller": "version",
-          "callee": "cmd.Output",
+          "caller": "TurnHint",
+          "callee": "currentGitHash",
           "lineNumber": 106
         },
         {
-          "caller": "version",
-          "callee": "strings.TrimSpace",
-          "lineNumber": 110
+          "caller": "TurnHint",
+          "callee": "os.Stat",
+          "lineNumber": 114
         },
         {
-          "caller": "version",
-          "callee": "string",
-          "lineNumber": 110
+          "caller": "TurnHint",
+          "callee": "filepath.Join",
+          "lineNumber": 114
         },
         {
-          "caller": "version",
-          "callee": "h.mu.Lock",
-          "lineNumber": 111
+          "caller": "TurnHint",
+          "callee": "fmt.Sprintf",
+          "lineNumber": 118
         },
         {
-          "caller": "version",
-          "callee": "h.mu.Unlock",
-          "lineNumber": 113
+          "caller": "TurnHint",
+          "callee": "len",
+          "lineNumber": 118
         },
         {
-          "caller": "start",
-          "callee": "patchHeadroomServer",
-          "lineNumber": 120
+          "caller": "TurnHint",
+          "callee": "len",
+          "lineNumber": 118
         },
         {
-          "caller": "start",
-          "callee": "slog.Warn",
-          "lineNumber": 121
-        },
-        {
-          "caller": "start",
-          "callee": "h.mu.Lock",
+          "caller": "currentGitHash",
+          "callee": "context.WithTimeout",
           "lineNumber": 123
         },
         {
-          "caller": "start",
-          "callee": "h.mu.Unlock",
+          "caller": "currentGitHash",
+          "callee": "context.Background",
+          "lineNumber": 123
+        },
+        {
+          "caller": "currentGitHash",
+          "callee": "cancel",
           "lineNumber": 124
         },
         {
-          "caller": "start",
-          "callee": "cfg.Providers[i].PriceForModel",
-          "lineNumber": 131
+          "caller": "currentGitHash",
+          "callee": "exec.CommandContext",
+          "lineNumber": 125
         },
         {
-          "caller": "start",
-          "callee": "cfg.Providers[i].DefaultModel",
-          "lineNumber": 131
+          "caller": "currentGitHash",
+          "callee": "cmd.Output",
+          "lineNumber": 126
         },
         {
-          "caller": "start",
-          "callee": "fmt.Errorf",
-          "lineNumber": 140
+          "caller": "currentGitHash",
+          "callee": "strings.TrimSpace",
+          "lineNumber": 130
         },
         {
-          "caller": "start",
-          "callee": "cfg.Headroom.HeadroomPort",
+          "caller": "currentGitHash",
+          "callee": "string",
+          "lineNumber": 130
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 143
         },
         {
-          "caller": "start",
-          "callee": "cfg.Headroom.HeadroomMode",
-          "lineNumber": 144
+          "caller": "buildPrefix",
+          "callee": "fmt.Fprintf",
+          "lineNumber": 145
         },
         {
-          "caller": "start",
-          "callee": "filepath.Join",
-          "lineNumber": 150
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
+          "lineNumber": 149
         },
         {
-          "caller": "start",
-          "callee": "os.TempDir",
-          "lineNumber": 150
-        },
-        {
-          "caller": "start",
-          "callee": "writeWindowsLauncher",
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 151
         },
         {
-          "caller": "start",
-          "callee": "fmt.Errorf",
-          "lineNumber": 152
+          "caller": "buildPrefix",
+          "callee": "truncateStr",
+          "lineNumber": 151
         },
         {
-          "caller": "start",
-          "callee": "exec.LookPath",
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
+          "lineNumber": 153
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 155
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 155
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 156
         },
         {
-          "caller": "start",
-          "callee": "fmt.Sprintf",
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
+          "lineNumber": 157
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "strings.Join",
+          "lineNumber": 157
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 158
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 159
         },
         {
-          "caller": "start",
-          "callee": "fmt.Sprintf",
-          "lineNumber": 161
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
+          "lineNumber": 160
         },
         {
-          "caller": "start",
-          "callee": "context.WithCancel",
+          "caller": "buildPrefix",
+          "callee": "strings.Join",
+          "lineNumber": 160
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
+          "lineNumber": 162
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 164
         },
         {
-          "caller": "start",
-          "callee": "context.Background",
-          "lineNumber": 164
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 167
         },
         {
-          "caller": "start",
-          "callee": "exec.CommandContext",
-          "lineNumber": 165
-        },
-        {
-          "caller": "start",
-          "callee": "append",
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 168
         },
         {
-          "caller": "start",
-          "callee": "os.Environ",
-          "lineNumber": 168
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 170
         },
         {
-          "caller": "start",
-          "callee": "strconv.Itoa",
-          "lineNumber": 171
-        },
-        {
-          "caller": "start",
-          "callee": "cfg.Headroom.HeadroomDisableKompress",
+          "caller": "buildPrefix",
+          "callee": "fmt.Fprintf",
           "lineNumber": 174
         },
         {
-          "caller": "start",
-          "callee": "append",
+          "caller": "buildPrefix",
+          "callee": "truncateStr",
+          "lineNumber": 174
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
+          "lineNumber": 176
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "make",
           "lineNumber": 180
         },
         {
-          "caller": "start",
+          "caller": "buildPrefix",
           "callee": "append",
-          "lineNumber": 181
+          "lineNumber": 183
         },
         {
-          "caller": "start",
-          "callee": "filepath.Join",
-          "lineNumber": 185
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 186
         },
         {
-          "caller": "start",
-          "callee": "os.Getenv",
-          "lineNumber": 185
-        },
-        {
-          "caller": "start",
-          "callee": "filepath.Join",
+          "caller": "buildPrefix",
+          "callee": "sort.Strings",
           "lineNumber": 187
         },
         {
-          "caller": "start",
-          "callee": "os.Getenv",
-          "lineNumber": 187
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 188
         },
         {
-          "caller": "start",
-          "callee": "os.MkdirAll",
-          "lineNumber": 189
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
+          "lineNumber": 191
         },
         {
-          "caller": "start",
-          "callee": "slog.Warn",
-          "lineNumber": 190
-        },
-        {
-          "caller": "start",
-          "callee": "append",
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 192
         },
         {
-          "caller": "start",
-          "callee": "append",
-          "lineNumber": 199
+          "caller": "buildPrefix",
+          "callee": "strings.Join",
+          "lineNumber": 192
         },
         {
-          "caller": "start",
-          "callee": "cfg.Headroom.HeadroomGpuBackend",
-          "lineNumber": 199
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
+          "lineNumber": 193
         },
         {
-          "caller": "start",
-          "callee": "append",
+          "caller": "buildPrefix",
+          "callee": "make",
+          "lineNumber": 197
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "make",
           "lineNumber": 201
         },
         {
-          "caller": "start",
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 201
+        },
+        {
+          "caller": "buildPrefix",
           "callee": "append",
           "lineNumber": 203
         },
         {
-          "caller": "start",
-          "callee": "append",
+          "caller": "buildPrefix",
+          "callee": "fmt.Sprintf",
+          "lineNumber": 203
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "sort.Strings",
           "lineNumber": 205
         },
         {
-          "caller": "start",
-          "callee": "strconv.Itoa",
-          "lineNumber": 205
-        },
-        {
-          "caller": "start",
-          "callee": "append",
-          "lineNumber": 213
-        },
-        {
-          "caller": "start",
-          "callee": "cfg.Headroom.HeadroomShowLogWindow",
-          "lineNumber": 220
-        },
-        {
-          "caller": "start",
-          "callee": "hideConsoleAttr",
-          "lineNumber": 221
-        },
-        {
-          "caller": "start",
-          "callee": "cmd.Start",
-          "lineNumber": 223
-        },
-        {
-          "caller": "start",
-          "callee": "cancel",
-          "lineNumber": 224
-        },
-        {
-          "caller": "start",
-          "callee": "fmt.Errorf",
-          "lineNumber": 225
-        },
-        {
-          "caller": "start",
-          "callee": "slog.Info",
-          "lineNumber": 233
-        },
-        {
-          "caller": "start",
-          "callee": "h.waitForReady",
-          "lineNumber": 236
-        },
-        {
-          "caller": "start",
-          "callee": "func() {\n\t\terr := cmd.Wait()\n\t\th.mu.Lock()\n\t\th.cmd = nil\n\t\th.cancel = nil\n\t\th.mu.Unlock()\n\t\tif err != nil && ctx.Err() == nil {\n\t\t\tslog.Warn(\"headroom proxy exited unexpectedly\", \"err\", err)\n\t\t}\n\t\th.stopped <- struct{}{}\n\t}",
-          "lineNumber": 239
-        },
-        {
-          "caller": "start",
-          "callee": "cmd.Wait",
-          "lineNumber": 240
-        },
-        {
-          "caller": "start",
-          "callee": "h.mu.Lock",
-          "lineNumber": 241
-        },
-        {
-          "caller": "start",
-          "callee": "h.mu.Unlock",
-          "lineNumber": 244
-        },
-        {
-          "caller": "start",
-          "callee": "ctx.Err",
-          "lineNumber": 245
-        },
-        {
-          "caller": "start",
-          "callee": "slog.Warn",
-          "lineNumber": 246
-        },
-        {
-          "caller": "stop",
-          "callee": "h.mu.Lock",
-          "lineNumber": 256
-        },
-        {
-          "caller": "stop",
-          "callee": "h.mu.Unlock",
-          "lineNumber": 257
-        },
-        {
-          "caller": "stop",
-          "callee": "h.cancel",
-          "lineNumber": 260
-        },
-        {
-          "caller": "stop",
-          "callee": "slog.Info",
-          "lineNumber": 264
-        },
-        {
-          "caller": "stop",
-          "callee": "exec.Command(\"taskkill\", \"/T\", \"/F\", \"/PID\", strconv.Itoa(pid)).Run",
-          "lineNumber": 268
-        },
-        {
-          "caller": "stop",
-          "callee": "exec.Command",
-          "lineNumber": 268
-        },
-        {
-          "caller": "stop",
-          "callee": "strconv.Itoa",
-          "lineNumber": 268
-        },
-        {
-          "caller": "stop",
-          "callee": "h.cmd.Process.Kill",
-          "lineNumber": 270
-        },
-        {
-          "caller": "status",
-          "callee": "h.healthCheck",
-          "lineNumber": 281
-        },
-        {
-          "caller": "status",
-          "callee": "h.installed",
-          "lineNumber": 289
-        },
-        {
-          "caller": "status",
-          "callee": "h.version",
-          "lineNumber": 290
-        },
-        {
-          "caller": "status",
-          "callee": "h.fetchStats",
-          "lineNumber": 296
-        },
-        {
-          "caller": "status",
-          "callee": "float64",
-          "lineNumber": 302
-        },
-        {
-          "caller": "status",
-          "callee": "float64",
-          "lineNumber": 302
-        },
-        {
-          "caller": "healthCheck",
-          "callee": "context.WithTimeout",
-          "lineNumber": 321
-        },
-        {
-          "caller": "healthCheck",
-          "callee": "context.Background",
-          "lineNumber": 321
-        },
-        {
-          "caller": "healthCheck",
-          "callee": "cancel",
-          "lineNumber": 322
-        },
-        {
-          "caller": "healthCheck",
-          "callee": "http.NewRequestWithContext",
-          "lineNumber": 323
-        },
-        {
-          "caller": "healthCheck",
-          "callee": "fmt.Sprintf",
-          "lineNumber": 323
-        },
-        {
-          "caller": "healthCheck",
-          "callee": "hrmHTTPClient.Do",
-          "lineNumber": 327
-        },
-        {
-          "caller": "healthCheck",
-          "callee": "resp.Body.Close",
-          "lineNumber": 331
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "context.WithTimeout",
-          "lineNumber": 346
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "context.Background",
-          "lineNumber": 346
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "cancel",
-          "lineNumber": 347
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "http.NewRequestWithContext",
-          "lineNumber": 348
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "fmt.Sprintf",
-          "lineNumber": 348
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "hrmHTTPClient.Do",
-          "lineNumber": 352
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "resp.Body.Close",
-          "lineNumber": 356
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "json.NewDecoder(resp.Body).Decode",
-          "lineNumber": 374
-        },
-        {
-          "caller": "fetchStats",
-          "callee": "json.NewDecoder",
-          "lineNumber": 374
-        },
-        {
-          "caller": "waitForReady",
-          "callee": "time.NewTicker",
-          "lineNumber": 392
-        },
-        {
-          "caller": "waitForReady",
-          "callee": "tick.Stop",
-          "lineNumber": 393
-        },
-        {
-          "caller": "waitForReady",
-          "callee": "time.After",
-          "lineNumber": 394
-        },
-        {
-          "caller": "waitForReady",
-          "callee": "ctx.Done",
-          "lineNumber": 398
-        },
-        {
-          "caller": "waitForReady",
-          "callee": "slog.Warn",
-          "lineNumber": 401
-        },
-        {
-          "caller": "waitForReady",
-          "callee": "h.healthCheck",
-          "lineNumber": 404
-        },
-        {
-          "caller": "waitForReady",
-          "callee": "slog.Info",
-          "lineNumber": 405
-        },
-        {
-          "caller": "writeWindowsLauncher",
-          "callee": "os.WriteFile",
-          "lineNumber": 478
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "config.Load",
-          "lineNumber": 486
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "slog.Debug",
-          "lineNumber": 488
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "HeadroomHasUpstream",
-          "lineNumber": 491
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "slog.Debug",
-          "lineNumber": 492
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "cfg.Headroom.HeadroomAutoStart",
-          "lineNumber": 495
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "slog.Debug",
-          "lineNumber": 496
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "cfg.Headroom.ApplyPreset",
-          "lineNumber": 501
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "cfg.Headroom.HeadroomPreset",
-          "lineNumber": 501
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "upstreamURLForConfig",
-          "lineNumber": 502
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "slog.Warn",
-          "lineNumber": 504
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "a.headroom.healthCheck",
-          "lineNumber": 509
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "slog.Info",
-          "lineNumber": 510
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "a.headroom.start",
-          "lineNumber": 515
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "err.Error",
-          "lineNumber": 516
-        },
-        {
-          "caller": "autoStartHeadroom",
-          "callee": "slog.Warn",
-          "lineNumber": 517
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "exec.Command",
-          "lineNumber": 526
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "cmd.Output",
-          "lineNumber": 527
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "fmt.Errorf",
-          "lineNumber": 529
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "strings.TrimSpace",
-          "lineNumber": 531
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "string",
-          "lineNumber": 531
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "fmt.Errorf",
-          "lineNumber": 533
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "os.ReadFile",
-          "lineNumber": 535
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "fmt.Errorf",
-          "lineNumber": 537
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "string",
-          "lineNumber": 539
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "string",
-          "lineNumber": 540
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "strings.Contains",
-          "lineNumber": 541
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "string",
-          "lineNumber": 544
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "strings.Replace",
-          "lineNumber": 545
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "os.WriteFile",
-          "lineNumber": 546
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "fmt.Errorf",
-          "lineNumber": 547
-        },
-        {
-          "caller": "patchHeadroomServer",
-          "callee": "slog.Info",
-          "lineNumber": 549
-        },
-        {
-          "caller": "upstreamURLForConfig",
-          "callee": "strings.TrimRight",
-          "lineNumber": 568
-        },
-        {
-          "caller": "HeadroomStatus",
-          "callee": "a.headroom.status",
-          "lineNumber": 583
-        },
-        {
-          "caller": "StartHeadroom",
-          "callee": "fmt.Errorf",
-          "lineNumber": 589
-        },
-        {
-          "caller": "StartHeadroom",
-          "callee": "a.headroom.installed",
-          "lineNumber": 591
-        },
-        {
-          "caller": "StartHeadroom",
-          "callee": "fmt.Errorf",
-          "lineNumber": 592
-        },
-        {
-          "caller": "StartHeadroom",
-          "callee": "a.loadDesktopUserConfigForView",
-          "lineNumber": 594
-        },
-        {
-          "caller": "StartHeadroom",
-          "callee": "fmt.Errorf",
-          "lineNumber": 596
-        },
-        {
-          "caller": "StartHeadroom",
-          "callee": "upstreamURLForConfig",
-          "lineNumber": 598
-        },
-        {
-          "caller": "StartHeadroom",
-          "callee": "fmt.Errorf",
-          "lineNumber": 600
-        },
-        {
-          "caller": "StartHeadroom",
-          "callee": "a.headroom.start",
-          "lineNumber": 602
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "a.loadDesktopUserConfigForEdit",
-          "lineNumber": 608
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "fmt.Errorf",
-          "lineNumber": 610
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "cfg.Headroom.ApplyPreset",
-          "lineNumber": 616
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "cfg.SaveTo",
-          "lineNumber": 640
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "fmt.Errorf",
-          "lineNumber": 641
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "a.headroom.healthCheck",
-          "lineNumber": 652
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "a.headroom.stop",
-          "lineNumber": 653
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "time.Sleep",
-          "lineNumber": 657
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "upstreamURLForConfig",
-          "lineNumber": 658
-        },
-        {
-          "caller": "SaveHeadroomConfig",
-          "callee": "a.headroom.start",
-          "lineNumber": 660
-        },
-        {
-          "caller": "StopHeadroom",
-          "callee": "a.headroom.stop",
-          "lineNumber": 683
-        },
-        {
-          "caller": "pollHeadroomStats",
-          "callee": "a.emitHeadroomStats",
-          "lineNumber": 694
-        },
-        {
-          "caller": "pollHeadroomStats",
-          "callee": "time.NewTicker",
-          "lineNumber": 695
-        },
-        {
-          "caller": "pollHeadroomStats",
-          "callee": "ticker.Stop",
-          "lineNumber": 696
-        },
-        {
-          "caller": "pollHeadroomStats",
-          "callee": "a.ctx.Done",
-          "lineNumber": 699
-        },
-        {
-          "caller": "pollHeadroomStats",
-          "callee": "a.emitHeadroomStats",
-          "lineNumber": 702
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.headroom.healthCheck",
-          "lineNumber": 716
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "config.Load",
-          "lineNumber": 723
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "HeadroomHasUpstream",
-          "lineNumber": 724
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "cfg.Headroom.ApplyPreset",
-          "lineNumber": 725
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "cfg.Headroom.HeadroomPreset",
-          "lineNumber": 725
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "upstreamURLForConfig",
-          "lineNumber": 726
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.headroom.start",
-          "lineNumber": 727
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "err.Error",
-          "lineNumber": 728
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "slog.Warn",
-          "lineNumber": 729
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "slog.Warn",
-          "lineNumber": 737
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.emitRuntimeEvent",
-          "lineNumber": 739
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.headroom.installed",
-          "lineNumber": 740
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.goSafe",
-          "lineNumber": 749
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.rebuild",
-          "lineNumber": 750
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "slog.Warn",
-          "lineNumber": 751
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.headroom.fetchStats",
-          "lineNumber": 755
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.emitRuntimeEvent",
-          "lineNumber": 757
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "err.Error",
-          "lineNumber": 758
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "float64",
-          "lineNumber": 769
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "float64",
-          "lineNumber": 769
-        },
-        {
-          "caller": "emitHeadroomStats",
-          "callee": "a.emitRuntimeEvent",
-          "lineNumber": 771
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "context.WithTimeout",
-          "lineNumber": 786
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "context.Background",
-          "lineNumber": 786
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "cancel",
-          "lineNumber": 787
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "http.NewRequestWithContext",
-          "lineNumber": 788
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "fmt.Sprintf",
-          "lineNumber": 788
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "hrmHTTPClient.Do",
-          "lineNumber": 789
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "resp.Body.Close",
-          "lineNumber": 793
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "json.NewDecoder(resp.Body).Decode",
-          "lineNumber": 799
-        },
-        {
-          "caller": "isKompressDisabled",
-          "callee": "json.NewDecoder",
-          "lineNumber": 799
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "context.WithTimeout",
-          "lineNumber": 807
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "context.Background",
-          "lineNumber": 807
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "cancel",
-          "lineNumber": 808
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "http.NewRequestWithContext",
-          "lineNumber": 809
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "fmt.Sprintf",
-          "lineNumber": 809
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "hrmHTTPClient.Do",
-          "lineNumber": 810
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "resp.Body.Close",
-          "lineNumber": 814
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "json.NewDecoder(resp.Body).Decode",
-          "lineNumber": 822
-        },
-        {
-          "caller": "kompressRunSeconds",
-          "callee": "json.NewDecoder",
-          "lineNumber": 822
-        }
-      ],
-      "metrics": {
-        "importCount": 0,
-        "exportCount": 7,
-        "functionCount": 22,
-        "classCount": 4
-      }
-    },
-    {
-      "path": "internal/tool/builtin/builtin_test.go",
-      "language": "go",
-      "fileCategory": "code",
-      "totalLines": 477,
-      "nonEmptyLines": 424,
-      "functions": [
-        {
-          "name": "argsJSON",
-          "startLine": 26,
-          "endLine": 33,
-          "params": [
-            "t",
-            "m"
-          ]
-        },
-        {
-          "name": "runTool",
-          "startLine": 35,
-          "endLine": 42,
-          "params": [
-            "t",
-            "tl",
-            "m"
-          ]
-        },
-        {
-          "name": "TestBuiltinsRegistered",
-          "startLine": 44,
-          "endLine": 51,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestBuiltinReadOnlyClassification",
-          "startLine": 58,
-          "endLine": 72,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestReadFile",
-          "startLine": 74,
-          "endLine": 87,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestReadFileDirectory",
-          "startLine": 89,
-          "endLine": 103,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestReadFileOffsetLimit",
-          "startLine": 105,
-          "endLine": 130,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestReadFileBinary",
-          "startLine": 132,
-          "endLine": 140,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestReadFileBOM",
-          "startLine": 142,
-          "endLine": 171,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestReadFileEmpty",
-          "startLine": 173,
-          "endLine": 179,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestEditFile",
-          "startLine": 181,
-          "endLine": 201,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestMultiEdit",
-          "startLine": 203,
-          "endLine": 224,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestMultiEditAtomicity",
-          "startLine": 229,
-          "endLine": 249,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestGrep",
-          "startLine": 251,
-          "endLine": 260,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestWebFetchHTML",
-          "startLine": 264,
-          "endLine": 288,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestWebFetchPlain",
-          "startLine": 292,
-          "endLine": 306,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestWebFetchSchemeRejected",
-          "startLine": 310,
-          "endLine": 315,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestLsAndGlob",
-          "startLine": 317,
-          "endLine": 331,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestGlobRecursive",
-          "startLine": 333,
-          "endLine": 378,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestGlobForwardSlashPattern",
-          "startLine": 380,
-          "endLine": 391,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestGlobRecursiveNoMatches",
-          "startLine": 393,
-          "endLine": 402,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestGlobNoMatches",
-          "startLine": 404,
-          "endLine": 410,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestReadFileGB18030",
-          "startLine": 414,
-          "endLine": 426,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestEditFileGB18030RoundTrip",
-          "startLine": 428,
-          "endLine": 445,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestMultiEditGB18030RoundTrip",
-          "startLine": 447,
-          "endLine": 466,
-          "params": [
-            "t"
-          ]
-        },
-        {
-          "name": "TestGrepGB18030",
-          "startLine": 468,
-          "endLine": 477,
-          "params": [
-            "t"
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "name": "TestBuiltinsRegistered",
-          "line": 44,
-          "isDefault": false
-        },
-        {
-          "name": "TestBuiltinReadOnlyClassification",
-          "line": 58,
-          "isDefault": false
-        },
-        {
-          "name": "TestReadFile",
-          "line": 74,
-          "isDefault": false
-        },
-        {
-          "name": "TestReadFileDirectory",
-          "line": 89,
-          "isDefault": false
-        },
-        {
-          "name": "TestReadFileOffsetLimit",
-          "line": 105,
-          "isDefault": false
-        },
-        {
-          "name": "TestReadFileBinary",
-          "line": 132,
-          "isDefault": false
-        },
-        {
-          "name": "TestReadFileBOM",
-          "line": 142,
-          "isDefault": false
-        },
-        {
-          "name": "TestReadFileEmpty",
-          "line": 173,
-          "isDefault": false
-        },
-        {
-          "name": "TestEditFile",
-          "line": 181,
-          "isDefault": false
-        },
-        {
-          "name": "TestMultiEdit",
-          "line": 203,
-          "isDefault": false
-        },
-        {
-          "name": "TestMultiEditAtomicity",
-          "line": 229,
-          "isDefault": false
-        },
-        {
-          "name": "TestGrep",
-          "line": 251,
-          "isDefault": false
-        },
-        {
-          "name": "TestWebFetchHTML",
-          "line": 264,
-          "isDefault": false
-        },
-        {
-          "name": "TestWebFetchPlain",
-          "line": 292,
-          "isDefault": false
-        },
-        {
-          "name": "TestWebFetchSchemeRejected",
-          "line": 310,
-          "isDefault": false
-        },
-        {
-          "name": "TestLsAndGlob",
-          "line": 317,
-          "isDefault": false
-        },
-        {
-          "name": "TestGlobRecursive",
-          "line": 333,
-          "isDefault": false
-        },
-        {
-          "name": "TestGlobForwardSlashPattern",
-          "line": 380,
-          "isDefault": false
-        },
-        {
-          "name": "TestGlobRecursiveNoMatches",
-          "line": 393,
-          "isDefault": false
-        },
-        {
-          "name": "TestGlobNoMatches",
-          "line": 404,
-          "isDefault": false
-        },
-        {
-          "name": "TestReadFileGB18030",
-          "line": 414,
-          "isDefault": false
-        },
-        {
-          "name": "TestEditFileGB18030RoundTrip",
-          "line": 428,
-          "isDefault": false
-        },
-        {
-          "name": "TestMultiEditGB18030RoundTrip",
-          "line": 447,
-          "isDefault": false
-        },
-        {
-          "name": "TestGrepGB18030",
-          "line": 468,
-          "isDefault": false
-        }
-      ],
-      "callGraph": [
-        {
-          "caller": "argsJSON",
-          "callee": "t.Helper",
-          "lineNumber": 27
-        },
-        {
-          "caller": "argsJSON",
-          "callee": "json.Marshal",
-          "lineNumber": 28
-        },
-        {
-          "caller": "argsJSON",
-          "callee": "t.Fatalf",
-          "lineNumber": 30
-        },
-        {
-          "caller": "argsJSON",
-          "callee": "json.RawMessage",
-          "lineNumber": 32
-        },
-        {
-          "caller": "runTool",
-          "callee": "t.Helper",
-          "lineNumber": 36
-        },
-        {
-          "caller": "runTool",
-          "callee": "tl.Execute",
-          "lineNumber": 37
-        },
-        {
-          "caller": "runTool",
-          "callee": "context.Background",
-          "lineNumber": 37
-        },
-        {
-          "caller": "runTool",
-          "callee": "argsJSON",
-          "lineNumber": 37
-        },
-        {
-          "caller": "runTool",
-          "callee": "t.Fatalf",
-          "lineNumber": 39
-        },
-        {
-          "caller": "runTool",
-          "callee": "tl.Name",
-          "lineNumber": 39
-        },
-        {
-          "caller": "TestBuiltinsRegistered",
-          "callee": "tool.LookupBuiltin",
-          "lineNumber": 47
-        },
-        {
-          "caller": "TestBuiltinsRegistered",
-          "callee": "t.Errorf",
-          "lineNumber": 48
-        },
-        {
-          "caller": "TestBuiltinReadOnlyClassification",
-          "callee": "tool.LookupBuiltin",
-          "lineNumber": 64
-        },
-        {
-          "caller": "TestBuiltinReadOnlyClassification",
-          "callee": "t.Fatalf",
-          "lineNumber": 66
-        },
-        {
-          "caller": "TestBuiltinReadOnlyClassification",
-          "callee": "tl.ReadOnly",
-          "lineNumber": 68
-        },
-        {
-          "caller": "TestBuiltinReadOnlyClassification",
-          "callee": "t.Errorf",
-          "lineNumber": 69
-        },
-        {
-          "caller": "TestReadFile",
-          "callee": "t.TempDir",
-          "lineNumber": 75
-        },
-        {
-          "caller": "TestReadFile",
-          "callee": "filepath.Join",
-          "lineNumber": 76
-        },
-        {
-          "caller": "TestReadFile",
-          "callee": "os.WriteFile",
-          "lineNumber": 78
-        },
-        {
-          "caller": "TestReadFile",
-          "callee": "runTool",
-          "lineNumber": 80
-        },
-        {
-          "caller": "TestReadFile",
-          "callee": "strings.Contains",
-          "lineNumber": 83
-        },
-        {
-          "caller": "TestReadFile",
-          "callee": "t.Errorf",
-          "lineNumber": 84
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "t.TempDir",
-          "lineNumber": 90
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "readFile{}.Execute",
-          "lineNumber": 91
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "context.Background",
-          "lineNumber": 91
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "argsJSON",
-          "lineNumber": 91
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "t.Fatal",
-          "lineNumber": 93
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "strings.Contains",
-          "lineNumber": 97
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "err.Error",
-          "lineNumber": 97
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "strings.Contains",
-          "lineNumber": 97
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "err.Error",
-          "lineNumber": 97
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "t.Errorf",
-          "lineNumber": 98
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "strings.Count",
-          "lineNumber": 100
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "err.Error",
-          "lineNumber": 100
-        },
-        {
-          "caller": "TestReadFileDirectory",
-          "callee": "t.Errorf",
-          "lineNumber": 101
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "t.TempDir",
-          "lineNumber": 106
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "filepath.Join",
-          "lineNumber": 107
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
+          "caller": "buildPrefix",
           "callee": "fmt.Fprintf",
-          "lineNumber": 110
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "os.WriteFile",
-          "lineNumber": 112
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "b.String",
-          "lineNumber": 112
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "runTool",
-          "lineNumber": 114
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "strings.Contains",
-          "lineNumber": 117
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "t.Errorf",
-          "lineNumber": 118
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "strings.Contains",
-          "lineNumber": 122
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "t.Errorf",
-          "lineNumber": 123
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "strings.Contains",
-          "lineNumber": 127
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "strings.Contains",
-          "lineNumber": 127
-        },
-        {
-          "caller": "TestReadFileOffsetLimit",
-          "callee": "t.Errorf",
-          "lineNumber": 128
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "filepath.Join",
-          "lineNumber": 133
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "t.TempDir",
-          "lineNumber": 133
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "os.WriteFile",
-          "lineNumber": 134
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "readFile{}.Execute",
-          "lineNumber": 136
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "context.Background",
-          "lineNumber": 136
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "argsJSON",
-          "lineNumber": 136
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "strings.Contains",
-          "lineNumber": 137
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "err.Error",
-          "lineNumber": 137
-        },
-        {
-          "caller": "TestReadFileBinary",
-          "callee": "t.Errorf",
-          "lineNumber": 138
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "b.Write",
-          "lineNumber": 146
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "b.Write",
-          "lineNumber": 148
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "utf16.Encode",
-          "lineNumber": 150
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "binary.Write",
-          "lineNumber": 151
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "b.Bytes",
-          "lineNumber": 153
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "enc",
-          "lineNumber": 156
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "enc",
-          "lineNumber": 157
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "append",
-          "lineNumber": 158
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "filepath.Join",
-          "lineNumber": 161
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "t.TempDir",
-          "lineNumber": 161
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "os.WriteFile",
-          "lineNumber": 162
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "runTool",
-          "lineNumber": 163
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "strings.Contains",
-          "lineNumber": 164
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "strings.Contains",
-          "lineNumber": 164
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "t.Errorf",
-          "lineNumber": 165
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "strings.Contains",
-          "lineNumber": 167
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "strings.IndexByte",
-          "lineNumber": 167
-        },
-        {
-          "caller": "TestReadFileBOM",
-          "callee": "t.Errorf",
-          "lineNumber": 168
-        },
-        {
-          "caller": "TestReadFileEmpty",
-          "callee": "filepath.Join",
-          "lineNumber": 174
-        },
-        {
-          "caller": "TestReadFileEmpty",
-          "callee": "t.TempDir",
-          "lineNumber": 174
-        },
-        {
-          "caller": "TestReadFileEmpty",
-          "callee": "os.WriteFile",
-          "lineNumber": 175
-        },
-        {
-          "caller": "TestReadFileEmpty",
-          "callee": "runTool",
-          "lineNumber": 176
-        },
-        {
-          "caller": "TestReadFileEmpty",
-          "callee": "strings.Contains",
-          "lineNumber": 176
-        },
-        {
-          "caller": "TestReadFileEmpty",
-          "callee": "t.Errorf",
-          "lineNumber": 177
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "filepath.Join",
-          "lineNumber": 182
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "t.TempDir",
-          "lineNumber": 182
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "os.WriteFile",
-          "lineNumber": 183
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "runTool",
-          "lineNumber": 185
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "os.ReadFile",
-          "lineNumber": 186
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "string",
-          "lineNumber": 186
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "t.Fatalf",
-          "lineNumber": 187
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "os.WriteFile",
-          "lineNumber": 191
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "argsJSON",
-          "lineNumber": 192
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "(editFile{}).Execute",
-          "lineNumber": 193
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "context.Background",
-          "lineNumber": 193
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "t.Fatal",
-          "lineNumber": 194
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "strings.Contains",
-          "lineNumber": 195
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "err.Error",
-          "lineNumber": 195
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "t.Fatalf",
-          "lineNumber": 196
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "os.ReadFile",
-          "lineNumber": 198
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "string",
-          "lineNumber": 198
-        },
-        {
-          "caller": "TestEditFile",
-          "callee": "t.Fatalf",
-          "lineNumber": 199
-        },
-        {
-          "caller": "TestMultiEdit",
-          "callee": "filepath.Join",
-          "lineNumber": 204
-        },
-        {
-          "caller": "TestMultiEdit",
-          "callee": "t.TempDir",
-          "lineNumber": 204
-        },
-        {
-          "caller": "TestMultiEdit",
-          "callee": "os.WriteFile",
           "lineNumber": 206
         },
         {
-          "caller": "TestMultiEdit",
-          "callee": "runTool",
-          "lineNumber": 209
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 206
         },
         {
-          "caller": "TestMultiEdit",
-          "callee": "strings.Contains",
+          "caller": "buildPrefix",
+          "callee": "strings.Join",
+          "lineNumber": 206
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 206
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "len",
+          "lineNumber": 211
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "fmt.Fprintf",
+          "lineNumber": 214
+        },
+        {
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 216
         },
         {
-          "caller": "TestMultiEdit",
-          "callee": "strings.Contains",
-          "lineNumber": 216
-        },
-        {
-          "caller": "TestMultiEdit",
-          "callee": "t.Errorf",
-          "lineNumber": 217
-        },
-        {
-          "caller": "TestMultiEdit",
-          "callee": "os.ReadFile",
+          "caller": "buildPrefix",
+          "callee": "b.WriteString",
           "lineNumber": 219
         },
         {
-          "caller": "TestMultiEdit",
-          "callee": "string",
+          "caller": "buildPrefix",
+          "callee": "b.String",
           "lineNumber": 221
         },
         {
-          "caller": "TestMultiEdit",
-          "callee": "t.Errorf",
+          "caller": "buildPrefix",
+          "callee": "len",
           "lineNumber": 222
         },
         {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "filepath.Join",
+          "caller": "truncateStr",
+          "callee": "strings.ReplaceAll",
+          "lineNumber": 229
+        },
+        {
+          "caller": "truncateStr",
+          "callee": "strings.Join",
           "lineNumber": 230
         },
         {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "t.TempDir",
+          "caller": "truncateStr",
+          "callee": "strings.Fields",
           "lineNumber": 230
         },
         {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "os.WriteFile",
-          "lineNumber": 232
-        },
-        {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "argsJSON",
-          "lineNumber": 234
-        },
-        {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "(multiEdit{}).Execute",
-          "lineNumber": 242
-        },
-        {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "context.Background",
-          "lineNumber": 242
-        },
-        {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "t.Fatal",
-          "lineNumber": 243
-        },
-        {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "os.ReadFile",
-          "lineNumber": 245
-        },
-        {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "string",
-          "lineNumber": 246
-        },
-        {
-          "caller": "TestMultiEditAtomicity",
-          "callee": "t.Errorf",
-          "lineNumber": 247
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "t.TempDir",
-          "lineNumber": 252
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "os.WriteFile",
-          "lineNumber": 253
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "filepath.Join",
-          "lineNumber": 253
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "os.WriteFile",
-          "lineNumber": 254
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "filepath.Join",
-          "lineNumber": 254
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "runTool",
-          "lineNumber": 256
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "strings.Contains",
-          "lineNumber": 257
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "strings.Contains",
-          "lineNumber": 257
-        },
-        {
-          "caller": "TestGrep",
-          "callee": "t.Fatalf",
-          "lineNumber": 258
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "httptest.NewServer",
-          "lineNumber": 265
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "http.HandlerFunc",
-          "lineNumber": 265
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "w.Header().Set",
-          "lineNumber": 266
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "w.Header",
-          "lineNumber": 266
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "w.Write",
-          "lineNumber": 267
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "srv.Close",
-          "lineNumber": 275
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "runTool",
-          "lineNumber": 277
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "strings.Contains",
-          "lineNumber": 279
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "t.Errorf",
-          "lineNumber": 280
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "strings.Contains",
-          "lineNumber": 284
-        },
-        {
-          "caller": "TestWebFetchHTML",
-          "callee": "t.Errorf",
-          "lineNumber": 285
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "httptest.NewServer",
-          "lineNumber": 293
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "http.HandlerFunc",
-          "lineNumber": 293
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "w.Header().Set",
-          "lineNumber": 294
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "w.Header",
-          "lineNumber": 294
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "w.Write",
-          "lineNumber": 295
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "srv.Close",
-          "lineNumber": 297
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "runTool",
-          "lineNumber": 299
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "strings.Contains",
-          "lineNumber": 300
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "strings.Contains",
-          "lineNumber": 300
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "t.Errorf",
-          "lineNumber": 301
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "strings.Contains",
-          "lineNumber": 303
-        },
-        {
-          "caller": "TestWebFetchPlain",
-          "callee": "t.Errorf",
-          "lineNumber": 304
-        },
-        {
-          "caller": "TestWebFetchSchemeRejected",
-          "callee": "webFetch{}.Execute",
-          "lineNumber": 311
-        },
-        {
-          "caller": "TestWebFetchSchemeRejected",
-          "callee": "context.Background",
-          "lineNumber": 311
-        },
-        {
-          "caller": "TestWebFetchSchemeRejected",
-          "callee": "argsJSON",
-          "lineNumber": 311
-        },
-        {
-          "caller": "TestWebFetchSchemeRejected",
-          "callee": "strings.Contains",
-          "lineNumber": 312
-        },
-        {
-          "caller": "TestWebFetchSchemeRejected",
-          "callee": "err.Error",
-          "lineNumber": 312
-        },
-        {
-          "caller": "TestWebFetchSchemeRejected",
-          "callee": "t.Errorf",
-          "lineNumber": 313
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "t.TempDir",
-          "lineNumber": 318
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "os.WriteFile",
-          "lineNumber": 319
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "filepath.Join",
-          "lineNumber": 319
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "os.Mkdir",
-          "lineNumber": 320
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "filepath.Join",
-          "lineNumber": 320
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "runTool",
-          "lineNumber": 322
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "strings.Contains",
-          "lineNumber": 323
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "strings.Contains",
-          "lineNumber": 323
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "t.Fatalf",
-          "lineNumber": 324
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "runTool",
-          "lineNumber": 327
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "filepath.Join",
-          "lineNumber": 327
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "strings.Contains",
-          "lineNumber": 328
-        },
-        {
-          "caller": "TestLsAndGlob",
-          "callee": "t.Fatalf",
-          "lineNumber": 329
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "t.TempDir",
-          "lineNumber": 334
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "os.WriteFile",
-          "lineNumber": 341
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 341
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "os.MkdirAll",
-          "lineNumber": 342
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 342
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "os.WriteFile",
-          "lineNumber": 343
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 343
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "os.WriteFile",
-          "lineNumber": 344
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 344
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "os.WriteFile",
-          "lineNumber": 345
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 345
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "os.WriteFile",
-          "lineNumber": 346
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 346
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "runTool",
-          "lineNumber": 349
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 349
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 350
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "t.Errorf",
-          "lineNumber": 351
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 353
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "t.Errorf",
-          "lineNumber": 354
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 356
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "t.Errorf",
-          "lineNumber": 357
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 360
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 360
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "t.Errorf",
-          "lineNumber": 361
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "runTool",
-          "lineNumber": 365
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 365
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 366
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "t.Errorf",
-          "lineNumber": 367
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 369
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "t.Errorf",
-          "lineNumber": 370
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "runTool",
-          "lineNumber": 374
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "filepath.Join",
-          "lineNumber": 374
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 375
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "strings.Contains",
-          "lineNumber": 375
-        },
-        {
-          "caller": "TestGlobRecursive",
-          "callee": "t.Errorf",
-          "lineNumber": 376
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "t.TempDir",
-          "lineNumber": 381
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "os.MkdirAll",
-          "lineNumber": 382
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "filepath.Join",
-          "lineNumber": 382
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "os.WriteFile",
-          "lineNumber": 383
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "filepath.Join",
-          "lineNumber": 383
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "os.WriteFile",
-          "lineNumber": 384
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "filepath.Join",
-          "lineNumber": 384
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "t.Chdir",
-          "lineNumber": 385
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "runTool",
-          "lineNumber": 387
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "strings.Contains",
-          "lineNumber": 388
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "strings.Contains",
-          "lineNumber": 388
-        },
-        {
-          "caller": "TestGlobForwardSlashPattern",
-          "callee": "t.Errorf",
-          "lineNumber": 389
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "t.TempDir",
-          "lineNumber": 394
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "os.MkdirAll",
-          "lineNumber": 395
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "filepath.Join",
-          "lineNumber": 395
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "os.WriteFile",
-          "lineNumber": 396
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "filepath.Join",
-          "lineNumber": 396
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "runTool",
-          "lineNumber": 398
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "filepath.Join",
-          "lineNumber": 398
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "strings.Contains",
-          "lineNumber": 399
-        },
-        {
-          "caller": "TestGlobRecursiveNoMatches",
-          "callee": "t.Errorf",
-          "lineNumber": 400
-        },
-        {
-          "caller": "TestGlobNoMatches",
-          "callee": "t.TempDir",
-          "lineNumber": 405
-        },
-        {
-          "caller": "TestGlobNoMatches",
-          "callee": "runTool",
-          "lineNumber": 406
-        },
-        {
-          "caller": "TestGlobNoMatches",
-          "callee": "filepath.Join",
-          "lineNumber": 406
-        },
-        {
-          "caller": "TestGlobNoMatches",
-          "callee": "strings.Contains",
-          "lineNumber": 407
-        },
-        {
-          "caller": "TestGlobNoMatches",
-          "callee": "t.Errorf",
-          "lineNumber": 408
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "filepath.Join",
-          "lineNumber": 415
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "t.TempDir",
-          "lineNumber": 415
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "simplifiedchinese.GB18030.NewEncoder().String",
-          "lineNumber": 416
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "simplifiedchinese.GB18030.NewEncoder",
-          "lineNumber": 416
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "t.Fatalf",
-          "lineNumber": 418
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "os.WriteFile",
-          "lineNumber": 420
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "runTool",
-          "lineNumber": 422
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "strings.Contains",
-          "lineNumber": 423
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "strings.Contains",
-          "lineNumber": 423
-        },
-        {
-          "caller": "TestReadFileGB18030",
-          "callee": "t.Errorf",
-          "lineNumber": 424
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "filepath.Join",
-          "lineNumber": 429
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "t.TempDir",
-          "lineNumber": 429
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "simplifiedchinese.GB18030.NewEncoder().String",
-          "lineNumber": 430
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "simplifiedchinese.GB18030.NewEncoder",
-          "lineNumber": 430
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "os.WriteFile",
-          "lineNumber": 431
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "runTool",
-          "lineNumber": 433
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "os.ReadFile",
-          "lineNumber": 439
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "simplifiedchinese.GB18030.NewDecoder().Bytes",
-          "lineNumber": 441
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "simplifiedchinese.GB18030.NewDecoder",
-          "lineNumber": 441
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "string",
-          "lineNumber": 442
-        },
-        {
-          "caller": "TestEditFileGB18030RoundTrip",
-          "callee": "t.Errorf",
-          "lineNumber": 443
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "filepath.Join",
-          "lineNumber": 448
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "t.TempDir",
-          "lineNumber": 448
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "simplifiedchinese.GB18030.NewEncoder().String",
-          "lineNumber": 449
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "simplifiedchinese.GB18030.NewEncoder",
-          "lineNumber": 449
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "os.WriteFile",
-          "lineNumber": 450
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "runTool",
-          "lineNumber": 452
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "os.ReadFile",
-          "lineNumber": 460
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "simplifiedchinese.GB18030.NewDecoder().Bytes",
-          "lineNumber": 461
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "simplifiedchinese.GB18030.NewDecoder",
-          "lineNumber": 461
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "string",
-          "lineNumber": 463
-        },
-        {
-          "caller": "TestMultiEditGB18030RoundTrip",
-          "callee": "t.Errorf",
-          "lineNumber": 464
-        },
-        {
-          "caller": "TestGrepGB18030",
-          "callee": "t.TempDir",
-          "lineNumber": 469
-        },
-        {
-          "caller": "TestGrepGB18030",
-          "callee": "simplifiedchinese.GB18030.NewEncoder().String",
-          "lineNumber": 470
-        },
-        {
-          "caller": "TestGrepGB18030",
-          "callee": "simplifiedchinese.GB18030.NewEncoder",
-          "lineNumber": 470
-        },
-        {
-          "caller": "TestGrepGB18030",
-          "callee": "os.WriteFile",
-          "lineNumber": 471
-        },
-        {
-          "caller": "TestGrepGB18030",
-          "callee": "filepath.Join",
-          "lineNumber": 471
-        },
-        {
-          "caller": "TestGrepGB18030",
-          "callee": "runTool",
-          "lineNumber": 473
-        },
-        {
-          "caller": "TestGrepGB18030",
-          "callee": "strings.Contains",
-          "lineNumber": 474
-        },
-        {
-          "caller": "TestGrepGB18030",
-          "callee": "t.Errorf",
-          "lineNumber": 475
+          "caller": "truncateStr",
+          "callee": "len",
+          "lineNumber": 231
         }
       ],
       "metrics": {
         "importCount": 0,
-        "exportCount": 24,
-        "functionCount": 26,
-        "classCount": 0
-      }
-    },
-    {
-      "path": "internal/tool/builtin/headroom_retrieve.go",
-      "language": "go",
-      "fileCategory": "code",
-      "totalLines": 96,
-      "nonEmptyLines": 81,
-      "functions": [
-        {
-          "name": "init",
-          "startLine": 17,
-          "endLine": 17,
-          "params": []
-        },
-        {
-          "name": "Name",
-          "startLine": 26,
-          "endLine": 26,
-          "params": []
-        },
-        {
-          "name": "Description",
-          "startLine": 28,
-          "endLine": 30,
-          "params": []
-        },
-        {
-          "name": "Schema",
-          "startLine": 32,
-          "endLine": 40,
-          "params": []
-        },
-        {
-          "name": "ReadOnly",
-          "startLine": 42,
-          "endLine": 42,
-          "params": []
-        },
-        {
-          "name": "Execute",
-          "startLine": 44,
-          "endLine": 96,
-          "params": [
-            "ctx",
-            "args"
-          ]
-        }
-      ],
-      "classes": [
-        {
-          "name": "headroomRetrieve",
-          "startLine": 24,
-          "endLine": 24,
-          "methods": [
-            "Name",
-            "Description",
-            "Schema",
-            "ReadOnly",
-            "Execute"
-          ],
-          "properties": []
-        }
-      ],
-      "exports": [
-        {
-          "name": "Name",
-          "line": 26,
-          "isDefault": false
-        },
-        {
-          "name": "Description",
-          "line": 28,
-          "isDefault": false
-        },
-        {
-          "name": "Schema",
-          "line": 32,
-          "isDefault": false
-        },
-        {
-          "name": "ReadOnly",
-          "line": 42,
-          "isDefault": false
-        },
-        {
-          "name": "Execute",
-          "line": 44,
-          "isDefault": false
-        }
-      ],
-      "callGraph": [
-        {
-          "caller": "init",
-          "callee": "tool.RegisterBuiltin",
-          "lineNumber": 17
-        },
-        {
-          "caller": "Schema",
-          "callee": "json.RawMessage",
-          "lineNumber": 33
-        },
-        {
-          "caller": "Execute",
-          "callee": "json.Unmarshal",
-          "lineNumber": 48
-        },
-        {
-          "caller": "Execute",
-          "callee": "fmt.Errorf",
-          "lineNumber": 49
-        },
-        {
-          "caller": "Execute",
-          "callee": "os.Getenv",
-          "lineNumber": 53
-        },
-        {
-          "caller": "Execute",
-          "callee": "strconv.Atoi",
-          "lineNumber": 54
-        },
-        {
-          "caller": "Execute",
-          "callee": "fmt.Sprintf",
-          "lineNumber": 59
-        },
-        {
-          "caller": "Execute",
-          "callee": "http.NewRequestWithContext",
-          "lineNumber": 60
-        },
-        {
-          "caller": "Execute",
-          "callee": "fmt.Sprintf",
-          "lineNumber": 61
-        },
-        {
-          "caller": "Execute",
-          "callee": "bytes.NewReader",
-          "lineNumber": 62
-        },
-        {
-          "caller": "Execute",
-          "callee": "fmt.Errorf",
-          "lineNumber": 64
-        },
-        {
-          "caller": "Execute",
-          "callee": "req.Header.Set",
-          "lineNumber": 66
-        },
-        {
-          "caller": "Execute",
-          "callee": "client.Do",
-          "lineNumber": 69
-        },
-        {
-          "caller": "Execute",
-          "callee": "fmt.Errorf",
-          "lineNumber": 71
-        },
-        {
-          "caller": "Execute",
-          "callee": "resp.Body.Close",
-          "lineNumber": 78
-        },
-        {
-          "caller": "Execute",
-          "callee": "io.ReadAll",
-          "lineNumber": 80
-        },
-        {
-          "caller": "Execute",
-          "callee": "io.LimitReader",
-          "lineNumber": 80
-        },
-        {
-          "caller": "Execute",
-          "callee": "fmt.Errorf",
-          "lineNumber": 82
-        },
-        {
-          "caller": "Execute",
-          "callee": "string",
-          "lineNumber": 82
-        },
-        {
-          "caller": "Execute",
-          "callee": "json.Unmarshal",
-          "lineNumber": 88
-        },
-        {
-          "caller": "Execute",
-          "callee": "string",
-          "lineNumber": 89
-        },
-        {
-          "caller": "Execute",
-          "callee": "fmt.Errorf",
-          "lineNumber": 93
-        }
-      ],
-      "metrics": {
-        "importCount": 0,
-        "exportCount": 5,
-        "functionCount": 6,
-        "classCount": 1
+        "exportCount": 2,
+        "functionCount": 5,
+        "classCount": 5
       }
     }
   ]
