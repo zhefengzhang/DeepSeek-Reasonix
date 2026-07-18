@@ -29,12 +29,15 @@ question either tool can answer faster.
 
 ### Decision tree
 
-| You need to… | Tool | Rationale |
-|---|---|---|
-| Find what module / file / layer owns X | `understand_search` | Knowledge graph already indexed the project skeleton. One search returns the node id you need. |
-| See the **verbatim source** of a symbol (function, type, component) | `codegraph_explore` (`mcp__codegraph__codegraph_explore`) | Returns Read-equivalent line-numbered source + call paths + blast radius in **one capped call**. Treat the output as already Read — do NOT re-open those files. |
-| Trace a **cross-file flow** (who calls X, what X calls, callbacks, React re-render hops) | `codegraph_explore` | Dynamic-dispatch edges (JSX children, observer callbacks, React setState→render) are bridged automatically. grep can't follow these. |
-| Find exact text / regex across files | `grep` | Fallback only. Use AFTER the graph tools tell you which files matter. |
+| You need to… | Tool | Rationale | Estimated cost |
+|---|---|---|---|
+| Find what module / file / layer owns X | `understand_search` | Knowledge graph already indexed the project skeleton. One search returns the node id you need. | ~0.5–1K tokens |
+| See the **verbatim source** of a symbol (function, type, component) | `codegraph_explore` (`mcp__codegraph__codegraph_explore`) | Returns Read-equivalent line-numbered source + call paths + blast radius in **one capped call**. Treat the output as already Read — do NOT re-open those files. | ~1–3K tokens |
+| Trace a **cross-file flow** (who calls X, what X calls, callbacks, React re-render hops) | `codegraph_explore` | Dynamic-dispatch edges (JSX children, observer callbacks, React setState→render) are bridged automatically. grep can't follow these. | ~2–4K tokens |
+| Find exact text / regex across files | `grep` | Fallback only. Use AFTER the graph tools tell you which files matter. | ~5–15K tokens for a project-wide scan |
+| Read a file you already identified | `read_file` | Use only after `codegraph_explore` tells you which file and lines matter. | ~2–5K tokens per file |
+
+Choosing `grep` first when `codegraph_explore` would do: 5–15× more tokens for less structural context.
 
 ### Mandatory workflow
 

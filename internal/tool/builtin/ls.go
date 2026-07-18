@@ -26,7 +26,7 @@ type listDir struct {
 func (listDir) Name() string { return "ls" }
 
 func (listDir) Description() string {
-	return "List the entries of a directory. Directories are shown with a trailing slash; files show their byte size. Set recursive=true to list all nested files depth-first (skips .git/node_modules)."
+	return "List the entries of a directory. Directories are shown with a trailing slash; files show their byte size. Set recursive=true to list all nested files depth-first (skips .git/node_modules). PREFER `understand_search` outline for structural codebase discovery — ls is a fallback for quick directory inspection."
 }
 
 func (listDir) Schema() json.RawMessage {

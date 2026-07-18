@@ -27,7 +27,7 @@ type globTool struct {
 func (globTool) Name() string { return "glob" }
 
 func (globTool) Description() string {
-	return "Find files matching a glob pattern (e.g. \"*.go\", \"internal/*/*.go\", \"**/*.test.ts\"). Supports shell metacharacters * ? [] and the recursive ** pattern."
+	return "Find files matching a glob pattern (e.g. \"*.go\", \"internal/*/*.go\", \"**/*.test.ts\"). Supports shell metacharacters * ? [] and the recursive ** pattern. PREFER `understand_search` outline for structural codebase discovery — glob is a fallback for ad-hoc pattern matching."
 }
 
 func (globTool) Schema() json.RawMessage {

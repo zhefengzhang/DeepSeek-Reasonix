@@ -43,7 +43,7 @@ const (
 func (readFile) Name() string { return "read_file" }
 
 func (readFile) Description() string {
-	return "Read a text file with optional line offset/limit. Output prefixes each line with its 1-based number (e.g. `   42→...`) so subsequent edit_file calls can target exact lines. Use `offset` and `limit` to page through large files; the tool reports total length and pagination hints in a trailer."
+	return "Read a text file with optional line offset/limit. Output prefixes each line with its 1-based number (e.g. `   42→...`) so subsequent edit_file calls can target exact lines. Use `offset` and `limit` to page through large files; the tool reports total length and pagination hints in a trailer. PREFER `codegraph_explore` for source-code investigation — it returns verbatim source with call context in one call. For non-code documents (.md, .txt, etc.) this preference does not apply."
 }
 
 func (readFile) Schema() json.RawMessage {
