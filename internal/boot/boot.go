@@ -514,6 +514,11 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 		cleanup = func() { prev(); lspMgr.Close() }
 	}
 
+	// Wrap grep/read_file with codegraph efficiency hints when source-code
+	// files are targeted. This must run after all MCP plugins and LSP tools
+	// are registered so the hint is ready before any model turn.
+	wrapBuiltinReadTools(reg)
+
 	maxSteps := cfg.Agent.MaxSteps
 	if opts.MaxSteps > 0 {
 		maxSteps = opts.MaxSteps
@@ -1493,6 +1498,22 @@ func addBuiltins(reg *tool.Registry, enabled, writeRoots []string, bashSpec sand
 		if _, ok := reg.Get(t.Name()); ok {
 			reg.Add(t)
 		}
+	}
+}
+
+// wrapBuiltinReadTools wraps grep and read_file with CodeGraphHint to append
+// a cost-aware efficiency hint when they target source-code files. Wrapping
+// is idempotent: an already-wrapped tool is never wrapped again.
+func wrapBuiltinReadTools(reg *tool.Registry) {
+	for _, name := range []string{"grep", "read_file"} {
+		t, ok := reg.Get(name)
+		if !ok {
+			continue
+		}
+		if tool.IsCodeGraphHint(t) {
+			continue // idempotent
+		}
+		reg.Add(tool.NewCodeGraphHint(t))
 	}
 }
 
