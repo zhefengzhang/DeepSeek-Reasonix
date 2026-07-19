@@ -355,6 +355,13 @@ type Gate struct {
 	Policy   Policy
 	Approver Approver
 
+	// PreCheck, when set, runs before Policy.Decide(). When it returns
+	// ask=true, the call is routed to the approval flow regardless of Policy
+	// — useful for context-aware guards (e.g. "you already have this file in
+	// context — re-read?"). subject is the approval prompt identifier. When
+	// ask=false, the call falls through to normal Policy.Decide().
+	PreCheck func(toolName string, args json.RawMessage) (ask bool, subject string)
+
 	// OnRemember, when set, is invoked with a new allow rule the user chose to
 	// remember (e.g. "Bash(go build)"), so the front-end can persist it.
 	OnRemember func(rule string)
@@ -371,6 +378,33 @@ func (g *Gate) Check(ctx context.Context, toolName string, args json.RawMessage,
 		subject := Subject(args)
 		if isReadOnlyBashSubject(subject) {
 			readOnly = true
+		}
+	}
+	// PreCheck runs before Policy: context-aware guards (e.g. context-inventory
+	// re-read check) can force an approval prompt on a specific subject.
+	if g.PreCheck != nil {
+		if ask, subject := g.PreCheck(toolName, args); ask {
+			if g.Approver == nil {
+				return true, "", nil // non-interactive: preserve autonomy
+			}
+			allow, remember, approverReason, err := g.approve(ctx, toolName, subject, args)
+			if err != nil {
+				return false, "approval aborted", err
+			}
+			if !allow {
+				reason := "the user declined this tool call — do not retry it; ask how they would like to proceed or choose another approach."
+				if approverReason != "" {
+					reason = approverReason
+				}
+				return false, reason, nil
+			}
+			if remember && g.OnRemember != nil {
+				g.OnRemember(toolName)
+				if rule, ok := ParseRule(toolName); ok {
+					g.Policy.Allow = append(g.Policy.Allow, rule)
+				}
+			}
+			return true, "", nil
 		}
 	}
 	switch g.Policy.Decide(toolName, readOnly, args) {

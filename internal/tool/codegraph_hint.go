@@ -39,10 +39,10 @@ func IsCodeGraphHint(t Tool) bool {
 
 // --- tool.Tool interface passthrough ---
 
-func (w *CodeGraphHint) Name() string               { return w.inner.Name() }
-func (w *CodeGraphHint) Description() string         { return w.inner.Description() }
-func (w *CodeGraphHint) Schema() json.RawMessage     { return w.inner.Schema() }
-func (w *CodeGraphHint) ReadOnly() bool              { return w.inner.ReadOnly() }
+func (w *CodeGraphHint) Name() string            { return w.inner.Name() }
+func (w *CodeGraphHint) Description() string     { return w.inner.Description() }
+func (w *CodeGraphHint) Schema() json.RawMessage { return w.inner.Schema() }
+func (w *CodeGraphHint) ReadOnly() bool          { return w.inner.ReadOnly() }
 
 // Execute calls the inner tool and appends an efficiency hint when the
 // target path has a recognised source-code extension.
@@ -115,7 +115,7 @@ func codeExtensions() map[string]bool {
 		".go": true, ".js": true, ".ts": true, ".jsx": true, ".tsx": true,
 		".py": true, ".rs": true, ".java": true, ".kt": true, ".kts": true,
 		".cs": true,
-		".c": true, ".cc": true, ".cpp": true, ".cxx": true,
+		".c":  true, ".cc": true, ".cpp": true, ".cxx": true,
 		".h": true, ".hh": true, ".hpp": true, ".hxx": true,
 		".m": true, ".mm": true,
 		".swift": true, ".rb": true, ".php": true, ".scala": true,

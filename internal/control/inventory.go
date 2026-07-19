@@ -23,14 +23,22 @@ type fileState struct {
 // it incrementally processes only new messages. Call build to produce the
 // <context-inventory> block injected into the turn.
 type readFileTracker struct {
-	files    map[string]*fileState // path → state
+	files    map[string]*fileState // path → state (cross-turn, survives compaction)
 	scanUpTo int                   // number of messages already scanned
+
+	// inTurn tracks read_file calls that happened during the current turn,
+	// before scanDelta has had a chance to process them. Cleared each Compose.
+	// This lets same-turn re-reads trigger the PreCheck guard.
+	inTurn map[string]*fileState
 }
 
 // scanDelta processes msgs[scanUpTo:] and updates the file inventory. When
 // len(msgs) < scanUpTo a compact or session reset has rewritten the history
 // and the tracker rebuilds from scratch.
 func (t *readFileTracker) scanDelta(msgs []provider.Message) {
+	// Clear in-turn tracking each Compose — the new turn starts fresh.
+	t.inTurn = nil
+
 	if len(msgs) < t.scanUpTo {
 		t.files = nil
 		t.scanUpTo = 0
@@ -113,6 +121,29 @@ func (t *readFileTracker) apply(toolName, argsJSON string) {
 			s.stale = true
 		}
 	}
+}
+
+// lookup returns the fileState for a path when it exists and is not stale.
+// It checks inTurn first (same-turn reads), then falls back to files (cross-turn).
+func (t *readFileTracker) lookup(path string) (fileState, bool) {
+	// Check same-turn reads first.
+	if s, ok := t.inTurn[path]; ok && s != nil && !s.stale {
+		return *s, true
+	}
+	s, ok := t.files[path]
+	if !ok || s == nil || s.stale {
+		return fileState{}, false
+	}
+	return *s, true
+}
+
+// trackInTurn records that read_file was just called for path within the
+// current turn, so a subsequent read_file for the same path triggers PreCheck.
+func (t *readFileTracker) trackInTurn(path string, offset, limit int) {
+	if t.inTurn == nil {
+		t.inTurn = make(map[string]*fileState)
+	}
+	t.inTurn[path] = &fileState{path: path, readOffset: offset, readLimit: limit}
 }
 
 // build returns a compact <context-inventory> block, or "" when no files have

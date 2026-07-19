@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
 	"testing"
 )
 
@@ -260,5 +261,95 @@ func TestLegacyLiteralRuleMatchesExactly(t *testing.T) {
 	}
 	if got := p.Decide("bash", false, json.RawMessage(`{"command":"rm secrets.log"}`)); got == Allow {
 		t.Errorf("literal rule wildcard-matched %q — '*' must stay literal", "rm secrets.log")
+	}
+}
+
+// TestGatePreCheckReroutesToApprover verifies the PreCheck callback: when it
+// returns ask=true, the call goes through the approval flow even when Policy
+// would have allowed it. When ask=false, normal Policy.Decide() runs.
+func TestGatePreCheckReroutesToApprover(t *testing.T) {
+	// PreCheck that triggers for read_file with path containing "cached"
+	triggered := false
+	preCheck := func(toolName string, args json.RawMessage) (bool, string) {
+		triggered = true
+		if toolName != "read_file" {
+			return false, ""
+		}
+		var p struct {
+			Path string `json:"path"`
+		}
+		if err := json.Unmarshal(args, &p); err != nil {
+			return false, ""
+		}
+		if strings.Contains(p.Path, "cached") {
+			triggered = true
+			return true, "re-read " + p.Path + " — already in context"
+		}
+		return false, ""
+	}
+
+	// Scenario 1: PreCheck triggers → approval prompt
+	var remembered string
+	ap := &stubApprover{allow: true}
+	g := NewGate(Policy{}, ap)
+	g.PreCheck = preCheck
+	g.OnRemember = func(rule string) { remembered = rule }
+
+	allow, _, err := g.Check(context.Background(), "read_file",
+		json.RawMessage(`{"path":"cached/file.md"}`), true)
+	if err != nil || !allow {
+		t.Fatalf("PreCheck-triggered call = (%v, %v), want allow", allow, err)
+	}
+	if !triggered {
+		t.Fatal("PreCheck was not called")
+	}
+	if ap.calls != 1 {
+		t.Fatalf("approver calls = %d, want 1 (PreCheck must route through approval)", ap.calls)
+	}
+
+	// Scenario 2: PreCheck returns false → falls through to Policy (Allow for readOnly)
+	triggered = false
+	g2 := NewGate(Policy{}, &stubApprover{allow: false}) // approver would deny
+	g2.PreCheck = preCheck
+
+	allow, _, err = g2.Check(context.Background(), "read_file",
+		json.RawMessage(`{"path":"new/file.md"}`), true)
+	if err != nil || !allow {
+		t.Fatalf("PreCheck-skipped call = (%v, %v), want allow (Policy allows readOnly)", allow, err)
+	}
+	if !triggered {
+		t.Fatal("PreCheck was not called")
+	}
+	// Approver must NOT be called: PreCheck returned false, Policy.Decide returns Allow for readOnly
+	if g2.Approver.(*stubApprover).calls != 0 {
+		t.Fatalf("approver calls = %d, want 0 (PreCheck did not trigger)", g2.Approver.(*stubApprover).calls)
+	}
+
+	// Scenario 3: PreCheck triggers → user denies
+	triggered = false
+	ap3 := &stubApprover{allow: false}
+	g3 := NewGate(Policy{}, ap3)
+	g3.PreCheck = preCheck
+
+	allow, reason, _ := g3.Check(context.Background(), "read_file",
+		json.RawMessage(`{"path":"cached/file.md"}`), true)
+	if allow || reason == "" {
+		t.Fatalf("denied PreCheck call = (%v, %q), want blocked", allow, reason)
+	}
+
+	// Scenario 4: PreCheck triggers → user allows with remember
+	triggered = false
+	ap4 := &stubApprover{allow: true, remember: true}
+	g4 := NewGate(Policy{}, ap4)
+	g4.PreCheck = preCheck
+	g4.OnRemember = func(rule string) { remembered = rule }
+
+	allow, _, err = g4.Check(context.Background(), "read_file",
+		json.RawMessage(`{"path":"cached/file.md"}`), true)
+	if err != nil || !allow {
+		t.Fatalf("remembered call = (%v, %v), want allow", allow, err)
+	}
+	if remembered != "read_file" {
+		t.Errorf("remembered rule = %q, want tool-wide %q", remembered, "read_file")
 	}
 }

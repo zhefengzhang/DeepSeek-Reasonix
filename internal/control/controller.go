@@ -1389,6 +1389,30 @@ func (c *Controller) newInteractiveGate() *permission.Gate {
 		)
 	}
 	gate := permission.NewGate(policy, gateApprover{c})
+	gate.PreCheck = func(toolName string, args json.RawMessage) (bool, string) {
+		if toolName != "read_file" {
+			return false, ""
+		}
+		var p struct {
+			Path   string `json:"path"`
+			Offset int    `json:"offset"`
+			Limit  int    `json:"limit"`
+		}
+		if err := json.Unmarshal(args, &p); err != nil || p.Path == "" {
+			return false, ""
+		}
+		s, ok := c.readInv.lookup(p.Path)
+		if ok {
+			subject := "re-read " + p.Path + " — already in context"
+			if s.readLimit > 0 {
+				subject += " (L" + strconv.Itoa(s.readOffset+1) + "-L" + strconv.Itoa(s.readOffset+s.readLimit) + ")"
+			}
+			return true, subject
+		}
+		// First read this turn: record for same-turn re-read detection.
+		c.readInv.trackInTurn(p.Path, p.Offset, p.Limit)
+		return false, ""
+	}
 	gate.OnRemember = func(rule string) {
 		if c.onRemember != nil {
 			_ = c.onRemember(rule)

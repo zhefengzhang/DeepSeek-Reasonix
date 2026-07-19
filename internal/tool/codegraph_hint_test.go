@@ -18,10 +18,10 @@ type mockReadTool struct {
 	snipHint    *SnipHint // nil means don't implement SnipHinter
 }
 
-func (m *mockReadTool) Name() string              { return m.name }
-func (m *mockReadTool) Description() string        { return m.description }
-func (m *mockReadTool) Schema() json.RawMessage    { return m.schema }
-func (m *mockReadTool) ReadOnly() bool             { return true }
+func (m *mockReadTool) Name() string            { return m.name }
+func (m *mockReadTool) Description() string     { return m.description }
+func (m *mockReadTool) Schema() json.RawMessage { return m.schema }
+func (m *mockReadTool) ReadOnly() bool          { return true }
 
 func (m *mockReadTool) Execute(_ context.Context, _ json.RawMessage) (string, error) {
 	return m.output, m.err
