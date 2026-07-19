@@ -203,3 +203,50 @@ func TestGatePreCheckSameTurnReRead(t *testing.T) {
 		t.Fatalf("approver called %d times for different paths, want 0", ap3.calls)
 	}
 }
+
+// TestGatePreCheckGrepBlockedWhenCodeGraphConnected verifies that grep calls
+// trigger PreCheck → approval when a codegraph-tool-connected guard fires.
+func TestGatePreCheckGrepBlockedWhenCodeGraphConnected(t *testing.T) {
+	reg := tool.NewRegistry()
+	reg.Add(fakeTool{name: "grep", readOnly: true})
+
+	// Simulate codegraph-connected: the PreCheck closure returns ask=true.
+	ap := &stubGateApprover{allow: true}
+	g := permission.NewGate(permission.Policy{}, ap)
+	g.PreCheck = func(toolName string, args json.RawMessage) (bool, string) {
+		if toolName != "grep" {
+			return false, ""
+		}
+		return true, "grep is a fallback — is codegraph_explore available instead?"
+	}
+
+	a := New(nil, reg, NewSession(""), Options{Gate: g}, event.Discard)
+
+	out := a.executeOne(context.Background(), provider.ToolCall{
+		Name: "grep", Arguments: `{"pattern":"func.*execute"}`,
+	})
+	if out.blocked {
+		t.Fatalf("grep should be allowed by approver (allow=true), got blocked: %q", out.output)
+	}
+	if ap.calls != 1 {
+		t.Fatalf("approver called %d times, want 1 (PreCheck triggered)", ap.calls)
+	}
+
+	// Deny path: approver returns false → grep blocked.
+	ap2 := &stubGateApprover{allow: false}
+	g2 := permission.NewGate(permission.Policy{}, ap2)
+	g2.PreCheck = func(toolName string, args json.RawMessage) (bool, string) {
+		if toolName != "grep" {
+			return false, ""
+		}
+		return true, "grep is a fallback"
+	}
+
+	a2 := New(nil, reg, NewSession(""), Options{Gate: g2}, event.Discard)
+	out = a2.executeOne(context.Background(), provider.ToolCall{
+		Name: "grep", Arguments: `{"pattern":"func"}`,
+	})
+	if !out.blocked {
+		t.Fatal("grep should be blocked when approver denies")
+	}
+}

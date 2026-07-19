@@ -1401,27 +1401,34 @@ func (c *Controller) newInteractiveGate() *permission.Gate {
 	}
 	gate := permission.NewGate(policy, gateApprover{c})
 	gate.PreCheck = func(toolName string, args json.RawMessage) (bool, string) {
-		if toolName != "read_file" {
-			return false, ""
-		}
-		var p struct {
-			Path   string `json:"path"`
-			Offset int    `json:"offset"`
-			Limit  int    `json:"limit"`
-		}
-		if err := json.Unmarshal(args, &p); err != nil || p.Path == "" {
-			return false, ""
-		}
-		s, ok := c.readInv.lookup(p.Path)
-		if ok {
-			subject := "re-read " + p.Path + " — already in context"
-			if s.readLimit > 0 {
-				subject += " (L" + strconv.Itoa(s.readOffset+1) + "-L" + strconv.Itoa(s.readOffset+s.readLimit) + ")"
+		switch toolName {
+		case "read_file":
+			var p struct {
+				Path   string `json:"path"`
+				Offset int    `json:"offset"`
+				Limit  int    `json:"limit"`
 			}
-			return true, subject
+			if err := json.Unmarshal(args, &p); err != nil || p.Path == "" {
+				return false, ""
+			}
+			s, ok := c.readInv.lookup(p.Path)
+			if ok {
+				subject := "re-read " + p.Path + " — already in context"
+				if s.readLimit > 0 {
+					subject += " (L" + strconv.Itoa(s.readOffset+1) + "-" + strconv.Itoa(s.readOffset+s.readLimit) + ")"
+				}
+				return true, subject
+			}
+			// First read this turn: record for same-turn re-read detection.
+			c.readInv.trackInTurn(p.Path, p.Offset, p.Limit)
+			return false, ""
+
+		case "grep":
+			if c.codeGraphConnected() {
+				return true, "grep is a fallback — is codegraph_explore or understand_search available instead?"
+			}
+			return false, ""
 		}
-		// First read this turn: record for same-turn re-read detection.
-		c.readInv.trackInTurn(p.Path, p.Offset, p.Limit)
 		return false, ""
 	}
 	gate.OnRemember = func(rule string) {
@@ -1430,6 +1437,15 @@ func (c *Controller) newInteractiveGate() *permission.Gate {
 		}
 	}
 	return gate
+}
+
+func (c *Controller) codeGraphConnected() bool {
+	reg := c.mcp.registry()
+	if reg == nil {
+		return false
+	}
+	_, ok := reg.Get("mcp__codegraph__codegraph_explore")
+	return ok
 }
 
 func (c *Controller) refreshInteractiveGate() {
