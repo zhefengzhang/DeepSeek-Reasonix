@@ -394,7 +394,7 @@ func (g *Gate) Check(ctx context.Context, toolName string, args json.RawMessage,
 			if !allow {
 				reason := "the user declined this tool call — do not retry it; ask how they would like to proceed or choose another approach."
 				if approverReason != "" {
-					reason = approverReason
+					reason = "the user declined: " + approverReason + " — do not retry; ask how they would like to proceed or choose another approach."
 				}
 				return false, reason, nil
 			}
@@ -422,7 +422,7 @@ func (g *Gate) Check(ctx context.Context, toolName string, args json.RawMessage,
 		if !allow {
 			reason := "the user declined this tool call — do not retry it; ask how they would like to proceed or choose another approach."
 			if approverReason != "" {
-				reason = approverReason
+				reason = "the user declined: " + approverReason + " — do not retry; ask how they would like to proceed or choose another approach."
 			}
 			return false, reason, nil
 		}

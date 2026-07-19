@@ -1152,7 +1152,7 @@ func TestPermissionRequestHookDoesNotFireForSessionGrant(t *testing.T) {
 	c, _, payloads := permissionHookController(t, "bash")
 	c.approval.grantSession("bash", "go test ./...")
 
-	allow, _, err := c.requestApproval(context.Background(), "bash", "go test ./...", nil)
+	allow, _, _, err := c.requestApproval(context.Background(), "bash", "go test ./...", nil)
 	if err != nil || !allow {
 		t.Fatalf("session-granted approval = (%v,%v), want allowed", allow, err)
 	}
@@ -1163,7 +1163,7 @@ func TestPermissionRequestHookDoesNotFireForYolo(t *testing.T) {
 	c, _, payloads := permissionHookController(t, "bash")
 	c.SetToolApprovalMode(ToolApprovalYolo)
 
-	allow, _, err := c.requestApproval(context.Background(), "bash", "go test ./...", nil)
+	allow, _, _, err := c.requestApproval(context.Background(), "bash", "go test ./...", nil)
 	if err != nil || !allow {
 		t.Fatalf("YOLO approval = (%v,%v), want allowed", allow, err)
 	}
@@ -1175,7 +1175,7 @@ func TestPermissionRequestHookDoesNotFireForPlanApproval(t *testing.T) {
 	done := make(chan bool, 1)
 	errs := make(chan error, 1)
 	go func() {
-		allow, _, err := c.requestApproval(context.Background(), planApprovalTool, "", nil)
+		allow, _, _, err := c.requestApproval(context.Background(), planApprovalTool, "", nil)
 		if err != nil {
 			errs <- err
 			return

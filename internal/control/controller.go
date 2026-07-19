@@ -173,9 +173,10 @@ type Controller struct {
 }
 
 type approvalReply struct {
-	allow   bool
-	session bool
-	persist bool // true = write "always allow" rule to config
+	allow      bool
+	session    bool
+	persist    bool   // true = write "always allow" rule to config
+	denyReason string // user-supplied reason when allow=false
 }
 
 type pendingApproval struct {
@@ -1350,7 +1351,17 @@ func (c *Controller) Turn() int {
 func (c *Controller) Approve(id string, allow, session, persist bool) {
 	pending := c.approval.resolve(id)
 	if pending.reply != nil {
-		pending.reply <- approvalReply{allow: allow, session: session, persist: persist} // buffered, never blocks
+		pending.reply <- approvalReply{allow: allow, session: session, persist: persist}
+	}
+}
+
+// DenyWithReason denies a pending ApprovalRequest with an optional user-supplied
+// reason. The reason is fed back to the model so it understands why the call was
+// rejected and can adjust its approach.
+func (c *Controller) DenyWithReason(id, reason string) {
+	pending := c.approval.resolve(id)
+	if pending.reply != nil {
+		pending.reply <- approvalReply{allow: false, denyReason: strings.TrimSpace(reason)}
 	}
 }
 
@@ -3559,17 +3570,17 @@ func (g gateApprover) ApproveWithReason(ctx context.Context, tool, subject strin
 		if allow {
 			return true, false, "", nil
 		}
-		humanAllow, remember, err := g.c.requestApprovalWithReason(ctx, tool, subject, args, reason)
+		humanAllow, remember, humanReason, err := g.c.requestApprovalWithReason(ctx, tool, subject, args, reason)
 		if err != nil {
 			return false, false, reason, err
 		}
 		if !humanAllow {
-			return false, false, reason, nil
+			return false, false, humanReason, nil
 		}
 		return true, remember, "", nil
 	}
-	allow, remember, err := g.c.requestApproval(ctx, tool, subject, args)
-	return allow, remember, "", err
+	allow, remember, denyReason, err := g.c.requestApproval(ctx, tool, subject, args)
+	return allow, remember, denyReason, err
 }
 
 type planModeReadOnlyTrustApprover struct{ c *Controller }
@@ -3981,14 +3992,14 @@ func parseRewind(args string, cps []checkpoint.Meta) (int, RewindScope, error) {
 // the same approval scope short-circuits. The approvalManager's promptMu
 // serialises outstanding prompts; this method keeps the I/O (events, hooks,
 // remember) that the manager deliberately stays out of.
-func (c *Controller) requestApproval(ctx context.Context, tool, subject string, args json.RawMessage) (bool, bool, error) {
+func (c *Controller) requestApproval(ctx context.Context, tool, subject string, args json.RawMessage) (bool, bool, string, error) {
 	return c.requestApprovalWithReason(ctx, tool, subject, args, "")
 }
 
-func (c *Controller) requestApprovalWithReason(ctx context.Context, tool, subject string, args json.RawMessage, reason string) (bool, bool, error) {
+func (c *Controller) requestApprovalWithReason(ctx context.Context, tool, subject string, args json.RawMessage, reason string) (bool, bool, string, error) {
 	r, err := c.requestApprovalDecision(ctx, tool, subject, args, reason)
 	if err != nil {
-		return false, false, err
+		return false, false, "", err
 	}
 	// Plan approvals are one-shot — never persist a session grant for them, or
 	// every future plan would auto-approve.
@@ -3998,7 +4009,10 @@ func (c *Controller) requestApprovalWithReason(ctx context.Context, tool, subjec
 	if r.allow && r.persist && !requiresFreshApprovalTool(tool) && c.onRemember != nil {
 		c.emitRememberResult(c.onRemember(permission.RememberRuleForScope(tool, subject)))
 	}
-	return r.allow, false, nil
+	if !r.allow {
+		return r.allow, false, r.denyReason, nil
+	}
+	return r.allow, false, "", nil
 }
 
 func (c *Controller) requestApprovalDecision(ctx context.Context, tool, subject string, args json.RawMessage, reason string) (approvalReply, error) {

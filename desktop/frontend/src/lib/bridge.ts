@@ -143,6 +143,8 @@ export interface AppBindings {
   CancelTab(tabID: string): Promise<void>;
   Approve(id: string, allow: boolean, session: boolean, persist: boolean): Promise<void>;
   ApproveTab(tabID: string, id: string, allow: boolean, session: boolean, persist: boolean): Promise<void>;
+  DenyWithReason(id: string, reason: string): Promise<void>;
+  DenyWithReasonTab(tabID: string, id: string, reason: string): Promise<void>;
   AnswerQuestion(id: string, answers: QuestionAnswer[]): Promise<void>;
   AnswerQuestionForTab(tabID: string, id: string, answers: QuestionAnswer[]): Promise<void>;
   ReplayPendingPrompts(): Promise<void>;
@@ -1759,6 +1761,15 @@ function makeMockApp(): AppBindings {
         },
         async ApproveTab(_tabID, id, allow, session, persist) {
           await withMockTabScope(_tabID, () => this.Approve(id, allow, session, persist));
+        },
+        async DenyWithReason(_id, _reason) {
+          if (!pendingApprovalPreview) return;
+          pendingApprovalPreview = false;
+          emit({ kind: "message", text: `approval preview denied: ${_reason || "(no reason)"}` });
+          emitMockTurnDone();
+        },
+        async DenyWithReasonTab(_tabID, id, reason) {
+          await withMockTabScope(_tabID, () => this.DenyWithReason(id, reason));
         },
         async AnswerQuestion(_id, answers) {
       if (!pendingAskPreview) return;

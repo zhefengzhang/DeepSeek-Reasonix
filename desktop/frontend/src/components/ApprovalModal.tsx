@@ -39,7 +39,7 @@ export function ApprovalModal({
   onRevisionActiveChange,
 }: {
   approval: WireApproval;
-  onAnswer: (allow: boolean, session: boolean, persist: boolean) => void;
+  onAnswer: (allow: boolean, session: boolean, persist: boolean, denyReason?: string) => void;
   onRevisePlan?: (text: string) => void;
   onExitPlan?: () => void;
   onStop: () => void;
@@ -63,6 +63,8 @@ export function ApprovalModal({
 
 
   const [detailsOpen, setDetailsOpen] = useState(() => showToolDetailsByDefault);
+  const [showDenyReason, setShowDenyReason] = useState(false);
+  const [denyReason, setDenyReason] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(() => (isPlanApproval ? 1 : 0));
   const cardRef = useRef<HTMLDivElement | null>(null);
   const shelfRef = useRef<HTMLDivElement | null>(null);
@@ -106,12 +108,19 @@ export function ApprovalModal({
     else if (key === "Escape") answerWithExit(onStop);
   };
 
+  const confirmDeny = () => {
+    const reason = denyReason.trim();
+    answerWithExit(() => onAnswer(false, false, false, reason || undefined));
+  };
+
   useEffect(() => {
     cardRef.current?.focus();
     setRevisionOpen(false);
     setRevisionText("");
     setDetailsOpen(showToolDetailsByDefault);
     setSelectedIndex(isPlanApproval ? 1 : 0);
+    setShowDenyReason(false);
+    setDenyReason("");
     playAttentionChime();
   }, [approval.id, isPlanApproval, showToolDetailsByDefault]);
 
@@ -320,14 +329,48 @@ export function ApprovalModal({
           </>
         }
         actions={
-          <>
-            <PromptAction keyLabel="1" label={t("approval.allowOnce")} onClick={() => answerWithExit(() => onAnswer(true, false, false))} selected={selectedIndex === 0} />
-            <PromptAction keyLabel="2" label={t("approval.allowRuleSession")} onClick={() => answerWithExit(() => onAnswer(true, true, false))} selected={selectedIndex === 1} />
-            <PromptAction keyLabel="3" label={t("approval.allowRulePersistent")} onClick={() => answerWithExit(() => onAnswer(true, true, true))} selected={selectedIndex === 2} />
-            <PromptAction keyLabel="4" label={t("approval.deny")} onClick={() => answerWithExit(() => onAnswer(false, false, false))} selected={selectedIndex === 3} />
-          </>
+          showDenyReason ? null : (
+            <>
+              <PromptAction keyLabel="1" label={t("approval.allowOnce")} onClick={() => answerWithExit(() => onAnswer(true, false, false))} selected={selectedIndex === 0} />
+              <PromptAction keyLabel="2" label={t("approval.allowRuleSession")} onClick={() => answerWithExit(() => onAnswer(true, true, false))} selected={selectedIndex === 1} />
+              <PromptAction keyLabel="3" label={t("approval.allowRulePersistent")} onClick={() => answerWithExit(() => onAnswer(true, true, true))} selected={selectedIndex === 2} />
+              <PromptAction keyLabel="4" label={t("approval.deny")} onClick={() => setShowDenyReason(true)} selected={selectedIndex === 3} />
+            </>
+          )
         }
       >
+        {showDenyReason && (
+          <div className="plan-revision">
+            <textarea
+              ref={inputRef}
+              className="plan-revision__input"
+              value={denyReason}
+              rows={2}
+              placeholder={t("approval.denyReasonPlaceholder")}
+              onChange={(event) => setDenyReason(event.target.value)}
+              onFocus={() => onRevisionActiveChange?.(true)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  confirmDeny();
+                } else if (event.key === "Escape") {
+                  event.preventDefault();
+                  setShowDenyReason(false);
+                  setDenyReason("");
+                }
+                event.stopPropagation();
+              }}
+            />
+            <div className="plan-revision__actions">
+              <button className="btn" onClick={() => { setShowDenyReason(false); setDenyReason(""); }}>
+                {t("common.cancel")}
+              </button>
+              <button className="btn btn--primary" onClick={confirmDeny}>
+                {t("approval.confirmDeny")}
+              </button>
+            </div>
+          </div>
+        )}
         {detailsOpen && (
           <div className="approval-details">
             {approval.reason && <div className="approval-reason">{approval.reason}</div>}

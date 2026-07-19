@@ -916,6 +916,7 @@ export default function App() {
     notice,
     cancel,
     approve,
+    denyWithReason,
     answerQuestion,
     setControllerMode,
     setCollaborationMode: setControllerCollaborationMode,
@@ -3495,12 +3496,16 @@ export default function App() {
                 cwd={state.meta?.cwd}
                 insertRequest={planRevisionInsertRequest}
                 onRevisionActiveChange={(active) => setWorkspaceInsertTarget(active ? "planRevision" : "composer")}
-                onAnswer={async (allow, session, persist) => {
+                onAnswer={async (allow, session, persist, denyReason) => {
                   // Approving an exit_plan_mode plan leaves plan mode; await the
                   // mode switch before sending the approval so the controller
                   // observes the updated state before it unblocks.
                   if (state.approval!.tool === "exit_plan_mode" && allow) await applyCollaborationMode("normal");
-                  approve(state.approval!.id, allow, session, persist);
+                  if (!allow && denyReason) {
+                    denyWithReason(state.approval!.id, denyReason);
+                  } else {
+                    approve(state.approval!.id, allow, session, persist);
+                  }
                 }}
                 onRevisePlan={(text) => {
                   setPendingPlanRevision(text);

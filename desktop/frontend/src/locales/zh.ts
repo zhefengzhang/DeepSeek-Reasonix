@@ -628,6 +628,8 @@ export const zh: Record<DictKey, string> = {
   "approval.details": "详情",
   "approval.hideDetails": "收起",
   "approval.deny": "拒绝",
+  "approval.denyReasonPlaceholder": "为什么拒绝？（可选，帮助 AI 理解）",
+  "approval.confirmDeny": "确认拒绝",
   "approval.allowOnce": "允许一次",
   "approval.allowSession": "本会话允许此工具",
   "approval.allowPersistent": "总是允许此工具（保存）",

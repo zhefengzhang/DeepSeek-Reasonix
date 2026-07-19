@@ -1487,6 +1487,12 @@ export function useController() {
     app.ApproveTab(activeTabId, id, allow, session, persist).catch(() => {});
   }, [activeTabId, dispatchTo]);
 
+  const denyWithReason = useCallback((id: string, reason: string) => {
+    if (!activeTabId) return;
+    dispatchTo(activeTabId, { type: "clearApproval" });
+    app.DenyWithReasonTab(activeTabId, id, reason).catch(() => {});
+  }, [activeTabId, dispatchTo]);
+
   const answerQuestion = useCallback((id: string, answers: QuestionAnswer[]) => {
     if (!activeTabId) return;
     dispatchTo(activeTabId, { type: "clearAsk" });
@@ -1923,7 +1929,7 @@ export function useController() {
   return {
     state: activeState,
     activeTabId,
-    send, sendToTab, runShell, steer, notice, cancel, approve, answerQuestion, setControllerMode, setCollaborationMode, setToolApprovalMode, setGoal, clearGoal,
+    send, sendToTab, runShell, steer, notice, cancel, approve, denyWithReason, answerQuestion, setControllerMode, setCollaborationMode, setToolApprovalMode, setGoal, clearGoal,
     newSession, clearSession, listSessions, listTrashedSessions, resumeSession, openChannelSession, previewSession, deleteSession, restoreSession, purgeTrashedSession, renameSession,
     loadOlderHistory,
     refreshMeta, pickWorkspace, switchWorkspace, compact, rewind, setModel, setEffort, setTokenMode,

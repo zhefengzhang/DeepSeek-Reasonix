@@ -1126,6 +1126,22 @@ func (a *App) ApproveTab(tabID, id string, allow, session, persist bool) {
 	}
 }
 
+// DenyWithReason denies a pending approval with an optional user-supplied reason.
+func (a *App) DenyWithReason(id, reason string) {
+	ctrl := a.ctrlByTabID("")
+	if ctrl != nil {
+		ctrl.DenyWithReason(id, reason)
+	}
+}
+
+// DenyWithReasonTab is like DenyWithReason but scoped to a specific tab.
+func (a *App) DenyWithReasonTab(tabID, id, reason string) {
+	ctrl := a.ctrlByTabID(tabID)
+	if ctrl != nil {
+		ctrl.DenyWithReason(id, reason)
+	}
+}
+
 // ReplayPendingPrompts asks every tab's controller to re-emit any approval/ask
 // prompt that is currently blocking its run loop. The frontend calls this once
 // its event subscription is live (on load/reconnect) so a session that was

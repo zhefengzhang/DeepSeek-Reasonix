@@ -627,6 +627,8 @@ export const en = {
   "approval.details": "Details",
   "approval.hideDetails": "Hide",
   "approval.deny": "Deny",
+  "approval.denyReasonPlaceholder": "Why deny? (optional — helps the AI understand)",
+  "approval.confirmDeny": "Confirm deny",
   "approval.allowOnce": "Allow once",
   "approval.allowSession": "Allow tool for session",
   "approval.allowPersistent": "Always allow tool (save)",
