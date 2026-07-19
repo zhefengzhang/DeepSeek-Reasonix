@@ -451,6 +451,8 @@ export const zhTW: Record<DictKey, string> = {
   "approval.details": "詳情",
   "approval.hideDetails": "收起",
   "approval.deny": "拒絕",
+  "approval.denyReasonPlaceholder": "為什麼拒絕？（選填，幫助 AI 理解）",
+  "approval.confirmDeny": "確認拒絕",
   "approval.allowOnce": "允許一次",
   "approval.allowSession": "本會話允許此工具",
   "approval.allowPersistent": "總是允許此工具（儲存）",

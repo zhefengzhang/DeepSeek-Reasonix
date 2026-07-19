@@ -72,6 +72,7 @@ type TurnControl interface {
 // posture (ask/auto/yolo). It mirrors the approvalManager surface.
 type Approvals interface {
 	Approve(id string, allow, session, persist bool)
+	DenyWithReason(id, reason string)
 	AnswerQuestion(id string, answers []event.AskAnswer)
 	Ask(ctx context.Context, questions []event.AskQuestion) ([]event.AskAnswer, error)
 	ReplayPendingPrompts()
