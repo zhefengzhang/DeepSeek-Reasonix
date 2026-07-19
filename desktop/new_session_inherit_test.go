@@ -86,6 +86,7 @@ func TestEnsureBlankTabUsesGlobalSessionDefaultsForModelAndToolApproval(t *testi
 	if err := cfg.SetDesktopDefaultToolApprovalMode(control.ToolApprovalAuto); err != nil {
 		t.Fatalf("SetDesktopDefaultToolApprovalMode: %v", err)
 	}
+	cfg.Agent.PlanModeDefault = true
 	if err := cfg.SaveTo(config.UserConfigPath()); err != nil {
 		t.Fatalf("save user config: %v", err)
 	}
@@ -120,6 +121,9 @@ func TestEnsureBlankTabUsesGlobalSessionDefaultsForModelAndToolApproval(t *testi
 	}
 	if created.toolApprovalMode != control.ToolApprovalAuto {
 		t.Fatalf("new tab toolApprovalMode = %q, want global default auto", created.toolApprovalMode)
+	}
+	if created.mode != "plan" {
+		t.Fatalf("new tab mode = %q, want global plan mode default (plan)", created.mode)
 	}
 	if src.model != "deepseek-flash/deepseek-v4-flash" || src.toolApprovalMode != control.ToolApprovalAsk {
 		t.Fatalf("existing tab should not be overwritten, got model=%q approval=%q", src.model, src.toolApprovalMode)

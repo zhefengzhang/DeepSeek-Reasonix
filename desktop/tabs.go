@@ -1559,7 +1559,11 @@ func (a *App) EnsureBlankTab(scope, workspaceRoot string) (TabMeta, error) {
 	inheritedModel := defaultModel
 	var inheritedEffort *string
 	inheritedTokenMode := boot.TokenModeFull
-	inheritedMode := tabModeFromAxes(false, defaultToolApprovalMode == control.ToolApprovalYolo)
+	planModeDefault := false
+	if cfg := config.LoadForEdit(config.UserConfigPath()); cfg != nil {
+		planModeDefault = cfg.Agent.PlanModeDefault
+	}
+	inheritedMode := tabModeFromAxes(planModeDefault, defaultToolApprovalMode == control.ToolApprovalYolo)
 	inheritedToolApprovalMode := defaultToolApprovalMode
 	inheritedDisabledMCP := map[string]ServerView{}
 	var inheritedMCPOrder []string
