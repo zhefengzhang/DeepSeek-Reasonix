@@ -11,6 +11,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"sort"
 	"strings"
 	"sync"
@@ -1297,6 +1298,9 @@ func (a *App) openTopicTabWithActivation(scope, workspaceRoot, topicID, sessionP
 		actualRoot = globalWorkspaceRoot()
 	}
 	targetKey := sessionRuntimeKey(sessionPath)
+	// Preserve the caller's sessionPath before createEmptySessionFile below
+	// might replace a blank string with a freshly-minted path.
+	originalSessionPath := sessionPath
 
 	a.mu.Lock()
 	if targetKey != "" {
@@ -1353,6 +1357,10 @@ func (a *App) openTopicTabWithActivation(scope, workspaceRoot, topicID, sessionP
 			return TabMeta{}, err
 		}
 	}
+	// Save whether the caller explicitly provided this session path, so we
+	// can distinguish "resume an existing session" (build synchronously)
+	// from "create a blank session" (async build preserves existing behavior).
+	hasExplicitSession := originalSessionPath != ""
 	profile := loadTabSessionProfile(sessionPath)
 	tab := &WorkspaceTab{
 		ID:            tabID,
@@ -1372,10 +1380,30 @@ func (a *App) openTopicTabWithActivation(scope, workspaceRoot, topicID, sessionP
 		a.activeTabID = tabID
 	}
 	a.saveTabsLocked()
-	meta := a.tabMeta(tab, tab.ID == a.activeTabID)
-	a.mu.Unlock()
 
-	a.startTabControllerBuild(tab)
+	var meta TabMeta
+	if hasExplicitSession {
+		// Build the controller synchronously so TabMeta reports ready=true
+		// before the frontend renders the send button. Without this the
+		// frontend sees ready=false and disables submission until the async
+		// build completes, making the composer unresponsive (#PLAN_MODE_ISSUE).
+		a.mu.Unlock()
+		a.buildTabControllerWithLoadedSession(tab, loadedTabSession{Path: sessionPath})
+		if tab.Ctrl == nil {
+			if tab.StartupErr != "" {
+				return TabMeta{}, fmt.Errorf("open session: %s", tab.StartupErr)
+			}
+			return TabMeta{}, fmt.Errorf("open session: controller was not built")
+		}
+		a.mu.RLock()
+		meta = a.tabMeta(tab, tab.ID == a.activeTabID)
+		a.mu.RUnlock()
+	} else {
+		meta = a.tabMeta(tab, tab.ID == a.activeTabID)
+		a.mu.Unlock()
+		a.startTabControllerBuild(tab)
+	}
+
 	if scope == "project" {
 		a.emitProjectTreeChanged()
 	}
@@ -2149,7 +2177,21 @@ func (a *App) buildTabControllerWithLoadedSession(tab *WorkspaceTab, loadedSessi
 }
 
 func (a *App) buildTabControllerWithContext(tab *WorkspaceTab, loadedSession loadedTabSession, buildCtx context.Context, buildGeneration uint64, buildCancel context.CancelFunc) {
-	defer a.recoverToPending("buildTabController")
+	// Recover from panics gracefully: set the tab to a failed-ready state
+	// so the frontend's send button stays functional instead of being
+	// permanently stuck at ready=false.
+	defer func() {
+		if r := recover(); r != nil {
+			writePendingCrash("buildTabController", r, debug.Stack())
+			a.mu.Lock()
+			tab.StartupErr = fmt.Sprintf("panic: %v", r)
+			tab.Ready = true
+			a.mu.Unlock()
+			if wailsCtx := a.ctx; wailsCtx != nil {
+				runtime.EventsEmit(wailsCtx, "agent:ready", tab.ID)
+			}
+		}
+	}()
 	keepBuildContext := false
 	defer func() {
 		a.clearTabBuildCancel(tab, buildGeneration, buildCancel, keepBuildContext)
