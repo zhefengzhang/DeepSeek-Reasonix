@@ -108,6 +108,48 @@ console.log("\nuse controller meta");
 }
 
 {
+  const originalNow = Date.now;
+  let now = 1_000;
+  Date.now = () => now;
+  try {
+    let s = reducer(initialState, { type: "event", e: { kind: "turn_started" } });
+    now = 1_200;
+    s = reducer(s, { type: "event", e: { kind: "reasoning", reasoning: "plan" } });
+    eq(s.live?.reasoningStartedAt, 1_200, "first reasoning delta records a reasoning start time");
+    now = 3_700;
+    s = reducer(s, { type: "event", e: { kind: "text", text: "answer" } });
+    eq(s.live?.reasoningComplete, true, "first answer token marks reasoning complete");
+    eq(s.live?.reasoningCompletedAt, 3_700, "first answer token records reasoning completion time");
+    now = 4_200;
+    s = reducer(s, { type: "event", e: { kind: "turn_done" } });
+    const assistant = s.items.find((item) => item.kind === "assistant");
+    eq(assistant?.kind === "assistant" && assistant.reasoningDurationMs, 2_500, "turn_done persists the live reasoning duration");
+    eq(assistant?.kind === "assistant" && assistant.workDurationMs, 3_200, "turn_done persists the full turn wall-clock duration");
+  } finally {
+    Date.now = originalNow;
+  }
+}
+
+{
+  const originalNow = Date.now;
+  let now = 5_000;
+  Date.now = () => now;
+  try {
+    let s = reducer(initialState, { type: "event", e: { kind: "turn_started" } });
+    now = 5_100;
+    s = reducer(s, { type: "event", e: { kind: "reasoning", reasoning: "diagnose" } });
+    now = 6_400;
+    s = reducer(s, { type: "event", e: { kind: "message", text: "done", reasoning: "diagnose" } });
+    const assistant = s.items.find((item) => item.kind === "assistant");
+    eq(assistant?.kind === "assistant" && assistant.reasoningDurationMs, 1_300, "final message records reasoning duration when no text delta arrived");
+    eq(assistant?.kind === "assistant" && assistant.workDurationMs, 1_400, "final message records cumulative turn work duration before turn_done");
+    eq(s.live, undefined, "final message still closes live reasoning state");
+  } finally {
+    Date.now = originalNow;
+  }
+}
+
+{
   const started = reducer(initialState, { type: "event", e: { kind: "turn_started" } });
   const waiting = reducer(started, { type: "event", e: { kind: "approval_request", approval: { id: "1", tool: "bash", subject: "go test" } } });
   eq(waiting.running, true, "approval prompt keeps the turn running");

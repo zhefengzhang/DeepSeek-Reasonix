@@ -3,7 +3,7 @@ import type { Item, LiveStream } from "../lib/useController";
 import type { CheckpointMeta } from "../lib/types";
 import { useT } from "../lib/i18n";
 import { AssistantMessage, TurnActions, UserMessage } from "./Message";
-import { ProcessCompactIcon, ProcessPhaseIcon } from "./ProcessCard";
+import { ProcessBrainIcon, ProcessCompactIcon, ProcessPhaseIcon } from "./ProcessCard";
 import { ToolCard } from "./ToolCard";
 import { ArrowDown, ChevronRight } from "lucide-react";
 import { Welcome } from "./Welcome";
@@ -15,9 +15,12 @@ import { useGSAPCollapse } from "../lib/useGSAPCollapse";
 import { useEntranceAnimation } from "../lib/useEntranceAnimation";
 import { useScrollManager } from "../lib/useScrollManager";
 import { buildStepGroups, buildTurnGroups, compactQuestionText, createWarmLayerState, questionAnchorId, questionTurnsById, scrollVersion, warmColdPageForTurn, warmLayerWithColdPageAtLeast, warmLayerWithExpandedTurn, warmLayerWithNextColdPage, warmPagination, warmUserPreview, type QuestionAnchor, type TurnGroup, type WarmLayerState } from "../lib/transcriptGrouping";
+import { displayReasoningText } from "../lib/reasoningDisplay";
 
 type ToolItem = Extract<Item, { kind: "tool" }>;
 type AssistantItem = Extract<Item, { kind: "assistant" }>;
+type NoticeItem = Extract<Item, { kind: "notice" }>;
+type AssistantReasoningDisplay = "normal" | "hide";
 type OpenTurnAction = { turn: number; menu: "summary" | "rewind" };
 
 const QUESTION_NAV_MIN_COUNT = 2;
@@ -29,20 +32,38 @@ const LiveAssistantMessage = memo(function LiveAssistantMessage({
   expandWhileStreaming = true,
   truncateStreamingReasoning = false,
   creationMode = false,
+  reasoningDisplay = "normal",
 }: {
   item: AssistantItem;
   defaultExpanded?: boolean;
   expandWhileStreaming?: boolean;
   truncateStreamingReasoning?: boolean;
   creationMode?: boolean;
+  reasoningDisplay?: AssistantReasoningDisplay;
 }) {
   const live = useContext(LiveStreamContext);
   const shown = useMemo(
-    () =>
-      live && live.id === item.id
-        ? { ...item, text: live.text, reasoning: live.reasoning, streaming: true, reasoningComplete: live.reasoningComplete }
-        : item,
-    [item, live?.id, live?.text, live?.reasoning, live?.reasoningComplete],
+    () => {
+      const merged =
+        live && live.id === item.id
+          ? {
+              ...item,
+              text: live.text,
+              reasoning: live.reasoning,
+              streaming: true,
+              reasoningComplete: live.reasoningComplete,
+              reasoningDurationMs:
+                live.reasoningStartedAt && live.reasoningCompletedAt && live.reasoningCompletedAt >= live.reasoningStartedAt
+                  ? live.reasoningCompletedAt - live.reasoningStartedAt
+                  : item.reasoningDurationMs,
+            }
+          : item;
+      if (reasoningDisplay === "hide") {
+        return { ...merged, reasoning: "", reasoningComplete: true, reasoningDurationMs: undefined };
+      }
+      return merged;
+    },
+    [item, live?.id, live?.text, live?.reasoning, live?.reasoningComplete, live?.reasoningStartedAt, live?.reasoningCompletedAt, reasoningDisplay],
   );
   return (
     <AssistantMessage
@@ -54,6 +75,35 @@ const LiveAssistantMessage = memo(function LiveAssistantMessage({
     />
   );
 });
+
+function InlineAssistantReasoning({ item }: { item: AssistantItem }) {
+  const t = useT();
+  const live = useContext(LiveStreamContext);
+  const shown = live && live.id === item.id
+    ? {
+        reasoning: live.reasoning,
+        streaming: true,
+        reasoningComplete: live.reasoningComplete,
+      }
+    : item;
+  const reasoning = shown.reasoning.trim();
+  if (!reasoning) return null;
+  const visibleReasoning = displayReasoningText(shown.reasoning, {
+    streaming: shown.streaming,
+    truncateStreaming: true,
+  });
+  const running = shown.streaming && !shown.reasoningComplete;
+  return (
+    <div className="turn-collapse__reasoning-phase">
+      <div className="turn-collapse__reasoning-head" data-running={running ? "" : undefined}>
+        <ProcessBrainIcon size={12} />
+        <span>{running ? t("msg.thinkingRunning") : t("msg.thinking")}</span>
+        <ChevronRight className="reasoning__chevron reasoning__chevron--open" size={12} />
+      </div>
+      <div className="turn-collapse__inline-reasoning">{visibleReasoning}</div>
+    </div>
+  );
+}
 
 // ── Layer budgets ─────────────────────────────────────────────────────────────
 // Hot zone: the most recent N user turns are always fully rendered. All data
@@ -73,6 +123,110 @@ const HOT_TURNS = 30;
 const WARM_PAGE_SIZE = 20; // cold-zone pagination batch
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+
+function turnWorkDurationMs(items: readonly Item[]): number {
+  const persisted = items.reduce((ms, it) => {
+    if (it.kind !== "assistant") return ms;
+    return Math.max(ms, it.workDurationMs ?? 0);
+  }, 0);
+  if (persisted > 0) return persisted;
+  return items.reduce((ms, it) => {
+    if (it.kind === "tool") return ms + (it.durationMs ?? 0);
+    if (it.kind === "assistant") return ms + (it.reasoningDurationMs ?? 0);
+    return ms;
+  }, 0);
+}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+void turnWorkDurationMs;
+
+function useTick(on: boolean): number {
+  const [, setN] = useState(0);
+  useEffect(() => {
+    if (!on) return;
+    const id = window.setInterval(() => setN((n) => n + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [on]);
+  return Date.now();
+}
+
+function formatWorkDuration(durationMs: number, t: ReturnType<typeof useT>): string {
+  if (!Number.isFinite(durationMs) || durationMs <= 0) return "";
+  const totalSeconds = Math.max(1, Math.round(durationMs / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes <= 0) return t("transcript.durationSeconds", { s: totalSeconds });
+  if (seconds <= 0) return t("transcript.durationMinutes", { m: minutes });
+  return t("transcript.durationMinutesSeconds", { m: minutes, s: seconds });
+}
+
+function workStatusLabel(durationMs: number, running: boolean, t: ReturnType<typeof useT>): string {
+  const duration = formatWorkDuration(durationMs, t);
+  if (running) {
+    return duration ? t("transcript.workingDuration", { duration }) : t("transcript.working");
+  }
+  return duration ? t("transcript.workedDuration", { duration }) : t("transcript.worked");
+}
+
+function assistantReasoningOnly(item: AssistantItem): AssistantItem {
+  return { ...item, text: "" };
+}
+
+function assistantAnswerOnly(item: AssistantItem): AssistantItem {
+  return { ...item, reasoning: "", reasoningComplete: true, reasoningDurationMs: undefined };
+}
+
+function assistantHasVisibleAnswer(item: AssistantItem, liveId: string | undefined, liveHasAnswerText: boolean): boolean {
+  if (item.text.trim() !== "") return true;
+  return liveId === item.id && liveHasAnswerText;
+}
+
+type TurnDisplayParts = {
+  processItems: Item[];
+  outsideItems: Array<NoticeItem | AssistantItem>;
+};
+
+function partitionTurnItems(
+  items: readonly Item[],
+  liveId?: string,
+  liveHasAnswerText = false,
+  liveHasReasoning = false,
+): TurnDisplayParts {
+  let finalAssistantIndex = -1;
+  for (let i = items.length - 1; i >= 0; i--) {
+    const item = items[i];
+    if (item.kind === "assistant" && assistantHasVisibleAnswer(item, liveId, liveHasAnswerText)) {
+      finalAssistantIndex = i;
+      break;
+    }
+  }
+
+  const processItems: Item[] = [];
+  const outsideItems: Array<NoticeItem | AssistantItem> = [];
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    if (item.kind === "user") continue;
+    if (item.kind === "notice" && item.level === "warn") {
+      outsideItems.push(item);
+      continue;
+    }
+    if (item.kind !== "assistant") {
+      processItems.push(item);
+      continue;
+    }
+    if (i === finalAssistantIndex) {
+      outsideItems.push(item);
+      if (item.reasoning || (liveId === item.id && liveHasReasoning)) {
+        processItems.push(assistantReasoningOnly(item));
+      }
+      continue;
+    }
+    if (item.text.trim() || item.reasoning || (liveId === item.id && liveHasReasoning)) {
+      processItems.push(item);
+    }
+  }
+  return { processItems, outsideItems };
+}
+void partitionTurnItems;
 
 // ── Transcript component ──────────────────────────────────────────────────────
 
@@ -100,6 +254,7 @@ export function Transcript({
   olderHistoryCount = 0,
   loadingOlderHistory = false,
   onLoadOlderHistory,
+  turnStartAt,
 }: {
   items: Item[];
   live?: LiveStream;
@@ -124,6 +279,7 @@ export function Transcript({
   olderHistoryCount?: number;
   loadingOlderHistory?: boolean;
   onLoadOlderHistory?: () => void;
+  turnStartAt?: number;
 }) {
   const t = useT();
   const {
@@ -148,6 +304,7 @@ export function Transcript({
 
   const [displayMode, setDisplayMode] = useState<DisplayMode>(() => getDisplayMode());
   useEffect(() => onDisplayModeChange((mode) => setDisplayMode(mode)), []);
+  void turnStartAt;
 
   const questions = useMemo<QuestionAnchor[]>(() => {
     const anchors: QuestionAnchor[] = [];
@@ -1025,22 +1182,27 @@ function WarmTurnCard({
   );
 }
 
-// ── TurnCollapse: compact mode grouping ──────────────────────────────────────
+// ── TurnCollapse: one process fold per user turn ─────────────────────────────
 
 type TurnCollapseProps = {
-  items: Item[];       // intermediate items (tools, reasoning, phase)
-  durationMs: number;  // summed tool execution time across the batch; 0 when unknown
+  items: Item[];
+  durationMs: number;
   mode: DisplayMode;
-  subcalls: Map<string, ToolItem[]>;
+  subcalls: ReadonlyMap<string, ToolItem[]>;
   tabId?: string;
   creationMode?: boolean;
+  turnStartAt?: number;
+  turnActive?: boolean;
+  preferredKind?: "tool" | "reasoning" | "process";
 };
 
-function TurnCollapse({ items, durationMs, mode, subcalls, tabId, creationMode = false }: TurnCollapseProps) {
+function TurnCollapse({ items, durationMs, mode, subcalls, tabId, creationMode = false, turnStartAt, turnActive = false, preferredKind }: TurnCollapseProps) {
   const t = useT();
+  const live = useContext(LiveStreamContext);
   const [open, setOpen] = useState(false);
+  const userOverriddenOpen = useRef(false);
+  const prevRunningRef = useRef(false);
   const bodyRef = useRef<HTMLDivElement>(null);
-  useGSAPCollapse(bodyRef, open);
 
   // Keep only items the body will actually render — an expandable fold over
   // nothing is worse than no fold.
@@ -1048,29 +1210,65 @@ function TurnCollapse({ items, durationMs, mode, subcalls, tabId, creationMode =
     return items.filter((it) => {
       if (it.kind === "assistant") {
         if (it.text.trim() !== "") return true;
-        return Boolean(it.reasoning);
+        return Boolean(it.reasoning || (live?.id === it.id && live.reasoning));
       }
       if (it.kind === "phase") return true;
+      if (it.kind === "notice") return true;
+      if (it.kind === "compaction") return true;
       if (it.kind !== "tool") return false;
       if (it.parentId || it.name === "todo_write" || it.name === "exit_plan_mode") return false;
       return true;
     });
-  }, [items, mode]);
+  }, [items, mode, live?.id, live?.reasoning]);
 
   const seconds = Math.round(durationMs / 1000);
-  const label = seconds > 0 ? t("transcript.processedDuration", { s: seconds }) : t("transcript.processed");
+
+  const hasRunningProcess = displayItems.some((it) => {
+    if (it.kind === "tool") return it.status === "running";
+    if (it.kind !== "assistant") return false;
+    if (live?.id === it.id) return !live.reasoningComplete;
+    return it.streaming && !it.reasoningComplete;
+  });
+  const hasLiveAssistant = displayItems.some((it) => it.kind === "assistant" && live?.id === it.id);
+  const hasRunningWork = turnActive || hasRunningProcess || hasLiveAssistant;
+  const now = useTick(hasRunningWork);
+  const runningDurationMs = hasRunningWork
+    ? turnStartAt
+      ? Math.max(0, now - turnStartAt)
+      : live?.reasoningStartedAt
+        ? Math.max(0, now - live.reasoningStartedAt)
+        : 0
+    : 0;
+  const effectiveDurationMs = hasRunningWork ? Math.max(durationMs, runningDurationMs) : durationMs;
+
+  useGSAPCollapse(bodyRef, open);
+  useEffect(() => {
+    const wasRunning = prevRunningRef.current;
+    prevRunningRef.current = hasRunningWork;
+    if (hasRunningWork) {
+      if (!wasRunning) userOverriddenOpen.current = false;
+      if (!userOverriddenOpen.current) setOpen(true);
+    } else if (wasRunning && !userOverriddenOpen.current) {
+      setOpen(false);
+    }
+  }, [hasRunningWork]);
 
   if (displayItems.length === 0) return null;
 
-  const collapseKind = displayItems.some((it) => it.kind === "tool")
+  const collapseKind = preferredKind ?? (displayItems.some((it) => it.kind === "tool")
     ? "tool"
     : displayItems.some((it) => it.kind === "assistant" && Boolean(it.reasoning))
       ? "reasoning"
-      : "process";
+      : "process");
+  const label = collapseKind === "reasoning"
+    ? workStatusLabel(effectiveDurationMs, hasRunningWork, t)
+    : seconds > 0
+      ? t("transcript.processedDuration", { s: seconds })
+      : t("transcript.processed");
   const creationLabel = collapseKind === "tool"
     ? t("creation.toolCallsLabel")
     : collapseKind === "reasoning"
-      ? t("creation.reasoningLabel")
+      ? label
       : label;
 
   // Pre-compute body: group consecutive completed read-only tools into ReadOnlyBatch
@@ -1099,12 +1297,18 @@ function TurnCollapse({ items, durationMs, mode, subcalls, tabId, creationMode =
         continue;
       }
     }
+    if (it.kind !== "tool") {
+      flushToolBatch();
+      flushRO();
+    }
     if (!creationMode && it.kind === "tool" && !it.parentId && it.name !== "todo_write" && it.name !== "exit_plan_mode" && it.status !== "running" && isReadOnlyTool(it.name)) {
       roBatch.push(it as ToolItem);
       continue;
     }
-    flushToolBatch();
-    flushRO();
+    if (it.kind === "tool") {
+      flushToolBatch();
+      flushRO();
+    }
     switch (it.kind) {
       case "tool":
         if (it.parentId) break;
@@ -1113,9 +1317,23 @@ function TurnCollapse({ items, durationMs, mode, subcalls, tabId, creationMode =
         body.push(<ToolCard key={it.id} item={it as ToolItem} subcalls={subcalls.get(it.id)} tabId={tabId} />);
         break;
       case "phase": body.push(<PhaseCard key={it.id} text={it.text} />); break;
+      case "notice": body.push(<NoticeCard key={it.id} level={it.level} text={it.text} />); break;
+      case "compaction": body.push(<CompactionCard key={it.id} item={it} />); break;
       case "assistant": {
-        const displayItem = it;
-        body.push(<AssistantMessage key={it.id} item={displayItem as AssistantItem} creationMode={creationMode} />);
+        const assistant = it as AssistantItem;
+        if (assistant.reasoning || (live?.id === assistant.id && live.reasoning)) {
+          body.push(<InlineAssistantReasoning key={`${it.id}-reasoning`} item={assistant} />);
+        }
+        if (assistant.text.trim()) {
+          body.push(
+            <AssistantMessage
+              key={`${it.id}-text`}
+              item={assistantAnswerOnly(assistant)}
+              defaultExpanded={false}
+              creationMode={creationMode}
+            />,
+          );
+        }
         break;
       }
     }
@@ -1128,11 +1346,14 @@ function TurnCollapse({ items, durationMs, mode, subcalls, tabId, creationMode =
       <button
         type="button"
         className="reasoning__head"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          userOverriddenOpen.current = true;
+          setOpen((v) => !v);
+        }}
         aria-expanded={open}
       >
-        <ChevronRight className={`reasoning__chevron${open ? " reasoning__chevron--open" : ""}`} size={12} />
         <span className="turn-collapse__label" data-creation-label={creationLabel}>{label}</span>
+        {!hasRunningWork && <ChevronRight className={`reasoning__chevron${open ? " reasoning__chevron--open" : ""}`} size={12} />}
       </button>
       <div ref={bodyRef} className="turn-collapse__body">{body}</div>
     </div>
@@ -1270,7 +1491,6 @@ function QuestionJumpBar({ questions, onJump }: { questions: QuestionAnchor[]; o
 }
 
 type CompactionItem = Extract<Item, { kind: "compaction" }>;
-type NoticeItem = Extract<Item, { kind: "notice" }>;
 
 function PhaseCard({ text }: { text: string }) {
   return <div className="phase" data-entrance="true"><ProcessPhaseIcon size={12} /><span>{text}</span></div>;

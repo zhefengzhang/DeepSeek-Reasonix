@@ -858,6 +858,13 @@ func usageSourceOrDefault(source, fallback string) string {
 // a round count. A positive maxSteps imposes an optional hard guard, surfaced as
 // a resumable notice when hit.
 func (a *Agent) Run(ctx context.Context, input string) (runErr error) {
+	turnStartedAt := time.Now()
+	workDurationMs := func() int64 {
+		if elapsed := time.Since(turnStartedAt).Milliseconds(); elapsed > 0 {
+			return elapsed
+		}
+		return 1
+	}
 	defer a.clearSteerQueue()
 	a.steerMu.Lock()
 	a.steerConsumed = false
@@ -944,6 +951,7 @@ func (a *Agent) Run(ctx context.Context, input string) (runErr error) {
 						ReasoningContent:   reasoning,
 						ReasoningSignature: signature,
 						MemoryCitations:    a.memoryCitations(),
+						WorkDurationMs:     workDurationMs(),
 					})
 				}
 				a.session.Add(provider.Message{
@@ -982,6 +990,7 @@ func (a *Agent) Run(ctx context.Context, input string) (runErr error) {
 			ReasoningSignature: signature,
 			ToolCalls:          calls,
 			MemoryCitations:    a.memoryCitations(),
+			WorkDurationMs:     workDurationMs(),
 		})
 
 		if len(calls) == 0 {
