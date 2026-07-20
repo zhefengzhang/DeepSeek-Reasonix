@@ -879,6 +879,7 @@ func (gw *BotGateway) getOrCreateSession(ctx context.Context, key string, msg In
 	ctrl, err := boot.Build(ctx, boot.Options{
 		Model:           model,
 		MaxSteps:        gw.cfg.MaxSteps,
+		MaxStepsKey:     "bot.max_steps",
 		RequireKey:      true,
 		Sink:            sessionSink,
 		WorkspaceRoot:   workspaceRoot,

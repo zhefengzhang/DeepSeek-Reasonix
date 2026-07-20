@@ -123,6 +123,10 @@ type Options struct {
 	// terminal. Headless/bot frontends pass a positive value so an unanswered
 	// prompt can't wedge the session indefinitely (#4626, #4402).
 	ApprovalTimeout time.Duration
+	// MaxStepsKey names the configuration knob shown when the per-turn MaxSteps
+	// guard is triggered. Empty uses the default ("agent.max_steps"). CLI passes
+	// "--max-steps"; Bot passes "bot.max_steps"; desktop leaves it empty.
+	MaxStepsKey string
 }
 
 // Build loads config, resolves the model(s), and returns a Controller wrapping a
@@ -990,6 +994,7 @@ func Build(ctx context.Context, opts Options) (*control.Controller, error) {
 	}
 	executor := agent.New(execProv, reg, execSess, agent.Options{
 		MaxSteps:                           maxSteps,
+		MaxStepsKey:                        opts.MaxStepsKey,
 		Temperature:                        cfg.Agent.Temperature,
 		Pricing:                            entry.Price,
 		Gate:                               headlessGate,

@@ -47,8 +47,6 @@ default_model = "deepseek-flash"   # 执行器；设 [agent].planner_model 可�
 # cursor_shape = "underline"       # block|underline|bar；CLI/TUI 输入光标
 
 [agent]
-max_steps = 0                    # 仅用户/全局；执行器工具调用轮数；0 表示不限
-planner_max_steps = 0            # 仅用户/全局；规划器只读工具调用轮数；0 表示不限
 reasoning_language = "auto"      # 可见思考过程语言：auto|zh|en
 # plan_mode_allowed_tools = ["custom_reader"]   # 仅声明额外只读自定义工具；
 #                                                # 不能解锁被计划模式阻断的工具或 unsafe bash
@@ -504,10 +502,16 @@ planner_model = "deepseek-pro"   # 作为低频规划器
 
 Planner 会看到已加载的 `REASONIX.md` / `AGENTS.md` 记忆，并拿到一小组只读研究工具，
 因此可以先检查相关文件再把计划交给执行器。写入类和流程类工具仍只给执行器使用。
-`max_steps` 限制执行器；`planner_max_steps` 只限制规划器，两者都可设为 `0` 表示不限。
+Reasonix 会自动管理正常执行：活跃 Todo 连续 8 个工具调用轮次没有新的完成项、唯一读取、
+命令或修改时，宿主会要求执行器重新评估；连续 16 个无进展轮次后暂停并保存工作，可在
+下一轮用户消息中继续。完全重复的操作不算进展，新的宿主可观测工作会自动续期。两级任务
+列表保持同一"唯一当前项"契约：唯一的 `in_progress` 是活跃的 level-1 子步骤，其 level-0
+阶段保持 `pending`；子步骤按顺序推进并签核，全部完成后阶段本身转为 `in_progress` 做
+最后签核。
 
-轮数上限请放在用户级配置。项目 `./reasonix.toml` 不会覆盖 `max_steps` 或
-`planner_max_steps`。
+升级时仍可解析已有的 `[agent].max_steps` 和 `planner_max_steps`，但其值会被忽略，并在一次性
+迁移提示后从配置中移除，避免隐藏的旧上限截断自动进度管理或子 Agent 的继承任务。确实需要
+为单次运行设置预算时使用 CLI `--max-steps`；无人值守 Bot 仍保留 `[bot].max_steps`。
 
 Subagent skills 默认继承执行器模型。设置 `subagent_model` 可让它们统一走另一个已配置
 模型；设置 `subagent_models` 则只覆盖 `review`、`security_review` 等指定 skill。

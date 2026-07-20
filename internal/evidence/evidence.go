@@ -391,6 +391,17 @@ func AdvanceSerialTodo(todos []TodoItem, index int) bool {
 
 // MatchStep resolves a complete_step.step (number, title, or drift-tolerant
 // variant) against a todo list, returning the matched item.
+
+// NormalizeSerialTodos ensures the todo list follows the serial contract:
+// completed items form a contiguous prefix from index 0, at most one item is
+// in_progress, and no item past the first non-completed item is marked as
+// completed. Items violating the contract are repaired in place:
+// - A completed item that skips over an uncompleted earlier item → reset to
+//   the earliest conflicting item's original status.
+// - Multiple in_progress items → only the first unresolved item stays
+//   in_progress; the rest revert to pending.
+// MatchStep resolves a complete_step.step (number, title, or drift-tolerant
+// variant) against a todo list, returning the matched item.
 func MatchStep(step string, todos []TodoItem) (TodoStepMatch, bool) {
 	m := matchTodoStep(step, todos)
 	return m, m.Found

@@ -200,6 +200,7 @@ func setup(ctx context.Context, modelName string, maxStepsOverride int, requireK
 	return boot.Build(ctx, boot.Options{
 		Model:      modelName,
 		MaxSteps:   maxStepsOverride,
+		MaxStepsKey: "--max-steps",
 		RequireKey: requireKey,
 		Sink:       sink,
 		SessionDir: resolveCLISessionDir(),
@@ -227,6 +228,7 @@ func setupQuiet(ctx context.Context, modelName string, maxStepsOverride int, req
 	return boot.Build(ctx, boot.Options{
 		Model:      modelName,
 		MaxSteps:   maxStepsOverride,
+		MaxStepsKey: "--max-steps",
 		RequireKey: requireKey,
 		Sink:       sink,
 		Stderr:     io.Discard,
