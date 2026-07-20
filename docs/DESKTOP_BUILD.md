@@ -41,12 +41,7 @@ wails build \
 ```bash
 cd desktop
 
-wails build \
-  -clean \
-  -platform windows/amd64 \
-  -ldflags "-s -w -X main.version=0.0.0-dev -X main.channel=dev" \
-  -trimpath \
-  -upx
+wails build -clean -platform windows/amd64 -ldflags "-s -w -X main.version=1.16.0-dev -X main.channel=dev" -trimpath -upx
 ```
 
 产物：`build/bin/reasonix-desktop.exe`（UPX 压缩后约 13MB）
