@@ -96,33 +96,38 @@ darwin)
 	else
 		ditto -c -k --keepParent "$app" "$ROOT/dist/${APPNAME}-darwin-${arch}.zip"
 	fi
-	# A drag-to-Applications .dmg for first-time human download. Named -universal so
-	# cmd/sign's substring match (darwin-arm64/darwin-amd64) skips it: the .zip stays
-	# the updater channel, the .dmg is release-page only. create-dmg can exit nonzero
-	# while still writing the image, so gate on the file existing, not the exit code.
-	dmgsrc=$(mktemp -d)
-	cp -R "$app" "$dmgsrc/${APPNAME}.app"
-	dmg="$ROOT/dist/${APPNAME}-darwin-universal.dmg"
-	create-dmg \
-		--volname "$APPNAME" \
-		--window-size 540 380 \
-		--icon-size 110 \
-		--icon "${APPNAME}.app" 150 190 \
-		--app-drop-link 390 190 \
-		--no-internet-enable \
-		"$dmg" "$dmgsrc" || true
-	[ -f "$dmg" ] || { echo "create-dmg did not produce $dmg" >&2; exit 1; }
-	# The .dmg is a separately-downloaded artifact, so sign + notarize + staple the
-	# disk image itself too — the stapled .app inside isn't enough for the image.
-	if [ "${HAS_APPLE_CERT:-}" = "true" ]; then
-		codesign --force --timestamp -s "$identity" "$dmg"
-		echo "==> notarytool submit (dmg)"
-		xcrun notarytool submit "$dmg" \
-			--key "$APPLE_API_KEY_PATH" --key-id "$APPLE_API_KEY_ID" \
-			--issuer "$APPLE_API_ISSUER_ID" --wait
-		xcrun stapler staple "$dmg"
+	if [ "${DESKTOP_BUILD_SKIP_DMG:-0}" = "1" ]; then
+		echo "==> skip DMG packaging (DESKTOP_BUILD_SKIP_DMG=1)"
+	else
+		# A drag-to-Applications .dmg for first-time human download. Named -universal so
+		# cmd/sign's substring match (darwin-arm64/darwin-amd64) skips it: the .zip stays
+		# the updater channel, the .dmg is release-page only. create-dmg can exit nonzero
+		# while still writing the image, so gate on the file existing, not the exit code.
+		dmgsrc=$(mktemp -d)
+		cp -R "$app" "$dmgsrc/${APPNAME}.app"
+		dmg="$ROOT/dist/${APPNAME}-darwin-universal.dmg"
+		create-dmg \
+			--volname "$APPNAME" \
+			--window-size 540 380 \
+			--icon-size 110 \
+			--icon "${APPNAME}.app" 150 190 \
+			--app-drop-link 390 190 \
+			--no-internet-enable \
+			"$dmg" "$dmgsrc" || true
+		[ -f "$dmg" ] || { echo "create-dmg did not produce $dmg" >&2; exit 1; }
+		# The .dmg is a separately-downloaded artifact, so sign + notarize + staple the
+		# disk image itself too — the stapled .app inside isn't enough for the image.
+		if [ "${HAS_APPLE_CERT:-}" = "true" ]; then
+			codesign --force --timestamp -s "$identity" "$dmg"
+			echo "==> notarytool submit (dmg)"
+			xcrun notarytool submit "$dmg" \
+				--key "$APPLE_API_KEY_PATH" --key-id "$APPLE_API_KEY_ID" \
+				--issuer "$APPLE_API_ISSUER_ID" --wait
+			xcrun stapler staple "$dmg"
+		fi
+		rm -rf "$dmgsrc"
 	fi
-	rm -rf "$staging" "$dmgsrc"
+	rm -rf "$staging"
 	;;
 windows)
 	# `wails build -nsis` writes the installer under build/bin; its exact name
