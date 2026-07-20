@@ -1047,6 +1047,7 @@ export interface HeadroomConfigView {
   showLogWindow?: boolean;
   gpuBackend?: string;
   keepAlive?: boolean;
+  protectTools?: string[]; // extra tool names to protect from compression
 }
 
 export interface HookConfigView {
@@ -1126,6 +1127,7 @@ export interface SettingsView {
   headroomRequestTimeout?: number;
   headroomShowLogWindow?: boolean;
   headroomGpuBackend?: string;
+  headroomProtectTools?: string[];
   planModeDefault?: boolean;
   understandGraphAvailable?: boolean;
   understandGraphStatus?: UnderstandGraphStatusView;

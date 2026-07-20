@@ -1880,6 +1880,9 @@ export const en = {
   "settings.headroomKeepAliveHint": "Keep the Headroom proxy running after Reasonix exits for faster cold starts.",
   "settings.headroomTokensSaved": "{n} tokens saved ({pct}%)",
   "settings.headroomRestartNotice": "Changes to compression settings restart the proxy service. Active conversations may briefly pause.",
+  "settings.headroomProtectedTools": "Protected Tools",
+  "settings.headroomProtectedToolsHint": "Add tool names to protect their output from being compressed.",
+  "settings.headroomProtectedToolsPlaceholder": "tool_name",
 };
 
 export type DictKey = keyof typeof en;

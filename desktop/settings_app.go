@@ -207,6 +207,7 @@ type SettingsView struct {
 	HeadroomRequestTimeout   int                        `json:"headroomRequestTimeout"`
 	HeadroomShowLogWindow    bool                       `json:"headroomShowLogWindow"`
 	HeadroomGpuBackend       string                     `json:"headroomGpuBackend"`
+	HeadroomProtectTools     []string                   `json:"headroomProtectTools"`
 	PlanModeDefault          bool                       `json:"planModeDefault"`
 	UnderstandGraphAvailable bool                       `json:"understandGraphAvailable"`
 	UnderstandGraphStatus    *UnderstandGraphStatusView `json:"understandGraphStatus,omitempty"`
@@ -240,6 +241,15 @@ func nonNilStringMap(m map[string]string) map[string]string {
 		return map[string]string{}
 	}
 	return m
+}
+
+// protectToolsOrDefaults returns the configured protect tools, or the built-in
+// default set when no user config exists yet.
+func protectToolsOrDefaults(tools []string) []string {
+	if tools == nil {
+		return DefaultProtectTools
+	}
+	return tools
 }
 
 func providerModelOverridesForView(overrides map[string]config.ProviderModelOverride, models []string) []ProviderModelOverrideView {
@@ -616,6 +626,7 @@ func (a *App) Settings() SettingsView {
 		HeadroomRequestTimeout:   cfg.Headroom.HeadroomRequestTimeout(),
 		HeadroomShowLogWindow:    cfg.Headroom.ShowLogWindow,
 		HeadroomGpuBackend:       cfg.Headroom.HeadroomGpuBackend(),
+		HeadroomProtectTools:     protectToolsOrDefaults(cfg.Headroom.ProtectTools),
 		PlanModeDefault:          cfg.Agent.PlanModeDefault,
 		UnderstandGraphAvailable: understandGraphAvailable(a.activeWorkspaceRoot()),
 		UnderstandGraphStatus:    buildGraphStatus(a.activeWorkspaceRoot()),

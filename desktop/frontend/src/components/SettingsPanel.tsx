@@ -5737,6 +5737,11 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
   const [showLogWindow, setShowLogWindow] = useState(() => s?.headroomShowLogWindow ?? false);
   const [gpuBackend, setGpuBackend] = useState(() => s?.headroomGpuBackend ?? "auto");
   const [keepAlive, setKeepAlive] = useState(() => s?.headroomKeepAlive ?? false);
+  const [protectTools, setProtectTools] = useState<string[]>(() => s?.headroomProtectTools ?? []);
+  const [newToolName, setNewToolName] = useState("");
+
+  // Built-in tools always protected (mirrors headroomBuiltinProtected in Go).
+  const builtinProtected = ["read_file", "edit_file", "write_file", "multi_edit", "move_file", "ls", "code_index", "memory"];
 
   const save = async (fields: Partial<HeadroomConfigView>) => {
     try { await app.SaveHeadroomConfig(fields); } catch {}
@@ -5750,6 +5755,22 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
   const handleMode = (m: "token" | "cache") => {
     setMode(m);
     save({ mode: m });
+  };
+
+  const handleAddTool = () => {
+    const name = newToolName.trim();
+    if (name && !protectTools.includes(name) && !builtinProtected.includes(name)) {
+      const next = [...protectTools, name];
+      setProtectTools(next);
+      setNewToolName("");
+      save({ protectTools: next });
+    }
+  };
+
+  const handleRemoveTool = (name: string) => {
+    const next = protectTools.filter((t) => t !== name);
+    setProtectTools(next);
+    save({ protectTools: next });
   };
 
   return (
@@ -5834,6 +5855,42 @@ function HeadroomSettingsSection({ s, busy }: { s: SettingsView; busy: boolean }
               <option value="dml">DirectML (AMD)</option>
               <option value="cuda">CUDA (NVIDIA)</option>
             </select>
+          </SettingsField>
+          <SettingsField label={t("settings.headroomProtectedTools")} hint={t("settings.headroomProtectedToolsHint")}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {protectTools.length > 0 && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                  {protectTools.map((name) => (
+                    <span key={name} className="tag" style={{
+                      background: "var(--accent-bg)", color: "#fff",
+                      padding: "2px 8px", borderRadius: "4px", fontSize: "12px",
+                      display: "inline-flex", alignItems: "center", gap: "4px",
+                    }}>
+                      {name}
+                      <button
+                        disabled={busy}
+                        onClick={() => handleRemoveTool(name)}
+                        style={{ border: "none", background: "none", cursor: "pointer", padding: 0, fontSize: "14px", lineHeight: 1 }}
+                        title={`Remove ${name}`}
+                      >✕</button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              <div style={{ display: "flex", gap: "4px" }}>
+                <input className="mem-input" type="text"
+                  value={newToolName}
+                  disabled={busy}
+                  placeholder={t("settings.headroomProtectedToolsPlaceholder")}
+                  onChange={(e) => setNewToolName(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { handleAddTool(); } }}
+                  style={{ width: "140px", fontSize: "12px" }}
+                />
+                <button className="btn btn--small" disabled={busy || !newToolName.trim()} onClick={handleAddTool}>
+                  {t("common.add")}
+                </button>
+              </div>
+            </div>
           </SettingsField>
         </>
       )}

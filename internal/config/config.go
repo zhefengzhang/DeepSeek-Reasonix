@@ -1076,6 +1076,10 @@ type HeadroomConfig struct {
 	// KeepAlive keeps the proxy running after Reasonix exits so the next
 	// cold start is faster. Default false (proxy is stopped on exit).
 	KeepAlive bool `toml:"keep_alive"`
+	// ProtectTools lists extra tool names whose results should never be
+	// compressed by headroom. These merge with the hardcoded built-in set
+	// (read_file, edit_file, etc.) at proxy startup.
+	ProtectTools []string `toml:"protect_tools"`
 }
 
 // UnderstandAnythingConfig controls the Understand-Anything knowledge graph

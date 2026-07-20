@@ -26,6 +26,18 @@ import (
 // httpClient is a shared HTTP client with a short timeout for headroom health
 // checks and stats fetching. Using the default http.Get would hang for 30+
 // seconds on Windows when the proxy is not running.
+var headroomBuiltinProtected = []string{
+	"read_file", "edit_file", "write_file", "multi_edit",
+	"move_file", "ls", "code_index", "memory",
+}
+
+// DefaultProtectTools are recommended extra tools excluded from compression.
+// Pre-populated in the settings UI when no user config exists yet.
+var DefaultProtectTools = []string{
+	"understand_search",
+	"mcp__codegraph__codegraph_explore",
+}
+
 var hrmHTTPClient = &http.Client{Timeout: 3 * time.Second}
 
 // HeadroomStatusView is returned to the frontend.
@@ -210,7 +222,10 @@ func (h *headroomSidecar) start(cfg *config.Config, upstreamBaseURL string) erro
 	// match. Lossy compression of read_file breaks old_string anchors for
 	// edit_file; compressing understand_search / code_index / ls destroys
 	// node IDs and paths the LLM uses for subsequent tool calls.
-	env = append(env, "HEADROOM_PROTECT_TOOL_RESULTS=read_file,edit_file,write_file,multi_edit,move_file,ls,code_index,understand_search,memory")
+	protectedTools := make([]string, len(headroomBuiltinProtected), len(headroomBuiltinProtected)+len(cfg.Headroom.ProtectTools))
+	copy(protectedTools, headroomBuiltinProtected)
+	protectedTools = append(protectedTools, cfg.Headroom.ProtectTools...)
+	env = append(env, "HEADROOM_PROTECT_TOOL_RESULTS="+strings.Join(protectedTools, ","))
 	cmd.Env = env
 
 	// Capture stdout/stderr for logging
@@ -637,6 +652,9 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 	if in.KeepAlive != nil {
 		cfg.Headroom.KeepAlive = *in.KeepAlive
 	}
+	if in.ProtectTools != nil {
+		cfg.Headroom.ProtectTools = in.ProtectTools
+	}
 	if err := cfg.SaveTo(path); err != nil {
 		return fmt.Errorf("save config: %w", err)
 	}
@@ -646,7 +664,7 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 	if in.Preset != "" || in.CodeAware != nil ||
 		in.DisableKompress != nil || in.RequestTimeout > 0 ||
 		in.Mode != "" || in.ShowLogWindow != nil ||
-		in.GpuBackend != "" {
+		in.GpuBackend != "" || in.ProtectTools != nil {
 		needsRestart = true
 	}
 	if needsRestart && a.headroom != nil && a.headroom.healthCheck() {
@@ -665,14 +683,15 @@ func (a *App) SaveHeadroomConfig(in HeadroomConfigView) error {
 
 // HeadroomConfigView carries headroom proxy settings from the frontend.
 type HeadroomConfigView struct {
-	Preset          string `json:"preset,omitempty"`
-	Mode            string `json:"mode,omitempty"` // "token" | "cache"
-	CodeAware       *bool  `json:"codeAware,omitempty"`
-	DisableKompress *bool  `json:"disableKompress,omitempty"`
-	RequestTimeout  int    `json:"requestTimeout,omitempty"`
-	ShowLogWindow   *bool  `json:"showLogWindow,omitempty"`
-	GpuBackend      string `json:"gpuBackend,omitempty"` // "auto" | "cpu" | "dml" | "cuda"
-	KeepAlive       *bool  `json:"keepAlive,omitempty"`  // keep proxy running after exit
+	Preset          string   `json:"preset,omitempty"`
+	Mode            string   `json:"mode,omitempty"` // "token" | "cache"
+	CodeAware       *bool    `json:"codeAware,omitempty"`
+	DisableKompress *bool    `json:"disableKompress,omitempty"`
+	RequestTimeout  int      `json:"requestTimeout,omitempty"`
+	ShowLogWindow   *bool    `json:"showLogWindow,omitempty"`
+	GpuBackend      string   `json:"gpuBackend,omitempty"`   // "auto" | "cpu" | "dml" | "cuda"
+	KeepAlive       *bool    `json:"keepAlive,omitempty"`    // keep proxy running after exit
+	ProtectTools    []string `json:"protectTools,omitempty"` // extra tool names to protect from compression
 }
 
 // StopHeadroom stops the headroom proxy (Wails binding).

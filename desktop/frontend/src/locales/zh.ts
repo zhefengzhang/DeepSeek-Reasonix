@@ -1881,4 +1881,7 @@ export const zh: Record<DictKey, string> = {
   "settings.headroomKeepAliveHint": "Reasonix 退出后保持 Headroom 代理运行，加快下次启动速度。",
   "settings.headroomTokensSaved": "节省 {n} tokens ({pct}%)",
   "settings.headroomRestartNotice": "修改压缩设置后会重启代理服务，当前会话可能会出现短暂中断。",
+  "settings.headroomProtectedTools": "保护工具",
+  "settings.headroomProtectedToolsHint": "添加工具名称，保护其输出不被压缩。",
+  "settings.headroomProtectedToolsPlaceholder": "工具名称",
 };
