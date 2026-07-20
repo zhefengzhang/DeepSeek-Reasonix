@@ -17,6 +17,10 @@ type Session struct {
 	mu             sync.RWMutex
 	Messages       []provider.Message
 	rewriteVersion int // bumped each time the log is rewritten (compact/fold)
+	// version tracks tool-call preview updates. Separated from rewriteVersion
+	// so a preview refresh after a mid-turn snapshot triggers a rewrite save
+	// without conflating the compaction counter.
+	version int
 	// normalizedDirty is set when LoadSession repaired the history on the way in
 	// (empty tool-call names, dangling calls, truncated args, …). The repair
 	// already lives in Messages, so the next Save persists it automatically as
@@ -63,6 +67,62 @@ func (s *Session) RewriteVersion() int { return s.rewriteVersion }
 
 // IncrementRewrite bumps the rewrite version by 1.
 func (s *Session) IncrementRewrite() { s.rewriteVersion++ }
+
+// NeedsRewriteSave reports whether the session log was mutated after a
+// mid-turn Snapshot, so the caller must use SaveRewrite instead of an
+// append-only SaveSnapshot to avoid duplicating the already-persisted
+// assistant message.
+func (s *Session) NeedsRewriteSave() bool {
+	return s.rewriteVersion > 0 || s.version > 0
+}
+
+// SaveRewrite persists the full session and resets the rewrite markers. Use
+// this after mid-turn snapshot mutations so the saved file replaces the
+// original assistant message instead of appending tool results after it.
+func (s *Session) SaveRewrite(path string) error {
+	if err := s.Save(path); err != nil {
+		return err
+	}
+	s.rewriteVersion = 0
+	s.version = 0
+	return nil
+}
+
+// UpdateToolCallPreview replaces the preview fields of the newest matching
+// assistant tool call. A dependent writer can only be previewed after an
+// earlier writer in the same model batch succeeds; updating under the session
+// lock keeps live History/Snapshot readers race-free and ensures the refreshed
+// preview is what a resumed session archives.
+func (s *Session) UpdateToolCallPreview(call provider.ToolCall) bool {
+	if call.ID == "" {
+		return false
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for i := len(s.Messages) - 1; i >= 0; i-- {
+		if s.Messages[i].Role != provider.RoleAssistant {
+			continue
+		}
+		calls := s.Messages[i].ToolCalls
+		for j := range calls {
+			if calls[j].ID != call.ID {
+				continue
+			}
+			cloned := append([]provider.ToolCall(nil), calls...)
+			cloned[j].Diff = call.Diff
+			cloned[j].Added = call.Added
+			cloned[j].Removed = call.Removed
+			s.Messages[i].ToolCalls = cloned
+			// A snapshot may have persisted the original assistant message while
+			// its tools were still running. Mark this as a rewrite so a later
+			// autosave replaces that message instead of misclassifying the tool
+			// results as an append-only suffix.
+			s.version++
+			return true
+		}
+	}
+	return false
+}
 
 // HasContent returns true when the session carries at least one user,
 // assistant, or tool message — i.e. more than just a system prompt. An
