@@ -162,6 +162,9 @@ type Controller struct {
 	cancel         context.CancelFunc
 	running        bool
 	canceling      bool
+	finishing      bool                              // TurnDone is still being delivered; park replacement turns
+	closed         bool                              // terminal teardown; reject all submits
+	parkedTurns    []func(ctx context.Context) error // FIFO queue for finishing-window submissions
 	autosaveWG     sync.WaitGroup
 	planMode       bool
 	guidancePrompt string
@@ -498,11 +501,24 @@ func (c *Controller) beginCheckpoint(input string) {
 
 // runGuarded runs body on a background goroutine under a fresh cancellable
 // context, guarding against concurrent turns and emitting a TurnDone event when
-// it finishes (Err set on failure; nil also for a user Cancel). A no-op if a
-// turn is already in flight.
+// it finishes (Err set on failure; nil also for a user Cancel).
+//
+// Admission depends on state — see the per-branch comments. In particular, a
+// body arriving during the finishing window (TurnDone delivery in progress) is
+// parked in a FIFO queue, not dropped: every caller that reacts to TurnDone by
+// submitting again would otherwise race a silent drop.
 func (c *Controller) runGuarded(body func(ctx context.Context) error) {
 	c.mu.Lock()
+	if c.closed {
+		c.mu.Unlock()
+		return
+	}
 	if c.running {
+		c.mu.Unlock()
+		return
+	}
+	if c.finishing {
+		c.parkedTurns = append(c.parkedTurns, body)
 		c.mu.Unlock()
 		return
 	}
@@ -511,7 +527,12 @@ func (c *Controller) runGuarded(body func(ctx context.Context) error) {
 	c.running = true
 	c.canceling = false
 	c.mu.Unlock()
+	c.spawnGuardedTurn(ctx, cancel, body)
+}
 
+// spawnGuardedTurn launches an admitted turn body plus its autosave companion.
+// The caller must already have claimed admission (running=true) under c.mu.
+func (c *Controller) spawnGuardedTurn(ctx context.Context, cancel context.CancelFunc, body func(ctx context.Context) error) {
 	c.autosaveWG.Add(1)
 	go func() {
 		defer c.autosaveWG.Done()
@@ -519,24 +540,46 @@ func (c *Controller) runGuarded(body func(ctx context.Context) error) {
 	}()
 	go func() {
 		defer cancel()
-		defer func() {
-			if r := recover(); r != nil {
-				c.mu.Lock()
-				c.running = false
-				c.cancel = nil
-				c.canceling = false
-				c.mu.Unlock()
-				c.sink.Emit(event.Event{Kind: event.TurnDone, Err: fmt.Errorf("internal error: %v", r)})
-			}
+		var err error
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					err = fmt.Errorf("internal error: %v", r)
+				}
+			}()
+			err = body(ctx)
 		}()
-		err := body(ctx)
-		c.mu.Lock()
-		c.running = false
-		c.cancel = nil
-		c.canceling = false
-		c.mu.Unlock()
-		c.sink.Emit(event.Event{Kind: event.TurnDone, Err: explainError(err)})
+		c.finishGuardedTurn(err)
 	}()
+}
+
+// finishGuardedTurn completes a turn: clears the run state, emits TurnDone,
+// then drains the oldest parked turn (if any) in the same critical section
+// that closes the finishing window — no other submit can slip in between.
+func (c *Controller) finishGuardedTurn(err error) {
+	c.mu.Lock()
+	c.running = false
+	c.cancel = nil
+	c.canceling = false
+	c.finishing = true
+	c.mu.Unlock()
+
+	c.sink.Emit(event.Event{Kind: event.TurnDone, Err: explainError(err)})
+
+	c.mu.Lock()
+	c.finishing = false
+	if c.closed || len(c.parkedTurns) == 0 {
+		c.mu.Unlock()
+		return
+	}
+	next := c.parkedTurns[0]
+	c.parkedTurns = c.parkedTurns[1:]
+	ctx, cancel := context.WithCancel(context.Background())
+	c.cancel = cancel
+	c.running = true
+	c.canceling = false
+	c.mu.Unlock()
+	c.spawnGuardedTurn(ctx, cancel, next)
 }
 
 // Send starts a turn with an uncomposed message. The controller applies
@@ -583,7 +626,7 @@ func (c *Controller) runTurn(ctx context.Context, input string) error {
 func (c *Controller) RunTurn(ctx context.Context, input string) error {
 	ctx, cancel := context.WithCancel(ctx)
 	c.mu.Lock()
-	if c.running {
+	if c.running || c.finishing || c.closed {
 		c.mu.Unlock()
 		cancel()
 		return ErrTurnRunning
@@ -3428,6 +3471,8 @@ const (
 func (c *Controller) close(fireSessionEnd bool, jobsMode closeJobsMode) {
 	c.mu.Lock()
 	started := c.startedOnce
+	c.closed = true
+	c.parkedTurns = nil
 	c.mu.Unlock()
 	if fireSessionEnd && started {
 		c.hooks.SessionEnd(context.Background())
