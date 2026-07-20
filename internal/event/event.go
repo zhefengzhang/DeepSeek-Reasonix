@@ -114,8 +114,9 @@ type Profile struct {
 }
 
 // Tool describes a tool call for ToolDispatch / ToolResult events. On dispatch
-// only ID/Name/Args/ReadOnly are set; on result Output/Err/Truncated are filled
-// in. Args is the raw JSON arguments — a sink compacts it for display.
+// ID/Name/Args/ReadOnly and optional preview metadata are set; on result
+// Output/Err/Truncated are filled in. Args is the raw JSON arguments — a sink
+// compacts it for display.
 type Tool struct {
 	ID         string
 	Name       string
@@ -129,6 +130,11 @@ type Tool struct {
 	// Args still streaming) so a frontend can show the card immediately; a second,
 	// full ToolDispatch (Partial false, Args set) follows when the call completes.
 	Partial bool
+	// Refreshed marks a repeated full ToolDispatch for the same ID whose file
+	// preview was recomputed after an earlier writer in the provider batch
+	// changed disk. Frontends that can upsert by ID should replace the existing
+	// preview; append-only sinks should ignore it to avoid duplicate tool cards.
+	Refreshed bool
 	// ParentID, when set, is the ID of the tool call that spawned this one — a
 	// sub-agent's calls carry the parent `task` call's ID so a frontend can nest
 	// them under it. Empty for top-level calls.

@@ -676,3 +676,13 @@ func Kinds() []string {
 	sort.Strings(out)
 	return out
 }
+
+// RequiresToolCallReasoning reports whether the provider uses a tool-call
+// reasoning protocol (e.g. DeepSeek thinking mode). Such providers may signal
+// completion via finish_reason="stop" with reasoning-only content. Use a type
+// assertion so that providers that do not declare the marker return false.
+func RequiresToolCallReasoning(p Provider) bool {
+	type r interface{ RequiresToolCallReasoning() bool }
+	rp, ok := p.(r)
+	return ok && rp.RequiresToolCallReasoning()
+}
