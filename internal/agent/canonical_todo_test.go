@@ -57,8 +57,8 @@ func TestAdvanceCanonicalTodoCompletesAndPromotes(t *testing.T) {
 
 func TestAdvanceCanonicalTodoMatchesByNumber(t *testing.T) {
 	a := &Agent{sink: event.Discard, todoState: []evidence.TodoItem{
-		{Content: "first", Status: "in_progress"},
-		{Content: "second", Status: "pending"},
+		{Content: "first", Status: "completed"},
+		{Content: "second", Status: "in_progress"},
 	}}
 	a.advanceCanonicalTodo("2")
 	if a.todoState[1].Status != "completed" {

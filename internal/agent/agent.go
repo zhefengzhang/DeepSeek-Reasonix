@@ -1235,12 +1235,10 @@ func (a *Agent) advanceCanonicalTodo(step string) {
 		return
 	}
 	m, ok := evidence.MatchStep(step, a.todoState)
-	if !ok || canonicalTodoStatus(a.todoState[m.Index-1].Status) == "completed" {
+	if !ok || !evidence.AdvanceSerialTodo(a.todoState, m.Index-1) {
 		a.todoMu.Unlock()
 		return
 	}
-	a.todoState[m.Index-1].Status = "completed"
-	promoteNextPendingTodo(a.todoState)
 	snapshot := append([]evidence.TodoItem(nil), a.todoState...)
 	a.todoMu.Unlock()
 	a.recordTodoState(snapshot)
@@ -1338,13 +1336,12 @@ func (a *Agent) rebuildTodoState(msgs []provider.Message) {
 				continue
 			}
 			rec := evidence.ReceiptFromToolCall(tc.Name, json.RawMessage(tc.Arguments), true, true)
-			if m, ok := evidence.MatchStep(rec.Step, todos); ok && canonicalTodoStatus(todos[m.Index-1].Status) != "completed" {
-				todos[m.Index-1].Status = "completed"
-				promoteNextPendingTodo(todos)
+			if m, ok := evidence.MatchStep(rec.Step, todos); ok {
+				evidence.AdvanceSerialTodo(todos, m.Index-1)
 			}
 		}
 	}
-	a.setTodoState(todos)
+	a.setTodoState(evidence.NormalizeSerialTodos(todos))
 }
 
 func successfulToolCallIDs(msgs []provider.Message) map[string]bool {

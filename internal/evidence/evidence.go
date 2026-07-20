@@ -305,6 +305,90 @@ func IncompleteTodos(todos []TodoItem) []TodoStepMatch {
 	return incomplete
 }
 
+// NormalizeSerialTodos ensures the todo list follows the serial contract:
+// completed items form a contiguous prefix from index 0, at most one item is
+// in_progress, and no item past the first non-completed item is marked as
+// completed. Items violating the contract are repaired in place:
+// - A completed item that skips over an uncompleted earlier item → reset to
+//   the earliest conflicting item's original status.
+// - Multiple in_progress items → only the first unresolved item stays
+//   in_progress; the rest revert to pending.
+func NormalizeSerialTodos(todos []TodoItem) []TodoItem {
+	if len(todos) == 0 {
+		return todos
+	}
+	out := make([]TodoItem, len(todos))
+	copy(out, todos)
+
+	// Find the first non-completed item. Everything before it is fine;
+	// everything at or after it must not be completed.
+	firstNonCompleted := len(out)
+	for i, t := range out {
+		if todoStatus(t.Status) != "completed" {
+			firstNonCompleted = i
+			break
+		}
+	}
+
+	// Repair: any completed item at or after the first non-completed is
+	// reset to "pending" (it was completed out of order).
+	hadInProgress := false
+	for i := firstNonCompleted; i < len(out); i++ {
+		t := &out[i]
+		s := todoStatus(t.Status)
+		if s == "completed" {
+			t.Status = "pending"
+			continue
+		}
+		if s == "in_progress" {
+			if hadInProgress {
+				t.Status = "pending"
+			} else {
+				hadInProgress = true
+			}
+		}
+	}
+
+	// Ensure the first non-completed item is in_progress when there is no
+	// current in_progress item and there are still uncompleted items.
+	if !hadInProgress && firstNonCompleted < len(out) {
+		out[firstNonCompleted].Status = "in_progress"
+	}
+	return out
+}
+
+// AdvanceSerialTodo marks the todo at the given index as completed and
+// promotes the next pending item to in_progress. index is 0-based. Returns
+// false when the index is out of range or the item is already completed. The
+// serial contract is enforced: only the first non-completed item may be
+// advanced, and it must be completed via this function rather than direct
+// mutation.
+func AdvanceSerialTodo(todos []TodoItem, index int) bool {
+	if index < 0 || index >= len(todos) {
+		return false
+	}
+	if todoStatus(todos[index].Status) == "completed" {
+		return false
+	}
+	// Serial contract: only the first non-completed item may be advanced.
+	firstNonCompleted := 0
+	for firstNonCompleted < len(todos) && todoStatus(todos[firstNonCompleted].Status) == "completed" {
+		firstNonCompleted++
+	}
+	if index != firstNonCompleted {
+		return false
+	}
+	todos[index].Status = "completed"
+	// Promote the next pending item to in_progress.
+	for i := index + 1; i < len(todos); i++ {
+		if todoStatus(todos[i].Status) != "completed" {
+			todos[i].Status = "in_progress"
+			break
+		}
+	}
+	return true
+}
+
 // MatchStep resolves a complete_step.step (number, title, or drift-tolerant
 // variant) against a todo list, returning the matched item.
 func MatchStep(step string, todos []TodoItem) (TodoStepMatch, bool) {
